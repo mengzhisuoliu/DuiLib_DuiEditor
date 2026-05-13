@@ -8,12 +8,12 @@ namespace DuiLib {
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
 
-	class CComboWndWin32 : public CWindowWnd, public INotifyUI
+	class CComboWndWin32 : public CWindowWin32, public INotifyUI
 	{
 	public:
 		void Init(CComboUI* pOwner);
-		LPCTSTR GetWindowClassName() const;
-		void OnFinalMessage(UIWND hWnd);
+		LPCTSTR GetWindowClassName() const override;
+		void OnFinalMessage(UIWND hWnd) override;
 
 		LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 		void Notify(TNotifyUI& msg) override;
@@ -26,7 +26,6 @@ namespace DuiLib {
 #endif
 		bool IsHitItem(POINT ptMouse);
 	public:
-		DuiLibPaintManagerUI m_pm;
 		CComboUI* m_pOwner;
 		CVerticalLayoutUI* m_pLayout;
 		int m_iOldSel;

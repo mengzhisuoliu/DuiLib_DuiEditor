@@ -14,7 +14,7 @@ namespace DuiLib {
 	//
 	//
 
-	class CActiveXWnd : public CWindowWnd
+	class CActiveXWnd : public CWindowWin32
 	{
 	public:
 		CActiveXWnd() : m_iLayeredTick(0), m_bDrawCaret(false) {}
@@ -779,8 +779,9 @@ namespace DuiLib {
 
 	void CActiveXWnd::OnFinalMessage(HWND hWnd)
 	{
-		if( m_pOwner->m_pOwner->GetManager()->IsLayered() ) {
-			m_pOwner->m_pOwner->GetManager()->RemoveNativeWindow(hWnd);
+		CPaintManagerWin32UI *pManager = (CPaintManagerWin32UI *)m_pOwner->m_pOwner->GetManager();
+		if( pManager->IsLayered() ) {
+			pManager->RemoveNativeWindow(hWnd);
 		}
 	}
 
@@ -815,7 +816,7 @@ namespace DuiLib {
 		default:
 			bHandled = FALSE;
 		}
-		if( !bHandled ) return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+		if( !bHandled ) return CWindowWin32::HandleMessage(uMsg, wParam, lParam);
 		return lRes;
 	}
 

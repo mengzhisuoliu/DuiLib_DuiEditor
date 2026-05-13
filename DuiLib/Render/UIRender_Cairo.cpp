@@ -403,4 +403,4 @@ namespace DuiLib {
 	}
 
 } // namespace DuiLib
-#endif //#ifdef DUILIB_USE_RENDER_CAIRO
+#endif //#ifdef DUILIB_GTK

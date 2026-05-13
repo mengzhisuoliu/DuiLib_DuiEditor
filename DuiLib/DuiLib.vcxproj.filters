@@ -171,9 +171,6 @@
     <ClCompile Include="Utils\DPI.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\DragDropImpl.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\TrayIcon.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
@@ -381,28 +378,10 @@
     <ClCompile Include="Utils\QREncode.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Control\UIComboEditWndGtk.cpp">
-      <Filter>Source Files\Control</Filter>
-    </ClCompile>
-    <ClCompile Include="Control\UIComboEditWndWin32.cpp">
-      <Filter>Source Files\Control</Filter>
-    </ClCompile>
     <ClCompile Include="Control\UIComboWndGtk.cpp">
       <Filter>Source Files\Control</Filter>
     </ClCompile>
     <ClCompile Include="Control\UIComboWndWin32.cpp">
-      <Filter>Source Files\Control</Filter>
-    </ClCompile>
-    <ClCompile Include="Control\UIDateTimeExWndGtk.cpp">
-      <Filter>Source Files\Control</Filter>
-    </ClCompile>
-    <ClCompile Include="Control\UIDateTimeExWndWin32.cpp">
-      <Filter>Source Files\Control</Filter>
-    </ClCompile>
-    <ClCompile Include="Control\UIDateTimeWndGtk.cpp">
-      <Filter>Source Files\Control</Filter>
-    </ClCompile>
-    <ClCompile Include="Control\UIDateTimeWndWin32.cpp">
       <Filter>Source Files\Control</Filter>
     </ClCompile>
     <ClCompile Include="Control\UIEditWndWin32.cpp">
@@ -417,14 +396,17 @@
     <ClCompile Include="Control\UIMenuWndWin32.cpp">
       <Filter>Source Files\Control</Filter>
     </ClCompile>
-    <ClCompile Include="Render\UIRender_CairoWin32.cpp">
-      <Filter>Source Files\Render</Filter>
-    </ClCompile>
     <ClCompile Include="Control\UITracker.cpp">
       <Filter>Source Files\Control</Filter>
     </ClCompile>
     <ClCompile Include="Utils\Md5.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIDateTimeWndGtk.cpp">
+      <Filter>Source Files\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIDateTimeWndWin32.cpp">
+      <Filter>Source Files\Control</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -555,9 +537,6 @@
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\DPI.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\DragDropImpl.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\observer_impl_base.h">
@@ -773,28 +752,10 @@
     <ClInclude Include="Utils\UIFrameWndWin32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Control\UIComboEditWndGtk.h">
-      <Filter>Header Files\Control</Filter>
-    </ClInclude>
-    <ClInclude Include="Control\UIComboEditWndWin32.h">
-      <Filter>Header Files\Control</Filter>
-    </ClInclude>
     <ClInclude Include="Control\UIComboWndGtk.h">
       <Filter>Header Files\Control</Filter>
     </ClInclude>
     <ClInclude Include="Control\UIComboWndWin32.h">
-      <Filter>Header Files\Control</Filter>
-    </ClInclude>
-    <ClInclude Include="Control\UIDateTimeExWndGtk.h">
-      <Filter>Header Files\Control</Filter>
-    </ClInclude>
-    <ClInclude Include="Control\UIDateTimeExWndWin32.h">
-      <Filter>Header Files\Control</Filter>
-    </ClInclude>
-    <ClInclude Include="Control\UIDateTimeWndGtk.h">
-      <Filter>Header Files\Control</Filter>
-    </ClInclude>
-    <ClInclude Include="Control\UIDateTimeWndWin32.h">
       <Filter>Header Files\Control</Filter>
     </ClInclude>
     <ClInclude Include="Control\UIEditWndGtk.h">
@@ -815,14 +776,17 @@
     <ClInclude Include="compat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\UIRender_CairoWin32.h">
-      <Filter>Header Files\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Control\UITracker.h">
       <Filter>Header Files\Control</Filter>
     </ClInclude>
     <ClInclude Include="Utils\Md5.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIDateTimeWndGtk.h">
+      <Filter>Header Files\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIDateTimeWndWin32.h">
+      <Filter>Header Files\Control</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

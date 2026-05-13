@@ -41,7 +41,7 @@ BOOL CUIWindow::GetWindowRect(LPRECT lpRect)
 	return ::GetWindowRect(GetSafeHwnd(), lpRect);
 }
 
-void CUIWindow::Invalidate()
+void CUIWindow::InvalidateEx()
 {
 	InvalidateRect(GetSafeHwnd(), NULL, TRUE);
 }

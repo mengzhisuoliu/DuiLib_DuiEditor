@@ -694,7 +694,7 @@ namespace DuiLib {
 					bool isClosing = false;
 					CMenuUI* menuUI=static_cast<CMenuUI*>(GetManager()->GetRoot());
 					isClosing = (menuUI->m_pWindow->isClosing);
-					if (CPlatform::IsWindow(GetManager()->GetPaintWindow()) && !isClosing) {
+					if (GetManager()->IsWindow() && !isClosing) {
 						if (CMenuWnd::GetGlobalContextMenuObserver().GetManager() != NULL)
 						{
 
@@ -704,7 +704,7 @@ namespace DuiLib {
 							pMenuCmd->szText		= GetText();
 							pMenuCmd->tag			= GetTag();
 							pMenuCmd->bChecked		= GetChecked();
-							if (!CPlatform::PostMessage(CMenuWnd::GetGlobalContextMenuObserver().GetManager()->GetPaintWindow(), UIMSG_MENUCLICK, (WPARAM)pMenuCmd, (LPARAM)this))
+							if (!CMenuWnd::GetGlobalContextMenuObserver().GetManager()->PostMessage(UIMSG_MENUCLICK, (WPARAM)pMenuCmd, (LPARAM)this))
 							{
 								delete pMenuCmd;
 								pMenuCmd = NULL;
@@ -976,7 +976,7 @@ namespace DuiLib {
 	void CMenuElementUI::OnUpdateCommandUI()
 	{
 		//发消息给父窗口，返回check状态
-		if (!CPlatform::IsWindow(GetManager()->GetPaintWindow())) 
+		if (!GetManager()->IsWindow())
 			return;
 
 		if (CMenuWnd::GetGlobalContextMenuObserver().GetManager() == NULL)
@@ -986,7 +986,7 @@ namespace DuiLib {
 		//	return;
 
 		CMenuCmdUI cmdUI(this);
-		LRESULT lRet = CPlatform::SendMessage(CMenuWnd::GetGlobalContextMenuObserver().GetManager()->GetPaintWindow(), UIMSG_MENU_UPDATE_COMMAND_UI, (WPARAM)&cmdUI, (LPARAM)this);		
+		LRESULT lRet = CMenuWnd::GetGlobalContextMenuObserver().GetManager()->SendMessage(UIMSG_MENU_UPDATE_COMMAND_UI, (WPARAM)&cmdUI, (LPARAM)this);		
 	}
 
 	void CMenuElementUI::DrawDisableItemIcon(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify)

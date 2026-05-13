@@ -1039,7 +1039,7 @@ BOOL CDockToolBoxCtrl::OnDraging(CPoint point)
 		if(pUIWindow->m_pDragToControl != NULL)
 		{
 			pUIWindow->m_pDragToControl = NULL;
-			pUIWindow->Invalidate();
+			pUIWindow->InvalidateEx();
 		}
 		return FALSE;
 	}
@@ -1172,7 +1172,7 @@ void CDockToolBoxCtrl::OnLButtonUp(UINT nFlags, CPoint point)
 				pUIWindow->OnDragEndFromToolBox();
 				SetCurSel(TREENODETYPE_POINTER, TRUE);
 				pUIWindow->m_pDragToControl = NULL;
-				pUIWindow->Invalidate();
+				pUIWindow->InvalidateEx();
 			}	
 		}
 	}

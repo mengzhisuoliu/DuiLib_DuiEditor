@@ -7,11 +7,20 @@
 namespace DuiLib {
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
-	class CComboWndGtk : public CWindowWnd, public INotifyUI
+	class CComboWndGtk : public CWindowGtk, public INotifyUI
 	{
 	public:
 		void Init(CComboUI* pOwner);
+		LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) override;
+		void OnFinalMessage(UIWND hWnd) override;
+
 		void Notify(TNotifyUI& msg) override;
+
+		bool IsHitItem(POINT ptMouse);
+	protected:
+		CComboUI* m_pOwner;
+		CVerticalLayoutUI* m_pLayout;
+		bool m_bHitItem;
 	};
 
 } // namespace DuiLib

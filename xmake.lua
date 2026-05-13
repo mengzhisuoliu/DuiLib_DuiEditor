@@ -84,4 +84,6 @@ if is_plat("windows") then
 	includes("DuiPreviewer")
 	includes("DuiEditor")
 	includes("Demos/tutorial/tutorial")
+else
+	includes("Linux/gcc")
 end

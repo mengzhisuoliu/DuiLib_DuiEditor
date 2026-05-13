@@ -74,7 +74,7 @@ namespace DuiLib
 		case BTN_ICON:
 			if(bSelected)
 			{
-				if(!pTree->IsMultiSelect() || !CPlatform::IsKeyDown(VK_CONTROL)) pTree->ClearSeletedNodes();
+				if(!pTree->IsMultiSelect() || !GetManager()->IsKeyDown(VK_CONTROL)) pTree->ClearSeletedNodes();
 
 				pTree->SelectNode(pItemUI->GetNodeData(), bSelected);
 				pTree->SetFocusNode(pItemUI->GetNodeData());
@@ -91,7 +91,7 @@ namespace DuiLib
 		case BTN_TEXT:
 			if(bSelected)
 			{
-				if(!pTree->IsMultiSelect() || !CPlatform::IsKeyDown(VK_CONTROL)) pTree->ClearSeletedNodes();
+				if(!pTree->IsMultiSelect() || !GetManager()->IsKeyDown(VK_CONTROL)) pTree->ClearSeletedNodes();
 
 				pTree->SelectNode(pItemUI->GetNodeData(), bSelected);
 				pTree->SetFocusNode(pItemUI->GetNodeData());
@@ -388,7 +388,7 @@ namespace DuiLib
 		{
 			if( IsEnabled() ) 
 			{
-				if(!pTree->IsMultiSelect() || !CPlatform::IsKeyDown(VK_CONTROL)) pTree->ClearSeletedNodes();
+				if(!pTree->IsMultiSelect() || !GetManager()->IsKeyDown(VK_CONTROL)) pTree->ClearSeletedNodes();
 				GetOwner()->SelectNode(m_pNodeData);
 				GetOwner()->SetFocusNode(m_pNodeData);
 				GetOwner()->Refresh(false);

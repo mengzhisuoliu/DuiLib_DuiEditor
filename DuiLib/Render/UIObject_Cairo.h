@@ -4,7 +4,7 @@
 
 #include "IRender.h"
 
-#ifdef DUILIB_USE_RENDER_CAIRO
+#ifdef DUILIB_GTK
 namespace DuiLib { 
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -17,10 +17,7 @@ namespace DuiLib {
 
 		virtual void DeleteObject() override;
 
-		virtual HANDLE  GetHandle() override;
-#ifdef WIN32
-		virtual HFONT GetHFONT(CPaintManagerUI *pManager=NULL) override;
-#endif
+		virtual UINT_PTR  GetHandle() override;
 
 		virtual UIFont* Clone(CPaintManagerUI *pManager) override;
 
@@ -33,9 +30,6 @@ namespace DuiLib {
 	protected:
 		//cairo_font_face_t *m_hFont;
 		PangoFontDescription * m_pPangoFontDesc;
-#ifdef WIN32
-		HFONT m_hFont;
-#endif
 	};
 
 	//////////////////////////////////////////////////////////////////////////
@@ -47,18 +41,10 @@ namespace DuiLib {
 
 		virtual void DeleteObject() override;
 
-#ifdef WIN32
-		virtual HPEN GetHPEN() const override;
-#endif
-
 		virtual BOOL CreatePen(int nStyle, int nWidth, DWORD dwColor) override;
 
 	protected:
 		virtual ~UIPen_Cairo();
-	private:
-#ifdef WIN32
-		HPEN  m_hPen;
-#endif
 	};
 
 	//////////////////////////////////////////////////////////////////////////
@@ -72,16 +58,9 @@ namespace DuiLib {
 
 		virtual void DeleteObject() override;
 
-#ifdef WIN32
-		virtual BOOL CreateFromHBitmap(HBITMAP hBitmap) override; //hBitmap由内部释放
-		virtual HBITMAP GetHBITMAP() override;
-		virtual BOOL CreateARGB32Bitmap(HDC hDC, int width, int height, BOOL bFlip) override;
-		virtual BOOL CreateCompatibleBitmap(HDC hDC, int width, int height) override;
-#endif
-
 		virtual BOOL CreateFromData(LPBYTE pImage, int width, int height, DWORD mask) override;
 
-		virtual HANDLE  GetHandle()	override;
+		virtual UINT_PTR  GetHandle()	override;
 		virtual BYTE* GetBits() override;
 		virtual int	GetWidth() override;
 		virtual int GetHeight() override;
@@ -110,16 +89,9 @@ namespace DuiLib {
 
 		virtual void DeleteObject() override;
 
-#ifdef WIN32
-		virtual BOOL CreateFromHBitmap(HBITMAP hBitmap) override; //hBitmap由内部释放
-		virtual HBITMAP GetHBITMAP() override;
-		virtual BOOL CreateARGB32Bitmap(HDC hDC, int width, int height, BOOL bFlip) override;
-		virtual BOOL CreateCompatibleBitmap(HDC hDC, int width, int height) override;
-#endif
-
 		virtual BOOL CreateFromData(LPBYTE pImage, int width, int height, DWORD mask) override;
 
-		virtual HANDLE  GetHandle()	override;
+		virtual UINT_PTR  GetHandle()	override;
 		virtual BYTE* GetBits() override;
 		virtual int	GetWidth() override;
 		virtual int GetHeight() override;
@@ -148,10 +120,6 @@ namespace DuiLib {
 
 		virtual void DeleteObject() override;
 
-#ifdef WIN32
-		virtual BOOL CreateImage(HBITMAP hBitmap, bool bAlpha) override;
-#endif
-
 	protected:
 		virtual ~UIImage_Cairo();
 	};
@@ -165,21 +133,11 @@ namespace DuiLib {
 
 		virtual void DeleteObject() override;
 
-#ifdef WIN32
-		virtual HBRUSH GetHBrush() const override;
-		virtual BOOL CreateFromHBrush(HBRUSH hBrush) override;
-#endif
-
 		virtual BOOL CreateSolidBrush(DWORD clr) override;
 		virtual BOOL CreateBitmapBrush(UIBitmap *bitmap) override;
 
 	protected:
 		virtual ~UIBrush_Cairo();
-
-	private:
-#ifdef WIN32
-		HBRUSH m_hBrush;
-#endif
 	};
 
 	//////////////////////////////////////////////////////////////////////////
@@ -213,6 +171,6 @@ namespace DuiLib {
 	};
 
 } // namespace DuiLib
-#endif //#ifdef DUILIB_USE_RENDER_CAIRO
+#endif //#ifdef DUILIB_GTK
 
 #endif // __UIOBJECT_CAIRO_H__

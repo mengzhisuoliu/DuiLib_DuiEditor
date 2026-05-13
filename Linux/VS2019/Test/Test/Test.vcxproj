@@ -147,8 +147,8 @@
     </ClCompile>
     <Link>
       <LibraryDependencies>DuiLib</LibraryDependencies>
-      <AdditionalLibraryDirectories>/home/test/Desktop/DuiLib/bin/;%(Link.AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <OutputFile>/home/test/Desktop/DuiLib/bin/VS2019_Test.out</OutputFile>
+      <AdditionalLibraryDirectories>/home/test/projects/DuiLib/;%(Link.AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>/home/test/projects/DuiLib/VS2019_Test.out</OutputFile>
       <SharedLibrarySearchPath>%(Link.SharedLibrarySearchPath)</SharedLibrarySearchPath>
       <UnresolvedSymbolReferences>true</UnresolvedSymbolReferences>
       <AdditionalOptions>-Wl,--hash-style=sysv,-Bsymbolic,-rpath=./ -no-pie %(AdditionalOptions)</AdditionalOptions>

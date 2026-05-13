@@ -160,7 +160,7 @@ namespace DuiLib {
 			::GetCursorPos(&pt);
 			::ScreenToClient(m_pm.GetPaintWindow(), &pt);
 			if(m_bHitItem && IsHitItem(pt)) {
-				PostMessage(WM_KILLFOCUS);
+				::PostMessage(m_hWnd, WM_KILLFOCUS, 0, 0);
 			}
 			m_bHitItem = false;
 		}
@@ -170,7 +170,7 @@ namespace DuiLib {
 				m_pOwner->SelectItem(m_iOldSel, true);
 				EnsureVisible(m_iOldSel);
 			case VK_RETURN:
-				PostMessage(WM_KILLFOCUS);
+				::PostMessage(m_hWnd, WM_KILLFOCUS, 0, 0);
 				break;
 			default:
 				TEventUI event;
@@ -199,12 +199,12 @@ namespace DuiLib {
 			}
 		}
 		else if( uMsg == WM_KILLFOCUS ) {
-			if( m_hWnd != (HWND) wParam ) PostMessage(WM_CLOSE);
+			if( m_hWnd != (HWND) wParam ) ::PostMessage(m_hWnd, WM_CLOSE, 0, 0);
 		}
 
 		LRESULT lRes = 0;
 		if( m_pm.MessageHandler(uMsg, wParam, lParam, lRes) ) return lRes;
-		return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+		return CWindowWin32::HandleMessage(uMsg, wParam, lParam);
 	}
 
 	void CComboWndWin32::EnsureVisible(int iIndex)
@@ -234,11 +234,11 @@ namespace DuiLib {
 	UINT CComboWndWin32::GetClassStyle() const
 	{
 		if(m_pOwner->IsShowShadow()) {
-			return CWindowWnd::GetClassStyle();
+			return CWindowWin32::GetClassStyle();
 
 		}
 		else {
-			return CWindowWnd::GetClassStyle() | CS_DROPSHADOW;
+			return CWindowWin32::GetClassStyle() | CS_DROPSHADOW;
 		}
 	}
 #endif

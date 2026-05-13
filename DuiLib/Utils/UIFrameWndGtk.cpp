@@ -13,7 +13,7 @@ CUIFrameWndGtk::~CUIFrameWndGtk(void)
 	
 }
 
-CPaintManagerUI *CUIFrameWndGtk::GetManager()
+CPaintManagerGtkUI *CUIFrameWndGtk::GetManager()
 {
 	return &m_pm;
 }
@@ -102,7 +102,7 @@ LRESULT CUIFrameWndGtk::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	if (GetManager()->MessageHandler(uMsg, wParam, lParam, lRes))
 		return lRes;
-	return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+	return CWindowGtk::HandleMessage(uMsg, wParam, lParam);
 }
 
 LRESULT CUIFrameWndGtk::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -290,6 +290,7 @@ void CUIFrameWndGtk::Notify(TNotifyUI& msg)
 LRESULT CUIFrameWndGtk::OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
 {
 	bHandled = FALSE;
+	gtk_main_quit();
 	return 0;
 }
 
@@ -338,6 +339,7 @@ LRESULT CUIFrameWndGtk::OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 
 LRESULT CUIFrameWndGtk::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
+	bHandled = FALSE;
 	return 0;
 }
 
@@ -420,7 +422,7 @@ LRESULT CUIFrameWndGtk::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 	CDuiPoint ptEvent(ev->x, ev->y);
 
 	CDuiRect rcClient;
-	CPlatform::GetClientRect(GetHWND(), &rcClient);
+	GetManager()->GetClientRect(GetHWND(), &rcClient);
 
 	//改变窗口大小
 	int sep = 4;
@@ -511,7 +513,7 @@ LRESULT CUIFrameWndGtk::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	CDuiPoint ptEvent(ev->x, ev->y);
 
 	CDuiRect rcClient;
-	CPlatform::GetClientRect(GetHWND(), &rcClient);
+	GetManager()->GetClientRect(GetHWND(), &rcClient);
 
 	//改变窗口大小
 	int sep = 4;
@@ -529,14 +531,14 @@ LRESULT CUIFrameWndGtk::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 		rcLeftTop.PtInRect(ptEvent) || rcLeftBottom.PtInRect(ptEvent) ||
 		rcRightTop.PtInRect(ptEvent) || rcRightBottom.PtInRect(ptEvent))
 	{
-		if(rcLeft.PtInRect(ptEvent))				SetCursor(DUI_SIZEWE); 
-		else if(rcTop.PtInRect(ptEvent))			SetCursor(DUI_SIZENS);
-		else if(rcRight.PtInRect(ptEvent))			SetCursor(DUI_SIZEWE);
-		else if(rcBottom.PtInRect(ptEvent))			SetCursor(DUI_SIZENS);
-		else if(rcLeftTop.PtInRect(ptEvent))		SetCursor(DUI_SIZENWSE);
+		if(rcLeftTop.PtInRect(ptEvent))				SetCursor(DUI_SIZENWSE);
 		else if(rcRightBottom.PtInRect(ptEvent))	SetCursor(DUI_SIZENWSE);
 		else if(rcRightTop.PtInRect(ptEvent))		SetCursor(DUI_SIZENESW);
 		else if(rcLeftBottom.PtInRect(ptEvent))		SetCursor(DUI_SIZENESW);
+		else if(rcLeft.PtInRect(ptEvent))			SetCursor(DUI_SIZEWE); 
+		else if(rcTop.PtInRect(ptEvent))			SetCursor(DUI_SIZENS);
+		else if(rcRight.PtInRect(ptEvent))			SetCursor(DUI_SIZEWE);
+		else if(rcBottom.PtInRect(ptEvent))			SetCursor(DUI_SIZENS);
 
 		bHandled = TRUE;
 		return 0;

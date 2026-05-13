@@ -16,12 +16,14 @@ void UILIB_API DUI__Trace(LPCTSTR pstrFormat, ...)
     va_end(args);
     
 	_tcscat(szBuffer, _T("\n"));
-#ifdef DUILIB_WIN32
-	OutputDebugString(szBuffer);
-#else
-	UISTRING_CONVERSION;
-	g_print(UIT2UTF8(szBuffer));
-#endif //#ifdef WIN32
+	#ifdef DUILIB_WIN32
+		OutputDebugString(szBuffer);
+	#endif //#ifdef WIN32
+
+	#ifdef DUILIB_SDL
+		CDuiStringUtf8 strUtf8 = CDuiString(szBuffer);
+		SDL_Log(strUtf8.toString());
+	#endif
 #endif //#ifdef _DEBUG
 }
 
@@ -211,20 +213,225 @@ void CNotifyPump::NotifyPump(TNotifyUI& msg)
 
 //////////////////////////////////////////////////////////////////////////
 ///
-CWindowBase::CWindowBase() : m_hWnd(NULL)
+CWindowWnd::CWindowWnd() : m_hWnd(NULL), m_bHandleMessage(FALSE)
 {
 }
 
-UIWND CWindowBase::GetHWND() const 
+CWindowWnd::~CWindowWnd()
+{
+}
+
+UIWND CWindowWnd::GetHWND() const 
 { 
 	return m_hWnd; 
 }
 
-CWindowBase::operator UIWND() const
+CWindowWnd::operator UIWND() const
 {
 	return m_hWnd;
 }
 
+CPaintManagerUI *CWindowWnd::GetManager()
+{
+	return &m_pm;
+}
+
+void CWindowWnd::SetHandleMessage(BOOL bHandled)
+{
+	m_bHandleMessage = bHandled;
+}
+
+BOOL CWindowWnd::IsHandleMessage()
+{
+	return m_bHandleMessage;
+}
+
+LRESULT CWindowWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	LRESULT lRes = 0;
+	SetHandleMessage(TRUE);
+	switch (uMsg)
+	{
+	case WM_CREATE:			
+		lRes = OnCreate(uMsg, wParam, lParam, m_bHandleMessage); 
+		break;
+	case WM_CLOSE:			lRes = OnClose(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_DESTROY:		lRes = OnDestroy(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_NCACTIVATE:		lRes = OnNcActivate(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_NCCALCSIZE:		lRes = OnNcCalcSize(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_NCPAINT:		lRes = OnNcPaint(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_NCHITTEST:		lRes = OnNcHitTest(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_GETMINMAXINFO:	lRes = OnGetMinMaxInfo(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_MOUSEWHEEL:		lRes = OnMouseWheel(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_SIZE:			
+		lRes = OnSize(uMsg, wParam, lParam, m_bHandleMessage); 
+		break;
+	case WM_CHAR:			lRes = OnChar(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_SYSCOMMAND:		lRes = OnSysCommand(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_KEYDOWN:		lRes = OnKeyDown(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_KILLFOCUS:		lRes = OnKillFocus(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_SETFOCUS:		lRes = OnSetFocus(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_LBUTTONUP:		lRes = OnLButtonUp(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_LBUTTONDOWN:	lRes = OnLButtonDown(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_RBUTTONUP:		lRes = OnRButtonUp(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_RBUTTONDOWN:	lRes = OnRButtonDown(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_MOUSEMOVE:		lRes = OnMouseMove(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_MOUSEHOVER:		lRes = OnMouseHover(uMsg, wParam, lParam, m_bHandleMessage); break;
+	default:				m_bHandleMessage = FALSE; break;
+	}
+	if (IsHandleMessage()) return lRes;
+
+	lRes = HandleCustomMessage(uMsg, wParam, lParam, m_bHandleMessage);
+	if (m_bHandleMessage) return lRes;
+
+	//²Ëµ¥ÃüÁî
+	lRes = HandleMenuCommandMessage(uMsg, wParam, lParam, m_bHandleMessage);
+	if (m_bHandleMessage) return lRes;
+
+	if (GetManager()->MessageHandler(uMsg, wParam, lParam, lRes))
+		return lRes;
+
+	return 0;
+}
+
+
+LRESULT CWindowWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnNcActivate(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnNcCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnNcPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{	
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnMouseWheel(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+{
+	return 0;
+}
+
+LRESULT CWindowWnd::OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnKeyDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnKillFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnSetFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnLButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnLButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+
+LRESULT CWindowWnd::OnRButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnRButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
 
 } // namespace DuiLib
 

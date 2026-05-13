@@ -6,7 +6,7 @@
 namespace DuiLib{
 	class CHotKeyUI;
 
-	class UILIB_API CHotKeyWnd : public CWindowWnd
+	class UILIB_API CHotKeyWnd : public CWindowWin32
 	{
 	public:
 		CHotKeyWnd(void);

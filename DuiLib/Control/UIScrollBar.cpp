@@ -704,8 +704,8 @@ namespace DuiLib
 			else {
 				if( m_nScrollRepeatDelay <= 5 ) return;
 				POINT pt = { 0 };
-				CPlatform::GetCursorPos(&pt);
-				CPlatform::ScreenToClient(m_pManager->GetPaintWindow(), &pt);
+				GetManager()->GetCursorPos(&pt);
+				GetManager()->ScreenToClient(&pt);
 				if( !m_bHorizontal ) {
 					if( pt.y < m_rcThumb.top ) {
 						if( m_pOwner != NULL ) m_pOwner->PageUp(); 

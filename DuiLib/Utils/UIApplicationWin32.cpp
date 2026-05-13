@@ -60,7 +60,7 @@ void CUIApplicationWin32::Run()
 	}
 
 	// ÏûÏ¢Ñ­»·
-	CPaintManagerUI::MessageLoop();
+	CPaintManagerWin32UI::MessageLoop();
 }
 
 int CUIApplicationWin32::ExitInstance()

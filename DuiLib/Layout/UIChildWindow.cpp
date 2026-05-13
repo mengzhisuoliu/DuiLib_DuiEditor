@@ -5,7 +5,7 @@
 namespace DuiLib
 {
 
-class CChildWnd : public CWindowWnd
+class CChildWnd : public CWindowWin32
 {
 public:
 	CChildWnd(): m_pOwner(NULL)
@@ -71,7 +71,7 @@ public:
 
 		if( !bHandled ) 
 		{
-			return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+			return CWindowWin32::HandleMessage(uMsg, wParam, lParam);
 		}
 		return lRes;
 	}
@@ -109,7 +109,6 @@ public:
 
 		return rcPos;
 	}
-	DuiLibPaintManagerUI m_pm;
 private:
 	CChildWindowUI *m_pOwner;
 };

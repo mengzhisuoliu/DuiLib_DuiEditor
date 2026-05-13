@@ -1,18 +1,8 @@
 
 //#define UILIB_STATIC //静态库使用请在IDE添加预处理 UILIB_STATIC
 
-#ifdef __linux__
-#define DUILIB_GTK
-#elif defined __APPLE__
-#define DUILIB_GTK
-#endif
-
-#ifndef DUILIB_GTK
+#if !defined(DUILIB_SDL) && !defined(DUILIB_GTK)
 #define DUILIB_WIN32 //默认的
-#endif
-
-#ifdef DUILIB_GTK
-#define DUILIB_USE_RENDER_CAIRO
 #endif
 
 #include "compat.h"
@@ -74,37 +64,44 @@
 #endif //#ifdef WIN32
 
 #ifdef DUILIB_WIN32
-#define CWindowWnd	CWindowWin32
-#define UIWND		HWND // HWND
-#define CShadowUI	CShadowWin32UI
-#define CDPI		CDpiWin32
-#define UIClip		UIClipWin32
-#define DuiLibPaintManagerUI CPaintManagerWin32UI
-#define CUIApplication CUIApplicationWin32
-#define CUIFrameWnd CUIFrameWndWin32
-
-#define CEditWnd CEditWndWin32
-#define CComboWnd CComboWndWin32
-#define CComboEditWnd CComboEditWndWin32
-#define CDateTimeExWnd CDateTimeExWndWin32
-#define CDateTimeWnd CDateTimeWndWin32
-#define CMenuWnd CMenuWndWin32
+	#define UIWND		HWND // HWND
+	#define DuiLibWindowWnd	CWindowWin32
+	#define CShadowUI	CShadowWin32UI
+	#define CDPI		CDpiWin32
+	#define UIClip		UIClipWin32
+	#define DuiLibPaintManagerUI CPaintManagerWin32UI
+	#define CUIApplication CUIApplicationWin32
+	#define CUIFrameWnd CUIFrameWndWin32
+	#define DuiLibEditWnd CEditWndWin32
+	#define CComboWnd CComboWndWin32
+	#define CDateTimeWnd CDateTimeWndWin32
+	#define CMenuWnd CMenuWndWin32
 #elif defined DUILIB_GTK
-#define CWindowWnd	CWindowGtk
-#define UIWND		PVOID // GtkWidget*
-#define CShadowUI	CShadowGtkUI
-#define CDPI		CDpiGtk
-#define UIClip		UIClipGtk
-#define DuiLibPaintManagerUI CPaintManagerGtkUI
-#define CUIApplication CUIApplicationGtk
-#define CUIFrameWnd CUIFrameWndGtk
-
-#define CEditWnd CEditWndGtk
-#define CComboWnd CComboWndGtk
-#define CComboEditWnd CComboEditWndGtk
-#define CDateTimeExWnd CDateTimeExWndGtk
-#define CDateTimeWnd CDateTimeWndGtk
-#define CMenuWnd CMenuWndGtk
+	#define UIWND		UINT_PTR // GtkWidget*
+	#define DuiLibWindowWnd	CWindowGtk
+	#define CShadowUI	CShadowGtkUI
+	#define CDPI		CDpiGtk
+	#define UIClip		UIClipGtk
+	#define DuiLibPaintManagerUI CPaintManagerGtkUI
+	#define CUIApplication CUIApplicationGtk
+	#define CUIFrameWnd CUIFrameWndGtk
+	#define DuiLibEditWnd CEditWndGtk
+	#define CComboWnd CComboWndGtk
+	#define CDateTimeWnd CDateTimeWndGtk
+	#define CMenuWnd CMenuWndGtk
+#elif defined DUILIB_SDL
+	#define UIWND UINT_PTR  // SDL_Window*
+	#define DuiLibWindowWnd	CWindowSDL
+	#define CShadowUI CShadowSDLUI
+	#define CDPI CDpiSDL
+	#define UIClip UIClipSDL
+	#define DuiLibPaintManagerUI CPaintManagerSDLUI
+	#define CUIApplication CUIApplicationSDL
+	#define CUIFrameWnd CUIFrameWndSDL
+	#define DuiLibEditWnd CEditWndSDL
+	#define CComboWnd CComboWndSDL
+	#define CDateTimeWnd CDateTimeWndSDL
+	#define CMenuWnd CMenuWndSDL
 #endif //#ifdef DUILIB_WIN32
 
 #include "Utils/DuiString.h"
@@ -120,30 +117,35 @@
 #include "Core/UIXmlDocument.h"
 #include "Utils/observer_impl_base.h"
 #include "Utils/UIDelegate.h"
-#include "Utils/DragDropImpl.h"
 #include "Utils/TrayIcon.h"
 #include "Utils/DPI.h"
 #include "Utils/DpiWin32.h"
 #include "Utils/DpiGtk.h"
+#include "Utils/DpiSdl.h"
 
 #include "Core/UIDefine.h"
 #include "Utils/UIShadowBase.h"
 #include "Utils/UIShadowWin32.h"
 #include "Utils/UIShadowGtk.h"
-
-#include "Core/UIBase.h"
-#include "Core/UIWindowWin32.h"
-#include "Core/UIWindowGtk.h"
+#include "Utils/UIShadowSdl.h"
 
 #include "Core/UIResourceManager.h"
 #include "Core/UILangManager.h"
 #include "Render/IRender.h"
 #include "Render/UIClipWin32.h"
 #include "Render/UIClipGtk.h"
+#include "Render/UIClipSdl.h"
 #include "Core/UIScript.h"
 #include "Core/UIManager.h"
 #include "Core/UIManagerWin32.h"
 #include "Core/UIManagerGtk.h"
+#include "Core/UIManagerSdl.h"
+
+#include "Core/UIBase.h"
+#include "Core/UIWindowWin32.h"
+#include "Core/UIWindowGtk.h"
+#include "Core/UIWindowSdl.h"
+
 #include "Core/ControlFactory.h"
 
 #include "Control/UIAnimation.h"
@@ -194,6 +196,7 @@
 #include "Control/UIMenu.h"
 #include "Control/UIMenuWndWin32.h"
 #include "Control/UIMenuWndGtk.h"
+#include "Control/UIMenuWndSDL.h"
 
 #include "Control/UIGroupBox.h"
 #include "Control/UIRollText.h"
@@ -239,12 +242,14 @@
 #include "Utils/UIApplication.h"
 #include "Utils/UIApplicationWin32.h"
 #include "Utils/UIApplicationGtk.h"
+#include "Utils/UIApplicationSdl.h"
 
 #include "Utils/UIFrameBase.h"
 #include "Utils/UIFrameWnd.h"
 
 #include "Utils/UIFrameWndWin32.h"
 #include "Utils/UIFrameWndGtk.h"
+#include "Utils/UIFrameWndSdl.h"
 
 #include "Utils/UIForm.h"
 #include "Utils/UIDialog.h"

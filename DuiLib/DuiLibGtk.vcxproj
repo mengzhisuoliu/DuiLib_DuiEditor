@@ -494,8 +494,8 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;UILIB_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:/wingtk/gtk-build/gtk/Win32/debug/include/gtk-3.0;E:/wingtk/gtk-build/gtk/Win32/debug/include/cairo;E:/wingtk/gtk-build/gtk/Win32/debug/include/pango-1.0;E:/wingtk/gtk-build/gtk/Win32/debug/include/glib-2.0;E:/wingtk/gtk-build/gtk/Win32/debug/lib/glib-2.0/include;E:/wingtk/gtk-build/gtk/Win32/debug/include/gdk-pixbuf-2.0;E:/wingtk/gtk-build/gtk/Win32/debug/include/atk-1.0;E:/wingtk/gtk-build/gtk/Win32/debug/include/harfbuzz;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;UILIB_EXPORTS;DUILIB_GTK;_UTF8CODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -1016,8 +1016,6 @@
     <ClCompile Include="Control\UIButton.cpp" />
     <ClCompile Include="Control\UIColorPalette.cpp" />
     <ClCompile Include="Control\UICombo.cpp" />
-    <ClCompile Include="Control\UIComboEditWndGtk.cpp" />
-    <ClCompile Include="Control\UIComboEditWndWin32.cpp" />
     <ClCompile Include="Control\UIComboEx.cpp" />
     <ClCompile Include="Control\UIComboWndGtk.cpp" />
     <ClCompile Include="Control\UIComboWndWin32.cpp" />
@@ -1064,6 +1062,7 @@
     <ClCompile Include="Control\UISlider.cpp" />
     <ClCompile Include="Control\UITabCtrl.cpp" />
     <ClCompile Include="Control\UIText.cpp" />
+    <ClCompile Include="Control\UITracker.cpp" />
     <ClCompile Include="Control\UITreeItem.cpp" />
     <ClCompile Include="Control\UITreeView.cpp" />
     <ClCompile Include="Control\UITree.cpp" />
@@ -1105,7 +1104,6 @@
     <ClCompile Include="Render\UIRenderFactory_gdi.cpp" />
     <ClCompile Include="Render\UIRenderFactory_gdiplus.cpp" />
     <ClCompile Include="Render\UIRender_Cairo.cpp" />
-    <ClCompile Include="Render\UIRender_CairoWin32.cpp" />
     <ClCompile Include="Render\UIRender_gdi.cpp" />
     <ClCompile Include="Render\UIRender_gdiplus.cpp" />
     <ClCompile Include="StdAfx.cpp">
@@ -1138,7 +1136,6 @@
     <ClCompile Include="Utils\DPI.cpp" />
     <ClCompile Include="Utils\DpiGtk.cpp" />
     <ClCompile Include="Utils\DpiWin32.cpp" />
-    <ClCompile Include="Utils\DragDropImpl.cpp" />
     <ClCompile Include="Utils\DuiString.cpp" />
     <ClCompile Include="Utils\QREncode.cpp" />
     <ClCompile Include="Utils\TrayIcon.cpp" />
@@ -1156,7 +1153,6 @@
     <ClCompile Include="Utils\UIShadowGtk.cpp" />
     <ClCompile Include="Utils\UIShadowWin32.cpp" />
     <ClCompile Include="Utils\Utils.cpp" />
-    <ClCompile Include="Utils\Utils2.cpp" />
     <ClCompile Include="Utils\WinImplBase.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -1169,8 +1165,6 @@
     <ClInclude Include="Control\UIButton.h" />
     <ClInclude Include="Control\UIColorPalette.h" />
     <ClInclude Include="Control\UICombo.h" />
-    <ClInclude Include="Control\UIComboEditWndGtk.h" />
-    <ClInclude Include="Control\UIComboEditWndWin32.h" />
     <ClInclude Include="Control\UIComboEx.h" />
     <ClInclude Include="Control\UIComboWndGtk.h" />
     <ClInclude Include="Control\UIComboWndWin32.h" />
@@ -1217,6 +1211,7 @@
     <ClInclude Include="Control\UISlider.h" />
     <ClInclude Include="Control\UITabCtrl.h" />
     <ClInclude Include="Control\UIText.h" />
+    <ClInclude Include="Control\UITracker.h" />
     <ClInclude Include="Control\UITree.h" />
     <ClInclude Include="Control\UITreeItem.h" />
     <ClInclude Include="Control\UITreeView.h" />
@@ -1267,7 +1262,6 @@
     <ClInclude Include="Utils\DPI.h" />
     <ClInclude Include="Utils\DpiGtk.h" />
     <ClInclude Include="Utils\DpiWin32.h" />
-    <ClInclude Include="Utils\DragDropImpl.h" />
     <ClInclude Include="Utils\DuiString.h" />
     <ClInclude Include="Utils\observer_impl_base.h" />
     <ClInclude Include="Utils\QREncode.h" />
@@ -1286,7 +1280,6 @@
     <ClInclude Include="Utils\UIShadowGtk.h" />
     <ClInclude Include="Utils\UIShadowWin32.h" />
     <ClInclude Include="Utils\Utils.h" />
-    <ClInclude Include="Utils\Utils2.h" />
     <ClInclude Include="Utils\VersionHelpers.h" />
     <ClInclude Include="Utils\WebBrowserEventHandler.h" />
     <ClInclude Include="Utils\WinImplBase.h" />

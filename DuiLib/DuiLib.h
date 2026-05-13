@@ -1,6 +1,9 @@
 #pragma once
 
 #include "UIlib.h"
+
+#ifdef WIN32
+
 #include "Utils/UIDataExchange.hpp"
 
 #ifndef _LIBPATH_
@@ -76,4 +79,5 @@
 
 
 //////////////////////////////////////////////////////////////////////////
+#endif
 #endif

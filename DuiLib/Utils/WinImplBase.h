@@ -7,7 +7,7 @@
 namespace DuiLib
 {
 	class UILIB_API WindowImplBase
-		: public CWindowWnd
+		: public CWindowWin32
 		, public CNotifyPump
 		, public INotifyUI
 		, public IMessageFilterUI
@@ -36,7 +36,6 @@ namespace DuiLib
 		virtual LPCTSTR GetWindowClassName(void) const = 0 ;
 		virtual LPCTSTR GetManagerName() { return NULL; }
 		virtual LRESULT ResponseDefaultKeyEvent(WPARAM wParam);
-		DuiLibPaintManagerUI m_pm;
 
 	public:
 		virtual UINT GetClassStyle() const;

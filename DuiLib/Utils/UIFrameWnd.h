@@ -7,14 +7,20 @@ typedef MenuCmd MENUCOMMAND;
 
 class CUIForm;
 class UILIB_API CUIFrameWndBase 
-	: public IDialogBuilderCallback
+	: public CUIFrmBase
+	, public DuiLibWindowWnd
+	, public IDialogBuilderCallback
 	, public IQueryControlText
-	, public CUIFrmBase
+	, public IMessageFilterUI
 {
 public:
 	CUIFrameWndBase(void);
 	virtual ~CUIFrameWndBase(void);
 
+	virtual DuiLibPaintManagerUI *GetManager() override;
+	virtual void OnFinalMessage( UIWND hWnd ) override;
+
+	virtual LPCTSTR GetWindowClassName() const = 0;
 	virtual CDuiString GetSkinFile() = 0;
 	virtual CDuiString GetSkinType() { return _T(""); }
 	virtual LPCTSTR GetManagerName() { return NULL; }
@@ -27,14 +33,18 @@ public:
 	void AttachVirtualForm(CUIFrmBase *pForm);
 	void DetachVirtualForm(CUIFrmBase *pForm);
 
+	virtual void Notify(TNotifyUI& msg) override;
+
+	virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled);;
+	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);;
+	virtual LRESULT HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 public:
 	virtual void InitWindow(){}
 
+	virtual BOOL IsInStaticControl(CControlUI* pControl);
 protected:
 	virtual void __InitWindow();
 	virtual void UIAction(TUIAction *act, bool bAsync);
-	virtual BOOL IsInStaticControl(CControlUI *pControl);
-	virtual LRESULT ResponseDefaultKeyEvent(WPARAM wParam);
 
 public:
 	CUIApplication *m_pApplication;

@@ -52,6 +52,11 @@ namespace DuiLib
 		return sPoint;
 	}
 
+	CDuiPoint::operator PPOINT() throw()
+	{
+		return this;
+	}
+
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
 	//
@@ -429,6 +434,14 @@ namespace DuiLib
 	}
 
 	//bool CDuiRect::operator == (LPCRECT lpRect) const { return EqualRect(lpRect); };
+
+	void CDuiRect::SetPadding(const RECT& rc)
+	{
+		left += rc.left;
+		right -= rc.right;
+		top += rc.top;
+		bottom -= rc.bottom;
+	}
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
 	//
@@ -907,172 +920,44 @@ namespace DuiLib
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	//
-	BOOL CPlatform::IsWindow(UIWND hWnd)
+	CDuiLock::CDuiLock() 
 	{
-#ifdef DUILIB_WIN32
-		return ::IsWindow(hWnd);
-#else
-		return TRUE;
-#endif
+	#ifdef DUILIB_WIN32
+		InitializeCriticalSectionAndSpinCount(&m_lock, 5000);
+	#elif defined DUILIB_SDL
+		m_lock = (UINT_PTR)SDL_CreateMutex();
+	#else
+	#endif
+	}
+	CDuiLock::~CDuiLock()
+	{
+	#ifdef DUILIB_WIN32
+		DeleteCriticalSection(&m_lock);
+	#elif defined DUILIB_SDL
+		SDL_DestroyMutex((SDL_Mutex *)m_lock);
+	#else
+	#endif
 	}
 
-	LRESULT CPlatform::SendMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	void CDuiLock::Lock()
 	{
-#ifdef DUILIB_WIN32
-		return ::SendMessage(hWnd, uMsg, wParam, lParam);
-#else
-		return 0;
-#endif
+	#ifdef DUILIB_WIN32
+		EnterCriticalSection(&m_lock);
+	#elif defined DUILIB_SDL
+		SDL_LockMutex((SDL_Mutex*)m_lock);
+	#else
+	#endif
 	}
 
-	LRESULT CPlatform::PostMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	void CDuiLock::Unlock()
 	{
-#ifdef DUILIB_WIN32
-		return ::PostMessage(hWnd, uMsg, wParam, lParam);
-#else
-		return 0;
-#endif
+	#ifdef DUILIB_WIN32
+		LeaveCriticalSection(&m_lock);
+	#elif defined DUILIB_SDL
+		SDL_UnlockMutex((SDL_Mutex*)m_lock);
+	#else
+	#endif
 	}
 
-	BOOL CPlatform::SetWindowPos(UIWND hWnd, UIWND hWndInsertAfter,int x, int y, int cx, int cy, UINT uFlags)
-	{
-#ifdef DUILIB_WIN32
-		return ::SetWindowPos(hWnd, hWndInsertAfter, x, y, cx, cy, uFlags);
-#else
-		gtk_window_set_default_size(GTK_WINDOW(hWnd), cx, cy);
-		return TRUE;
-#endif
-	}
-
-	UIWND CPlatform::GetFocus()
-	{
-#ifdef DUILIB_WIN32
-		return ::GetFocus();
-#else
-		return NULL;
-#endif
-	}
-
-	UIWND CPlatform::SetFocus(UIWND hWnd)
-	{
-#ifdef DUILIB_WIN32
-		return ::SetFocus(hWnd);
-#else
-		return NULL;
-#endif
-	}
-
-	BOOL CPlatform::GetWindowRect(UIWND hWnd, LPRECT lpRect)
-	{
-#ifdef DUILIB_WIN32
-		return ::GetWindowRect(hWnd, lpRect);
-#else
-		GtkAllocation Allocation;
-		gtk_widget_get_allocation(GTK_WIDGET(hWnd), &Allocation);
-		lpRect->left = Allocation.x;
-		lpRect->top = Allocation.y;
-		lpRect->right = Allocation.x + Allocation.width;
-		lpRect->bottom = Allocation.y + Allocation.height;
-		
-		//gtk_window_get_size
-		return TRUE;
-#endif
-	}
-
-	BOOL CPlatform::GetClientRect(UIWND hWnd, LPRECT lpRect)
-	{
-#ifdef DUILIB_WIN32
-		return ::GetClientRect(hWnd, lpRect);
-#else
-		return CPlatform::GetWindowRect(hWnd, lpRect);
-#endif
-	}
-
-	BOOL CPlatform::GetCursorPos(LPPOINT pt)
-	{
-#ifdef DUILIB_WIN32
-		return ::GetCursorPos(pt);
-#else
-		GdkDisplay* ddpy = gdk_display_get_default();   //获取默认的GdkDisplay
-		GdkDeviceManager* device_manager = gdk_display_get_device_manager(ddpy);//获取gdk设备管理器
-		GdkDevice* pointer = gdk_device_manager_get_client_pointer(device_manager);//获取gdk表示的鼠标设备
-		gint x, y;
-		gdk_device_get_position(pointer, NULL, &x, &y);//获取鼠标设备的全局坐标
-		pt->x = x;
-		pt->y = y;
-		return TRUE;
-#endif
-	}
-
-	BOOL CPlatform::ScreenToClient(UIWND hWnd, LPPOINT lpPoint)
-	{
-#ifdef DUILIB_WIN32
-		return ::ScreenToClient(hWnd, lpPoint);
-#else
-		return TRUE;
-#endif
-	}
-
-	BOOL CPlatform::IsKeyDown(UINT uKey)
-	{
-#ifdef DUILIB_WIN32
-		return ::GetKeyState(uKey) < 0;
-#else
-		return FALSE;
-#endif
-	}
-
-	BOOL CPlatform::IsKeyUp(UINT uKey)
-	{
-#ifdef DUILIB_WIN32
-		return ::GetKeyState(uKey) >= 0;
-#else
-		return FALSE;
-#endif
-	}
-
-	UINT CPlatform::MapKeyState()
-	{
-		UINT uState = 0;
-		if( IsKeyDown(VK_CONTROL) ) uState |= MK_CONTROL;
-		if( IsKeyDown(VK_LBUTTON) ) uState |= MK_LBUTTON;
-		if( IsKeyDown(VK_RBUTTON) ) uState |= MK_RBUTTON;
-		if( IsKeyDown(VK_SHIFT) ) uState |= MK_SHIFT;
-		if( IsKeyDown(VK_MENU) ) uState |= MK_ALT;
-		return uState;
-	}
-
-	DWORD CPlatform::GetTickCount()
-	{
-#ifdef WIN32
-		return ::GetTickCount();
-#else
-#include <time.h>
-		struct timespec ts;
-		clock_gettime(CLOCK_MONOTONIC, &ts);
-		return (ts.tv_sec * 1000 + ts.tv_nsec / 1000000);
-#endif
-	}
-
-	void CPlatform::GetLocalTime(SYSTEMTIME &st)
-	{
-#ifdef WIN32
-		return ::GetLocalTime(&st);
-#else
-#include <time.h>
-		time_t tmp = ::time(&tmp);
-		struct tm *ptm;
-		ptm = localtime(&tmp);
-		st.wYear = ptm->tm_year;
-		st.wMonth = ptm->tm_mon;
-		st.wDay = ptm->tm_mday;
-		st.wHour = ptm->tm_hour;
-		st.wMinute = ptm->tm_min;
-		st.wSecond = ptm->tm_sec;
-		st.wDayOfWeek = ptm->tm_wday;
-#endif
-	}
-	
 } // namespace DuiLib
 

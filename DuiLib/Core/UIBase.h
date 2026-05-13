@@ -77,30 +77,60 @@ namespace DuiLib {
 		CStdStringPtrMap m_VirtualWndMap;
 	};
 
-	class UILIB_API CWindowBase
+	class UILIB_API CWindowWnd
 	{
 	public:
-		CWindowBase();
+		CWindowWnd();
+		virtual ~CWindowWnd();
 
 		UIWND GetHWND() const;
 		operator UIWND() const;
 
-		virtual LRESULT SendMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0L) { return 0; }
-		virtual LRESULT PostMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0L) { return 0; }
+		virtual CPaintManagerUI *GetManager();
+
+		virtual void OnFinalMessage(UIWND hWnd) {}
 
 		virtual void Close(UINT nRet = IDOK) = 0;
 
 		virtual void SetCursor(int nCursor) = 0;
-		virtual BOOL SetWindowPos(UIWND hWndInsertAfter,int x, int y, int cx, int cy, UINT uFlags) { return FALSE; }
+		
+		virtual LRESULT ResponseDefaultKeyEvent(WPARAM wParam) { return S_FALSE; }
 
-		virtual BOOL SetTimer(UINT uElapse, TIMERINFO *pTimer) = 0;
-		virtual BOOL KillTimer(TIMERINFO *pTimer) = 0;
-	protected:
-		virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) { return 0;}
-		virtual void OnFinalMessage(UIWND hWnd) {}
+		virtual void Invalidate() = 0;
+		virtual BOOL SetWindowPos(int x, int y, int cx, int cy, UINT uFlags) = 0;
+		virtual BOOL GetWindowRect(LPRECT lpRect) = 0;
+		virtual BOOL GetClientRect(LPRECT lpRect) = 0;
 
+		void SetHandleMessage(BOOL bHandled);
+		BOOL IsHandleMessage();
+		virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+		virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnNcCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnNcPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnMouseWheel(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnRButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnRButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		virtual LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	public:
 		UIWND m_hWnd;
+		DuiLibPaintManagerUI m_pm;
+		BOOL m_bHandleMessage;
 	};
 
 } // namespace DuiLib

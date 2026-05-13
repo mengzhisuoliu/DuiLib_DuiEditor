@@ -110,7 +110,7 @@ LRESULT CUIWindowContainer::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lPara
 			return lRes;
 	}
 
-	return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+	return CWindowWin32::HandleMessage(uMsg, wParam, lParam);
 }
 
 LRESULT CUIWindowContainer::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -213,7 +213,7 @@ LRESULT CUIWindowContainer::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lPara
 		OnChangeRect();
 	}
 
-	Invalidate();
+	InvalidateEx();
 	return 0;
 }
 

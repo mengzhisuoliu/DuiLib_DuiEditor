@@ -222,7 +222,7 @@ public:
 
 		// Œª÷√œ‡πÿ
 		REG_CONTROL_FUNPR(RECT,			  GetRelativePos,	() const				); 
-		REG_CONTROL_FUNPR(RECT,			  GetClientPos,		() const				); 
+		REG_CONTROL_FUNPR(CDuiRect,			  GetClientPos,		()				); 
 		REG_CONTROL_FUNPR(const CDuiRect&,	  GetPos,			() const				);
 		REG_CONTROL_FUNPR(void,			  SetPos,			(RECT rc, bool bNeedInvalidate)				);
 		//REG_CONTROL_FUN(bool,			  CalcPos,			(CControlUI *pChildControl, RECT &rcChild)	); 
@@ -716,7 +716,7 @@ public:
 
 		REG_CONTROL_FUNPR(int,		GetCurSel,					() const						);
 		REG_CONTROL_FUNPR(int,		GetCurSelActivate,			() const						);
-		REG_CONTROL_FUNPR(bool,		SelectItem,					(int iIndex, bool bTakeFocus)	);
+		REG_CONTROL_FUNPR(bool,		SelectItem,					(int iIndex, bool bTakeFocus,bool bTriggerEvent)	);
 		REG_CONTROL_FUNPR(bool,		SelectItemActivate,			(int iIndex)					);
 
 		REG_CONTROL_FUNPR(bool,		SelectMultiItem,			(int iIndex, bool bTakeFocus)	);
@@ -1043,7 +1043,7 @@ public:
 		//UINT GetListType();
 		//TListInfoUI* GetListInfo();
 		REG_CONTROL_FUNPR(int,			GetCurSel,					() const						);  
-		REG_CONTROL_FUNPR(bool,			SelectItem,					(int iIndex, bool bTakeFocus)	);
+		REG_CONTROL_FUNPR(bool,			SelectItem,					(int iIndex, bool bTakeFocus, bool bTriggerEvent)	);
 		REG_CONTROL_FUNPR(bool,			SelectMultiItem,			(int iIndex, bool bTakeFocus)	);
 		REG_CONTROL_FUNPR(bool,			UnSelectItem,				(int iIndex, bool bOthers)		);
 	}
@@ -1407,33 +1407,32 @@ public:
 		__super::reg(engine);
 		int r = 0;
 
-		REG_CONTROL_FUNPR(void,		SetMaxChar,				(UINT uMax)				);
-		REG_CONTROL_FUNPR(UINT,		GetMaxChar,				()	);
-		REG_CONTROL_FUNPR(void,		SetReadOnly,			(bool bReadOnly	)		);
-		REG_CONTROL_FUNPR(bool,		IsReadOnly,				() const				);
-		REG_CONTROL_FUNPR(void,		SetPasswordMode,		(bool bPasswordMode)	);
-		REG_CONTROL_FUNPR(bool,		IsPasswordMode,			() const				);
-		REG_CONTROL_FUNPR(void,		SetPasswordChar,		(TCHAR cPasswordChar)	);
-		REG_CONTROL_FUNPR(TCHAR,	GetPasswordChar,		() const				);
-		REG_CONTROL_FUNPR(void,		SetNumberOnly,			(bool bNumberOnly)		);
-		REG_CONTROL_FUNPR(bool,		IsNumberOnly,			() const				);
-		REG_CONTROL_FUNPR(int,		GetWindowStyls,			() const				);
-
-		REG_CONTROL_FUNPR(void,		SetNativeEditBkColor,	(DWORD dwBkColor)		);
-		REG_CONTROL_FUNPR(DWORD,	GetNativeEditBkColor,	() const				);
-		REG_CONTROL_FUNPR(void,		SetNativeEditTextColor,	( LPCTSTR pStrColor)	);
-		REG_CONTROL_FUNPR(DWORD,	GetNativeEditTextColor,	() const				);
-
-		REG_CONTROL_FUNPR(bool,		IsAutoSelAll,			()						);
-		REG_CONTROL_FUNPR(void,		SetAutoSelAll,			(bool bAutoSelAll)		);
-		REG_CONTROL_FUNPR(void,		SetSel,					(long nStartChar, long nEndChar)	);
-		REG_CONTROL_FUNPR(void,		SetSelAll,				()						);
-		REG_CONTROL_FUNPR(void,		SetReplaceSel,			(LPCTSTR lpszReplace)	);
-
-		REG_CONTROL_FUNPR(void,		SetTipValue,			(LPCTSTR pStrTipValue)	);
-		REG_CONTROL_FUNPR(CDuiString,	GetTipValue,			()						);
-		REG_CONTROL_FUNPR(void,		SetTipValueColor,		(LPCTSTR pStrColor)		);
-		REG_CONTROL_FUNPR(DWORD,	GetTipValueColor,		()						);
+// 		REG_CONTROL_FUNPR(void,		SetMaxChar,				(UINT uMax)				);
+// 		REG_CONTROL_FUNPR(UINT,		GetMaxChar,				()	);
+// 		REG_CONTROL_FUNPR(void,		SetReadOnly,			(bool bReadOnly	)		);
+// 		REG_CONTROL_FUNPR(bool,		IsReadOnly,				() const				);
+// 		REG_CONTROL_FUNPR(void,		SetPasswordMode,		(bool bPasswordMode)	);
+// 		REG_CONTROL_FUNPR(bool,		IsPasswordMode,			() const				);
+// 		REG_CONTROL_FUNPR(void,		SetPasswordChar,		(TCHAR cPasswordChar)	);
+// 		REG_CONTROL_FUNPR(TCHAR,	GetPasswordChar,		() const				);
+// 		REG_CONTROL_FUNPR(void,		SetNumberOnly,			(bool bNumberOnly)		);
+// 		REG_CONTROL_FUNPR(bool,		IsNumberOnly,			() const				);
+// 
+// 		REG_CONTROL_FUNPR(void,		SetNativeEditBkColor,	(DWORD dwBkColor)		);
+// 		REG_CONTROL_FUNPR(DWORD,	GetNativeEditBkColor,	() const				);
+// 		REG_CONTROL_FUNPR(void,		SetNativeEditTextColor,	( LPCTSTR pStrColor)	);
+// 		REG_CONTROL_FUNPR(DWORD,	GetNativeEditTextColor,	() const				);
+// 
+// 		REG_CONTROL_FUNPR(bool,		IsAutoSelAll,			()						);
+// 		REG_CONTROL_FUNPR(void,		SetAutoSelAll,			(bool bAutoSelAll)		);
+// 		REG_CONTROL_FUNPR(void,		SetSel,					(long nStartChar, long nEndChar)	);
+// 		REG_CONTROL_FUNPR(void,		SetSelAll,				()						);
+// 		REG_CONTROL_FUNPR(void,		SetReplaceSel,			(LPCTSTR lpszReplace)	);
+// 
+// 		REG_CONTROL_FUNPR(void,		SetTipValue,			(LPCTSTR pStrTipValue)	);
+// 		REG_CONTROL_FUNPR(CDuiString,	GetTipValue,			()						);
+// 		REG_CONTROL_FUNPR(void,		SetTipValueColor,		(LPCTSTR pStrColor)		);
+// 		REG_CONTROL_FUNPR(DWORD,	GetTipValueColor,		()						);
 	}
 };
 

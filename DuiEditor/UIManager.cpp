@@ -55,7 +55,7 @@ BOOL CUIManager::SelectItem(CControlUI *pControl)
 	if(!pControl)	
 	{
 		GetUiTracker()->RemoveAll();
-		GetUiWindow()->Invalidate();
+		GetUiWindow()->InvalidateEx();
 		return FALSE;
 	}
 	
@@ -103,7 +103,7 @@ BOOL CUIManager::SelectItem(CControlUI *pControl)
 	
 	GetUiTracker()->Add(xml_node((xml_node_struct *)pControl->GetTag()), pControl->GetPos());
 	
-	GetUiWindow()->Invalidate();
+	GetUiWindow()->InvalidateEx();
 	return TRUE;
 }
 
@@ -187,7 +187,7 @@ BOOL CUIManager::UpdateControlUI(CControlUI *pControl)
 		pControl->NeedUpdate();
 	}
 	GetUiTracker()->UpdateRect(nodeControl);
-	GetUiWindow()->Invalidate();
+	GetUiWindow()->InvalidateEx();
 
 	//改动属性之后，即时刷新xml
 	/*

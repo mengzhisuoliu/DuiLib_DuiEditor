@@ -15,7 +15,7 @@ CUIFrmBase::~CUIFrmBase(void)
 CMenuWnd *CUIFrmBase::CreateMenu(STRINGorID xml)
 {
 	CDuiPoint pt2;
-	CPlatform::GetCursorPos(&pt2);
+	GetManager()->GetCursorPos(&pt2);
 	CMenuWnd *pMenuWnd = CMenuWnd::CreateMenu(NULL, xml, pt2,  GetManager());
 	pMenuWnd->m_bAutoDestroy = true;
 	if(pMenuWnd) pMenuWnd->ResizeMenu();

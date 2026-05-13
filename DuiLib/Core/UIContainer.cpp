@@ -623,7 +623,7 @@ namespace DuiLib
 		}
 	}
 
-	RECT CContainerUI::GetClientPos() const
+	CDuiRect CContainerUI::GetClientPos()
 	{
 		RECT rc = m_rcItem;
 		RECT rcInset = GetInset();

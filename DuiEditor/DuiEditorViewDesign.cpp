@@ -288,7 +288,8 @@ void CDuiEditorViewDesign::InitView()
 	//设置定时器，刷新一下duilib窗口，不然duilib会抢焦点
 	//SetTimer(1, 100, NULL);
 
-	GetUIManager()->SetZoom(GetUIManager()->GetManager()->GetDPIObj()->GetMainMonitorDPI());
+	int dpi = GetUIManager()->GetManager()->GetDPIObj()->GetMainMonitorDPI();
+	GetUIManager()->SetZoom(dpi);
 }
 
 void CDuiEditorViewDesign::OnDestroy()
@@ -313,7 +314,7 @@ void CDuiEditorViewDesign::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 		if(!pUIWindow->m_rcHot.IsRectEmpty())
 		{
 			pUIWindow->m_rcHot.SetRectEmpty();
-			pUIWindow->Invalidate();
+			pUIWindow->InvalidateEx();
 		}
 		g_pToolBox->SetDefaultPoint();
 		::SetCursor(::LoadCursor(NULL, IDC_ARROW));
@@ -385,19 +386,21 @@ BOOL CDuiEditorViewDesign::OnEraseBkgnd(CDC* pDC)
 		CRect rc2(0,0, RULEBAR_SIZE_Y, rectClient.Height());
 		pDC->FillSolidRect(rc2,g_cfg.crDesignerBkColor);
 
+		int space = GetUIManager()->GetManager()->GetDPIObj()->ScaleInt(10);
+		DUITRACE(_T("space=%d"), space);
 		for (int i=0; i<=200; i++)
 		{
-			pDC->MoveTo(RULEBAR_SIZE_X + i*10, 0);
+			pDC->MoveTo(RULEBAR_SIZE_X + i*space, 0);
 			if(i*10%100 == 0)
-				pDC->LineTo(RULEBAR_SIZE_X + i*10, 15);
+				pDC->LineTo(RULEBAR_SIZE_X + i*space, 15);
 			else
-				pDC->LineTo(RULEBAR_SIZE_X + i*10, 5);
+				pDC->LineTo(RULEBAR_SIZE_X + i*space, 5);
 
-			pDC->MoveTo(0, RULEBAR_SIZE_Y + i*10);
+			pDC->MoveTo(0, RULEBAR_SIZE_Y + i*space);
 			if(i*10%100 == 0)
-				pDC->LineTo(15, RULEBAR_SIZE_Y + i*10);
+				pDC->LineTo(15, RULEBAR_SIZE_Y + i*space);
 			else
-				pDC->LineTo(5, RULEBAR_SIZE_Y + i*10);
+				pDC->LineTo(5, RULEBAR_SIZE_Y + i*space);
 		}
 	}
 

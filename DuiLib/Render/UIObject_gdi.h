@@ -17,7 +17,7 @@ namespace DuiLib {
 
 		virtual BOOL CreateDefaultFont() override;
 
-		virtual HANDLE  GetHandle() override;
+		virtual UINT_PTR  GetHandle() override;
 		virtual HFONT GetHFONT(CPaintManagerUI *pManager=NULL) override;
 
 		virtual UIFont* Clone(CPaintManagerUI *pManager) override;
@@ -69,7 +69,7 @@ namespace DuiLib {
 
 		virtual BOOL CreateFromData(LPBYTE pImage, int width, int height, DWORD mask) override;
 
-		virtual HANDLE  GetHandle()	override;
+		virtual UINT_PTR  GetHandle()	override;
 		virtual HBITMAP GetHBITMAP() override;
 		virtual BYTE* GetBits() override;
 		virtual int	GetWidth() override;

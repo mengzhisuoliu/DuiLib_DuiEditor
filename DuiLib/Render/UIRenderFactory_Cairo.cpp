@@ -2,10 +2,9 @@
 
 #include "../Render/UIRenderFactory_Cairo.h"
 #include "../Render/UIRender_Cairo.h"
-#include "../Render/UIRender_CairoWin32.h"
 #include "../Render/UIObject_Cairo.h"
 
-#ifdef DUILIB_USE_RENDER_CAIRO
+#ifdef DUILIB_GTK
 ///////////////////////////////////////////////////////////////////////////////////////
 namespace DuiLib {
 
@@ -14,11 +13,7 @@ namespace DuiLib {
 	//
 	UIRender *UIRenderFactory_Cairo::CreateRenderTarget()
 	{
-#ifdef DUILIB_WIN32
-		return new UIRender_CairoWin32();
-#else
 		return new UIRender_Cairo();
-#endif
 	}
 
 	UIFont *UIRenderFactory_Cairo::CreateFont()
@@ -60,4 +55,4 @@ namespace DuiLib {
 
 
 } // namespace DuiLib
-#endif //#ifdef DUILIB_USE_RENDER_CAIRO
+#endif //#ifdef DUILIB_GTK

@@ -452,6 +452,7 @@ CXmlNodeUI child(LPCWSTR name) const;
 
 
 
-
+2026-05-13
+1，跨平台方案改为SDL3,目前正在开发完善中，不影响原有的windows使用。
 
 

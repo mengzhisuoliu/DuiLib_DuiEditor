@@ -16,7 +16,7 @@ public:
 	virtual void InitWindow(){};
 	virtual CControlUI *CreateControl(LPCTSTR pstrClass) { return NULL; }
 
-	void SetFrameWnd(CUIFrameWndBase *pFrame) { m_pFrame = pFrame; m_pManager=m_pFrame->GetManager(); }
+	void SetFrameWnd(CUIFrameWndBase *pFrame) { m_pFrame = pFrame; m_pManager = (DuiLibPaintManagerUI *)m_pFrame->GetManager(); }
 	CUIFrameWndBase *GetFrameWnd() const { return m_pFrame; }
 
 	virtual CPaintManagerUI* GetManager() { return m_pManager; } //{ return GetFrameWnd()->GetManager(); }
@@ -31,7 +31,7 @@ public:
 
 	void __InitWindow();
 protected:
-	CPaintManagerUI *m_pManager;
+	DuiLibPaintManagerUI *m_pManager;
 	CControlUI *m_pRoot;
 	CUIFrameWndBase *m_pFrame;
 };

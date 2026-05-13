@@ -40,14 +40,13 @@ namespace DuiLib
 		if( sText.IsEmpty() ) return;
 
 		CDuiRect rcText = m_rcItem;
-		rcText.Deflate(5,5);
 		SIZE szAvailable = { rcText.right - rcText.left, rcText.bottom - rcText.top };
 		SIZE sz = CalcrectSize(szAvailable);
 
 		//¼ÆËãÎÄ×ÖÇøÓò
-		rcText.left = rcText.left + 15;
-		rcText.top = rcText.top - 5;
-		rcText.right = rcText.left + sz.cx;
+		rcText.left = rcText.left + 20;
+		//rcText.top = rcText.top;
+		rcText.right = rcText.left + sz.cx + 10;
 		rcText.bottom = rcText.top + sz.cy;
 
 		DWORD dwTextColor = m_dwTextColor;
@@ -62,7 +61,12 @@ namespace DuiLib
 		if( nBorderSize > 0 )
 		{
 			CDuiRect rcItem = m_rcItem;
-			rcItem.Deflate(5, 5);
+
+			CDuiRect rcText = m_rcItem;
+			SIZE szAvailable = { rcText.right - rcText.left, rcText.bottom - rcText.top };
+			SIZE sz = CalcrectSize(szAvailable);
+
+			rcItem.top += sz.cy/2 + 1;
 
 			DWORD dwColor = 0;
 

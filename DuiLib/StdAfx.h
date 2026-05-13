@@ -125,7 +125,7 @@ private:
 #include <gtk/gtk.h>
 #endif
 
-#ifdef DUILIB_USE_RENDER_CAIRO
+#ifdef DUILIB_GTK
 #	ifdef WIN32
 #		include "cairo-win32.h"
 #		include "pango/pangocairo.h"
@@ -175,6 +175,40 @@ private:
 #				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/release/lib/gobject-2.0.lib")
 #				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/release/lib/gtk-3.lib")
 #				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/release/lib/gdk-3.0.lib")
+#			endif
+#		endif
+#	endif
+#endif
+
+#ifdef DUILIB_SDL
+#include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
+#include <SDL3_ttf/SDL_ttf.h>
+#include <SDL3_gfxPrimitives.h>
+#	ifdef WIN32
+#		ifdef _WIN64
+#			ifdef _DEBUG
+#				pragma comment(lib, "../3rd/SDL/VisualC/x64/Debug/SDL3x64_d.lib")
+#				pragma comment(lib, "../3rd/SDL_image/VisualC/x64/Debug/SDL3_image64_d.lib")
+#				pragma comment(lib, "../3rd/SDL_ttf/VisualC/x64/Debug/SDL3_ttf64_d.lib")
+#				pragma comment(lib, "../3rd/SDL_gfx/Win32/Debug/SDL3_gfx64_d.lib")
+#			else
+#				pragma comment(lib, "../3rd/SDL/VisualC/Win32/Debug/SDL3x64.lib")
+#				pragma comment(lib, "../3rd/SDL_image/VisualC/Win32/Debug/SDL3_image64.lib")
+#				pragma comment(lib, "../3rd/SDL_ttf/VisualC/Win32/Debug/SDL3_ttf64.lib")
+#				pragma comment(lib, "../3rd/SDL_gfx/Win32/Debug/SDL3_gfx64.lib")
+#			endif
+#		else
+#			ifdef _DEBUG
+#				pragma comment(lib, "../3rd/SDL/VisualC/Win32/Debug/SDL3_d.lib")
+#				pragma comment(lib, "../3rd/SDL_image/VisualC/Win32/Debug/SDL3_image_d.lib")
+#				pragma comment(lib, "../3rd/SDL_ttf/VisualC/Win32/Debug/SDL3_ttf_d.lib")
+#				pragma comment(lib, "../3rd/SDL_gfx/Win32/Debug/SDL3_gfx_d.lib")
+#			else
+#				pragma comment(lib, "../3rd/SDL/VisualC/Win32/Debug/SDL3.lib")
+#				pragma comment(lib, "../3rd/SDL_image/VisualC/Win32/Debug/SDL3_image.lib")
+#				pragma comment(lib, "../3rd/SDL_ttf/VisualC/Win32/Debug/SDL3_ttf.lib")
+#				pragma comment(lib, "../3rd/SDL_gfx/Win32/Debug/SDL3_gfx.lib")
 #			endif
 #		endif
 #	endif

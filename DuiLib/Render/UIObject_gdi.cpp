@@ -41,9 +41,9 @@ namespace DuiLib {
 		return _buildFont(NULL);
 	}
 
-	HANDLE UIFont_gdi::GetHandle()
+	UINT_PTR UIFont_gdi::GetHandle()
 	{
-		return m_hFont;
+		return (UINT_PTR)m_hFont;
 	}
 
 	HFONT UIFont_gdi::GetHFONT(CPaintManagerUI *pManager)
@@ -378,9 +378,9 @@ namespace DuiLib {
 		return TRUE;
 	}
 
-	HANDLE UIBitmap_gdi::GetHandle()
+	UINT_PTR UIBitmap_gdi::GetHandle()
 	{
-		return m_hBitmap;
+		return (UINT_PTR)m_hBitmap;
 	}
 
 	HBITMAP UIBitmap_gdi::GetHBITMAP()

@@ -559,7 +559,7 @@ namespace DuiLib {
 				return;
 			case 0x41:// Ctrl+A
 				{
-					if (IsMultiSelect() && CPlatform::IsKeyDown(VK_CONTROL)) {
+					if (IsMultiSelect() && GetManager()->IsKeyDown(VK_CONTROL)) {
 						SelectAllItems();
 					}
 					return;
@@ -633,7 +633,7 @@ namespace DuiLib {
 		return m_iCurSelActivate;
 	}
 
-	bool CListUI::SelectItem(int iIndex, bool bTakeFocus)
+	bool CListUI::SelectItem(int iIndex, bool bTakeFocus, bool bTriggerEvent)
 	{
 		// 取消所有选择项
 		UnSelectAllItems();
@@ -651,7 +651,7 @@ namespace DuiLib {
 		m_aSelItems.Add(reinterpret_cast<LPVOID>(iIndex));
 		EnsureVisible(iIndex);
 		if( bTakeFocus ) pControl->SetFocus();
-		if( m_pManager != NULL && iLastSel != m_iCurSel) {
+		if( m_pManager != NULL && iLastSel != m_iCurSel && bTriggerEvent) {
 			m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMSELECT, iIndex);
 		}
 
@@ -1980,7 +1980,7 @@ namespace DuiLib {
 			if( m_pOwner->GetListInfo()->bRSelected && event.Type == UIEVENT_RBUTTONDOWN )
 			{
 				if( IsEnabled() ){
-					if(CPlatform::IsKeyDown(VK_CONTROL)) {
+					if(GetManager()->IsKeyDown(VK_CONTROL)) {
 						SelectMulti(!IsSelected());
 					}
 					else Select();
@@ -1992,7 +1992,7 @@ namespace DuiLib {
 		if( event.Type == UIEVENT_BUTTONDOWN )
 		{
 			if( IsEnabled() ){
-				if(CPlatform::IsKeyDown(VK_CONTROL)) {
+				if(GetManager()->IsKeyDown(VK_CONTROL)) {
 					SelectMulti(!IsSelected());
 				}
 				else {
@@ -2481,7 +2481,7 @@ namespace DuiLib {
 		if( event.Type == UIEVENT_BUTTONDOWN )
 		{
 			if( IsEnabled() ){
-				if(CPlatform::IsKeyDown(VK_CONTROL)) {
+				if(GetManager()->IsKeyDown(VK_CONTROL)) {
 					SelectMulti(!IsSelected());
 				}
 				else Select();
@@ -2494,7 +2494,7 @@ namespace DuiLib {
 			if( m_pOwner->GetListInfo()->bRSelected && event.Type == UIEVENT_RBUTTONDOWN )
 			{
 				if( IsEnabled() ){
-					if(CPlatform::IsKeyDown(VK_CONTROL)) {
+					if(GetManager()->IsKeyDown(VK_CONTROL)) {
 						SelectMulti(!IsSelected());
 					}
 					else Select();

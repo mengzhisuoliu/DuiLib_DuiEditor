@@ -15,7 +15,7 @@ public:
 	virtual HWND CreateUiWindow(HWND hwndParent, LPCTSTR pstrWindowName,DWORD dwStyle, DWORD dwExStyle) = 0;
 	virtual BOOL DestroyUiWindow();
 	virtual BOOL GetWindowRect(LPRECT lpRect);
-	virtual void Invalidate();
+	virtual void InvalidateEx();
 	virtual BOOL MoveWindow(__in int X, __in int Y, __in int nWidth, __in int nHeight, __in BOOL bRepaint);
 
 public:

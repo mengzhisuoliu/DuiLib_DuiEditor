@@ -336,7 +336,7 @@ namespace DuiLib
 		pNotify->sNotifyName = _T("CGridUI::EnsureVisible");
 		pNotify->wparam = row;
 		pNotify->lparam = col;
-		CPlatform::PostMessage(GetManager()->GetPaintWindow(), UIMSG_GRID_NOTIFY, (WPARAM)this, (LPARAM)pNotify);
+		GetManager()->PostMessage(UIMSG_GRID_NOTIFY, (WPARAM)this, (LPARAM)pNotify);
 
 		/*
 		if (IsVirtualGrid()) return;
@@ -1349,7 +1349,7 @@ LABEL_END:
 					else
 					{
 						//Ctrl键按下
-						if(CPlatform::IsKeyDown(VK_CONTROL))
+						if(GetManager()->IsKeyDown(VK_CONTROL))
 						{
 							//当多行选中时，若是按住Ctrl键，点击已选中行时，取消选择
 							if(IsSelectedRow(row))
@@ -1377,7 +1377,7 @@ LABEL_END:
 				{
 					if(IsFixedCol(col) && !IsFixedRow(row)) //点击左边固定列时，选中整行
 					{
-						if(CPlatform::IsKeyUp(VK_CONTROL)) //Ctrl键没有按下，先清理选择
+						if(GetManager()->IsKeyUp(VK_CONTROL)) //Ctrl键没有按下，先清理选择
 							ClearSelectedCells();
 
 						//选中整行，不包含固定列
@@ -1394,7 +1394,7 @@ LABEL_END:
 					else
 					{
 						//Ctrl键按下
-						if(CPlatform::IsKeyDown(VK_CONTROL))
+						if(GetManager()->IsKeyDown(VK_CONTROL))
 						{
 							//当多行选中时，若是按住Ctrl键，点击已选中单元格时，取消选择之
 							if(IsSelectedCell(row, col))
@@ -1432,7 +1432,7 @@ LABEL_END:
 				CGridCellUI *pCell2 = GetCellUIFromPoint(CDuiPoint(m_rcTracker.right, m_rcTracker.bottom));
 				if(pCell1 && pCell2 && pCell1 != pCell2)
 				{
-					if(CPlatform::IsKeyUp(VK_CONTROL)) {
+					if(GetManager()->IsKeyUp(VK_CONTROL)) {
 						ClearSelectedRows();
 						ClearSelectedCells();
 					}

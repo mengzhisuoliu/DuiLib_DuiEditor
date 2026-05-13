@@ -42,6 +42,7 @@ namespace DuiLib {
 		DuiLib_Render_Default,	//默认的，就是原来的模式。
 		DuiLib_Render_GdiPlus,	//统一使用Gdiplus绘制
 		DuiLib_Render_Cairo,	//使用cairo图像库
+		DuiLib_Render_Sdl,		//使用SDL原生
 		//DuiLib_Render_Skia,	//使用skia图像库
 	};
 	
@@ -57,6 +58,7 @@ namespace DuiLib {
 		OT_BITMAP,
 		OT_BITMAP_CAIRO,
 		OT_BITMAP_PIXBUF,
+		OT_BITMAP_SDL,
 		OT_IMAGE,
 	};
 	
@@ -85,8 +87,8 @@ namespace DuiLib {
 	public:
 		const emUIOBJTYPE ObjectType() const override {  return OT_FONT;  }
 
-		virtual HANDLE  GetHandle()		= 0;
-#ifdef WIN32
+		virtual UINT_PTR  GetHandle()		= 0;
+#ifdef DUILIB_WIN32
 		virtual HFONT GetHFONT(CPaintManagerUI *pManager) = 0;
 #endif
 
@@ -139,7 +141,7 @@ namespace DuiLib {
 
 	public:
 		const emUIOBJTYPE ObjectType() const override { return OT_PEN; }
-#ifdef WIN32
+#ifdef DUILIB_WIN32
 		virtual HPEN GetHPEN() const = 0;
 #endif
 
@@ -165,7 +167,7 @@ namespace DuiLib {
 		const emUIOBJTYPE ObjectType() const override {  return OT_BITMAP;  }
 
 		//hBitmap由内部释放
-#ifdef WIN32
+#ifdef DUILIB_WIN32
 		virtual BOOL CreateFromHBitmap(HBITMAP hBitmap) = 0;
 
 		virtual BOOL CreateARGB32Bitmap(HDC hDC, int width, int height, BOOL bFlip) = 0;
@@ -175,8 +177,8 @@ namespace DuiLib {
 
 		virtual BOOL CreateFromData(LPBYTE pImage, int width, int height, DWORD mask) = 0;
 
-		virtual HANDLE  GetHandle() = 0;
-#ifdef WIN32
+		virtual UINT_PTR  GetHandle() = 0;
+#ifdef DUILIB_WIN32
 		virtual HBITMAP GetHBITMAP()	= 0;
 #endif
 		virtual BYTE* GetBits()			= 0;
@@ -201,7 +203,7 @@ namespace DuiLib {
 	public:
 		const emUIOBJTYPE ObjectType() const override {  return OT_IMAGE;  }
 
-#ifdef WIN32
+#ifdef DUILIB_WIN32
 		virtual BOOL CreateImage(HBITMAP hBitmap, bool bAlpha) = 0;
 #endif
 
@@ -242,12 +244,12 @@ namespace DuiLib {
 
 	public:
 		const emUIOBJTYPE ObjectType() const override { return OT_BRUSH; }
-#ifdef WIN32
+#ifdef DUILIB_WIN32
 		virtual HBRUSH GetHBrush() const = 0;
 #endif
 
 		//hBrush由内部释放
-#ifdef WIN32
+#ifdef DUILIB_WIN32
 		virtual BOOL CreateFromHBrush(HBRUSH hBrush) = 0;
 #endif
 

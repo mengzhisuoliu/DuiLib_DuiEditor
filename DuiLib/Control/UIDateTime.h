@@ -17,6 +17,8 @@ namespace DuiLib
 		virtual LPCTSTR GetClass() const override;
 		virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
+		virtual void DoInit();
+
 		SYSTEMTIME& GetTime();
 		void SetTime(SYSTEMTIME* pst);
 
@@ -31,6 +33,7 @@ namespace DuiLib
 		void SetVisible(bool bVisible = true);
 		void SetInternVisible(bool bVisible = true);
 		void DoEvent(TEventUI& event);
+		virtual void PaintText(UIRender *pRender) override;
 
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
@@ -38,7 +41,8 @@ namespace DuiLib
 		SYSTEMTIME m_sysTime;
 		int        m_uFormatStyle; //0=date, 1=time, 2=datetime  add by liqs99
 
-		CDateTimeWnd* m_pWindow;
+		CDateTimeWnd* m_pWindowDate;
+		CDateTimeWnd* m_pWindowTime;
 	};
 }
 #endif // __UIDATETIME_H__

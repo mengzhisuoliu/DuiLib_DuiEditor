@@ -26,7 +26,7 @@ namespace DuiLib {
 	{
 		ASSERT(::IsWindow(m_hWnd));
 		if (!::IsWindow(m_hWnd)) return;
-		PostMessage(WM_CLOSE, (WPARAM)nRet, 0L);
+		::PostMessage(m_hWnd, WM_CLOSE, (WPARAM)nRet, 0L);
 		isClosing = true;
 	}
 
@@ -436,7 +436,7 @@ namespace DuiLib {
 		}
 
 		RECT rcWindow;
-		GetWindowRect(m_pOwner->GetManager()->GetPaintWindow(), &rcWindow);
+		m_pOwner->GetManager()->GetWindowRect(&rcWindow);
 
 		rc.top = rcOwner.top;
 		rc.bottom = rc.top + cyFixed;
@@ -455,8 +455,9 @@ namespace DuiLib {
 		MenuMenuReceiverImplBase* pReceiver = iterator.next();
 		while( pReceiver != NULL ) {
 			CMenuWndWin32* pContextMenu = dynamic_cast<CMenuWndWin32*>(pReceiver);
-			if( pContextMenu != NULL ) {
-				GetWindowRect(pContextMenu->GetHWND(), &rcPreWindow);
+			if( pContextMenu != NULL ) 
+			{
+				pContextMenu->GetWindowRect(&rcPreWindow);
 
 				bReachRight = rcPreWindow.left >= rcWindow.right;
 				bReachBottom = rcPreWindow.top >= rcWindow.bottom;
@@ -591,7 +592,7 @@ namespace DuiLib {
 		}
 
 		if( m_pm.MessageHandler(uMsg, wParam, lParam, lRes) ) return lRes;
-		return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+		return CWindowWin32::HandleMessage(uMsg, wParam, lParam);
 	}
 
 } // namespace DuiLib

@@ -186,7 +186,7 @@ namespace DuiLib {
 		}
 
 		if( m_pm.MessageHandler(uMsg, wParam, lParam, lRes) ) return lRes;
-		return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+		return CWindowGtk::HandleMessage(uMsg, wParam, lParam);
 	}
 
 } // namespace DuiLib

@@ -22,6 +22,25 @@ CUIFrameWndBase::~CUIFrameWndBase(void)
 	
 }
 
+DuiLibPaintManagerUI *CUIFrameWndBase::GetManager()
+{
+	return &m_pm;
+}
+
+void CUIFrameWndBase::OnFinalMessage( UIWND hWnd )
+{
+	for (int i=0; i<m_listForm.GetSize(); i++)
+	{
+		CUIForm *pForm = (CUIForm *)m_listForm.GetAt(i);
+		delete pForm;
+	}
+	m_listForm.Empty();
+
+	GetManager()->RemovePreMessageFilter(this);
+	GetManager()->RemoveNotifier(this);
+	GetManager()->ReapObjects(GetManager()->GetRoot());
+}
+
 CControlUI *CUIFrameWndBase::GetRoot()
 {
 	return GetManager()->GetRoot();
@@ -54,6 +73,216 @@ void CUIFrameWndBase::DetachVirtualForm(CUIFrmBase *pForm)
 			return;
 		}
 	}
+}
+
+void CUIFrameWndBase::Notify(TNotifyUI& msg)
+{
+	if (msg.sType == DUI_MSGTYPE_CLICK)
+	{
+		CDuiString sCtrlName = msg.pSender->GetName();
+		if (sCtrlName == _T("windowclosebtn"))
+		{
+			Close(IDCANCEL);
+		}
+		else if (sCtrlName == _T("windowminbtn"))
+		{
+			DuiLibWindowWnd::SendMessage(m_hWnd, WM_SYSCOMMAND, SC_MINIMIZE, 0);
+		}
+		else if (sCtrlName == _T("windowmaxbtn"))
+		{
+			DuiLibWindowWnd::SendMessage(m_hWnd, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
+		}
+		else if (sCtrlName == _T("windowrestorebtn"))
+		{
+			DuiLibWindowWnd::SendMessage(m_hWnd, WM_SYSCOMMAND, SC_RESTORE, 0);
+		}
+	}
+
+	else if (msg.sType == DUI_MSGTYPE_WINDOWINIT)
+	{
+		if (GetManager()->IsZoomed())
+		{
+			CControlUI* pControl = static_cast<CControlUI*>(GetManager()->FindControl(_T("windowmaxbtn")));
+			if (pControl) pControl->SetVisible(false);
+			pControl = static_cast<CControlUI*>(GetManager()->FindControl(_T("windowrestorebtn")));
+			if (pControl) pControl->SetVisible(true);
+		}
+		else
+		{
+			CControlUI* pControl = static_cast<CControlUI*>(GetManager()->FindControl(_T("windowmaxbtn")));
+			if (pControl) pControl->SetVisible(true);
+			pControl = static_cast<CControlUI*>(GetManager()->FindControl(_T("windowrestorebtn")));
+			if (pControl) pControl->SetVisible(false);
+		}
+	}
+
+	else if (msg.sType == DUI_MSGTYPE_TABACTIVEFORM)
+	{
+		for (int i = 0; i < m_listForm.GetSize(); i++)
+		{
+			CUIForm* pForm = (CUIForm*)m_listForm.GetAt(i);
+			if (pForm->IsForm(msg.pSender->GetName()))
+			{
+				pForm->OnActiveForm();
+				return;
+			}
+		}
+	}
+
+	else if (msg.sType == DUI_MSGTYPE_TABNOACTIVEFORM)
+	{
+		for (int i = 0; i < m_listForm.GetSize(); i++)
+		{
+			CUIForm* pForm = (CUIForm*)m_listForm.GetAt(i);
+			if (pForm->IsForm(msg.pSender->GetName()))
+			{
+				pForm->OnHideForm();
+				return;
+			}
+		}
+	}
+
+	for (int i = 0; i < m_listForm.GetSize(); i++)
+	{
+		CUIForm* pForm = (CUIForm*)m_listForm.GetAt(i);
+		pForm->Notify(msg);
+	}
+}
+
+LRESULT CUIFrameWndBase::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& bHandled)
+{
+	if (uMsg == WM_KEYDOWN)
+	{
+		switch (wParam)
+		{
+		case VK_RETURN:
+		case VK_ESCAPE:
+			{
+				LRESULT lResult = ResponseDefaultKeyEvent(wParam);
+				if(lResult == S_OK)
+				{
+					bHandled = true;
+					return S_OK;
+				}
+			}
+		default:
+			break;
+		}
+	}
+	return S_FALSE;
+}
+
+LRESULT CUIFrameWndBase::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	if (uMsg == UIMSG_GRID_NOTIFY)
+	{
+		CGridUI* pGrid = (CGridUI*)wParam;
+		GetManager()->SendNotify(pGrid, _T("CGridUI::OnGridNotify"), wParam, lParam);
+		return 0;
+	}
+
+	if(uMsg == UIMSG_CREATE_MENU)
+	{
+		CDuiString *pstring = (CDuiString *)wParam;
+		CreateMenu(pstring->GetData());
+		delete pstring;
+		return 0;
+	}
+
+	if(uMsg == UIMSG_CONTROL_ACTION)
+	{
+		TUIAction *act = (TUIAction *)wParam;
+		ASSERT(act);
+		UIAction(act, false);
+		return 0;
+	}
+
+	if(uMsg == UIMSG_CONTROL_ACTION_ASYNC)
+	{
+		TUIAction *act = (TUIAction *)wParam;
+		ASSERT(act);
+		UIAction(act, true);
+		delete act;
+	}
+
+	if(OnCustomMessage(uMsg, wParam, lParam))
+	{
+		return 0;
+	}
+
+	for (int i=0; i<m_listForm.GetSize(); i++)
+	{
+		CUIForm *pForm = (CUIForm *)m_listForm.GetAt(i);
+		if(pForm->OnCustomMessage(uMsg, wParam, lParam))
+		{
+			bHandled = TRUE;
+			return 0;
+		}
+	}
+
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CUIFrameWndBase::HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	if(uMsg == UIMSG_MENUCLICK)
+	{
+		bHandled = TRUE;
+
+		MenuCmd* pMenuCmd = (MenuCmd*)wParam;
+		if(pMenuCmd)
+		{
+			if(OnMenuCommand(pMenuCmd))
+			{
+				delete pMenuCmd;
+				bHandled = TRUE;
+				return 0;
+			}
+
+			for (int i=0; i<m_listForm.GetSize(); i++)
+			{
+				CUIForm *pForm = (CUIForm *)m_listForm.GetAt(i);
+				if(pForm->OnMenuCommand(pMenuCmd))
+				{
+					delete pMenuCmd;
+					bHandled = TRUE;
+					return 0; 
+				}
+			}
+
+			delete pMenuCmd;
+			return 0;
+		}
+	}
+	else if(uMsg == UIMSG_MENU_UPDATE_COMMAND_UI)
+	{
+		bHandled = TRUE;
+
+		CMenuCmdUI* pCmdUI = (CMenuCmdUI *)wParam;
+		if(pCmdUI)
+		{
+			if(OnMenuUpdateCommandUI(pCmdUI))
+			{
+				bHandled = TRUE;
+				return 1;
+			}
+
+			for (int i=0; i<m_listForm.GetSize(); i++)
+			{
+				CUIForm *pForm = (CUIForm *)m_listForm.GetAt(i);
+				if(pForm->OnMenuUpdateCommandUI(pCmdUI))
+				{
+					bHandled = TRUE;
+					return 1; 
+				}
+			}
+
+			return 0;
+		}
+	}
+
+	return 0;
 }
 
 void CUIFrameWndBase::__InitWindow()
@@ -148,6 +377,18 @@ void CUIFrameWndBase::UIAction(TUIAction *act, bool bAsync)
 		}
 		return;
 	}
+
+	if (act->action == UIACTION_SetVisible)
+	{
+		pControl->SetVisible((BOOL)act->wParam == TRUE);
+		return;
+	}
+
+	if(act->action == UIACTION_Close)
+	{
+		Close(act->wParam);
+		return;
+	}
 }
 
 BOOL CUIFrameWndBase::IsInStaticControl(CControlUI *pControl)
@@ -182,20 +423,6 @@ BOOL CUIFrameWndBase::IsInStaticControl(CControlUI *pControl)
 	}
 
 	return bRet;
-}
-
-LRESULT CUIFrameWndBase::ResponseDefaultKeyEvent(WPARAM wParam)
-{
-	if (wParam == VK_RETURN)
-	{
-		return S_FALSE;
-	}
-	else if (wParam == VK_ESCAPE)
-	{
-		return S_FALSE;
-	}
-
-	return S_FALSE;
 }
 
 } //namespace DuiLib{

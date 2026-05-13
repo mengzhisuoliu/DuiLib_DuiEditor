@@ -267,7 +267,7 @@ namespace DuiLib {
 		virtual RECT GetRelativePos() const; 
 
 		// 客户区域（除去scrollbar和inset）
-		virtual RECT GetClientPos() const; 
+		virtual CDuiRect GetClientPos(); 
 
 		//控件位置大小
 		virtual const CDuiRect& GetPos() const;
@@ -482,7 +482,7 @@ namespace DuiLib {
 		CDuiString m_sName;				//控件名字
 		bool m_bUpdateNeeded;			//控件是否需要刷新
 		bool m_bMenuUsed;				//是否响应菜单事件，DUI_MSGTYPE_MENU
-		CDuiRect m_rcItem;					//控件的位置和大小，实际显示时。
+		CDuiRect m_rcItem;				//控件的位置和大小，实际显示时。
 		RECT m_rcPadding;				//外边距
 		SIZE m_cXY;						//绝对定位时，控件左上角坐标
 		SIZE m_cxyFixed;				//预设的控件大小

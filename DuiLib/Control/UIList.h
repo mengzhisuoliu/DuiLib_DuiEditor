@@ -132,7 +132,7 @@ namespace DuiLib {
 		virtual UINT GetListType() = 0;
 		virtual TListInfoUI* GetListInfo() = 0;
 		virtual int GetCurSel() const = 0;
-		virtual bool SelectItem(int iIndex, bool bTakeFocus = false) = 0;
+		virtual bool SelectItem(int iIndex, bool bTakeFocus = false, bool bTriggerEvent=true) = 0;
 		virtual bool SelectMultiItem(int iIndex, bool bTakeFocus = false) = 0;
 		virtual bool UnSelectItem(int iIndex, bool bOthers = false) = 0;
 		virtual void DoEvent(TEventUI& event) = 0;
@@ -192,7 +192,7 @@ namespace DuiLib {
 
 		virtual int GetCurSel() const override;
 		int GetCurSelActivate() const;
-		virtual bool SelectItem(int iIndex, bool bTakeFocus = false) override;
+		virtual bool SelectItem(int iIndex, bool bTakeFocus = false, bool bTriggerEvent=true) override;
 		bool SelectItemActivate(int iIndex);    // Ë«»÷Ñ¡ÖÐ
 
 		virtual bool SelectMultiItem(int iIndex, bool bTakeFocus = false) override;

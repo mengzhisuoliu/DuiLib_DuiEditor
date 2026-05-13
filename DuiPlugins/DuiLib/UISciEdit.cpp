@@ -63,7 +63,7 @@ namespace DuiLib
 		"mkd.ghdkm"
 	}; 
 
-	class CSciWndUI : public CWindowWnd
+	class CSciWndUI : public CWindowWin32
 	{
 	public:
 		CSciWndUI(void)
@@ -108,7 +108,8 @@ namespace DuiLib
 
 		void OnFinalMessage(HWND hWnd)
 		{
-			
+			DuiLibPaintManagerUI *pManager = (DuiLibPaintManagerUI *)m_pOwner->GetManager();
+			pManager->RemoveNativeWindow(m_hWnd);
 		}
 
 		virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -118,10 +119,11 @@ namespace DuiLib
 
 			if( uMsg == WM_CREATE ) 
 			{
-				m_pOwner->GetManager()->AddNativeWindow(m_pOwner, m_hWnd);
+				DuiLibPaintManagerUI *pManager = (DuiLibPaintManagerUI *)m_pOwner->GetManager();
+				pManager->AddNativeWindow(m_pOwner, m_hWnd);
 
 				m_hwndScintilla = CreateWindowEx(0, _T("Scintilla"),_T(""), WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_CLIPCHILDREN, 0,0,0,0,
-					GetHWND(),(HMENU)NULL, m_pOwner->GetManager()->GetInstance(),NULL);
+					GetHWND(),(HMENU)NULL, pManager->GetInstance(),NULL);
 				ASSERT(m_hwndScintilla);
 				m_pOwner->InitSciApi(m_hwndScintilla);
 			}
@@ -147,7 +149,7 @@ namespace DuiLib
 				}
 			}
 
-			if( !bHandled ) return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+			if( !bHandled ) return CWindowWin32::HandleMessage(uMsg, wParam, lParam);
 			return lRes;
 		}
 

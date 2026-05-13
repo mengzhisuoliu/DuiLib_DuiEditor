@@ -417,7 +417,7 @@
     </ClCompile>
     <Link>
       <LibraryDependencies>gtk-3; gobject-2.0; glib-2.0;gdk-3;cairo;gdk_pixbuf-2.0;pango-1.0;pangocairo-1.0;</LibraryDependencies>
-      <OutputFile>/home/test/Desktop/DuiLib/bin/libDuiLib.so</OutputFile>
+      <OutputFile>/home/test/projects/DuiLib/libDuiLib.so</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='xsDebug|x64'">

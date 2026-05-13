@@ -109,7 +109,7 @@ namespace DuiLib{
 			bHandled = TRUE;
 		}
 		else bHandled = FALSE;
-		if( !bHandled ) return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+		if( !bHandled ) return CWindowWin32::HandleMessage(uMsg, wParam, lParam);
 		return lRes;
 	}
 

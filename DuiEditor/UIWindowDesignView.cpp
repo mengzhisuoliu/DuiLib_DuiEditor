@@ -82,7 +82,7 @@ BOOL CUIWindowDesignView::OnDragingFromToolBox(CPoint point)
 	if(m_pDragToControl != pCurControl)
 	{
 		m_pDragToControl = (CContainerUI *)pCurControl;
-		Invalidate();
+		InvalidateEx();
 	}
 
 	return TRUE;
@@ -452,7 +452,7 @@ LRESULT CUIWindowDesignView::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lPar
 		}
 	}
 
-	return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+	return CWindowWin32::HandleMessage(uMsg, wParam, lParam);
 }
 
 LRESULT CUIWindowDesignView::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -710,7 +710,7 @@ LRESULT CUIWindowDesignView::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lPar
 		if(!m_rcHot.IsRectEmpty())
 		{
 			m_rcHot.SetRectEmpty();
-			Invalidate();
+			InvalidateEx();
 		}
 		g_pToolBox->SetDefaultPoint();
 		return 0;
@@ -809,7 +809,7 @@ LRESULT CUIWindowDesignView::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lPar
 		}
 	}
 
-	Invalidate();
+	InvalidateEx();
 	return 0;
 }
 
@@ -905,7 +905,7 @@ LRESULT CUIWindowDesignView::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam
 		if(m_rcHot != pCurControl->GetPos())
 		{
 			m_rcHot = pCurControl->GetPos();
-			Invalidate();
+			InvalidateEx();
 		}
 		return 0;
 	}
@@ -924,7 +924,7 @@ LRESULT CUIWindowDesignView::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam
 
 	if(pDesignView && pDesignView->m_bViewMouse)
 	{
-		Invalidate();
+		InvalidateEx();
 	}
 
 	return 0;
@@ -971,7 +971,7 @@ LRESULT CUIWindowDesignView::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 		break;
 	case VK_UP:
 		m_tracker.OnkeyUp();
-		Invalidate();
+		InvalidateEx();
 		break;
 	case VK_DOWN:
 		m_tracker.OnkeyDown();

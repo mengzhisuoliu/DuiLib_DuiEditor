@@ -4,7 +4,7 @@
 namespace DuiLib
 {
 
-class CGridCtrlWnd : public CWindowWnd
+class CGridCtrlWnd : public CWindowWin32
 {
 public:
 	CGridCtrlWnd(void) {}
@@ -32,6 +32,8 @@ public:
 
 	void OnFinalMessage(HWND hWnd)
 	{
+		DuiLibPaintManagerUI *pManager = (DuiLibPaintManagerUI *)m_pOwner->GetManager();
+		pManager->RemoveNativeWindow(m_hWnd);
 		if(m_pGrid) { delete m_pGrid; m_pGrid = NULL; }
 	}
 
@@ -41,7 +43,8 @@ public:
 		BOOL bHandled = FALSE;
 		if( uMsg == WM_CREATE ) 
 		{
-			m_pOwner->GetManager()->AddNativeWindow(m_pOwner, m_hWnd);
+			DuiLibPaintManagerUI *pManager = (DuiLibPaintManagerUI *)m_pOwner->GetManager();
+			pManager->AddNativeWindow(m_pOwner, m_hWnd);
 
 			CWnd *pWnd = CWnd::FromHandle(m_hWnd);
 			m_pGrid = new CGridCtrl();
@@ -67,7 +70,7 @@ public:
 			m_pOwner->OnGridNotify(uMsg, wParam, lParam);
 		}
 
-		if( !bHandled ) return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+		if( !bHandled ) return CWindowWin32::HandleMessage(uMsg, wParam, lParam);
 		return lRes;
 	}
 

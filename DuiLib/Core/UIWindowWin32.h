@@ -8,7 +8,7 @@
 namespace DuiLib {
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
-	class UILIB_API CWindowWin32 : public CWindowBase
+	class UILIB_API CWindowWin32 : public CWindowWnd
 	{
 	public:
 		CWindowWin32();
@@ -24,26 +24,31 @@ namespace DuiLib {
 		void Unsubclass();
 		void ShowWindow(bool bShow = true, bool bTakeFocus = true);
 		UINT ShowModal();
+
+		static BOOL IsWindow(UIWND hWnd);
+		static BOOL IsChildWindow(UIWND hWnd);
+		static UIWND GetParentWindow(UIWND hWnd);
+		static LRESULT SendMessage(UIWND hWnd, UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0);
+		static BOOL PostMessage(UIWND hWnd, UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0);
+
+		virtual void Invalidate() override;
+		virtual BOOL SetWindowPos(int x, int y, int cx, int cy, UINT uFlags) override;
+		virtual BOOL GetWindowRect(LPRECT lpRect) override;
+		virtual BOOL GetClientRect(LPRECT lpRect) override;
+
 		virtual void Close(UINT nRet = IDOK) override;
 		virtual void SetCursor(int nCursor) override;
-		virtual BOOL SetWindowPos(UIWND hWndInsertAfter,int x, int y, int cx, int cy, UINT uFlags) override;
-
+		
 		void CenterWindow();	// 居中，支持扩展屏幕
 		void SetIcon(UINT nRes);
 
-		virtual LRESULT SendMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0L) override;
-		virtual LRESULT PostMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0L) override;
 		void ResizeClient(int cx = -1, int cy = -1);
-
-		virtual BOOL SetTimer(UINT uElapse, TIMERINFO *pTimer) override;
-		virtual BOOL KillTimer(TIMERINFO *pTimer) override;
 	protected:
 		virtual LPCTSTR GetWindowClassName() const = 0;
 		virtual LPCTSTR GetSuperClassName() const;
 		virtual UINT GetClassStyle() const;
 
-		virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-		virtual void OnFinalMessage(HWND hWnd);
+		virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) override;
 
 		static LRESULT CALLBACK __WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 		static LRESULT CALLBACK __ControlProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);

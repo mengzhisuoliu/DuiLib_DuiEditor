@@ -8,7 +8,7 @@ namespace DuiLib {
 //////////////////////////////////////////////////////////////////////////////////////////////
 //
 //
-class UILIB_API CMenuWndWin32 : public CWindowWnd, public MenuReceiverImpl, public INotifyUI, public IDialogBuilderCallback
+class UILIB_API CMenuWndWin32 : public CWindowWin32, public MenuReceiverImpl, public INotifyUI, public IDialogBuilderCallback
 {
 public:
 	static MenuObserverImpl& GetGlobalContextMenuObserver()
@@ -66,7 +66,6 @@ public:
 
 	POINT			m_BasedPoint;
 	STRINGorID		m_xml;
-    DuiLibPaintManagerUI m_pm;
     CMenuElementUI* m_pOwner;
     CMenuUI*	m_pLayout;
 	DWORD		m_dwAlignment;	//菜单对齐方式

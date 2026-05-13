@@ -73,7 +73,7 @@ namespace DuiLib {
 
 		virtual int FindSelectable(int iIndex, bool bForward = true) const;
 
-		RECT GetClientPos() const;
+		virtual CDuiRect GetClientPos() override;
 		virtual SIZE EstimateSize(SIZE szAvailable) override;
 		virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
 		virtual bool CalcPos(CControlUI *pChildControl, CDuiRect &rcChild) override; //子控件调用, 询问父控件，你将会给我分配多大的rect。

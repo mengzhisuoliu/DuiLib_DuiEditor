@@ -6,7 +6,7 @@
 #ifdef DUILIB_GTK
 namespace DuiLib
 {
-	class CDateTimeWndGtk : public CWindowWnd
+	class CDateTimeWndGtk : public CWindowGtk
 	{
 	public:
 		CDateTimeWndGtk();

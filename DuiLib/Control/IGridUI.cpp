@@ -62,6 +62,9 @@ void TCellData::SetTextV(LPCTSTR lpszFormat, ...)
 void TCellData::SetTag(UINT_PTR tag) { m_tag = tag; }
 UINT_PTR TCellData::GetTag() const { return m_tag; }
 
+CDuiString TCellData::GetUserData(){ return m_sUserData; }
+void TCellData::SetUserData(LPCTSTR pstrText){ m_sUserData = pstrText; }
+
 void TCellData::SetTextColor(DWORD dwColor) { m_dwTextColor = dwColor; }
 DWORD TCellData::GetTextColor() const { return m_dwTextColor; }
 
@@ -83,6 +86,9 @@ BOOL TRowData::IsSelected() const { return m_bSelected; }
 
 void TRowData::SetTag(UINT_PTR tag) { m_tag = tag; }
 UINT_PTR TRowData::GetTag() const { return m_tag; }
+
+CDuiString TRowData::GetUserData(){ return m_sUserData; }
+void TRowData::SetUserData(LPCTSTR pstrText){ m_sUserData = pstrText; }
 
 TCellData *TRowData::GetCell(int col) { return (TCellData *)m_cells.GetAt(col); }
 

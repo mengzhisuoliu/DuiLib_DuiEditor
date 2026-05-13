@@ -16,7 +16,7 @@ CWindowWin32::CWindowWin32() : m_OldWndProc(::DefWindowProc), m_bSubclassed(fals
 
 UINT CWindowWin32::GetClassStyle() const
 {
-    return 0;
+    return CS_DBLCLKS;
 }
 
 LPCTSTR CWindowWin32::GetSuperClassName() const
@@ -88,7 +88,7 @@ UINT CWindowWin32::ShowModal()
             ::EnableWindow(hWndParent, TRUE);
             ::SetFocus(hWndParent);
         }
-        if( !CPaintManagerUI::TranslateMessage(&msg) ) {
+        if( !CPaintManagerWin32UI::TranslateMessage(&msg) ) {
             ::TranslateMessage(&msg);
             ::DispatchMessage(&msg);
         }
@@ -100,21 +100,66 @@ UINT CWindowWin32::ShowModal()
     return nRet;
 }
 
+BOOL CWindowWin32::IsWindow(UIWND hWnd)
+{
+    return ::IsWindow(hWnd);
+}
+
+BOOL CWindowWin32::IsChildWindow(UIWND hWnd)
+{
+	UINT uStyle = GetWindowStyle(hWnd);
+	return (uStyle & WS_CHILD) == WS_CHILD;
+}
+
+UIWND CWindowWin32::GetParentWindow(UIWND hWnd)
+{
+    return ::GetParent(hWnd);
+}
+
+LRESULT CWindowWin32::SendMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	if (IsWindow(hWnd))
+		return ::SendMessage(hWnd, uMsg, wParam, lParam);
+	return 0;
+}
+
+BOOL CWindowWin32::PostMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    if (IsWindow(hWnd))
+        return ::PostMessage(hWnd, uMsg, wParam, lParam);
+    return FALSE;
+}
+
+void CWindowWin32::Invalidate()
+{
+    ::InvalidateRect(m_hWnd, NULL, FALSE);
+}
+
+BOOL CWindowWin32::SetWindowPos(int x, int y, int cx, int cy, UINT uFlags)
+{
+    return ::SetWindowPos(m_hWnd, NULL, x, y, cx, cy, uFlags);
+}
+
+BOOL CWindowWin32::GetWindowRect(LPRECT lpRect)
+{
+   return ::GetWindowRect(m_hWnd, lpRect);
+}
+
+BOOL CWindowWin32::GetClientRect(LPRECT lpRect)
+{
+    return ::GetClientRect(m_hWnd, lpRect);
+}
+
 void CWindowWin32::Close(UINT nRet)
 {
     ASSERT(::IsWindow(m_hWnd));
     if( !::IsWindow(m_hWnd) ) return;
-    PostMessage(WM_CLOSE, (WPARAM)nRet, 0L);
+    ::PostMessage(m_hWnd, WM_CLOSE, (WPARAM)nRet, 0L);
 }
 
 void CWindowWin32::SetCursor(int nCursor)
 {
 	::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(nCursor)));
-}
-
-BOOL CWindowWin32::SetWindowPos(UIWND hWndInsertAfter,int x, int y, int cx, int cy, UINT uFlags)
-{
-	return ::SetWindowPos(m_hWnd, hWndInsertAfter, x, y, cx, cy, uFlags);
 }
 
 void CWindowWin32::CenterWindow()
@@ -344,18 +389,6 @@ BOOL CWindowWin32::DoTouchInformation(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 	*/
 }
 
-LRESULT CWindowWin32::SendMessage(UINT uMsg, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0*/)
-{
-    ASSERT(::IsWindow(m_hWnd));
-    return ::SendMessage(m_hWnd, uMsg, wParam, lParam);
-} 
-
-LRESULT CWindowWin32::PostMessage(UINT uMsg, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0*/)
-{
-    ASSERT(::IsWindow(m_hWnd));
-    return ::PostMessage(m_hWnd, uMsg, wParam, lParam);
-}
-
 void CWindowWin32::ResizeClient(int cx /*= -1*/, int cy /*= -1*/)
 {
     ASSERT(::IsWindow(m_hWnd));
@@ -367,24 +400,20 @@ void CWindowWin32::ResizeClient(int cx /*= -1*/, int cy /*= -1*/)
     ::SetWindowPos(m_hWnd, NULL, 0, 0, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
 }
 
-BOOL CWindowWin32::SetTimer(UINT uElapse, TIMERINFO *pTimer)
-{
-	return ::SetTimer(m_hWnd, pTimer->uWinTimer, uElapse, NULL) != NULL;
-}
-
-BOOL CWindowWin32::KillTimer(TIMERINFO *pTimer)
-{
-	if(pTimer == NULL) return FALSE;
-	return ::KillTimer(m_hWnd, pTimer->uWinTimer);
-}
-
 LRESULT CWindowWin32::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    return ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
-}
+	LRESULT lRet = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+	if(IsHandleMessage()) return lRet;
 
-void CWindowWin32::OnFinalMessage(HWND /*hWnd*/)
-{
+	if(UIGetApp() && uMsg == ((CUIApplicationWin32 *)UIGetApp())->m_UIAPP_SINGLEAPPLICATION_MSG)
+	{
+		::ShowWindow(GetHWND(), SW_SHOW);
+		::SendMessage(m_hWnd, WM_SYSCOMMAND, SC_RESTORE, 0); 
+		::SetForegroundWindow(GetHWND());
+		return 1;
+	}
+
+    return ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
 }
 
 } // namespace DuiLib

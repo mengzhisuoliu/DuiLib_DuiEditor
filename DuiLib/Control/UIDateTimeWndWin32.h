@@ -6,13 +6,13 @@
 #ifdef DUILIB_WIN32
 namespace DuiLib
 {
-	class CDateTimeWndWin32 : public CWindowWnd
+	class CDateTimeWndWin32 : public CWindowWin32
 	{
 	public:
 		CDateTimeWndWin32();
 
-		void Init(CDateTimeUI* pOwner);
-		RECT CalPos();
+		void Init(CDateTimeUI* pOwner, RECT rcBase, UINT uFormatStyle);
+		RECT CalPos(RECT rcBase);
 
 
 		LPCTSTR GetWindowClassName() const;
@@ -22,8 +22,8 @@ namespace DuiLib
 		LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	protected:
 		CDateTimeUI* m_pOwner;
+		UINT m_uFormatStyle;
 		HBRUSH m_hBkBrush;
-		bool m_bInit;
 		bool m_bDropOpen;
 		SYSTEMTIME m_oldSysTime;
 		CStdRefPtr<UIFont> m_font;

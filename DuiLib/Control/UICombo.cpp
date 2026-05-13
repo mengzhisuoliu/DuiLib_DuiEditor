@@ -2,7 +2,11 @@
 
 #include "UIComboWndWin32.h"
 #include "UIComboWndGtk.h"
+#include "UIComboWndSdl.h"
 
+#include "UIEditWndWin32.h"
+#include "UIEditWndGtk.h"
+#include "UIEditWndSdl.h"
 namespace DuiLib {
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -18,6 +22,17 @@ namespace DuiLib {
 		m_szDropBox = CDuiSize(0, 150);
 		m_rcTextPadding.left = 5;
 		m_rcTextPadding.right = 5;
+
+		m_dwTipValueColor = 0xFFBAC0C5;
+		m_pEditWindow = NULL;
+		m_type = CBS_DROPDOWNLIST;	
+		m_szDropButtonSize.cx = 16;
+		m_szDropButtonSize.cy = 16;
+	}
+
+	CComboUI::~CComboUI()
+	{
+		if(m_pWindow) { delete m_pWindow; m_pWindow = NULL; }
 	}
 
 	LPCTSTR CComboUI::GetClass() const
@@ -56,7 +71,7 @@ namespace DuiLib {
 		return m_iCurSel;
 	}
 
-	bool CComboUI::SelectItem(LPCTSTR pstrText)
+	bool CComboUI::SelectItem(LPCTSTR pstrText, bool bTriggerEvent)
 	{
 		for( int it = 0; it < GetCount(); it++ ) {
 			CControlUI* pControl = static_cast<CControlUI*>(GetItemAt(it));
@@ -64,14 +79,14 @@ namespace DuiLib {
 
 			if(pControl->GetText() == pstrText)
 			{
-				SelectItem(it);
+				SelectItem(it, false, bTriggerEvent);
 				return true;
 			}
 		}
 		return false;
 	}
 
-	bool CComboUI::SelectItem(int iIndex, bool bTakeFocus)
+	bool CComboUI::SelectItem(int iIndex, bool bTakeFocus, bool bTriggerEvent)
 	{
 		if( iIndex == m_iCurSel ) return true;
 		int iOldSel = m_iCurSel;
@@ -97,7 +112,10 @@ namespace DuiLib {
 		//modify by liqs99
 		SetText(pControl->GetText());
 
-		if( m_pManager != NULL ) m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMSELECT, m_iCurSel, iOldSel, true);
+		if( m_pManager != NULL && bTriggerEvent) 
+		{
+			m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMSELECT, m_iCurSel, iOldSel, true);
+		}
 		Invalidate();
 
 
@@ -237,23 +255,42 @@ namespace DuiLib {
 		{
 			Invalidate();
 		}
+
 		if( event.Type == UIEVENT_BUTTONDOWN )
 		{
-			if( IsEnabled() ) {
-				Activate();
-				SetCaptureState(true);
-				SetPushedState(true);
+			if( IsEnabled() ) 
+			{
+				CDuiRect rcButton = GetDropButtonRect();
+				if(GetDropType() != CBS_DROPDOWN || rcButton.PtInRect(event.ptMouse))
+				{
+					Activate();
+					SetCaptureState(true);
+					SetPushedState(true);
+				}
+				else
+				{
+					m_pEditWindow = new DuiLibEditWnd(this);
+					ASSERT(m_pEditWindow);
+					m_pEditWindow->Init();
+				}
 			}
 			return;
 		}
+
 		if( event.Type == UIEVENT_BUTTONUP )
 		{
-			if( IsCaptureState() ) {
-				SetCaptureState(false);
-				Invalidate();
+			CDuiRect rcButton = GetDropButtonRect();
+			if(GetDropType() != CBS_DROPDOWN || rcButton.PtInRect(event.ptMouse))
+			{
+				if( IsCaptureState() ) 
+				{
+					SetCaptureState(false);
+					Invalidate();
+				}
 			}
 			return;
 		}
+
 		if( event.Type == UIEVENT_MOUSEMOVE )
 		{
 			return;
@@ -381,21 +418,33 @@ namespace DuiLib {
 	void CComboUI::SetPos(RECT rc, bool bNeedInvalidate)
 	{
 		CDuiRect rcPos = rc;
-		//if(!::EqualRect(&rc, &m_rcItem)) {
-		if(!rcPos.EqualRect(m_rcItem)) {
+
+		if(!rcPos.EqualRect(m_rcItem)) 
+		{
 			// 隐藏下拉窗口
-			if(m_pWindow && CPlatform::IsWindow(m_pWindow->GetHWND())) m_pWindow->Close();
+			if(m_pWindow && DuiLibWindowWnd::IsWindow(m_pWindow->GetHWND())) m_pWindow->Close();
 			// 所有元素大小置为0
 			RECT rcNull = { 0 };
 			for( int i = 0; i < m_items.GetSize(); i++ ) static_cast<CControlUI*>(m_items[i])->SetPos(rcNull);
 			// 调整位置
 			CControlUI::SetPos(rc, bNeedInvalidate);
 		}
+
+		if( m_pWindow != NULL ) 
+		{
+			CDuiRect rcPos = GetClientPos();
+			((DuiLibEditWnd *)m_pEditWindow)->SetWindowPos(rcPos.left, rcPos.top, rcPos.GetWidth(), rcPos.GetHeight(), SWP_NOZORDER | SWP_NOACTIVATE);        
+		}
 	}
 
 	void CComboUI::Move(SIZE szOffset, bool bNeedInvalidate)
 	{
 		CControlUI::Move(szOffset, bNeedInvalidate);
+		if( m_pWindow != NULL ) 
+		{
+			CDuiRect rcPos = GetClientPos();
+			((DuiLibEditWnd *)m_pEditWindow)->SetWindowPos(rcPos.left, rcPos.top, rcPos.GetWidth(), rcPos.GetHeight(), SWP_NOZORDER | SWP_NOACTIVATE);        
+		}
 	}
 
 	void CComboUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
@@ -413,30 +462,404 @@ namespace DuiLib {
 			szDropBoxSize.cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
 			SetDropBoxSize(szDropBoxSize);
 		}
+		else if( _tcsicmp(pstrName, _T("dropbuttonsize")) == 0 )
+		{
+			SIZE cx = { 0 };
+			LPTSTR pstr = NULL;
+			cx.cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
+			cx.cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
+			m_szDropButtonSize = cx;
+		}
+		else if( _tcsicmp(pstrName, _T("dropbuttonnormalimage")) == 0 ) SetdbNormalImage(pstrValue);
+		else if( _tcsicmp(pstrName, _T("dropbuttonhotimage")) == 0 ) SetdbHotImage(pstrValue);
+		else if( _tcsicmp(pstrName, _T("dropbuttonpushedimage")) == 0 ) SetdbPushedImage(pstrValue);
+		else if( _tcsicmp(pstrName, _T("dropbuttonfocusedimage")) == 0 ) SetdbFocusedImage(pstrValue);
+		else if( _tcsicmp(pstrName, _T("dropbuttondisabledimage")) == 0 ) SetdbDisabledImage(pstrValue);
+		else if( _tcsicmp(pstrName, _T("type")) == 0 ) 
+		{
+			if( _tcsicmp(pstrValue , _T("dropdown")) == 0)
+				SetDropType(CBS_DROPDOWN);
+			else
+				SetDropType(CBS_DROPDOWNLIST);
+		}
+		else if( _tcsicmp(pstrName, _T("tipvalue")) == 0 ) SetTipValue(pstrValue);
+		else if( _tcsicmp(pstrName, _T("tipvaluecolor")) == 0 ) SetTipValueColor(pstrValue);
 		else CContainerUI::SetAttribute(pstrName, pstrValue);
 	}
 
+	bool CComboUI::DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl)
+	{
+		if(!CControlUI::DoPaint(pRender, rcPaint, pStopControl))
+			return false;
+
+		if( !IsEnabled() ) {
+			if( !m_dbDisabledImage.IsEmpty() ) {
+				if( DrawDropButtonImage(pRender, (LPCTSTR)m_dbDisabledImage) )
+					return true;
+			}
+		}
+		else if( IsPushedState() ) {
+			if( !m_dbPushedImage.IsEmpty() ) {
+				if( DrawDropButtonImage(pRender, (LPCTSTR)m_dbPushedImage) )
+					return true;
+			}
+		}
+		else if( IsHotState() ) {
+			if( !m_dbHotImage.IsEmpty() ) {
+				if( DrawDropButtonImage(pRender, (LPCTSTR)m_dbHotImage) ) 
+					return true;
+			}
+		}
+		else if( IsFocused() ) {
+			if( !m_dbFocusedImage.IsEmpty() ) {
+				if( DrawDropButtonImage(pRender, (LPCTSTR)m_dbFocusedImage) )
+					return true;
+			}
+		}
+
+		if( !m_dbNormalImage.IsEmpty() ) {
+			if( DrawDropButtonImage(pRender, (LPCTSTR)m_dbNormalImage) )
+				return true;
+		}
+
+		return true;
+	}
+
+	bool CComboUI::DrawDropButtonImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify)
+	{
+		RECT rcButton = GetDropButtonRect();
+		return pRender->DrawImageString(rcButton, rcButton, pStrImage, pStrModify, m_instance);
+	}
 
 	void CComboUI::PaintText(UIRender *pRender)
 	{
-		if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
-		if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
+		if(m_pEditWindow)
+			return;
 
-		CDuiRect rc = m_rcItem;
-		rc.left += m_rcTextPadding.left;
-		rc.right -= m_rcTextPadding.right;
-		rc.top += m_rcTextPadding.top;
-		rc.bottom -= m_rcTextPadding.bottom;
+// 		if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
+// 		if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
+// 
+// 		CDuiRect rc = m_rcItem;
+// 		rc.left += m_rcTextPadding.left;
+// 		rc.right -= m_rcTextPadding.right;
+// 		rc.top += m_rcTextPadding.top;
+// 		rc.bottom -= m_rcTextPadding.bottom;
+// 
+// 		CDuiString sText = GetText();
+// 		DWORD dwTextColor = m_dwTextColor;
+// 
+// 		if( sText.IsEmpty() ) 
+// 		{
+// 			return;
+// 		}
+// 
+// 		pRender->DrawText(rc, CDuiRect(0,0,0,0), sText, dwTextColor, GetFont(), GetTextStyle());
 
 		CDuiString sText = GetText();
-		DWORD dwTextColor = m_dwTextColor;
+		if(sText.IsEmpty()) return;
 
-		if( sText.IsEmpty() ) 
+		RECT rcText = m_rcItem;
+		DWORD dwColor = 0;
+		int iFont = -1;
+		CDuiRect rcTextPadding = GetTextPadding();
+
+		if(IsPushedState())
 		{
-			return;
+			CDuiRect rc = GetPushedTextPadding();
+			if(!rc.IsNull()) rcTextPadding = rc;
 		}
 
-		pRender->DrawText(rc, CDuiRect(0,0,0,0), sText, dwTextColor, GetFont(), GetTextStyle());
+		//////////////////////////////////////////////////////////////////////////
+		if( !IsEnabled() )
+			iFont = GetDisabledFont();
+
+		else if( IsSelectedState() )
+			iFont = GetSelectedFont();
+
+		else if( IsPushedState() )
+			iFont = GetPushedFont();
+
+		else if( IsHotState() )
+			iFont = GetHotFont();
+
+		else if( IsFocused() )
+			iFont = GetFocusedFont();
+
+		if(iFont == -1)
+			iFont = GetFont();
+
+		//////////////////////////////////////////////////////////////////////////
+		if( !IsEnabled() )
+			dwColor = GetDisabledTextColor();
+
+		else if( IsSelectedState() )
+			dwColor = GetSelectedTextColor();
+
+		else if( IsPushedState() )
+			dwColor = GetPushedTextColor();
+
+		else if( IsHotState() )
+			dwColor = GetHotTextColor();
+
+		else if( IsFocused() )
+			dwColor = GetFocusedTextColor();
+
+		if(dwColor == 0)
+			dwColor = GetTextColor();
+
+		if(dwColor == 0 && m_pManager)
+			dwColor = m_pManager->GetDefaultFontColor();
+
+		pRender->DrawText(rcText, rcTextPadding, sText, dwColor, iFont, GetTextStyle());
+		return;
+	}
+
+	void CComboUI::SetText(LPCTSTR pstrText)
+	{
+		if( m_sText == pstrText ) return;
+		m_sText = pstrText;
+
+		for( int it = 0; it < GetCount(); it++ ) {
+			CControlUI* pControl = static_cast<CControlUI*>(GetItemAt(it));
+			if( !pControl->IsVisible() ) continue;
+
+			if(pControl->GetText() == pstrText)
+			{
+				SelectItem(it);
+				return;
+			}
+		}
+		SelectItem(-1);
+	}
+
+	CDuiRect CComboUI::GetClientPos()
+	{
+		CDuiRect rcPos = m_rcItem;
+		RECT rcButton = GetDropButtonRect();
+		rcPos.right = rcButton.left;
+		rcPos.right -= 1;
+		return rcPos;
+	}
+
+	CControlUI *CComboUI::AddString(LPCTSTR pstrText, UINT_PTR pItemData)
+	{
+		CListLabelElementUI *pLabel = new CListLabelElementUI;
+		pLabel->SetTag(pItemData);
+		pLabel->SetText(pstrText);
+		if(!Add(pLabel))
+		{
+			delete pLabel;
+			return NULL;
+		}
+		pLabel->SetFixedWidth(m_rcItem.right - m_rcItem.left);
+		return pLabel;
+	}
+
+	bool CComboUI::DeleteString(LPCTSTR pstrText)
+	{
+		for( int it = 0; it < GetCount(); it++ ) {
+			CControlUI* pControl = static_cast<CControlUI*>(GetItemAt(it));
+			if( !pControl->IsVisible() ) continue;
+
+			if(pControl->GetText() == pstrText)
+			{
+				if(m_iCurSel  == it)
+				{
+					SetCurSel(-1);
+					SetText(_T(""));
+				}
+				Remove(pControl);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool CComboUI::DeleteString_byItemData(UINT_PTR pItemData)
+	{
+		for( int it = 0; it < GetCount(); it++ ) {
+			CControlUI* pControl = static_cast<CControlUI*>(GetItemAt(it));
+			if( !pControl->IsVisible() ) continue;
+
+			if(pControl->GetTag() == pItemData)
+			{
+				if(m_iCurSel  == it)
+				{
+					SetCurSel(-1);
+					SetText(_T(""));
+				}
+				Remove(pControl);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool CComboUI::SelectString(LPCTSTR pstrText)
+	{
+		return SelectItem(pstrText);
+	}
+
+	bool CComboUI::SetCurSel(int iIndex, bool bTakeFocus)
+	{
+		bool bRet = SelectItem(iIndex, bTakeFocus);
+		if(!bRet)
+		{
+			m_sText.Empty();
+		}
+		return bRet;
+	}
+
+	bool CComboUI::SetCurSelFromItemData(UINT_PTR ptrItemData)
+	{
+		for( int it = 0; it < GetCount(); it++ ) {
+			CControlUI* pControl = static_cast<CControlUI*>(GetItemAt(it));
+			if( !pControl->IsVisible() ) continue;
+
+			if(pControl->GetTag() == ptrItemData)
+			{
+				SelectItem(it);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool CComboUI::SetItemData(CControlUI *pControl, UINT_PTR ptrItemData)
+	{
+		pControl->SetTag(ptrItemData);
+		return true;
+	}
+
+	UINT_PTR CComboUI::GetCurSelItemData()
+	{
+		if(m_iCurSel < 0) return 0;
+		CControlUI* pControl = static_cast<CControlUI*>(m_items[m_iCurSel]);
+		return pControl->GetTag();
+	}
+
+	LPCTSTR CComboUI::GetdbNormalImage() const
+	{
+		return m_dbNormalImage;
+	}
+
+	void CComboUI::SetdbNormalImage(LPCTSTR pStrImage)
+	{
+		m_dbNormalImage = pStrImage;
+		Invalidate();
+	}
+
+	LPCTSTR CComboUI::GetdbHotImage() const
+	{
+		return m_dbHotImage;
+	}
+
+	void CComboUI::SetdbHotImage(LPCTSTR pStrImage)
+	{
+		m_dbHotImage = pStrImage;
+		Invalidate();
+	}
+
+	LPCTSTR CComboUI::GetdbPushedImage() const
+	{
+		return m_dbPushedImage;
+	}
+
+	void CComboUI::SetdbPushedImage(LPCTSTR pStrImage)
+	{
+		m_dbPushedImage = pStrImage;
+		Invalidate();
+	}
+
+	LPCTSTR CComboUI::GetdbFocusedImage() const
+	{
+		return m_dbFocusedImage;
+	}
+
+	void CComboUI::SetdbFocusedImage(LPCTSTR pStrImage)
+	{
+		m_dbFocusedImage = pStrImage;
+		Invalidate();
+	}
+
+	LPCTSTR CComboUI::GetdbDisabledImage() const
+	{
+		return m_dbDisabledImage;
+	}
+
+	void CComboUI::SetdbDisabledImage(LPCTSTR pStrImage)
+	{
+		m_dbDisabledImage = pStrImage;
+		Invalidate();
+	}
+
+	int CComboUI::GetDropType() const
+	{
+		return m_type;
+	}
+
+	void CComboUI::SetDropType(int type)
+	{
+		m_type = type;
+	}
+
+	void CComboUI::SetTipValue( LPCTSTR pStrTipValue )
+	{
+		m_sTipValue	= pStrTipValue;
+	}
+
+	CDuiString CComboUI::GetTipValue()
+	{
+		if (IsResourceText()) 
+		{
+			CDuiString s = CResourceManager::GetInstance()->GetText(m_sTipValue);
+			if(!s.IsEmpty()) return s;
+		}
+
+		CLangPackageUI *pkg = GetLangPackage();
+		if(pkg && GetResourceID() > 0)
+		{
+			LPCTSTR s = pkg->GetTipValue(GetResourceID());
+			if(s && *s!='\0') return s; 
+		}
+		else if (IsResourceText())
+		{
+			CDuiString s = CLangManagerUI::LoadString(m_sTipValue);
+			if(!s.IsEmpty()) return s;
+		}
+		return m_sTipValue;
+	}
+
+	void CComboUI::SetTipValueColor( LPCTSTR pStrColor )
+	{
+		if( *pStrColor == _T('#')) pStrColor = ::CharNext(pStrColor);
+		LPTSTR pstr = NULL;
+		DWORD clrColor = _tcstoul(pStrColor, &pstr, 16);
+
+		m_dwTipValueColor = clrColor;
+	}
+
+	DWORD CComboUI::GetTipValueColor()
+	{
+		return m_dwTipValueColor;
+	}
+
+	RECT CComboUI::GetDropButtonRect()
+	{
+		RECT rc = m_rcItem;
+		rc.top++;
+		rc.bottom--;
+		rc.right--;
+		rc.left = rc.right - (rc.bottom - rc.top);
+
+		SIZE sz = m_szDropButtonSize;
+		RECT rcButton;
+		rcButton.left = rc.left + (rc.right - rc.left)/2 - sz.cx/2;
+		rcButton.right = rcButton.left + sz.cx;
+		rcButton.top = rc.top + (rc.bottom - rc.top)/2 - sz.cy/2;
+		rcButton.bottom = rcButton.top + sz.cy;
+
+		return rcButton;
 	}
 } // namespace DuiLib
 

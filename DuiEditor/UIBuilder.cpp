@@ -211,7 +211,7 @@ CControlUI* CUIBuilder::Create(pugi::xml_node xmldoc, IDialogBuilderCallback* pC
 					}
 				}
 				if (pstrPath) {
-					pManager->AddFontArray(pstrPath);
+					pManager->ImportFontFile(pstrPath, NULL, 0); //这里原本是window载入字体的
 				}
 			}
 		}
@@ -539,11 +539,26 @@ CControlUI* CUIBuilder::_Parse(pugi::xml_node root,  CControlUI* pParent, CPaint
 			}
 		}
 		// Process attributes
-		for (xml_attribute attr=node.first_attribute(); attr; attr=attr.next_attribute())
+// 		for (xml_attribute attr=node.first_attribute(); attr; attr=attr.next_attribute())
+// 		{
+// 			const char *pValue = attr.value();
+// 			if(pValue && *pValue != '\0')
+// 				pControl->SetAttribute(XML2T(attr.name()), XML2T(attr.value()));
+// 		}
+		if( node.first_attribute() ) 
 		{
-			const char *pValue = attr.value();
-			if(pValue && *pValue != '\0')
+			//first find style attribute  先设置style属性
+			xml_attribute attr = node.attribute("style");
+			if(attr)
+			{
 				pControl->SetAttribute(XML2T(attr.name()), XML2T(attr.value()));
+			}
+
+			// Set ordinary attributes， 设置除了style之外的属性
+			for( xml_attribute attr = node.first_attribute(); attr; attr=attr.next_attribute() ) {
+				if(stricmp(attr.name(), "style") != 0)
+					pControl->SetAttribute(XML2T(attr.name()), XML2T(attr.value()));
+			}
 		}
 
 		if( pManager ) {

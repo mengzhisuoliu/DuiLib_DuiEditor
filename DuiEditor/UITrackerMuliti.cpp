@@ -703,7 +703,7 @@ void CUITrackerMuliti::RefreshRect()
 	}
 	if(GetUIManager())
 	{
-		GetUIManager()->GetUiWindow()->Invalidate();
+		GetUIManager()->GetUiWindow()->InvalidateEx();
 	}
 }
 

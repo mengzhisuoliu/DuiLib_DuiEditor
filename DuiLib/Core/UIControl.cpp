@@ -593,7 +593,7 @@ namespace DuiLib {
 		}
 	}
 
-	RECT CControlUI::GetClientPos() const 
+	CDuiRect CControlUI::GetClientPos()
 	{
 		return m_rcItem;
 	}

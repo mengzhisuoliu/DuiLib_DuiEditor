@@ -131,7 +131,7 @@ bool CXmlDocumentUI::save_file(LPCTSTR path)
 
 bool CXmlDocumentUI::save_to_default_file()
 {
-	return impxmldoc(_xml_document)->save_file(m_sFileName.GetData(), _T("\t"), ui_pugi::format_default,  ui_pugi::encoding_utf8);
+	return impxmldoc(_xml_document)->save_file(m_sFileName.GetData(), _T("\t"), ui_pugi::format_indent|ui_pugi::format_save_file_text|ui_pugi::format_default,  ui_pugi::encoding_utf8);
 }
 
 CDuiString CXmlDocumentUI::GetError()

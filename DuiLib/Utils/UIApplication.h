@@ -25,7 +25,11 @@ public:
 
 #ifdef DUILIB_WIN32
 	virtual bool InitInstance(HINSTANCE hInstance) = 0;
-#elif defined DUILIB_GTK
+#endif
+#ifdef DUILIB_GTK
+	virtual bool InitInstance(int argc, char* argv[]) = 0;
+#endif
+#ifdef DUILIB_SDL
 	virtual bool InitInstance(int argc, char* argv[]) = 0;
 #endif
 	virtual void Run() = 0;

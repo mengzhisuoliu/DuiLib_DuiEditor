@@ -67,11 +67,15 @@ public:
 	void SetTag(UINT_PTR tag);
 	UINT_PTR GetTag() const;
 
+	CDuiString GetUserData(); 
+	void SetUserData(LPCTSTR pstrText);
+
 	void SetTextColor(DWORD dwColor);
 	DWORD GetTextColor() const;
 protected:
 	CDuiString m_sText;
 	UINT_PTR m_tag;
+	CDuiString m_sUserData;
 
 	//bt0 = 单元格是否选中
 	//bt1 = 单选框选中状态
@@ -96,11 +100,15 @@ struct UILIB_API TRowData : public ILinkedList
 	void SetTag(UINT_PTR tag);
 	UINT_PTR GetTag() const;
 
+	CDuiString GetUserData(); 
+	void SetUserData(LPCTSTR pstrText);
+
 	TCellData *GetCell(int col);
 
 	short m_nHeight;
 	BOOL m_bSelected;
 	UINT_PTR m_tag;
+	CDuiString m_sUserData;
 	CStdPtrArray m_cells;
 };
 

@@ -53,6 +53,7 @@ target("DuiLib")
     if is_plat("linux", "macosx") then
         setup_gtk_includedirs()
         setup_install_files()
+	set_targetdir("$(buildir)/../DuiLib/Lib")
     elseif is_plat("windows") then	
         if is_kind("static") then
             add_defines("UILIB_EXPORTS", "UILIB_STATIC")

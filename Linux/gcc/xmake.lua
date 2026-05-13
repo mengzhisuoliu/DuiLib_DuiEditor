@@ -19,9 +19,14 @@ target("TestDuiLib")
 local target_file_name = "TestDuiLib"
 
 if is_plat("linux") then
-	add_includedirs("/usr/local/include/DuiLib")
-	
+	--add_includedirs("/usr/local/include/DuiLib")	
+	--add_links("DuiLib")
+
+	add_includedirs("$(buildir)/../DuiLib")
+	add_linkdirs("$(buildir)/../DuiLib/Lib")
 	add_links("DuiLib")
+
+
 	add_links("gtk-3") 
 	add_links("gobject-2.0")
 	add_links("glib-2.0")
@@ -80,7 +85,8 @@ elseif is_mode("release") then
     add_defines("NDEBUG")
 end
 	
-set_targetdir("$(buildir)/$(plat)/$(arch)/$(mode)")
+--set_targetdir("$(buildir)/$(plat)/$(arch)/$(mode)")
+set_targetdir("$(buildir)/../bin")
 	
 set_basename(target_file_name)
 	

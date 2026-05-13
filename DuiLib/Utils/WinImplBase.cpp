@@ -264,12 +264,12 @@ namespace DuiLib
 		if (wParam == SC_CLOSE)
 		{
 			bHandled = TRUE;
-			SendMessage(WM_CLOSE);
+			::SendMessage(m_hWnd, WM_CLOSE, 0, 0);
 			return 0;
 		}
 #if defined(WIN32) && !defined(UNDER_CE)
 		BOOL bZoomed = ::IsZoomed(*this);
-		LRESULT lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+		LRESULT lRes = CWindowWin32::HandleMessage(uMsg, wParam, lParam);
 		if( ::IsZoomed(*this) != bZoomed ) {
 			if( !bZoomed ) {
 				CControlUI* pControl = static_cast<CControlUI*>(m_pm.FindControl(_T("maxbtn")));
@@ -285,7 +285,7 @@ namespace DuiLib
 			}
 		}
 #else
-		LRESULT lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+		LRESULT lRes = CWindowWin32::HandleMessage(uMsg, wParam, lParam);
 #endif
 		return lRes;
 	}
@@ -404,7 +404,7 @@ namespace DuiLib
 
 		if (m_pm.MessageHandler(uMsg, wParam, lParam, lRes))
 			return lRes;
-		return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+		return CWindowWin32::HandleMessage(uMsg, wParam, lParam);
 	}
 
 	LRESULT WindowImplBase::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)

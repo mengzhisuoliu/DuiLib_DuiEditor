@@ -86,6 +86,8 @@ namespace DuiLib
 		CDuiPoint(LPCTSTR pstrValue);
 		bool FromString(LPCTSTR pstrValue); //从"x,y"构造POINT
 		CDuiString ToString();				//输出字符串"x,y"
+
+		operator PPOINT() throw();
 	};
 
 
@@ -183,6 +185,9 @@ namespace DuiLib
 		//pt是否在区域中
 		BOOL PtInRect(POINT pt) const;
 		//bool operator == (LPCRECT lpRect) const;
+
+		//设置边距，获得除去边距后的区域
+		void SetPadding(const RECT& rc);
 	};
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -596,21 +601,18 @@ namespace DuiLib
 	//lock类
 	class CDuiLock
 	{
-#ifdef WIN32
 	public:
-		CDuiLock() { InitializeCriticalSectionAndSpinCount(&m_lock, 5000); }
-		~CDuiLock() { DeleteCriticalSection(&m_lock); }
-		void Lock() { EnterCriticalSection(&m_lock); }
-		void Unlock() { LeaveCriticalSection(&m_lock); }
+		CDuiLock();
+		~CDuiLock();
+		void Lock();
+		void Unlock();
+
 	private:
+#ifdef DUILIB_WIN32
 		CRITICAL_SECTION m_lock;
+#elif defined DUILIB_SDL
+		UINT_PTR m_lock;
 #else
-	public:
-		CDuiLock() {}
-		~CDuiLock() {}
-		void Lock() { m_lock.lock(); }
-		void Unlock() { m_lock.unlock(); }
-	private:
 		std::mutex m_lock;
 #endif
 	};
@@ -908,27 +910,6 @@ namespace DuiLib
 		int _blockcountnext;
 		int _nMaxMemoryPageSize;
 		CStdPtrArray m_pListMemBlock;
-	};
-
-	//跨平台的某些函数
-	class UILIB_API CPlatform
-	{
-	public:
-		static BOOL IsWindow(UIWND hWnd);
-		static LRESULT SendMessage(UIWND hWnd, UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0);
-		static LRESULT PostMessage(UIWND hWnd, UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0);
-		static BOOL SetWindowPos(UIWND hWnd, UIWND hWndInsertAfter,int x, int y, int cx, int cy, UINT uFlags);
-		static UIWND GetFocus();
-		static UIWND SetFocus(UIWND hWnd);
-		static BOOL GetWindowRect(UIWND hWnd, LPRECT lpRect);
-		static BOOL GetClientRect(UIWND hWnd, LPRECT lpRect);
-		static BOOL GetCursorPos(LPPOINT pt);
-		static BOOL ScreenToClient(UIWND hWnd, LPPOINT lpPoint);
-		static BOOL IsKeyDown(UINT uKey);
-		static BOOL IsKeyUp(UINT uKey);
-		static UINT MapKeyState();
-		static DWORD GetTickCount();
-		static void GetLocalTime(SYSTEMTIME &st);
 	};
 
 }// namespace DuiLib

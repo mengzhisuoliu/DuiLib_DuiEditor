@@ -4,6 +4,7 @@
 #include "../Render/UIRenderFactory_gdi.h"
 #include "../Render/UIRenderFactory_gdiplus.h"
 #include "../Render/UIRenderFactory_Cairo.h"
+#include "../Render/UIRenderFactory_Sdl.h"
 ///////////////////////////////////////////////////////////////////////////////////////
 namespace DuiLib {
 
@@ -45,9 +46,14 @@ namespace DuiLib {
 				m_renderEngineFactory = MakeRefPtr<UIRenderFactory>(new UIRenderFactory_gdiplus);
 				break;
 #endif
-#ifdef DUILIB_USE_RENDER_CAIRO
+#ifdef DUILIB_GTK
 			case DuiLib_Render_Cairo:
 				m_renderEngineFactory = MakeRefPtr<UIRenderFactory>(new UIRenderFactory_Cairo);
+				break;
+#endif
+#ifdef DUILIB_SDL
+			case DuiLib_Render_Sdl:
+				m_renderEngineFactory = MakeRefPtr<UIRenderFactory>(new UIRenderFactory_Sdl);
 				break;
 #endif
 			default:

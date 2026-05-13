@@ -14,10 +14,14 @@
 			</HorizontalLayout>
 		</HorizontalLayout>
 		<VerticalLayout>
-			<Edit name="edit_text" width="185" height="33" pos="115,60,300,93" float="true" style="style_edit" />
-			<RichEdit name="redit_text" width="185" height="33" pos="115,112,300,145" float="true" bkcolor="0xFFFFFFFF" style="style_edit" />
+			<Edit name="edit_text" width="185" height="33" tipvalue="编辑框" text="我是谁" textpadding="10,5,0,0" pos="115,60,300,93" float="true" style="style_edit" />
+			<Edit name="redit_text" width="200" height="50" bkcolor="0xFFC0DCC0" text="我是编辑框" pos="115,112,315,162" float="true" style="style_edit" />
 			<Option name="opt_check" width="30" height="30" pos="118,171,148,201" float="true" style="style_checkbox" />
 			<ComboEx name="cb_recv_type" type="dropdown" width="185" height="32" pos="120,213,305,245" float="true" style="style_comboex">
+				<ListLabelElement text="111111" />
+				<ListLabelElement text="222222" />
+			</ComboEx>
+			<ComboEx name="cb_recv_type" width="185" height="32" pos="119,260,304,292" float="true" style="style_comboex">
 				<ListLabelElement text="111111" />
 				<ListLabelElement text="222222" />
 			</ComboEx>

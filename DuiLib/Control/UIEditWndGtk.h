@@ -6,21 +6,30 @@
 #ifdef DUILIB_GTK
 namespace DuiLib
 {
-	class CEditWndGtk : public CWindowWnd
+	class CEditWndGtk : public CEditWnd//, public CWindowGtk, 
 	{
 	public:
-		CEditWndGtk();
+		CEditWndGtk(CControlUI *pOwner);
+		virtual ~CEditWndGtk();
 
-		void Init(CEditUI* pOwner);
-		RECT CalPos();
+		virtual void Init() override;
+		virtual bool IsInit() override;
 
-		void edit_SetPasswordMode(BOOL bPasswordMode);
-		void edit_SetSel(int ichStart, int ichEnd);
-		void edit_SetText(LPCTSTR pstrText);
-		void edit_LimitText(UINT uMax);
-		void edit_SetReadOnly(BOOL bReadOnly);
-		void edit_SetPasswordChar(TCHAR cPasswordChar);
-		void edit_ReplaceSel(LPCTSTR lpszReplace);
+		virtual void SetPos(CDuiRect rc) override;
+		virtual void Move(SIZE szOffset) override;
+		virtual CDuiRect CalPos() override;
+		virtual bool DoEvent(TEventUI& event) override;
+
+		virtual void SetEditText(LPCTSTR sText) override;
+		virtual bool NeedPaintText() override;
+
+		static gboolean wrap_event(GtkWidget* self, GdkEvent* ev, gpointer user_data);
+		static void on_entry_changed(GtkEntry *entry, gpointer user_data);
+
+		CMacroToStringMap m_eventStringMap;
+	protected:
+		//static GtkWidget *m_pGtkFixed;
+		GtkWidget *m_pGtkEntry;
 	};
 } //namespace DuiLib
 #endif //#ifdef DUILIB_GTK

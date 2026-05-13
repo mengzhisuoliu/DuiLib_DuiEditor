@@ -68,8 +68,8 @@ static gboolean wrap_motion_notify(GtkWidget *widget, GdkEventMotion *ev, CWindo
 
 static void dui_window_destroy(GtkWidget *widget, CWindowGtk *pWindow)
 {
-	gtk_main_quit();
-	pWindow->HandleMessage(WM_DESTROY, 0, 0);
+	pWindow->HandleMessage(WM_CLOSE, 0, 0);
+	pWindow->OnFinalMessage(pWindow);
 }
 
 static void wrap_size(GtkWidget *widget, GdkRectangle *allocation, CWindowGtk *pWindow)
@@ -125,6 +125,16 @@ static gboolean wrap_timer_event(gpointer userdata)
 	return true;
 }
 
+static void wrap_window_realize(GtkWidget *widget, gpointer user_data) 
+{
+	GdkWindow *window = gtk_widget_get_window(widget);
+	if (window) 
+	{
+		CWindowGtk *pWindow = (CWindowGtk *)user_data;
+		pWindow->HandleMessage(WM_CREATE, 0, 0);
+	}
+}
+
 /////////////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -150,15 +160,39 @@ UIWND CWindowGtk::Create(UIWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWOR
 {
 	m_hWnd = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
+	GtkWidget *pGtkFixed = gtk_fixed_new();
+	gtk_container_add(GTK_CONTAINER(m_hWnd), pGtkFixed);
+	gtk_widget_show(pGtkFixed);
+	m_pGtkFixed = pGtkFixed;
+
 	//隐藏标题栏
 	gtk_window_set_decorated(GTK_WINDOW(m_hWnd), FALSE);
-
+	
 	//gtk_container_set_border_width(GTK_CONTAINER(m_hWnd), 8);
 	//gtk_window_set_title(GTK_WINDOW(m_hWnd), "Hello World");
 
 	//自绘窗口
 	gtk_widget_set_app_paintable(GTK_WIDGET(m_hWnd), TRUE);
 
+	if(hwndParent != NULL)
+	{
+		GtkWidget *pWindow = (GtkWidget *)hwndParent;
+		gtk_window_set_transient_for(GTK_WINDOW(m_hWnd), GTK_WINDOW(pWindow));
+		gtk_window_set_type_hint(GTK_WINDOW(m_hWnd), GDK_WINDOW_TYPE_HINT_DIALOG);
+		int toplevel_x, toplevel_y;
+		GdkWindow *gdk_window = gtk_widget_get_window(pWindow);
+		gdk_window_get_origin(gdk_window, &toplevel_x, &toplevel_y); //父窗口的屏幕坐标
+		gtk_window_move(GTK_WINDOW(m_hWnd), x+toplevel_x, y+toplevel_y);
+	}
+
+	gtk_window_set_default_size(GTK_WINDOW(m_hWnd), cx, cy);
+
+	RegisterSignal();
+	return m_hWnd;
+}
+
+void CWindowGtk::RegisterSignal()
+{
 	gtk_widget_add_events(GTK_WIDGET(m_hWnd),
 		GDK_EXPOSURE_MASK               |
 		GDK_SCROLL_MASK                 |
@@ -192,21 +226,46 @@ UIWND CWindowGtk::Create(UIWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWOR
 	g_signal_connect(G_OBJECT(m_hWnd), "key-release-event", G_CALLBACK(wrap_key_release), this);
 	g_signal_connect(G_OBJECT(m_hWnd), "delete-event", G_CALLBACK(wrap_delete_event), this);
 	g_signal_connect(G_OBJECT(m_hWnd), "draw", G_CALLBACK(wrap_draw), this);
-
-	HandleMessage(WM_CREATE, 0, 0);
-
-	ASSERT(m_hWnd != NULL);
-	return m_hWnd;
+	g_signal_connect(G_OBJECT(m_hWnd), "realize", G_CALLBACK(wrap_window_realize), this);
 }
 
-LRESULT CWindowGtk::SendMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+BOOL CWindowGtk::IsWindow(UIWND hWnd)
+{
+	return hWnd != NULL;
+}
+
+LRESULT CWindowGtk::SendMessage(UIWND hWnd, UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0)
 {
 	return 0;
 }
 
-LRESULT CWindowGtk::PostMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+BOOL CWindowGtk::PostMessage(UIWND hWnd, UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0)
 {
-	return 0;
+	return FALSE;
+}
+
+BOOL CWindowGtk::SetWindowPos(int x, int y, int cx, int cy, UINT uFlags)
+{
+	gtk_window_set_default_size(GTK_WINDOW(hWnd), cx, cy);
+	return TRUE;
+}
+
+BOOL CWindowGtk::GetWindowRect(LPRECT lpRect)
+{
+	GtkAllocation Allocation;
+	gtk_widget_get_allocation(GTK_WIDGET(hWnd), &Allocation);
+	lpRect->left = Allocation.x;
+	lpRect->top = Allocation.y;
+	lpRect->right = Allocation.x + Allocation.width;
+	lpRect->bottom = Allocation.y + Allocation.height;
+
+	//gtk_window_get_size
+	return TRUE;
+}
+
+BOOL CWindowGtk::GetClientRect(LPRECT lpRect)
+{
+	return GetWindowRect(hWnd, lpRect);
 }
 
 void CWindowGtk::Close(UINT nRet)
@@ -293,16 +352,9 @@ void CWindowGtk::CenterWindow()	// 居中，支持扩展屏幕
 	gtk_widget_show_all(GTK_WIDGET(m_hWnd));
 }
 
-BOOL CWindowGtk::SetTimer(UINT uElapse, TIMERINFO *pTimer)
+PVOID CWindowGtk::GetFixedContainer()
 {
-	pTimer->uWinTimer = g_timeout_add((guint)uElapse, wrap_timer_event, pTimer);
-	return pTimer->uWinTimer > 0;
-}
-
-BOOL CWindowGtk::KillTimer(TIMERINFO *pTimer)
-{
-	if(pTimer == NULL) return FALSE;
-	return g_source_remove(pTimer->uWinTimer);
+	return m_pGtkFixed;
 }
 
 LRESULT CWindowGtk::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)

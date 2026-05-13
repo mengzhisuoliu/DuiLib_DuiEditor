@@ -123,14 +123,6 @@ RECT CXmlAttributeUI::as_rect(int def_left, int def_top, int def_right, int def_
 
 DWORD CXmlAttributeUI::as_uicolor(DWORD def_color) const
 {
-// 	LPCTSTR pstr = as_string();
-// 	if(!pstr || *pstr == _T('\0'))
-// 		return def_color;
-// 
-// 	LPCTSTR cp = pstr;
-// 	while (cp && _istxdigit(*cp))
-// 	{
-// 	}
 	LPCTSTR pstrValue = as_string();
 	DWORD clrColor = 0;
 	while( *pstrValue > _T('\0') && *pstrValue <= _T(' ') ) pstrValue = ::CharNext(pstrValue);

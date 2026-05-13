@@ -29,7 +29,8 @@ namespace DuiLib
 	{
 		if (!CActiveXUI::DoCreateControl())
 			return false;
-		GetManager()->AddTranslateAccelerator(this);
+		CPaintManagerWin32UI *pManager = (CPaintManagerWin32UI *)GetManager();
+		pManager->AddTranslateAccelerator(this);
 		GetControl(IID_IWebBrowser2,(LPVOID*)&m_pWebBrowser2);
 		if ( m_bAutoNavi && !m_sHomePage.IsEmpty())
 		{
@@ -42,7 +43,8 @@ namespace DuiLib
 	void CWebBrowserUI::ReleaseControl()
 	{
 		m_bCreated=false;
-		GetManager()->RemoveTranslateAccelerator(this);
+		CPaintManagerWin32UI *pManager = (CPaintManagerWin32UI *)GetManager();
+		pManager->RemoveTranslateAccelerator(this);
 		RegisterEventHandler(FALSE);
 	}
 

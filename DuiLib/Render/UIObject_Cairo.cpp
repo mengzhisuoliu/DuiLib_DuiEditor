@@ -2,7 +2,7 @@
 
 #include "../Render/UIObject_Cairo.h"
 
-#ifdef DUILIB_USE_RENDER_CAIRO
+#ifdef DUILIB_GTK
 
 #ifndef M_PI
 #define M_PI       3.14159265358979323846
@@ -16,9 +16,6 @@ namespace DuiLib {
 	UIFont_pango::UIFont_pango()
 	{
 		m_pPangoFontDesc = NULL; 
-#ifdef WIN32
-		m_hFont = NULL;
-#endif
 	}
 
 	UIFont_pango::~UIFont_pango()
@@ -43,10 +40,6 @@ namespace DuiLib {
 			pango_font_description_free(m_pPangoFontDesc);
 			m_pPangoFontDesc = NULL;
 		}
-
-#ifdef WIN32
-		if(m_hFont) { ::DeleteObject(m_hFont); m_hFont = NULL; }
-#endif
 	}
 
 	BOOL UIFont_pango::CreateDefaultFont()
@@ -59,41 +52,10 @@ namespace DuiLib {
 		return _buildFont(NULL);
 	}
 
-	HANDLE UIFont_pango::GetHandle()
+	UINT_PTR UIFont_pango::GetHandle()
 	{
-		return m_pPangoFontDesc;
+		return (UINT_PTR)m_pPangoFontDesc;
 	}
-
-#ifdef WIN32
-	HFONT UIFont_pango::GetHFONT(CPaintManagerUI *pManager)
-	{
-		//为啥不行
-// 		PangoFontMap *fontmap;
-// 		PangoFontDescription *desc;
-// 		PangoFont *font;
-// 		fontmap = pango_cairo_font_map_get_default ();
-// 		font = pango_font_map_load_font (fontmap, m_pPangoFontDesc);
-// 		LOGFONTA pango_win32_font_logfont(font);
-
-		if(m_hFont)
-			return m_hFont;
-
-		LOGFONT lf = { 0 };
-		::GetObject(::GetStockObject(DEFAULT_GUI_FONT), sizeof(LOGFONT), &lf);
-		if(sFontName.GetLength() > 0) 
-		{
-			_tcsncpy(lf.lfFaceName, sFontName, LF_FACESIZE);
-		}
-		lf.lfCharSet = DEFAULT_CHARSET;
-		lf.lfHeight = pManager ? -pManager->GetDPIObj()->ScaleInt(iSize) : iSize;
-		if( bBold ) lf.lfWeight = FW_BOLD;
-		if( bUnderline ) lf.lfUnderline = TRUE;
-		if( bItalic ) lf.lfItalic = TRUE;
-
-		m_hFont = ::CreateFontIndirect(&lf);
-		return m_hFont;
-	}
-#endif
 
 	UIFont* UIFont_pango::Clone(CPaintManagerUI *pManager)
 	{
@@ -173,9 +135,7 @@ namespace DuiLib {
 	//
 	UIPen_Cairo::UIPen_Cairo()
 	{
-#ifdef WIN32
-		m_hPen = NULL;
-#endif
+
 	}
 
 	UIPen_Cairo::~UIPen_Cairo() 
@@ -188,13 +148,6 @@ namespace DuiLib {
 		
 	}
 
-#ifdef WIN32
-	HPEN UIPen_Cairo::GetHPEN() const
-	{
-		return m_hPen;
-	}
-#endif
-
 	BOOL UIPen_Cairo::CreatePen(int nStyle, int nWidth, DWORD dwColor)
 	{
 		return FALSE;
@@ -205,9 +158,6 @@ namespace DuiLib {
 	//
 	UIBrush_Cairo::UIBrush_Cairo() 
 	{
-#ifdef WIN32
-		m_hBrush = NULL;
-#endif
 	}
 
 	UIBrush_Cairo::~UIBrush_Cairo() 
@@ -220,31 +170,13 @@ namespace DuiLib {
 		
 	}
 
-#ifdef WIN32
-	HBRUSH UIBrush_Cairo::GetHBrush() const
-	{
-		return m_hBrush;
-	}
-
-	BOOL UIBrush_Cairo::CreateFromHBrush(HBRUSH hBrush)
-	{	
-		return TRUE;
-	}
-#endif
-
 	BOOL UIBrush_Cairo::CreateSolidBrush(DWORD clr)
 	{
-#ifdef WIN32
-		return m_hBrush != NULL;
-#endif
         return FALSE;
 	}
 
 	BOOL UIBrush_Cairo::CreateBitmapBrush(UIBitmap *bitmap)
 	{
-#ifdef WIN32
-		return m_hBrush != NULL;
-#endif
         return FALSE;
 	}
 
@@ -341,35 +273,6 @@ namespace DuiLib {
 		if(m_pDataBits) { free(m_pDataBits); m_pDataBits = NULL; }
 	}
 
-#ifdef WIN32
-	BOOL UIBitmap_Cairo::CreateFromHBitmap(HBITMAP hBitmap) //hBitmap由内部释放
-	{
-		DeleteObject();
-		m_surface = cairo_surface_reference((cairo_surface_t *)hBitmap);
-		return FALSE;
-	}
-
-	HBITMAP UIBitmap_Cairo::GetHBITMAP()
-	{
-		return (HBITMAP)m_surface;
-	}
-
-	BOOL UIBitmap_Cairo::CreateARGB32Bitmap(HDC hDC, int width, int height, BOOL bFlip)
-	{
-		DeleteObject();
-		m_surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-		//m_surface = cairo_image_surface_create_from_png ("c:/tomcat.png");
-		return m_surface != NULL;
-	}
-
-	BOOL UIBitmap_Cairo::CreateCompatibleBitmap(HDC hDC, int width, int height)
-	{
-		DeleteObject();
-		m_surface = cairo_win32_surface_create(hDC);
-		return m_surface != NULL;
-	}
-#endif
-
 	BOOL UIBitmap_Cairo::CreateFromData(LPBYTE pImage, int width, int height, DWORD mask)
 	{
 		DeleteObject();
@@ -429,9 +332,9 @@ namespace DuiLib {
 		return TRUE;
 	}
 
-	HANDLE UIBitmap_Cairo::GetHandle()
+	UINT_PTR UIBitmap_Cairo::GetHandle()
 	{
-		return m_surface;
+		return (UINT_PTR)m_surface;
 	}
 
 	BYTE* UIBitmap_Cairo::GetBits()
@@ -498,31 +401,6 @@ namespace DuiLib {
 		if(m_pDataBits) { free(m_pDataBits); m_pDataBits = NULL; }
 	}
 
-#ifdef WIN32
-	BOOL UIBitmap_Pixbuf::CreateFromHBitmap(HBITMAP hBitmap) //hBitmap由内部释放
-	{
-		return FALSE;
-	}
-
-	HBITMAP UIBitmap_Pixbuf::GetHBITMAP()
-	{
-		return (HBITMAP)m_pixbuf;
-	}
-
-	BOOL UIBitmap_Pixbuf::CreateARGB32Bitmap(HDC hDC, int width, int height, BOOL bFlip)
-	{
-		DeleteObject();
-		m_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, true, 32, width, height);
-		return m_pixbuf != NULL;
-	}
-
-	BOOL UIBitmap_Pixbuf::CreateCompatibleBitmap(HDC hDC, int width, int height)
-	{
-		DeleteObject();
-		return FALSE;
-	}
-#endif
-
 	BOOL UIBitmap_Pixbuf::CreateFromData(LPBYTE pImage, int width, int height, DWORD mask)
 	{
 		DeleteObject();
@@ -538,9 +416,9 @@ namespace DuiLib {
 		return m_pixbuf != NULL;
 	}
 
-	HANDLE UIBitmap_Pixbuf::GetHandle()
+	UINT_PTR UIBitmap_Pixbuf::GetHandle()
 	{
-		return m_pixbuf;
+		return (UINT_PTR)m_pixbuf;
 	}
 
 	BYTE* UIBitmap_Pixbuf::GetBits()
@@ -614,13 +492,6 @@ namespace DuiLib {
 		if (pSrcBits) { delete[] pSrcBits; pSrcBits = NULL; }
 	}
 
-#ifdef WIN32
-	BOOL UIImage_Cairo::CreateImage(HBITMAP hBitmap, bool bAlpha)
-	{
-		return FALSE;
-	}
-#endif
-
 } // namespace DuiLib
-#endif //#ifdef DUILIB_USE_RENDER_CAIRO
+#endif //#ifdef DUILIB_GTK
 

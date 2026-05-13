@@ -680,6 +680,60 @@ namespace DuiLib
 				break;
 		}
 	}
+
+	void DuiStringTraitsA::URLEncode(const char *str, char *&dst_str, DuiStringEncoding encoding, BOOL x_www_form_urlencoded)
+	{
+		int srcLen = ui_strlen(str);
+		for(int i=0; i<srcLen; i++)
+		{
+			unsigned char c = str[i];
+			if((c >= '0' && c <= '9') || 
+				(c >= 'A' && c <= 'Z') ||
+				(c >= 'a' && c <= 'z') ||
+				c == '-' || c == '_' || c == '.' || c == '~') //直接保留的字符：A-Z a-z 0-9 以及 - _ . ~
+			{
+				append_string(dst_str, encoding, &c, 1, encoding);
+			}
+			else if(x_www_form_urlencoded && c == 0x20) //空格，x-www-form-urlencoded环境下 空格转为加号'+'
+			{
+				append_string(dst_str, encoding, "+", 1, encoding);
+			}
+			else
+			{
+				char temp[16];
+				sprintf(temp, "%%%02X", c);
+				append_string(dst_str, encoding, temp, strlen(temp), encoding);
+			}
+		}
+	}
+
+	void DuiStringTraitsA::URLDecode(const char *str, char *&dst_str, DuiStringEncoding encoding, BOOL x_www_form_urlencoded)
+	{
+		int srcLen = ui_strlen(str);
+		for(int i=0; i<srcLen; i++)
+		{
+			char c = str[i];
+			if(x_www_form_urlencoded && c == '+') //加号'+'，x-www-form-urlencoded环境下 加号转为空格
+			{
+				append_string(dst_str, encoding, " ", sizeof(char), encoding);
+			}
+			else if(c != '%')
+			{
+				append_string(dst_str, encoding, &c, 1, encoding);
+			}
+			else
+			{
+				if(i+2 >= srcLen)
+					break;
+				BYTE bt1 = Char2Hex(str[i+1]);
+				BYTE bt2 = Char2Hex(str[i+2]);
+				BYTE bt = (bt1 << 4) | bt2;
+				append_string(dst_str, encoding, &bt, 1, encoding);
+				i += 2;
+			}	
+		}
+	}
+
 	//////////////////////////////////////////////////////////////////////////
 	//
 	//
@@ -1085,6 +1139,71 @@ namespace DuiLib
 		}
 	}
 
+	void DuiStringTraitsW::URLEncode(const wchar_t *str, wchar_t *&dst_str, DuiStringEncoding encoding, BOOL x_www_form_urlencoded)
+	{
+		//转成UTF8再编码
+		StringConverterUI conv;
+		const char *strutf8 = conv.W_to_utf8(str, ui_strlen(str));
+
+		int srcLen = ::strlen(strutf8);
+		for(int i=0; i<srcLen; i++)
+		{
+			unsigned char c = strutf8[i];
+			if((c >= '0' && c <= '9') || 
+				(c >= 'A' && c <= 'Z') ||
+				(c >= 'a' && c <= 'z') ||
+				c == '-' || c == '_' || c == '.' || c == '~') //直接保留的字符：A-Z a-z 0-9 以及 - _ . ~
+			{
+				append_string(dst_str, encoding, &c, 1, duistring_encoding_utf8);
+			}
+			else if(x_www_form_urlencoded && c == 0x20) //空格，x-www-form-urlencoded环境下 空格转为加号'+'
+			{
+				append_string(dst_str, encoding, "+", 1, duistring_encoding_utf8);
+			}
+			else
+			{
+				wchar_t temp[16];
+				swprintf(temp, 16, L"%%%02X", c);
+				append_string(dst_str, encoding, temp, ui_strlen(temp), encoding);
+			}
+		}
+	}
+
+	void DuiStringTraitsW::URLDecode(const wchar_t *str, wchar_t *&dst_str, DuiStringEncoding encoding, BOOL x_www_form_urlencoded)
+	{
+		//转成UTF8再解码
+		StringConverterUI conv;
+		const char *strutf8 = conv.W_to_utf8(str, ui_strlen(str));
+
+		std::string strTemp;
+
+		int srcLen = ::strlen(strutf8);
+		for(int i=0; i<srcLen; i++)
+		{
+			unsigned char c = strutf8[i];
+			if(x_www_form_urlencoded && c == '+') //加号'+'，x-www-form-urlencoded环境下 加号转为空格
+			{
+				strTemp += " ";
+			}
+			else if(c != '%')
+			{
+				strTemp += c;
+			}
+			else
+			{
+				if(i+2 >= srcLen)
+					break;
+				BYTE bt1 = DuiStringTraitsA::Char2Hex(strutf8[i+1]);
+				BYTE bt2 = DuiStringTraitsA::Char2Hex(strutf8[i+2]);
+				BYTE bt = (bt1 << 4) | bt2;
+				strTemp += (char)bt;
+				i += 2;
+			}	
+		}
+
+		append_string(dst_str, encoding, strTemp.c_str(), strTemp.length(), duistring_encoding_utf8);
+	}
+
 	//////////////////////////////////////////////////////////////////////////
 	CDuiString UILIB_API operator+(char lpStr, const CDuiString& string2)
 	{
@@ -1134,6 +1253,22 @@ namespace DuiLib
 	{
 		CDuiString s(lpStr,2);
 		return s + string2;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	//
+	//
+	void CMacroToStringMap::Add(int i, LPCTSTR s)
+	{
+		m_arrString[i] = s;
+	}
+
+	CDuiString CMacroToStringMap::Lookup(int i)
+	{
+		std::map<int, CDuiString>::iterator it = m_arrString.find(i);
+		if (it != m_arrString.end())
+			return it->second;
+		return _T("[Unknow]");
 	}
 	//////////////////////////////////////////////////////////////////////////
 	//

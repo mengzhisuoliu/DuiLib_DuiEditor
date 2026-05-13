@@ -212,10 +212,10 @@ typedef int INT;
 typedef unsigned char BYTE;
 typedef unsigned long long    INT64;
 
-#if (defined _M_X64 || defined __amd64 || defined __x86_64__ || defined __arm64 || defined __aarch64__ || defined __mips64 || defined __loongarch64__ || defined __loongarch64)
-typedef long long UINT_PTR;
-typedef long long LONG_PTR;
-typedef unsigned long long    ULONG_PTR;
+#if (defined _M_X64 || defined __amd64 || defined __x86_64__ || defined __arm64 || defined __aarch64__ || defined __mips64 || defined __loongarch64__ || defined __loongarch64 || defined __sw64__ || defined __sw_64)
+typedef uint64_t UINT_PTR;
+typedef __int64_t LONG_PTR;
+typedef uint64_t    ULONG_PTR;
 #else
 typedef unsigned int UINT_PTR;
 typedef unsigned int LONG_PTR;

@@ -28,7 +28,7 @@ namespace DuiLib
 #define IP_DELETE 2
 #define IP_KEEP   3
 
-	class CIPAddressWnd : public CWindowWnd
+	class CIPAddressWnd : public CWindowWin32
 	{
 	public:
 		CIPAddressWnd();
@@ -68,6 +68,15 @@ namespace DuiLib
 				RECT rcPos = CalPos();
 				UINT uStyle = WS_CHILD | WS_TABSTOP | WS_GROUP;
 				Create(m_pOwner->GetManager()->GetPaintWindow(), NULL, uStyle, 0, rcPos);
+
+				LONG_PTR style = GetWindowLongPtr(GetHWND(), GWL_STYLE);
+				style &= ~WS_BORDER;
+				SetWindowLongPtr(GetHWND(), GWL_STYLE, style);
+				LONG_PTR exStyle = GetWindowLongPtr(GetHWND(), GWL_EXSTYLE);
+				exStyle &= ~WS_EX_CLIENTEDGE;
+				SetWindowLongPtr(GetHWND(), GWL_EXSTYLE, exStyle);
+				::SetWindowPos(GetHWND(), NULL, 0, 0, 0, 0,
+					SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 			}
 			//不知何故，窗口关闭时，这个字体会被卸载掉。 有人知道请告诉我哈。
 			//SetWindowFont(m_hWnd, m_pOwner->GetManager()->GetFontInfo(m_pOwner->GetFont())->hFont, TRUE);
@@ -87,6 +96,7 @@ namespace DuiLib
 	RECT CIPAddressWnd::CalPos()
 	{
 		CDuiRect rcPos = m_pOwner->GetPos();
+		rcPos.Deflate(1,1,1,1);
 		return rcPos;
 	}
 
@@ -123,14 +133,14 @@ namespace DuiLib
 			LRESULT lRes = ::DefWindowProc(m_hWnd, uMsg, wParam, lParam);
 			m_pOwner->m_nIPUpdateFlag = IP_DELETE;
 			m_pOwner->UpdateText();
-			PostMessage(WM_CLOSE);
+			::PostMessage(m_hWnd, WM_CLOSE, 0, 0);
 			return lRes;
 		}
 		else if (uMsg == WM_KEYUP && wParam == VK_ESCAPE)
 		{
 			LRESULT lRes = ::DefWindowProc(m_hWnd, uMsg, wParam, lParam);
 			m_pOwner->m_nIPUpdateFlag = IP_KEEP;
-			PostMessage(WM_CLOSE);
+			::PostMessage(m_hWnd, WM_CLOSE, 0, 0);
 			return lRes;
 		}
 		else if( uMsg == OCM_COMMAND ) {
@@ -140,7 +150,7 @@ namespace DuiLib
 			}
 		}
 		else bHandled = FALSE;
-		if( !bHandled ) return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+		if( !bHandled ) return CWindowWin32::HandleMessage(uMsg, wParam, lParam);
 		return lRes;
 	}
 

@@ -4,16 +4,13 @@
 #ifdef DUILIB_GTK
 namespace DuiLib {
 
-class UILIB_API CUIFrameWndGtk
-	: public CWindowGtk
-	, public IMessageFilterUI
-	, public CUIFrameWndBase
+class UILIB_API CUIFrameWndGtk : public CUIFrameWndBase
 {
 public:
 	CUIFrameWndGtk(void);
 	virtual ~CUIFrameWndGtk(void);
 
-	virtual CPaintManagerUI *GetManager() override;
+	virtual CPaintManagerGtkUI *GetManager() override;
 	virtual void OnFinalMessage(UIWND hWnd) override;
 
 	virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled) override;
@@ -48,7 +45,6 @@ public:
 	virtual LRESULT OnRButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	virtual LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 protected:
-	CPaintManagerGtkUI m_pm;
 };
 
 } //namespace DuiLib {

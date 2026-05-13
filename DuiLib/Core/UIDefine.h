@@ -41,7 +41,7 @@ namespace DuiLib
 	// 核心控件
 	class CControlUI;
 	class CPaintManagerUI;
-
+	class CWindowWnd;
 	//定时器
 	typedef struct tagTIMERINFO
 	{
@@ -49,7 +49,7 @@ namespace DuiLib
 		UINT nLocalID;
 		UIWND hWnd;
 		PVOID pWindow;
-		UINT uWinTimer;
+		UINT uWinTimer; // TIMERID WIN32/sdl/gtk
 		bool bKilled;
 	} TIMERINFO;
 

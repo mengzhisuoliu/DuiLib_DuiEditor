@@ -6,7 +6,7 @@
 namespace DuiLib {
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
-	class UILIB_API CPaintManagerWin32UI : public CPaintManagerUI, public CIDropTarget
+	class UILIB_API CPaintManagerWin32UI : public CPaintManagerUI
 	{
 	public:
 		CPaintManagerWin32UI();
@@ -22,43 +22,49 @@ namespace DuiLib {
 
 		virtual void SetCursor(int nCursor) override;
 
-		bool InitDragDrop(); // ³õÊ¼»¯ÍÏ×§
-		virtual bool OnDropOver(DWORD grfKeyState, LPDWORD pdwEffect) override;
-		virtual bool OnDrop(FORMATETC* pFmtEtc, STGMEDIUM& medium,DWORD *pdwEffect) override;
-
 		virtual void SetCapture() override;
 		virtual void ReleaseCapture() override;
 		virtual bool IsCaptured() override;
 
-		virtual bool PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnApp1(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
+		virtual BOOL SetTimer(UINT uElapse, TIMERINFO* pTimer) override;
+		virtual BOOL KillTimer(TIMERINFO* pTimer) override;
+		virtual BOOL GetCursorPos(LPPOINT pt) override;
+		virtual BOOL ScreenToClient(LPPOINT pt) override;
+		virtual void SetWndFocus() override;
+		virtual UIWND GetWndFocus() override;
+		virtual BOOL IsZoomed() override;
+		virtual BOOL IsIconic() override;
+		virtual BOOL SetWindowPos(int x, int y, int cx, int cy, UINT uFlags) override;
+		virtual BOOL GetWindowRect(LPRECT lpRect) override;
+		virtual BOOL GetClientRect(LPRECT lpRect) override;
+		virtual BOOL IsKeyDown(UINT uKey) override;
+		virtual BOOL IsKeyUp(UINT uKey) override;
+		virtual BOOL IsCtrlKeyDown() override;
+		virtual BOOL IsAltKeyDown() override;
+		virtual BOOL IsShiftKeyDown() override;
+		virtual BOOL IsCapsLockKeyOn() override;
+		virtual BOOL IsNUmberLockKeyOn() override;
+		virtual UINT MapKeyState() override;
+		virtual DWORD GetTickCount() override;
+		virtual void GetLocalTime(SYSTEMTIME &st) override;
+
+		int GetNativeWindowCount() const;
+		RECT GetNativeWindowRect(HWND hChildWnd);
+		bool AddNativeWindow(CControlUI* pControl, HWND hChildWnd);
+		bool RemoveNativeWindow(HWND hChildWnd);
+
+		static void MessageLoop();
+
 		virtual bool OnClose(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 		virtual bool OnPaint(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 		virtual bool OnEraseBkgnd(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 		virtual bool OnPrintClient(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 		virtual bool OnGetMaxMinInfo(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnSize(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnTimer(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnLButtonDown(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnLButtonUp(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnLButtonDbClick(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnRButtonDown(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnRButtonUp(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnRButtonDbClick(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnMButtonDown(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnMButtonUp(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 		virtual bool OnMouseOver(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 		virtual bool OnMouseLeave(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 		virtual bool OnMouseMove(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 		virtual bool OnMouseWheel(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 		virtual bool OnContextMenu(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnChar(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnKeyDown(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnKeyUp(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnSetCursor(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnSetFocus(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnKillFocus(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 		virtual bool OnNotify(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 		virtual bool OnCommand(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 		virtual bool OnCtlColorEdit(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
@@ -74,6 +80,7 @@ namespace DuiLib {
 	protected:
 		HDC m_hDcPaint;
 		TOOLINFO m_ToolTip;
+		UINT m_uTimerID;
 	};
 
 

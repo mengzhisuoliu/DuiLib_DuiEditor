@@ -3,6 +3,7 @@
 #define __DUISTRING_H__
 
 #include <vector>
+#include <map>
 
 #ifdef __GNUC__
 
@@ -37,8 +38,10 @@ namespace DuiLib
 
 #ifdef WIN32
 	typedef __int64 Int64;
+	typedef unsigned __int64 UInt64;
 #else
 	typedef __int64_t Int64;
+	typedef unsigned __int64_t UInt64;
 #endif
 
 	//////////////////////////////////////////////////////////////////////////
@@ -87,6 +90,8 @@ namespace DuiLib
 		static void append_string(char *&pstr, DuiStringEncoding dst_encoding, const void *src_string, int src_strlength, DuiStringEncoding src_encoding);
 		static void TrimLeft(char *&pstr);
 		static void TrimRight(char *&pstr);
+		static void URLEncode(const char *str, char *&dst_str, DuiStringEncoding encoding, BOOL x_www_form_urlencoded);
+		static void URLDecode(const char *str, char *&dst_str, DuiStringEncoding encoding, BOOL x_www_form_urlencoded);
 	};
 
 	class UILIB_API DuiStringTraitsW
@@ -134,6 +139,8 @@ namespace DuiLib
 		static void append_string(wchar_t *&pstr, DuiStringEncoding dst_encoding, const void *src_string, int src_strlength, DuiStringEncoding src_encoding);
 		static void TrimLeft(wchar_t *&pstr);
 		static void TrimRight(wchar_t *&pstr);
+		static void URLEncode(const wchar_t *str, wchar_t *&dst_str, DuiStringEncoding encoding, BOOL x_www_form_urlencoded);
+		static void URLDecode(const wchar_t *str, wchar_t *&dst_str, DuiStringEncoding encoding, BOOL x_www_form_urlencoded);
 	};
 
 	template< typename uichar, class DuiTraits, DuiStringEncoding StringEncoding > class DuiStringT;
@@ -482,6 +489,17 @@ namespace DuiLib
 		friend CDuiString UILIB_API operator+(float lpStr, const CDuiString& string2);
 
 		//////////////////////////////////////////////////////////////////////////
+		DuiStringT& Insert(int nIndex, DuiStringT str)
+		{
+			if (nIndex < 0) return *this;
+			DuiStringT left = Left(nIndex);
+			DuiStringT right = Right(GetLength() - nIndex);
+			DuiStringT newstr = left + str + right;
+			Assign(newstr);
+			return (*this);
+		}
+
+		//////////////////////////////////////////////////////////////////////////
 		const uichar *toString() const						{ return (const uichar *)m_pstr; }
 		bool toBool(bool def = false) const					{ return m_pstr[0]=='1' || m_pstr[0]=='t' || m_pstr[0]=='T' || m_pstr[0]=='Y' || m_pstr[0]=='y'; }
 		int toInt(int def = 0) const						{ return DuiTraits::ui_atoi(m_pstr); }
@@ -823,6 +841,13 @@ namespace DuiLib
 #endif
 		}
 
+		//URL编码, CDuiStringA使用GBK编码，其他使用UTF-8编码
+		DuiStringT URLEncode(BOOL x_www_form_urlencoded = FALSE)	{ DuiStringT sTemp; DuiTraits::URLEncode(m_pstr, sTemp.m_pstr, StringEncoding, x_www_form_urlencoded); return sTemp; }
+		
+		//URL解码, CDuiStringA使用GBK编码，其他使用UTF-8编码
+		DuiStringT URLDecode(BOOL x_www_form_urlencoded = FALSE)	{ DuiStringT sTemp; DuiTraits::URLDecode(m_pstr, sTemp.m_pstr, StringEncoding, x_www_form_urlencoded); return sTemp; }
+
+		//
 		DuiStringEncoding GetEncoding() const { return StringEncoding; }
 	protected:
 		uichar *m_pstr;
@@ -990,6 +1015,16 @@ namespace DuiLib
 	private:
 		std::vector<DuiString> m_arrString;
 		bool m_bNoRepeat;
+	};
+
+	#define MACROTOSTRINGMAP_ADD(c, a) c.Add(a, _T(#a));
+	class UILIB_API CMacroToStringMap //宏定义转为字符串
+	{
+	public:
+		void Add(int i, LPCTSTR s);
+		CDuiString Lookup(int i);
+	protected:
+		std::map<int, CDuiString> m_arrString;
 	};
 
 	class UILIB_API CBufferUI

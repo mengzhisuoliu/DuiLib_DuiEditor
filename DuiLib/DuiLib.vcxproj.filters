@@ -408,6 +408,9 @@
     <ClCompile Include="Control\UIDateTimeWndWin32.cpp">
       <Filter>Source Files\Control</Filter>
     </ClCompile>
+    <ClCompile Include="Control\UISpin.cpp">
+      <Filter>Source Files\Control</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Control\UIWebBrowser.h">
@@ -786,6 +789,9 @@
       <Filter>Header Files\Control</Filter>
     </ClInclude>
     <ClInclude Include="Control\UIDateTimeWndWin32.h">
+      <Filter>Header Files\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UISpin.h">
       <Filter>Header Files\Control</Filter>
     </ClInclude>
   </ItemGroup>

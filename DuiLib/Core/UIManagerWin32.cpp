@@ -23,16 +23,16 @@ namespace DuiLib {
 		rcChildWnd.bottom = pt.y;
 	}
 
-// 	static UINT MapKeyState()
-// 	{
-// 		UINT uState = 0;
-// 		if( ::GetKeyState(VK_CONTROL) < 0 ) uState |= MK_CONTROL;
-// 		if( ::GetKeyState(VK_LBUTTON) < 0 ) uState |= MK_LBUTTON;
-// 		if( ::GetKeyState(VK_RBUTTON) < 0 ) uState |= MK_RBUTTON;
-// 		if( ::GetKeyState(VK_SHIFT) < 0 ) uState |= MK_SHIFT;
-// 		if( ::GetKeyState(VK_MENU) < 0 ) uState |= MK_ALT;
-// 		return uState;
-// 	}
+	// 	static UINT MapKeyState()
+	// 	{
+	// 		UINT uState = 0;
+	// 		if( ::GetKeyState(VK_CONTROL) < 0 ) uState |= MK_CONTROL;
+	// 		if( ::GetKeyState(VK_LBUTTON) < 0 ) uState |= MK_LBUTTON;
+	// 		if( ::GetKeyState(VK_RBUTTON) < 0 ) uState |= MK_RBUTTON;
+	// 		if( ::GetKeyState(VK_SHIFT) < 0 ) uState |= MK_SHIFT;
+	// 		if( ::GetKeyState(VK_MENU) < 0 ) uState |= MK_ALT;
+	// 		return uState;
+	// 	}
 
 	typedef BOOL (__stdcall *PFUNCUPDATELAYEREDWINDOW)(HWND, HDC, POINT*, SIZE*, HDC, POINT*, COLORREF, BLENDFUNCTION*, DWORD);
 	PFUNCUPDATELAYEREDWINDOW g_fUpdateLayeredWindow = NULL;
@@ -531,6 +531,7 @@ namespace DuiLib {
 		}
 
 		PAINTSTRUCT ps = { 0 };
+		Render()->BeginPaint();
 		::BeginPaint(m_hWndPaint, &ps);
 
 		Render()->Resize(dwWidth, dwHeight);
@@ -590,6 +591,7 @@ namespace DuiLib {
 
 		Render()->RestoreObject();
 		::EndPaint(m_hWndPaint, &ps);
+		Render()->EndPaint();
 
 		// »æÖÆ½áÊø
 		SetPainting(false);
@@ -611,24 +613,24 @@ namespace DuiLib {
 
 	bool CPaintManagerWin32UI::OnPrintClient(WPARAM wParam, LPARAM lParam, LRESULT& lRes)
 	{
-// 		if( m_pRoot == NULL ) return false;
-// 		RECT rcClient;
-// 		::GetClientRect(m_hWndPaint, &rcClient);
-// 		HDC hDC = (HDC) wParam;
-// 		int save = ::SaveDC(hDC);
-// 		m_pRoot->Paint(hDC, rcClient, NULL);
-// 		if( (lParam & PRF_CHILDREN) != 0 ) {
-// 			HWND hWndChild = ::GetWindow(m_hWndPaint, GW_CHILD);
-// 			while( hWndChild != NULL ) {
-// 				RECT rcPos = { 0 };
-// 				::GetWindowRect(hWndChild, &rcPos);
-// 				::MapWindowPoints(HWND_DESKTOP, m_hWndPaint, reinterpret_cast<LPPOINT>(&rcPos), 2);
-// 				::SetWindowOrgEx(hDC, -rcPos.left, -rcPos.top, NULL);
-// 				::SendMessage(hWndChild, WM_PRINT, wParam, lParam | PRF_NONCLIENT);
-// 				hWndChild = ::GetWindow(hWndChild, GW_HWNDNEXT);
-// 			}
-// 		}
-// 		::RestoreDC(hDC, save);
+		// 		if( m_pRoot == NULL ) return false;
+		// 		RECT rcClient;
+		// 		::GetClientRect(m_hWndPaint, &rcClient);
+		// 		HDC hDC = (HDC) wParam;
+		// 		int save = ::SaveDC(hDC);
+		// 		m_pRoot->Paint(hDC, rcClient, NULL);
+		// 		if( (lParam & PRF_CHILDREN) != 0 ) {
+		// 			HWND hWndChild = ::GetWindow(m_hWndPaint, GW_CHILD);
+		// 			while( hWndChild != NULL ) {
+		// 				RECT rcPos = { 0 };
+		// 				::GetWindowRect(hWndChild, &rcPos);
+		// 				::MapWindowPoints(HWND_DESKTOP, m_hWndPaint, reinterpret_cast<LPPOINT>(&rcPos), 2);
+		// 				::SetWindowOrgEx(hDC, -rcPos.left, -rcPos.top, NULL);
+		// 				::SendMessage(hWndChild, WM_PRINT, wParam, lParam | PRF_NONCLIENT);
+		// 				hWndChild = ::GetWindow(hWndChild, GW_HWNDNEXT);
+		// 			}
+		// 		}
+		// 		::RestoreDC(hDC, save);
 		return false;
 	}
 

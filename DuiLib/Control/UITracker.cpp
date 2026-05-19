@@ -5,14 +5,13 @@ namespace DuiLib
 
 IMPLEMENT_DUICONTROL(CTrackerUI)
 
-CTrackerUI::CTrackerUI() : m_iCursor(0), m_uButtonState(0)
+CTrackerUI::CTrackerUI() : m_iCursor(0)
 {
 	m_rcInset = CDuiRect(4,4,4,4);
 	m_dwBorderColor = 0xFF000000;
 	m_nBorderStyle = PS_DOT;
 	m_rcBorderSize = CDuiRect(1,1,1,1);
 	m_bMouseDown = false;
-	m_ptLastMouse.x = m_ptLastMouse.y = 0;
 }
 
 LPCTSTR CTrackerUI::GetClass() const
@@ -311,35 +310,35 @@ void CTrackerUI::DoEvent(TEventUI& event)
 	if( event.Type == UIEVENT_SETCURSOR && IsEnabled())
 	{
 		int cursorx;
-		if( (m_uButtonState & UISTATE_CAPTURED) != 0 ) return;
-		GetManager()->SetCursor(GetSizerCursor(event.ptMouse, cursorx));
+		if (IsCaptureState()) return;
+		int nCursor = GetSizerCursor(event.ptMouse, cursorx);
+		GetManager()->SetCursor(nCursor);
 		return;
 	}
 
 	if( event.Type == UIEVENT_BUTTONDOWN && IsEnabled() )
 	{
+		GetManager()->SetCapture();
 		m_bMouseDown = true;
-		m_uButtonState |= UISTATE_CAPTURED;
+		SetCaptureState(true);
 		m_ptLastMouse = event.ptMouse;
 		m_rcNewPos = m_rcItem;
-
-		GetSizerCursor(event.ptMouse, m_iCursor);
-		
+		GetSizerCursor(event.ptMouse, m_iCursor);		
 		return;
 	}
 
 	if( event.Type == UIEVENT_BUTTONUP )
 	{
 		m_bMouseDown = false;
-		if( (m_uButtonState & UISTATE_CAPTURED) != 0 ) {
-			m_uButtonState &= ~UISTATE_CAPTURED;
-			//NeedParentUpdate();
+		if (IsCaptureState())
+		{
+			SetCaptureState(false);
 		}
 		return;
 	}
 	else if(( event.Type == UIEVENT_MOUSEMOVE )&&(m_bMouseDown))
 	{
-		if( (m_uButtonState & UISTATE_CAPTURED) == 0 ) return;
+		if (!IsCaptureState()) return;
 
 		LONG cx, cy;
 

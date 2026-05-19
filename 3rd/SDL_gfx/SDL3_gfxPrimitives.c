@@ -36,8 +36,8 @@ Andreas Schiffler -- aschiffler at ferzkopp dot net
 #include "SDL3_rotozoom.h"
 #include "SDL3_gfxPrimitives_font.h"
 
-extern int* gfxPrimitivesPolyIntsGlobal;
-extern int gfxPrimitivesPolyAllocatedGlobal;
+static int* gfxPrimitivesPolyIntsGlobal = NULL;
+static int gfxPrimitivesPolyAllocatedGlobal = 0;
 
 /*!
 \brief Initializes internal data used by GFX functions
@@ -2743,14 +2743,14 @@ int _gfxPrimitivesCompareInt(const void* a, const void* b)
 
 Note: Used for non-multithreaded (default) operation of filledPolygonMT.
 */
-static int* gfxPrimitivesPolyIntsGlobal = NULL;
+//static int* gfxPrimitivesPolyIntsGlobal = NULL;
 
 /*!
 \brief Flag indicating if global vertex array was already allocated.
 
 Note: Used for non-multithreaded (default) operation of filledPolygonMT.
 */
-static int gfxPrimitivesPolyAllocatedGlobal = 0;
+//static int gfxPrimitivesPolyAllocatedGlobal = 0;
 
 /*!
 \brief Draw filled polygon with alpha blending (multi-threaded capable).

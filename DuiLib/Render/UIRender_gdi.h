@@ -20,6 +20,9 @@ namespace DuiLib {
 
 		virtual HDC GetDC() override;
 
+		virtual void BeginPaint() override;
+		virtual void EndPaint() override;
+
 		virtual bool CloneFrom(UIRender *pSrcRender) override;
 
 		virtual UIBitmap *GetBitmap() override;

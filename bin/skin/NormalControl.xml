@@ -14,7 +14,7 @@
 			</OptionLayout>
 			<Button name="btn_domodal" width="120" text="打开模态对话框" style="style_button" />
 			<Button name="btn_show_dialog" width="120" text="打开非模态对话框" resourceid="7" style="style_button" />
-			<Button name="btn_test_script_dialog" width="100" height="50" text="脚本弹窗" pos="0,0,100,50" style="style_button" />
+			<Button name="btn_test_script_dialog" width="100" height="50" text="脚本弹窗" style="style_button" />
 		</HorizontalLayout>
 		<HorizontalLayout height="30" childpadding="10" childvalign="vcenter">
 			<Label text="单选框" autocalcwidth="true" resourceid="8" />
@@ -51,7 +51,10 @@
 		</HorizontalLayout>
 		<HorizontalLayout height="60" childpadding="10" childvalign="vcenter">
 			<Label text="编辑框" autocalcwidth="true" resourceid="20" />
-			<Edit width="150" nativebkcolor="0x7FFF0000" tipvalue="编辑框" bordercolor="0xFFC0C0C0" bordersize="1" resourceid="39" tooltip="真的是编辑框" />
+			<HorizontalLayout height="30" autocalcwidth="true">
+				<Edit name="edit_spin" width="150" tipvalue="编辑框" pos="0,0,150,30" bordercolor="0xFFC0C0C0" bordersize="1" resourceid="39" tooltip="真的是编辑框" />
+				<Spin bindcontrolname="edit_spin" btnup="foreimage=&quot;file='images\jiantou4_top.svg' dest='0,0,8,8' align='center' valign='vcenter' width='8' height='8' &quot; style=&quot;style_button&quot; " btndown="foreimage=&quot;file='images\jiantou4_down.svg' dest='0,0,8,8' align='center' valign='vcenter' width='8' height='8' &quot; style=&quot;style_button&quot; " width="20" />
+			</HorizontalLayout>
 			<Label text="多行编辑框" autocalcwidth="true" />
 			<Edit width="150" height="60" multiline="true" wantreturn="true" tipvalue="编辑框" valign="top" bordercolor="0xFFC0C0C0" bordersize="1" />
 			<Button width="60" height="60" hotbkcolor="0xFFC0C0C0" text="圆角按钮" bkcolor="0xFFA0A0A4" bordercolor="0xFFFF0000" bordersize="1" borderround="10,10" />

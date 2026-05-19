@@ -1,5 +1,5 @@
 #include "StdAfx.h"
-#include "UIComboWndSDL.h"
+#include "UIComboWndSdl.h"
 
 #ifdef DUILIB_SDL
 namespace DuiLib {

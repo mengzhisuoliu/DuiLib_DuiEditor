@@ -36,27 +36,27 @@ namespace DuiLib {
 		return (LONG) MulDiv(dy, HIMETRIC_PER_INCH, yPerInch);
 	}
 
-	HRESULT InitDefaultCharFormat(CRichEditUI* re, CHARFORMAT2W* pcf, HFONT hfont) 
+	HRESULT CTxtWinHost::InitDefaultCharFormat(CHARFORMAT2W* pcf, HFONT hfont) 
 	{
 		memset(pcf, 0, sizeof(CHARFORMAT2W));
 		if(hfont == NULL) 
 		{
-			if(re->GetManager()) 
+			if(m_re->GetManager()) 
 			{
-				UIFont *pFont = re->GetManager()->GetFont(re->GetFont());
-				hfont = pFont->GetHFONT(re->GetManager());
+				UIFont *pFont = m_re->GetManager()->GetFont(m_re->GetFont());
+				hfont = pFont->GetHFONT(m_re->GetManager());
 			}
 		}
 		LOGFONT lf;
 		::GetObject(hfont, sizeof(LOGFONT), &lf);
 
-		DWORD dwColor = re->GetTextColor();
-		if(re->GetManager()->IsLayered()) {
+		DWORD dwColor = m_re->GetTextColor();
+		if(m_re->GetManager()->IsLayered()) {
 			UIGlobal::CheckAlphaColor(dwColor);
 		}
 		pcf->cbSize = sizeof(CHARFORMAT2W);
 		pcf->crTextColor = RGB(GetBValue(dwColor), GetGValue(dwColor), GetRValue(dwColor));
-		LONG yPixPerInch = GetDeviceCaps(re->GetManager()->GetPaintDC(), LOGPIXELSY);
+		LONG yPixPerInch = GetDeviceCaps(TxGetDC(), LOGPIXELSY);
 		pcf->yHeight = -lf.lfHeight * LY_PER_INCH / yPixPerInch;
 		pcf->yOffset = 0;
 		pcf->dwEffects = 0;
@@ -79,7 +79,7 @@ namespace DuiLib {
 		return S_OK;
 	}
 
-	HRESULT InitDefaultParaFormat(CRichEditUI* re, PARAFORMAT2* ppf) 
+	HRESULT CTxtWinHost::InitDefaultParaFormat(PARAFORMAT2* ppf) 
 	{	
 		memset(ppf, 0, sizeof(PARAFORMAT2));
 		ppf->cbSize = sizeof(PARAFORMAT2);
@@ -116,11 +116,11 @@ namespace DuiLib {
 		cRefs = 1;
 
 		// Create and cache CHARFORMAT for this control
-		if(FAILED(InitDefaultCharFormat(re, &cf, NULL)))
+		if(FAILED(InitDefaultCharFormat(&cf, NULL)))
 			goto err;
 
 		// Create and cache PARAFORMAT for this control
-		if(FAILED(InitDefaultParaFormat(re, &pf)))
+		if(FAILED(InitDefaultParaFormat(&pf)))
 			goto err;
 
 		// edit controls created without a window are multiline by default
@@ -641,7 +641,7 @@ err:
 		if( hFont == NULL ) return;
 		LOGFONT lf;
 		::GetObject(hFont, sizeof(LOGFONT), &lf);
-		LONG yPixPerInch = ::GetDeviceCaps(m_re->GetManager()->GetPaintDC(), LOGPIXELSY);
+		LONG yPixPerInch = ::GetDeviceCaps(TxGetDC(), LOGPIXELSY);
 		cf.yHeight = -lf.lfHeight * LY_PER_INCH / yPixPerInch;
 		if(lf.lfWeight >= FW_BOLD) cf.dwEffects |= CFE_BOLD;
 		else cf.dwEffects &= ~CFE_BOLD;
@@ -767,8 +767,8 @@ err:
 	{
 		rcClient = *prc;
 
-		LONG xPerInch = ::GetDeviceCaps(m_re->GetManager()->GetPaintDC(), LOGPIXELSX); 
-		LONG yPerInch =	::GetDeviceCaps(m_re->GetManager()->GetPaintDC(), LOGPIXELSY); 
+		LONG xPerInch = ::GetDeviceCaps(TxGetDC(), LOGPIXELSX); 
+		LONG yPerInch =	::GetDeviceCaps(TxGetDC(), LOGPIXELSY); 
 		sizelExtent.cx = DXtoHimetricX(rcClient.right - rcClient.left, xPerInch);
 		sizelExtent.cy = DYtoHimetricY(rcClient.bottom - rcClient.top, yPerInch);
 
@@ -823,7 +823,7 @@ err:
 		if (rc.PtInRect(*pt))
 		{
 			RECT *prcClient = (!fInplaceActive || prc) ? &rc : NULL;
-			HRESULT hRet = pserv->OnTxSetCursor(DVASPECT_CONTENT,	-1, NULL, NULL,  m_re->GetManager()->GetPaintDC(),
+			HRESULT hRet = pserv->OnTxSetCursor(DVASPECT_CONTENT,	-1, NULL, NULL,  TxGetDC(),
 				NULL, prcClient, pt->x, pt->y);
 
 			return TRUE;

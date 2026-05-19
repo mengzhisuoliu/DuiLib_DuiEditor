@@ -161,7 +161,6 @@ LRESULT CUIFrameWndSDL::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 		return 0;
 	}
 
-	SetCursor(DUI_ARROW);
 	bHandled = FALSE;
 	return 0;
 }

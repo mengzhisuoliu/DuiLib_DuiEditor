@@ -16,6 +16,7 @@ namespace DuiLib {
 		virtual ~UIRender_Sdl();
 
 		virtual void Init(CPaintManagerUI* pManager, PVOID pParam) override;
+		virtual HANDLE GetHandle() override;
 
 		virtual void BeginPaint() override;
 		virtual void EndPaint() override;
@@ -29,6 +30,8 @@ namespace DuiLib {
 		virtual int GetHeight() const override;
 		virtual void Clear() override;
 		virtual void ClearAlpha(const RECT &rc, int alpha = 0) override;
+
+		void InvalidRect(const RECT* lpRect);
 
 		virtual void SaveDC() override;
 		virtual void RestoreDC() override;
@@ -65,6 +68,7 @@ namespace DuiLib {
 		SDL_Texture* m_pTexture;
 		int m_nWidth;
 		int m_nHeight;
+		CDuiRect m_rcInvalidate;
 	};
 
 } // namespace DuiLib

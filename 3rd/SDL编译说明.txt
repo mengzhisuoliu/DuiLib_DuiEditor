@@ -1,0 +1,32 @@
+
+==============================
+======  linux ================
+==============================
+
+1, 进入SDL目录
+cmake -S . -B build
+cmake -DSDL_X11_XSCRNSAVER=OFF
+cmake --build build
+sudo cmake --install build
+
+2，进入SDL_gfx目录      
+mkdir build
+cd build
+cmake ..
+cmake --build .
+make --install
+cd ..
+sudo cmake --install build
+sudo ldconfig
+
+3, 进入 SDL_image目录
+cmake -S . -B build
+cmake --build build
+sudo cmake --install build
+
+4, 进入 SDL_ttf目录
+cmake -S . -B build
+cmake --build build
+sudo cmake --install build
+
+

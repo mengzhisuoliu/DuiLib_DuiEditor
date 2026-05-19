@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "UIDateTime.h"
 
-#ifndef _WIN32
+#ifndef WIN32
 #include <locale.h>
 #include <time.h>
 #endif
@@ -63,7 +63,7 @@ namespace DuiLib
 
 	void CDateTimeUI::SetText(LPCTSTR lpszDate)
 	{
-#ifdef _WIN32
+#ifdef WIN32
 		CDuiStringW sUnicode = CDuiString(lpszDate);
 		DATE dt = 0;
 		LCID lcid = LOCALE_USER_DEFAULT;
@@ -82,9 +82,14 @@ namespace DuiLib
 			// 失败时回退到 "C" locale
 			setlocale(LC_TIME, "C");
 		}
-
+		
+		const char* format = NULL;
+		if (m_uFormatStyle == DTS_TIMEFORMAT)
+			format = _T(":H:M:S");
+		else
+			format = _T("%Y-%m-%d");
 		struct tm tm = {0};
-		char* ret = strptime(str, format, &tm);
+		char* ret = strptime(lpszDate, format, &tm);
 		// 恢复原有 locale
 		if (old_dup) 
 		{

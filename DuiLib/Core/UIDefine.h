@@ -334,6 +334,7 @@ protected:                                                                \
 #define  DUI_CTR_OPTION_LAYOUT                   (_T("OptionLayout"))
 
 #define  DUI_CTR_SLIDER                          (_T("Slider"))
+#define  DUI_CTR_SPIN							 (_T("Spin"))
 
 #define  DUI_CTR_CONTROL                         (_T("Control"))
 #define  DUI_CTR_ACTIVEX                         (_T("ActiveX"))

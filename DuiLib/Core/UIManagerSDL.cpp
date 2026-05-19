@@ -1,5 +1,7 @@
 #include "StdAfx.h"
 
+#include "../Render/UIRender_Sdl.h"
+
 #ifdef DUILIB_SDL
 namespace DuiLib {
 
@@ -110,6 +112,9 @@ namespace DuiLib {
 	{
 		if (m_pWindow)
 		{
+			UIRender_Sdl* pRender = (UIRender_Sdl*)Render();
+			pRender->InvalidRect(lpRect);
+
 			SDL_Event event;
 			event.type = SDL_EVENT_WINDOW_EXPOSED;
 			event.window.windowID = SDL_GetWindowID((SDL_Window*)m_hWndPaint);
@@ -545,8 +550,6 @@ namespace DuiLib {
 			static UINT lastEventType = 0;
 			if (lastWindowID != ev.window.windowID || lastEventType != ev.type)
 			{
-				lastWindowID = ev.window.windowID;
-				lastEventType = ev.type;
 				CDuiString tmp;
 
 				if (ev.type == CWindowSDL::m_EVENT_SEND_MESSAGE)
@@ -558,9 +561,12 @@ namespace DuiLib {
 				}
 				else if (ev.type == SDL_EVENT_USER)
 				{
-					tmp.Format(_T("winowID=%d, SDL_Event: %s, code=%s, wparam=%p, lparam=%p"), 
-						ev.window.windowID, m_sdlEventString.Lookup(ev.type).toString(),
-						m_wmEventString.Lookup(ev.user.code).toString(), ev.user.data1, ev.user.data2);
+					if (ev.user.code != WM_TIMER)
+					{
+						tmp.Format(_T("winowID=%d, SDL_Event: %s, code=%s, wparam=%p, lparam=%p"),
+							ev.window.windowID, m_sdlEventString.Lookup(ev.type).toString(),
+							m_wmEventString.Lookup(ev.user.code).toString(), ev.user.data1, ev.user.data2);
+					}
 				}
 				else if(ev.type != SDL_EVENT_WINDOW_EXPOSED)
 				{
@@ -568,8 +574,12 @@ namespace DuiLib {
 						ev.window.windowID, m_sdlEventString.Lookup(ev.type).toString());
 				}
 
-				if(!tmp.IsEmpty())
+				if (!tmp.IsEmpty())
+				{
+					lastWindowID = ev.window.windowID;
+					lastEventType = ev.type;
 					DUITRACE(tmp.toString());
+				}
 			}
 		#endif
 
@@ -608,7 +618,7 @@ namespace DuiLib {
 			if (!win) continue;
 
 			MSG msg = { 0 };
-// 			#ifdef _WIN32
+// 			#ifdef WIN32
 // 			msg.hwnd = (HWND)win;
 // 			#else
 // 			msg.hwnd = (UIWND)win;
@@ -746,7 +756,7 @@ namespace DuiLib {
 
 		Render()->BeginPaint();
 		Render()->Resize(rcClient);
- 		Render()->ClearAlpha(rcPaint);
+ 		//Render()->ClearAlpha(rcPaint);
 		GetRoot()->Paint(Render(), rcPaint, NULL);
 
 		for (int i = 0; i < m_aPostPaintControls.GetSize(); i++) {
@@ -788,6 +798,8 @@ namespace DuiLib {
 			event.ptMouse = pt;
 			event.wKeyState = MapKeyState();
 			m_pEventHover->Event(event);
+			event.Type = UIEVENT_SETCURSOR;
+			m_pEventHover->Event(event);
 		}
 		return true;
 	}
@@ -825,7 +837,7 @@ namespace DuiLib {
 
 				CStdPtrArray aNeedMouseLeaveNeeded(m_aNeedMouseLeaveNeeded.GetSize());
 				aNeedMouseLeaveNeeded.Resize(m_aNeedMouseLeaveNeeded.GetSize());
-				::CopyMemory(aNeedMouseLeaveNeeded.GetData(), m_aNeedMouseLeaveNeeded.GetData(), m_aNeedMouseLeaveNeeded.GetSize() * sizeof(LPVOID));
+				memcpy(aNeedMouseLeaveNeeded.GetData(), m_aNeedMouseLeaveNeeded.GetData(), m_aNeedMouseLeaveNeeded.GetSize() * sizeof(LPVOID));
 				for (int i = 0; i < aNeedMouseLeaveNeeded.GetSize(); i++) {
 					static_cast<CControlUI*>(aNeedMouseLeaveNeeded[i])->Event(event);
 				}
@@ -841,14 +853,19 @@ namespace DuiLib {
 				m_pEventHover = pNewHover;
 			}
 		}
-		if (m_pEventClick != NULL) {
+		if (m_pEventClick != NULL) 
+		{
 			event.Type = UIEVENT_MOUSEMOVE;
 			event.pSender = m_pEventClick;
 			m_pEventClick->Event(event);
 		}
-		else if (pNewHover != NULL) {
+		else if (pNewHover != NULL) 
+		{
 			event.Type = UIEVENT_MOUSEMOVE;
 			event.pSender = pNewHover;
+			pNewHover->Event(event);
+
+			event.Type = UIEVENT_SETCURSOR;
 			pNewHover->Event(event);
 		}
 
@@ -861,11 +878,10 @@ namespace DuiLib {
 	}
 
 #define MAPKEY_WIN32_SDL(sdl, win32)	\
-    do {								\
-        m_keySdlToWin32[sdl] = win32;	\
-        m_keyWin32ToSdl[win32] = sdl;	\
-    } while(0)
-
+ do {									\
+	m_keySdlToWin32[sdl] = win32;		\
+	m_keyWin32ToSdl[win32] = sdl;		\
+ } while(0)
 	void CPaintManagerSDLUI::_init_sdl_defined()
 	{
 	#ifdef _DEBUG

@@ -29,6 +29,7 @@
 			<DateTime width="210" height="36" pos="364,58,574,94" float="true" />
 			<DateTime width="246" height="40" formatstyle="datetime" align="center" textpadding="5,0,0,0" pos="344,254,590,294" float="true" bordercolor="0xFFA0A0A4" bordersize="1" />
 			<DateTime width="150" height="43" formatstyle="time" pos="359,97,509,140" float="true" />
+			<Spin bindcontrolname="edit_text" btnup="normalimage=&quot;images\addico.png&quot; " btndown="normalimage=&quot;images\delico.png&quot; " width="33" height="56" pos="502,128,535,184" float="true" />
 		</VerticalLayout>
 		<VerticalLayout height="100" sepheight="-8" sepimm="true" inset="0,8,0,0">
 			<MsgWnd name="msgwnd_frame" bordercolor="0xFFC0C0C0" bordersize="1" />

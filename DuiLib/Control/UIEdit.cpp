@@ -100,7 +100,7 @@ namespace DuiLib
 					ASSERT(m_pWindow);
 					m_pWindow->Init();
 
-					if( PtInRect(&m_rcItem, event.ptMouse) )
+					if( m_rcItem.PtInRect(event.ptMouse) )
 					{
 						//int nSize = GetWindowTextLength(*m_pWindow);
 						//if( nSize == 0 ) nSize = 1;

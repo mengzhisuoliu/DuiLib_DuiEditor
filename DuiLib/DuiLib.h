@@ -12,8 +12,9 @@
 
 //////////////////////////////////////////////////////////////////////////
 #ifdef UILIB_STATIC
-
-#ifdef _WIN64
+#ifdef _M_ARM64EC
+#elif defined(_M_ARM64)
+#elif defined(_WIN64)
 #	ifdef _UNICODE
 #		ifdef _DEBUG
 #			pragma comment(lib,  _LIBPATH_(__FILE__,   "/../Lib/DuiLib_64usd.lib"))
@@ -46,7 +47,9 @@
 //////////////////////////////////////////////////////////////////////////
 #else
 
-#ifdef _WIN64
+#ifdef _M_ARM64EC
+#elif defined(_M_ARM64)
+#elif defined(_WIN64)
 #	ifdef _UNICODE
 #		ifdef _DEBUG
 #			pragma comment(lib,  _LIBPATH_(__FILE__,   "/../Lib/DuiLib_64ud.lib"))

@@ -190,6 +190,26 @@
 #define VK_NUMLOCK        0x90
 #define VK_SCROLL         0x91
 
+#define VK_LSHIFT         0xA0
+#define VK_RSHIFT         0xA1
+#define VK_LCONTROL       0xA2
+#define VK_RCONTROL       0xA3
+#define VK_LMENU          0xA4
+#define VK_RMENU          0xA5
+
+#define VK_OEM_1          0xBA   // ';:' for US
+#define VK_OEM_PLUS       0xBB   // '+' any country
+#define VK_OEM_COMMA      0xBC   // ',' any country
+#define VK_OEM_MINUS      0xBD   // '-' any country
+#define VK_OEM_PERIOD     0xBE   // '.' any country
+#define VK_OEM_2          0xBF   // '/?' for US
+#define VK_OEM_3          0xC0   // '`~' for US
+#define VK_OEM_4          0xDB  //  '[{' for US
+#define VK_OEM_5          0xDC  //  '\|' for US
+#define VK_OEM_6          0xDD  //  ']}' for US
+#define VK_OEM_7          0xDE  //  ''"' for US
+#define VK_OEM_8          0xDF
+
 
 typedef wchar_t WCHAR;
 typedef const WCHAR *LPCWSTR, *PCWSTR;
@@ -699,4 +719,7 @@ typedef BYTE * LPBYTE;
 #define ES_NUMBER           0x2000L
 
 
+#define DTS_SHORTDATEFORMAT 0x0000 // use the short date format (app must forward WM_WININICHANGE messages)
+#define DTS_LONGDATEFORMAT  0x0004 // use the long date format (app must forward WM_WININICHANGE messages)
+#define DTS_TIMEFORMAT      0x0009 // use the time format (app must forward WM_WININICHANGE messages)
 #endif // __COMPAT__H__

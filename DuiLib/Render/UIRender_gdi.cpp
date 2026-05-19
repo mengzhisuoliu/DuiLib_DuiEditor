@@ -193,6 +193,15 @@ namespace DuiLib {
 		return m_hDC;
 	}
 
+	void UIRender_gdi::BeginPaint() 
+	{ 
+		DUITRACE(_T("BeginPaint")); 
+	}
+
+	void UIRender_gdi::EndPaint() 
+	{ 
+		DUITRACE(_T("EndPaint")); 
+	}
 
 	bool UIRender_gdi::CloneFrom(UIRender *pSrcRender)
 	{

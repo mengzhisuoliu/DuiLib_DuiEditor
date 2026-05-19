@@ -5,6 +5,7 @@
 
 namespace DuiLib
 {
+	class CEditWnd;
 	class UILIB_API CEditUI : public CLabelUI
 	{
 		DECLARE_DUICONTROL(CEditUI)

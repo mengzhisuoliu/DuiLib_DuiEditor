@@ -41,16 +41,34 @@ namespace DuiLib {
 		//m_pRenderer = SDL_CreateRenderer(pWindow, "opengl");
 		//m_pRenderer = SDL_CreateRenderer(pWindow, "direct3d11");
 		m_pRenderer = SDL_CreateRenderer(pWindow, NULL); //windows默认使用direct3d11
+		SDL_SetRenderDrawBlendMode(m_pRenderer, SDL_BLENDMODE_BLEND);// 设置混合模式	
+		if (pManager)
+		{
+			CDuiRect rc;
+			pManager->GetClientRect(rc);
+			Resize(rc);
+		}
+	}
 
-		CDuiRect rc;
-		pManager->GetClientRect(rc);
-		Resize(rc);
+	HANDLE UIRender_Sdl::GetHandle()
+	{
+		return m_pRenderer;
 	}
 
 	void UIRender_Sdl::BeginPaint()
 	{
-		if(m_pRenderer && m_pTexture)
-			SDL_SetRenderTarget(m_pRenderer, m_pTexture);
+		SDL_SetRenderTarget(m_pRenderer, m_pTexture);
+
+		if (!m_rcInvalidate.IsEmpty())
+		{
+			//ClearAlpha(m_rcInvalidate);
+
+			SDL_Rect clipRect = { m_rcInvalidate.left, m_rcInvalidate.top,
+								m_rcInvalidate.right, m_rcInvalidate.bottom };
+			SDL_SetRenderClipRect(m_pRenderer, &clipRect);
+
+			DUITRACE(_T("BeginPaint: %s"), m_rcInvalidate.ToString());
+		}
 	}
 
 	void UIRender_Sdl::EndPaint()
@@ -61,6 +79,11 @@ namespace DuiLib {
 			if (m_pTexture)
 				SDL_RenderTexture(m_pRenderer, m_pTexture, NULL, NULL);
 			SDL_RenderPresent(m_pRenderer);
+
+			SDL_SetRenderClipRect(m_pRenderer, NULL);
+			m_rcInvalidate.Empty();
+
+			DUITRACE(_T("EndPaint"));
 		}
 	}
 
@@ -108,11 +131,23 @@ namespace DuiLib {
 
 	void UIRender_Sdl::ClearAlpha(const RECT &rc, int alpha)
 	{
-		// 设置混合模式
-		SDL_SetRenderDrawBlendMode(m_pRenderer, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, alpha);
 		SDL_FRect rect = { rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top };
 		SDL_RenderFillRect(m_pRenderer, &rect);
+	}
+
+	void UIRender_Sdl::InvalidRect(const RECT* lpRect)
+	{
+		if (!lpRect)
+		{
+			m_rcInvalidate.Empty();
+			return;
+		}
+		if (m_rcInvalidate.IsEmpty())
+			m_rcInvalidate = *lpRect;
+		else
+			m_rcInvalidate.Join(*lpRect);
+		DUITRACE(_T("InvalidRect: %s"), m_rcInvalidate.ToString());
 	}
 
 	void UIRender_Sdl::SaveDC()
@@ -282,11 +317,20 @@ namespace DuiLib {
 	{
 		CDuiStringUtf8 utf8Text(pstrText);
 
-		CPaintManagerUI* pMgr = GetManager();
-		UIFont* pFont = pMgr->GetFont(iFont);
+		UIFont* pFont = GetManager()->GetFont(iFont);
 		if (!pFont) return;
 		TTF_Font* ttfFont = (TTF_Font*)pFont->GetHandle();
 		if (!ttfFont) return;
+
+		if (uStyle & DT_CALCRECT)
+		{
+			int w = 0, h = 0;
+			TTF_GetStringSize(ttfFont, utf8Text.toString(), utf8Text.GetLength(), &w, &h);
+			rc.right = rc.left + w;
+			rc.bottom = rc.top + h;
+			return;
+		}
+
 		SDL_Color color = GetSDLColor(dwColor);
 		SDL_Surface* surface = TTF_RenderText_Blended(ttfFont, utf8Text.toString(), utf8Text.GetLength(), color);
 		if (surface)

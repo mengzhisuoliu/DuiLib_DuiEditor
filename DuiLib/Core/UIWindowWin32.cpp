@@ -404,15 +404,6 @@ LRESULT CWindowWin32::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LRESULT lRet = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 	if(IsHandleMessage()) return lRet;
-
-	if(UIGetApp() && uMsg == ((CUIApplicationWin32 *)UIGetApp())->m_UIAPP_SINGLEAPPLICATION_MSG)
-	{
-		::ShowWindow(GetHWND(), SW_SHOW);
-		::SendMessage(m_hWnd, WM_SYSCOMMAND, SC_RESTORE, 0); 
-		::SetForegroundWindow(GetHWND());
-		return 1;
-	}
-
     return ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
 }
 

@@ -1,5 +1,5 @@
 #include "StdAfx.h"
-#include "UIEditWndSDL.h"
+#include "UIEditWndSdl.h"
 
 #ifdef DUILIB_SDL
 #include <algorithm>
@@ -71,6 +71,7 @@ namespace DuiLib
 		, m_bDrawCaret(true)
 		, m_caretTimerID(100)
 		, m_bDragging(false)
+		, m_compositionCursor(0)
 	{
 	}
 
@@ -212,8 +213,24 @@ namespace DuiLib
 	BOOL CEditWndSDL::OnSdlEvent(const void* pEvent)
 	{
 		SDL_Event* ev = (SDL_Event*)pEvent;
-		if (ev->type == SDL_EVENT_TEXT_INPUT)
+		// 处理预编辑文本（IME 组合状态）
+		if (ev->type == SDL_EVENT_TEXT_EDITING)
 		{
+			// 获取组合文本和光标位置
+			m_sComposition = CDuiStringUtf8(ev->edit.text);
+			m_compositionCursor = ev->edit.start;  // 光标在组合字符串中的偏移（字符数）
+			// 注意：ev->edit.length 是选中的长度，可根据需要处理
+			Invalidate();   // 刷新显示
+			return TRUE;
+		}
+		else if (ev->type == SDL_EVENT_TEXT_INPUT)
+		{
+			// 确认输入时，先清除组合状态
+			if (!m_sComposition.IsEmpty())
+			{
+				m_sComposition.Empty();
+				m_compositionCursor = 0;
+			}
 			CDuiString s = CDuiStringUtf8(ev->text.text);
 			InsertText(s);
 			Invalidate();
@@ -330,10 +347,64 @@ namespace DuiLib
 			if (curX > rcText.right) break; // 超出区域则停止（多行模式需要换行，暂简化）
 		}
 
-		//绘制光标（仅当有焦点且闪烁标志为真）
-		if (IsFocused() && m_bDrawCaret)
+		// 绘制组合文本（IME 预编辑）
+		if (!m_sComposition.IsEmpty())
 		{
-			CDuiRect rcCaret = GetCaretPos();
+			// 获取光标前的 X 坐标（用于放置组合文本）
+			int caretX = GetCharXPos(m_cursorPos);
+			CDuiRect rcText = rcClient;
+			rcText.SetPadding(m_pOwner->GetTextPadding());
+			int curY = rcText.top;
+			if (!IsMultiLine())
+			{
+				int lineHeight = GetManager()->GetFontHeight(m_pOwner->GetFont());
+				if (lineHeight < rcText.GetHeight())
+					curY = rcText.top + (rcText.GetHeight() - lineHeight) / 2;
+			}
+			// 绘制组合文本
+			CDuiRect rcCompose = { caretX, rcText.top, caretX + 200, rcText.bottom }; // 临时矩形，实际应测量宽度
+			// 测量组合文本宽度
+			SIZE szCompose = pRender->GetTextSize(m_sComposition, m_pOwner->GetFont(), DT_LEFT | DT_VCENTER);
+			rcCompose.right = caretX + szCompose.cx;
+			pRender->DrawText(rcCompose, CDuiRect(0, 0, 0, 0), m_sComposition,
+				textColor, m_pOwner->GetFont(), DT_LEFT | DT_VCENTER);
+
+			// 绘制下划线（简单实现：在组合文本下方画一条线）
+			// 获取字体高度，用于下划线位置
+			int lineHeight = GetManager()->GetFontHeight(m_pOwner->GetFont());
+			int underlineY = rcCompose.bottom - 2; // 底部往上 2 像素
+			//pRender->DrawLine(rcCompose.left, underlineY, rcCompose.right, underlineY,
+			//	1, textColor);
+			// 绘制虚线下划线
+			int dashLen = 2;   // 实线长度
+			int gapLen = 2;    // 间隙长度
+			for (int x = rcCompose.left; x < rcCompose.right; x += dashLen + gapLen)
+			{
+				int endX = x + dashLen;
+				if (endX > rcCompose.right) endX = rcCompose.right;
+				pRender->DrawLine(x, underlineY, endX, underlineY, 1, textColor);
+			}
+		}
+
+		//绘制光标（仅当有焦点且闪烁标志为真）
+		if (m_bDrawCaret)
+		{
+			// 如果存在组合文本，光标位置应基于组合字符串中的偏移
+			int caretX = 0;
+			if (!m_sComposition.IsEmpty() && m_compositionCursor >= 0 && m_compositionCursor <= m_sComposition.GetLength())
+			{
+				// 测量组合文本中光标前的宽度
+				CDuiString leftPart = m_sComposition.Left(m_compositionCursor);
+				SIZE szLeft = pRender->GetTextSize(leftPart, m_pOwner->GetFont(), DT_LEFT | DT_TOP);
+				caretX = GetCharXPos(m_cursorPos) + szLeft.cx;
+			}
+			else
+			{
+				caretX = GetCharXPos(m_cursorPos);
+			}
+			CDuiRect rcCaret = GetCaretPos(); // 调整 GetCaretPos 使用 caretX
+			rcCaret.left = caretX;
+			rcCaret.right = caretX + 1;
 			pRender->DrawRect(rcCaret, 1, 0xFF000000);
 		}
 
@@ -342,6 +413,16 @@ namespace DuiLib
 
 	void CEditWndSDL::OnKeyDown(WPARAM wParam, LPARAM lParam)
 	{
+		// 如果有组合文本，按下任意编辑键时清除组合
+		if (!m_sComposition.IsEmpty())
+		{
+			SDL_ClearComposition((SDL_Window*)m_hWnd);
+			m_sComposition.Empty();
+			m_compositionCursor = 0;
+			Invalidate();
+			return;
+		}
+
 		bool ctrl = GetManager()->IsCtrlKeyDown();
 		bool shift = GetManager()->IsShiftKeyDown();
 
@@ -482,6 +563,10 @@ namespace DuiLib
 		SDL_SetTextInputArea((SDL_Window*)m_hWnd, NULL, 0);
 		// 停止文本输入事件
 		SDL_StopTextInput((SDL_Window*)m_hWnd);
+
+		// 清空组合文本
+		m_sComposition.Empty();
+		m_compositionCursor = 0;
 
 		GetManager()->SetCursor(DUI_ARROW);
 		m_pOwner->GetManager()->SetFocus(NULL);
@@ -707,11 +792,6 @@ namespace DuiLib
 		rcCaret.top = rcClient.top + (rcClient.GetHeight() - caretHeight) / 2;
 		rcCaret.bottom = rcCaret.top + caretHeight;
 		return rcCaret;
-	}
-
-	bool CEditWndSDL::IsFocused()
-	{
-		return GetOwner()->GetManager()->GetFocus() == m_pOwner;
 	}
 }
 #endif // DUILIB_SDL

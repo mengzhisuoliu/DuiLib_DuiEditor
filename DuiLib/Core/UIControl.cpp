@@ -85,8 +85,6 @@ namespace DuiLib {
 		m_dwFocusBorderColor	= 0;
 		m_dwDisableBorderColor	= 0;
 		m_dwSelectedBorderColor	= 0;
-
-		m_ptLastMouse.x = m_ptLastMouse.y = 0;
 	}
 
 	CControlUI::~CControlUI()

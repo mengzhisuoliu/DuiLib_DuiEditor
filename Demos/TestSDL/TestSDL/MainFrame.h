@@ -6,7 +6,7 @@ public:
 	CMainFrame(void);
 	virtual ~CMainFrame(void);
 	virtual LPCTSTR GetWindowClassName() const  { return _T("MainFrame"); }
-	virtual CDuiString GetSkinFile() 			{ return _T("TestSDL.xml"); }
+	virtual CDuiString GetSkinFile() 			{ return _T("MainFrame.xml"); }
 	virtual CDuiString GetSkinFolder()			{ return _T(""); }
 	virtual void OnFinalMessage( UIWND hWnd ) { __super::OnFinalMessage(hWnd); ::PostQuitMessage(0L); }
 

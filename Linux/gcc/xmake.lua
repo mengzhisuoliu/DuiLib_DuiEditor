@@ -27,14 +27,9 @@ if is_plat("linux") then
 	add_links("DuiLib")
 
 
-	add_links("gtk-3") 
-	add_links("gobject-2.0")
-	add_links("glib-2.0")
-	add_links("gdk-3")
-	add_links("cairo")
-	add_links("gdk_pixbuf-2.0")
-	add_links("pango-1.0")
-	add_links("pangocairo-1.0")
+	add_linkdirs("/usr/local/lib")
+    	add_linkdirs("/usr/local/lib/SDL3_gfx")
+    	add_links("SDL3", "SDL3_gfx", "SDL3_image", "SDL3_ttf")
 	
 	add_ldflags("-Wl,--hash-style=sysv,-Bsymbolic,-rpath=./ -no-pie")
 	

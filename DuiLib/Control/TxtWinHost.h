@@ -25,6 +25,8 @@ namespace DuiLib {
 	{
 	public:
 		CTxtWinHost();
+		HRESULT InitDefaultCharFormat(CHARFORMAT2W* pcf, HFONT hfont);
+		HRESULT InitDefaultParaFormat(PARAFORMAT2* ppf);
 		BOOL Init(CRichEditUI *re , const CREATESTRUCT *pcs);
 		virtual ~CTxtWinHost();
 

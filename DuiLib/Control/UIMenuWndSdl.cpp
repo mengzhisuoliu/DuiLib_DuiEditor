@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 
-#include "UIMenuWndSDL.h"
+#include "UIMenuWndSdl.h"
 
 #ifdef DUILIB_SDL
 namespace DuiLib {

@@ -40,8 +40,8 @@ namespace DuiLib
 	typedef __int64 Int64;
 	typedef unsigned __int64 UInt64;
 #else
-	typedef __int64_t Int64;
-	typedef unsigned __int64_t UInt64;
+	typedef int64_t Int64;
+	typedef uint64_t UInt64;
 #endif
 
 	//////////////////////////////////////////////////////////////////////////

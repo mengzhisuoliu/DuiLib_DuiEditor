@@ -1016,6 +1016,7 @@
     <ClCompile Include="Control\UIButton.cpp" />
     <ClCompile Include="Control\UIDateTimeWndGtk.cpp" />
     <ClCompile Include="Control\UIDateTimeWndWin32.cpp" />
+    <ClCompile Include="Control\UISpin.cpp" />
     <ClCompile Include="Control\UITracker.cpp" />
     <ClCompile Include="Control\UIColorPalette.cpp" />
     <ClCompile Include="Control\UICombo.cpp" />
@@ -1165,6 +1166,7 @@
     <ClInclude Include="Control\UIButton.h" />
     <ClInclude Include="Control\UIDateTimeWndGtk.h" />
     <ClInclude Include="Control\UIDateTimeWndWin32.h" />
+    <ClInclude Include="Control\UISpin.h" />
     <ClInclude Include="Control\UITracker.h" />
     <ClInclude Include="Control\UIColorPalette.h" />
     <ClInclude Include="Control\UICombo.h" />

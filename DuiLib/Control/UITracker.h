@@ -29,8 +29,6 @@ public:
 	RECT GetRect();
 protected:
 	int m_iCursor;
-	UINT m_uButtonState;
-	POINT m_ptLastMouse; // 
 	RECT m_rcNewPos;
 	bool m_bMouseDown;
 };

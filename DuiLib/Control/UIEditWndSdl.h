@@ -49,7 +49,6 @@ namespace DuiLib
 		int GetCharPosFromPoint(const POINT& pt);
 		int GetCharXPos(int charIndex);
 		CDuiRect GetCaretPos();
-		bool IsFocused();
 
 	private:
 		CDuiString m_sText;    // 当前编辑的文本
@@ -59,6 +58,9 @@ namespace DuiLib
 		bool m_bDrawCaret;     // 光标是否显示（闪烁）
 		UINT m_caretTimerID;   // 光标闪烁定时器 ID
 		bool m_bDragging;
+
+		CDuiString m_sComposition;  // 当前 IME 组合字符串（预编辑文本）
+		int m_compositionCursor;    // 组合字符串中的光标位置
 	};
 }
 #endif // DUILIB_SDL

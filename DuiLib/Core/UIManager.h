@@ -190,7 +190,7 @@ namespace DuiLib {
 		virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled) = 0;
 	};
 
-#ifndef _WIN32
+#ifndef WIN32
 	typedef struct tagMSG {
 		UIWND   hwnd;
 		UINT   message;

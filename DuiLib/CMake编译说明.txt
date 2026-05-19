@@ -1,0 +1,8 @@
+mkdir build
+cd build
+cmake ../
+make
+
+
+
+生成的.a文件在DuiLib/Lib目录下。

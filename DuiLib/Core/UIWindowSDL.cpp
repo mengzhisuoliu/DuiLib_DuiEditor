@@ -78,6 +78,8 @@ void CWindowSDL::Close(UINT nRet)
 
 void CWindowSDL::SetCursor(int nCursor)
 {
+	//DUITRACE(_T("CWindowSDL::SetCursor(%d)"), nCursor);
+
 	// 如果光标类型没有变化，直接返回，避免无意义的操作
 	if (nCursor == m_nCurrentCursor)
 		return;

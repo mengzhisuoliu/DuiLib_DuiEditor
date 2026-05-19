@@ -299,6 +299,7 @@ namespace DuiLib {
 		virtual HDC GetDC() = 0;
 #else
 		virtual void Init(CPaintManagerUI* pManager, PVOID pParam) = 0;
+		virtual HANDLE GetHandle() = 0;
 #endif
 
 		virtual void BeginPaint() {}

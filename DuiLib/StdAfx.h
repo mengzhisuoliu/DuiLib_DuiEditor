@@ -186,7 +186,9 @@ private:
 #include <SDL3_ttf/SDL_ttf.h>
 #include <SDL3_gfxPrimitives.h>
 #	ifdef WIN32
-#		ifdef _WIN64
+#		ifdef _M_ARM64EC
+#		elif defined(_M_ARM64)
+#		elif defined(_WIN64)
 #			ifdef _DEBUG
 #				pragma comment(lib, "../3rd/SDL/VisualC/x64/Debug/SDL3x64_d.lib")
 #				pragma comment(lib, "../3rd/SDL_image/VisualC/x64/Debug/SDL3_image64_d.lib")
@@ -213,6 +215,10 @@ private:
 #		endif
 #	endif
 #endif
+
+#include "Render/UIClipWin32.h"
+#include "Render/UIClipGtk.h"
+#include "Render/UIClipSdl.h"
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.

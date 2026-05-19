@@ -977,8 +977,7 @@ INT类型(最小值，最大值)：
 		<Attribute name="barcodetype" default="code39" type="STRING" value="code39,code93" comment="条码类型" />
 		<Attribute name="barcodesize" default="1" type="INT" comment="条码单线宽度"/>
 		<Attribute name="text" default="" type="STRING" comment="条码内容" />
-	</BarCode>
-	
+	</BarCode>	
 	<Tracker parent="Container" comment="Tracker拾取工具" >
 		<Attribute name="name" default="" type="STRING" comment="控件名字" />
 		<Attribute name="inset" default="4,4,4,4" type="RECT" comment="容器的内边距,如(2,2,2,2)" />
@@ -989,6 +988,16 @@ INT类型(最小值，最大值)：
 		<Attribute name="rightbordersize" default="1" type="INT" comment="右边边框大小，如(1)，设置该值大于0，则将忽略bordersize属性的设置" />
 		<Attribute name="bottombordersize" default="1" type="INT" comment="底部边框大小，如(1)，设置该值大于0，则将忽略bordersize属性的设置" />
 	</Tracker>
+	<Spin parent="DynamicLayout" comment="SPIN 数值微调控件" >
+		<Attribute name="name" default="" type="STRING" comment="控件名字" />
+		<Attribute name="layout" default="VerticalLayout" type="STRING" value="HorizontalLayout,VerticalLayout" comment="布局方式" />
+		<Attribute name="min" default="0" type="INT" comment="最小值，如(0)" />
+		<Attribute name="max" default="0" type="INT" comment="最大值，如(100)，若max<=min，将忽略min和max." />
+		<Attribute name="step" default="1" type="INT" comment="进度步长，如(1)" />
+		<Attribute name="bindcontrolname" default="" type="STRING" comment="绑定控件的名字"/>
+		<Attribute name="btnup" default="" type="ATTRIBUTELIST" value="Button" comment="上箭头的按钮风格" />
+		<Attribute name="btndown" default="" type="ATTRIBUTELIST" value="Button" comment="下箭头的按钮风格" />
+	</Spin>
 	
 	<!-- 以下只给设计器使用 -->
 	<Font>

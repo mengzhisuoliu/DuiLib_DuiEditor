@@ -18,7 +18,9 @@ bool CApp::InitInstance(int argc, char* argv[])
 	if(!CUIApplication::InitInstance(argc, argv))
 		return false;
 
-	//½¨Á¢Ö÷´°¿Ú
+	CPaintManagerUI::ImportFontFile(GetAppPath() + _T("å®‹ä½“.ttc"), _T("å¾®è½¯é›…é»‘"), 12);
+	
+	//Å“Å¡ÃÂ¢Ã–Ã·Å½Â°Â¿Ãš
 	m_pMainWnd = new CMainFrame();
 	if( m_pMainWnd == NULL ) return false;
 	m_pMainWnd->Create(NULL, GetAppName(), UI_WNDSTYLE_FRAME, 0L, 0, 0, 0, 0);

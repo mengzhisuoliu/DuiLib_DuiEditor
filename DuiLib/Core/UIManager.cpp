@@ -3166,7 +3166,9 @@ MACROTOSTRINGMAP_ADD(m_wmEventString, WM_USER);
 	bool CPaintManagerUI::OnSetCursor(WPARAM wParam, LPARAM lParam, LRESULT& lRes)
 	{
 		if (m_pRoot == NULL) return false;
+	#ifdef DUILIB_WIN32
 		if (LOWORD(lParam) != HTCLIENT) return false;
+	#endif
 		if (m_bMouseCapture) return true;
 
 		POINT pt = { 0 };

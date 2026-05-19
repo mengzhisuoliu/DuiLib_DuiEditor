@@ -132,19 +132,16 @@
 #include "Core/UIResourceManager.h"
 #include "Core/UILangManager.h"
 #include "Render/IRender.h"
-#include "Render/UIClipWin32.h"
-#include "Render/UIClipGtk.h"
-#include "Render/UIClipSdl.h"
 #include "Core/UIScript.h"
 #include "Core/UIManager.h"
 #include "Core/UIManagerWin32.h"
 #include "Core/UIManagerGtk.h"
-#include "Core/UIManagerSdl.h"
+#include "Core/UIManagerSDL.h"
 
 #include "Core/UIBase.h"
 #include "Core/UIWindowWin32.h"
 #include "Core/UIWindowGtk.h"
-#include "Core/UIWindowSdl.h"
+#include "Core/UIWindowSDL.h"
 
 #include "Core/ControlFactory.h"
 
@@ -196,7 +193,7 @@
 #include "Control/UIMenu.h"
 #include "Control/UIMenuWndWin32.h"
 #include "Control/UIMenuWndGtk.h"
-#include "Control/UIMenuWndSDL.h"
+#include "Control/UIMenuWndSdl.h"
 
 #include "Control/UIGroupBox.h"
 #include "Control/UIRollText.h"
@@ -226,17 +223,13 @@
 #include "Control/UIPictureBox.h"
 #include "Control/UIQRCode.h"
 #include "Control/UIBarCode.h"
-
 #include "Control/UIGrid.h"
-
 #include "Control/ITreeUI.h"
 #include "Control/UITree.h"
 #include "Control/UITreeItem.h"
-
 #include "Control/UITracker.h"
-
+#include "Control/UISpin.h"
 #include "Layout/UITableLayout.h"
-
 #include "Layout/UIChildWindow.h"
 
 #include "Utils/UIApplication.h"

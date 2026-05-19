@@ -481,7 +481,7 @@ namespace DuiLib {
 			if(sFindPath.GetAt(sFindPath.GetLength()-1) != _T('\\') 
 				|| sFindPath.GetAt(sFindPath.GetLength()-1) != _T('/'))
 				sFindPath += _T("/");
-#ifdef _WIN32
+#ifdef WIN32
 			sFindPath += _T("*.*");
 #endif
 			BOOL bFind = finder.FindFile(sFindPath);

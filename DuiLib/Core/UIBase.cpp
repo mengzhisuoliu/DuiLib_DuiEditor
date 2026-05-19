@@ -17,12 +17,17 @@ void UILIB_API DUI__Trace(LPCTSTR pstrFormat, ...)
     
 	_tcscat(szBuffer, _T("\n"));
 	#ifdef DUILIB_WIN32
-		OutputDebugString(szBuffer);
+		CDuiString line;
+		line.Format(_T("%d: "), ::GetTickCount());
+		line += szBuffer;
+		OutputDebugString(line);
 	#endif //#ifdef WIN32
 
 	#ifdef DUILIB_SDL
-		CDuiStringUtf8 strUtf8 = CDuiString(szBuffer);
-		SDL_Log(strUtf8.toString());
+		CDuiStringUtf8 line;
+		line.Format("%d: ", SDL_GetTicks());
+		line += CDuiString(szBuffer);
+		SDL_Log(line.toString());
 	#endif
 #endif //#ifdef _DEBUG
 }
@@ -289,7 +294,10 @@ LRESULT CWindowWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	if (m_bHandleMessage) return lRes;
 
 	if (GetManager()->MessageHandler(uMsg, wParam, lParam, lRes))
+	{
+		SetHandleMessage(TRUE);
 		return lRes;
+	}
 
 	return 0;
 }

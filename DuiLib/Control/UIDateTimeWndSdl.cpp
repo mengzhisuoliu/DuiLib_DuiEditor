@@ -1,5 +1,5 @@
 #include "StdAfx.h"
-#include "UIDateTimeWndSDL.h"
+#include "UIDateTimeWndSdl.h"
 
 #ifdef DUILIB_SDL
 

@@ -526,7 +526,7 @@ namespace DuiLib {
 		int m_nTooltipWidth;			//浮动提示框宽度
 		TCHAR m_chShortcut;				//快捷键, Alt+字母
 
-		POINT m_ptLastMouse;
+		CDuiPoint m_ptLastMouse;
 		//////////////////////////////////////////////////////////////////////////
 		//字体
 		int	m_iFont;

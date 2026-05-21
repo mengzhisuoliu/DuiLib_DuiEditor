@@ -645,7 +645,7 @@ namespace DuiLib {
 		void __AddRef();
 		void __ReleaseRef();
 	private:
-		int __refCount;
+		int m_refCount;
 
 	public:
 		void SetExtraParent(CControlUI *pControl);

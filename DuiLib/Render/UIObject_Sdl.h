@@ -4,6 +4,7 @@
 
 #include "IRender.h"
 
+#ifdef DUILIB_SDL
 namespace DuiLib { 
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -130,5 +131,6 @@ namespace DuiLib {
 	};
 
 } // namespace DuiLib
+#endif //#ifdef DUILIB_SDL
 
 #endif // __UIOBJECT_CAIRO_H__

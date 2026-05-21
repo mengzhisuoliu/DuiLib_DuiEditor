@@ -360,7 +360,8 @@ namespace DuiLib {
 				}
 				continue;
 			}
-			else {
+			else 
+			{
 				CDuiString strClass;
 				strClass.Format(_T("C%sUI"), pstrClass);
 				pControl = dynamic_cast<CControlUI*>(CControlFactory::GetInstance()->CreateControl(strClass));

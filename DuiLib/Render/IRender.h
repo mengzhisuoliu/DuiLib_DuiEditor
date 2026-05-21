@@ -297,6 +297,12 @@ namespace DuiLib {
 		virtual void Init(CPaintManagerUI *pManager, HDC hDC = NULL) = 0;
 		virtual void AttachDC(CPaintManagerUI *pManager, HDC hDC) = 0;
 		virtual HDC GetDC() = 0;
+
+		virtual void SaveDC() = 0;
+		virtual void RestoreDC() = 0;
+		virtual CStdRefPtr<UIObject> SelectObject(UIObject *pObject) = 0;
+		virtual void RestoreObject(UIObject *pObject = NULL) = 0;
+		virtual void RestoreDefaultObject() = 0;
 #else
 		virtual void Init(CPaintManagerUI* pManager, PVOID pParam) = 0;
 		virtual HANDLE GetHandle() = 0;
@@ -319,12 +325,6 @@ namespace DuiLib {
 		virtual void Clear() = 0;
 		virtual void ClearAlpha(const RECT &rc, int alpha = 0) = 0;
 
-		virtual void SaveDC() = 0;
-		virtual void RestoreDC() = 0;
-
-		virtual CStdRefPtr<UIObject> SelectObject(UIObject *pObject) = 0;
-		virtual void RestoreObject(UIObject *pObject = NULL) = 0;
-		virtual void RestoreDefaultObject() = 0;
 
 		virtual DWORD SetPixel(int x, int y, DWORD dwColor) = 0;
 
@@ -336,7 +336,7 @@ namespace DuiLib {
 
 		//显示具有透明或半透明像素的位图
 		virtual BOOL AlphaBlend(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, int alpha ) = 0;
-		
+
 		//绘制位图
 		virtual void DrawBitmapAlpha(int x, int y, int nWidth, int nHeight, UIBitmap *pUiBitmap, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, int alpha) = 0;
 

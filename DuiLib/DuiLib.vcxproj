@@ -1014,8 +1014,12 @@
     <ClCompile Include="Control\UIAnimation.cpp" />
     <ClCompile Include="Control\UIBarCode.cpp" />
     <ClCompile Include="Control\UIButton.cpp" />
+    <ClCompile Include="Control\UIComboWndSdl.cpp" />
     <ClCompile Include="Control\UIDateTimeWndGtk.cpp" />
+    <ClCompile Include="Control\UIDateTimeWndSdl.cpp" />
     <ClCompile Include="Control\UIDateTimeWndWin32.cpp" />
+    <ClCompile Include="Control\UIEditWndSdl.cpp" />
+    <ClCompile Include="Control\UIMenuWndSdl.cpp" />
     <ClCompile Include="Control\UISpin.cpp" />
     <ClCompile Include="Control\UITracker.cpp" />
     <ClCompile Include="Control\UIColorPalette.cpp" />
@@ -1076,10 +1080,12 @@
     <ClCompile Include="Core\UILangManager.cpp" />
     <ClCompile Include="Core\UIManager.cpp" />
     <ClCompile Include="Core\UIManagerGtk.cpp" />
+    <ClCompile Include="Core\UIManagerSDL.cpp" />
     <ClCompile Include="Core\UIManagerWin32.cpp" />
     <ClCompile Include="Core\UIResourceManager.cpp" />
     <ClCompile Include="Core\UIScript.cpp" />
     <ClCompile Include="Core\UIWindowGtk.cpp" />
+    <ClCompile Include="Core\UIWindowSDL.cpp" />
     <ClCompile Include="Core\UIWindowWin32.cpp" />
     <ClCompile Include="Core\UIXmlAttribute.cpp" />
     <ClCompile Include="Core\UIXmlDocument.cpp" />
@@ -1095,6 +1101,7 @@
     <ClCompile Include="Layout\UIVerticalLayout.cpp" />
     <ClCompile Include="Render\IRender.cpp" />
     <ClCompile Include="Render\UIClipGtk.cpp" />
+    <ClCompile Include="Render\UIClipSdl.cpp" />
     <ClCompile Include="Render\UIClipWin32.cpp" />
     <ClCompile Include="Render\UIObject_Cairo.cpp" />
     <ClCompile Include="Render\UIObject_gdi.cpp" />
@@ -1105,6 +1112,7 @@
     <ClCompile Include="Render\UIRender_Cairo.cpp" />
     <ClCompile Include="Render\UIRender_gdi.cpp" />
     <ClCompile Include="Render\UIRender_gdiplus.cpp" />
+    <ClCompile Include="Render\UIRender_Sdl.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -1134,6 +1142,7 @@
     <ClCompile Include="UIlib.cpp" />
     <ClCompile Include="Utils\DPI.cpp" />
     <ClCompile Include="Utils\DpiGtk.cpp" />
+    <ClCompile Include="Utils\DpiSdl.cpp" />
     <ClCompile Include="Utils\DpiWin32.cpp" />
     <ClCompile Include="Utils\DuiString.cpp" />
     <ClCompile Include="Utils\Md5.cpp" />
@@ -1141,6 +1150,7 @@
     <ClCompile Include="Utils\TrayIcon.cpp" />
     <ClCompile Include="Utils\UIApplication.cpp" />
     <ClCompile Include="Utils\UIApplicationGtk.cpp" />
+    <ClCompile Include="Utils\UIApplicationSdl.cpp" />
     <ClCompile Include="Utils\UIApplicationWin32.cpp" />
     <ClCompile Include="Utils\UIDelegate.cpp" />
     <ClCompile Include="Utils\UIDialog.cpp" />
@@ -1148,9 +1158,11 @@
     <ClCompile Include="Utils\UIFrameBase.cpp" />
     <ClCompile Include="Utils\UIFrameWnd.cpp" />
     <ClCompile Include="Utils\UIFrameWndGtk.cpp" />
+    <ClCompile Include="Utils\UIFrameWndSdl.cpp" />
     <ClCompile Include="Utils\UIFrameWndWin32.cpp" />
     <ClCompile Include="Utils\UIShadowBase.cpp" />
     <ClCompile Include="Utils\UIShadowGtk.cpp" />
+    <ClCompile Include="Utils\UIShadowSdl.cpp" />
     <ClCompile Include="Utils\UIShadowWin32.cpp" />
     <ClCompile Include="Utils\Utils.cpp" />
     <ClCompile Include="Utils\WinImplBase.cpp" />
@@ -1164,8 +1176,12 @@
     <ClInclude Include="Control\UIAnimation.h" />
     <ClInclude Include="Control\UIBarCode.h" />
     <ClInclude Include="Control\UIButton.h" />
+    <ClInclude Include="Control\UIComboWndSdl.h" />
     <ClInclude Include="Control\UIDateTimeWndGtk.h" />
+    <ClInclude Include="Control\UIDateTimeWndSdl.h" />
     <ClInclude Include="Control\UIDateTimeWndWin32.h" />
+    <ClInclude Include="Control\UIEditWndSdl.h" />
+    <ClInclude Include="Control\UIMenuWndSdl.h" />
     <ClInclude Include="Control\UISpin.h" />
     <ClInclude Include="Control\UITracker.h" />
     <ClInclude Include="Control\UIColorPalette.h" />
@@ -1227,10 +1243,12 @@
     <ClInclude Include="Core\UILangManager.h" />
     <ClInclude Include="Core\UIManager.h" />
     <ClInclude Include="Core\UIManagerGtk.h" />
+    <ClInclude Include="Core\UIManagerSDL.h" />
     <ClInclude Include="Core\UIManagerWin32.h" />
     <ClInclude Include="Core\UIResourceManager.h" />
     <ClInclude Include="Core\UIScript.h" />
     <ClInclude Include="Core\UIWindowGtk.h" />
+    <ClInclude Include="Core\UIWindowSDL.h" />
     <ClInclude Include="Core\UIWindowWin32.h" />
     <ClInclude Include="Core\UIXmlAttribute.h" />
     <ClInclude Include="Core\UIXmlDocument.h" />
@@ -1246,6 +1264,7 @@
     <ClInclude Include="Layout\UIVerticalLayout.h" />
     <ClInclude Include="Render\IRender.h" />
     <ClInclude Include="Render\UIClipGtk.h" />
+    <ClInclude Include="Render\UIClipSdl.h" />
     <ClInclude Include="Render\UIClipWin32.h" />
     <ClInclude Include="Render\UIObject_Cairo.h" />
     <ClInclude Include="Render\UIObject_gdi.h" />
@@ -1256,10 +1275,12 @@
     <ClInclude Include="Render\UIRender_Cairo.h" />
     <ClInclude Include="Render\UIRender_gdi.h" />
     <ClInclude Include="Render\UIRender_gdiplus.h" />
+    <ClInclude Include="Render\UIRender_Sdl.h" />
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="UIlib.h" />
     <ClInclude Include="Utils\DPI.h" />
     <ClInclude Include="Utils\DpiGtk.h" />
+    <ClInclude Include="Utils\DpiSdl.h" />
     <ClInclude Include="Utils\DpiWin32.h" />
     <ClInclude Include="Utils\DuiString.h" />
     <ClInclude Include="Utils\Md5.h" />
@@ -1268,6 +1289,7 @@
     <ClInclude Include="Utils\TrayIcon.h" />
     <ClInclude Include="Utils\UIApplication.h" />
     <ClInclude Include="Utils\UIApplicationGtk.h" />
+    <ClInclude Include="Utils\UIApplicationSdl.h" />
     <ClInclude Include="Utils\UIApplicationWin32.h" />
     <ClInclude Include="Utils\UIDelegate.h" />
     <ClInclude Include="Utils\UIDialog.h" />
@@ -1275,9 +1297,11 @@
     <ClInclude Include="Utils\UIFrameBase.h" />
     <ClInclude Include="Utils\UIFrameWnd.h" />
     <ClInclude Include="Utils\UIFrameWndGtk.h" />
+    <ClInclude Include="Utils\UIFrameWndSdl.h" />
     <ClInclude Include="Utils\UIFrameWndWin32.h" />
     <ClInclude Include="Utils\UIShadowBase.h" />
     <ClInclude Include="Utils\UIShadowGtk.h" />
+    <ClInclude Include="Utils\UIShadowSdl.h" />
     <ClInclude Include="Utils\UIShadowWin32.h" />
     <ClInclude Include="Utils\Utils.h" />
     <ClInclude Include="Utils\VersionHelpers.h" />

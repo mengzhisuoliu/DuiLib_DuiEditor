@@ -206,7 +206,7 @@ void CQRCodeUI::MakeQrImage()
 			{
 				if (qr.m_byModuleData[i][j])
 				{
-					m_qrRender->SetPixel(i + m_qrMargin, j + m_qrMargin, RGB(0, 0, 0));
+					m_qrRender->SetPixel(i + m_qrMargin, j + m_qrMargin, UIRGB(0, 0, 0));
 				}
 			}
 		}

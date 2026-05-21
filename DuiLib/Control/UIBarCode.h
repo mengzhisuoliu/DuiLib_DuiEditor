@@ -1,6 +1,5 @@
 #pragma once
 
-#ifdef DUILIB_WIN32
 namespace DuiLib
 {
 
@@ -39,4 +38,3 @@ protected:
 };
 
 }
-#endif // #ifdef DUILIB_WIN32

@@ -1572,11 +1572,11 @@ void CUIPropertyGridCtrl::OnGridpropertySetDefaultValue()
 			}
 			else if(CompareString(strName, _T("right")))
 			{
-				pProp->SetValue(_variant_t((long)rcDefault.top, VT_I4));
+				pProp->SetValue(_variant_t((long)rcDefault.right, VT_I4));
 			}
 			else if(CompareString(strName, _T("bottom")))
 			{
-				pProp->SetValue(_variant_t((long)rcDefault.top, VT_I4));
+				pProp->SetValue(_variant_t((long)rcDefault.bottom, VT_I4));
 			}
 		}
 	}

@@ -132,7 +132,7 @@ namespace DuiLib
 	{
 		CControlUI* pControl = GetItemAt(iIndex);
 		if (pControl != NULL) {
-			return CContainerUI::Remove(pControl);
+			return CContainerUI::Remove(pControl, bDoNotDestroy);
 		}
 
 		return false;

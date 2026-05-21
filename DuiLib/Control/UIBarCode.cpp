@@ -1,8 +1,6 @@
 #include "StdAfx.h"
 #include "UIBarCode.h"
 
-#ifdef DUILIB_WIN32
-#include "../Render/UIRender_gdi.h"
 #include "../Utils/barcode.h"
 namespace DuiLib
 {
@@ -138,7 +136,7 @@ void CBarCodeUI::MakeBarcodeImage()
 {
 	if(!m_qrRender)
 	{
-		m_qrRender = MakeRefPtr<UIRender>(new UIRender_gdi);
+		m_qrRender = MakeRefPtr<UIRender>(UIGlobal::CreateRenderTarget());
 		m_qrRender->Init(NULL,NULL);
 	}
 
@@ -187,4 +185,3 @@ void CBarCodeUI::MakeBarcodeImage()
 }
 
 }
-#endif // #ifdef DUILIB_WIN32

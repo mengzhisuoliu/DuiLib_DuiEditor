@@ -20,6 +20,7 @@ namespace DuiLib {
 	UIRender_Sdl::UIRender_Sdl()
 	{
 		m_pManager	= NULL;
+		m_bWindowRender = true;
 		m_pRenderer = NULL;
 		m_pTexture = NULL;
 		m_nWidth = 0;
@@ -28,25 +29,47 @@ namespace DuiLib {
 
 	UIRender_Sdl::~UIRender_Sdl()
 	{
-		RestoreDefaultObject();
 		if (m_pTexture) SDL_DestroyTexture(m_pTexture);
 		if (m_pRenderer != NULL) { SDL_DestroyRenderer(m_pRenderer); m_pRenderer = NULL; }
 	}
 
 	void UIRender_Sdl::Init(CPaintManagerUI* pManager, PVOID pParam)
 	{
+		if (m_pTexture) SDL_DestroyTexture(m_pTexture);
 		if (m_pRenderer != NULL) { SDL_DestroyRenderer(m_pRenderer); m_pRenderer = NULL; }
-		SDL_Window* pWindow = (SDL_Window*)pParam;
+
 		m_pManager = pManager;
-		//m_pRenderer = SDL_CreateRenderer(pWindow, "opengl");
-		//m_pRenderer = SDL_CreateRenderer(pWindow, "direct3d11");
-		m_pRenderer = SDL_CreateRenderer(pWindow, NULL); //windows默认使用direct3d11
+
+		SDL_Window* pWindow = (SDL_Window*)pParam;
+		if (pWindow)
+		{
+			m_bWindowRender = true;
+			//m_pRenderer = SDL_CreateRenderer(pWindow, "opengl");
+			//m_pRenderer = SDL_CreateRenderer(pWindow, "direct3d11");
+			m_pRenderer = SDL_CreateRenderer(pWindow, NULL); //windows默认使用direct3d11
+		}
+		else
+		{
+			m_bWindowRender = false;
+
+			m_curBmp = MakeRefPtr<UIBitmap>(UIGlobal::CreateBitmap());
+			m_curBmp->CreateFromData(NULL, 1, 1, 0);
+
+			//无窗口渲染
+			SDL_PropertiesID props = SDL_CreateProperties();
+			if (props == 0) return;
+			SDL_SetPointerProperty(props, SDL_PROP_RENDERER_CREATE_SURFACE_POINTER, (SDL_Surface *)m_curBmp->GetHandle());
+			SDL_SetStringProperty(props, SDL_PROP_RENDERER_CREATE_NAME_STRING, "software");
+			m_pRenderer = SDL_CreateRendererWithProperties(props);
+			SDL_DestroyProperties(props);
+		}
+
 		SDL_SetRenderDrawBlendMode(m_pRenderer, SDL_BLENDMODE_BLEND);// 设置混合模式	
 		if (pManager)
 		{
 			CDuiRect rc;
 			pManager->GetClientRect(rc);
-			Resize(rc);
+			if(!rc.IsEmpty()) Resize(rc);
 		}
 	}
 
@@ -57,34 +80,35 @@ namespace DuiLib {
 
 	void UIRender_Sdl::BeginPaint()
 	{
-		SDL_SetRenderTarget(m_pRenderer, m_pTexture);
+		DUITRACE(_T("BeginPaint: %s"), m_rcInvalidate.ToString());
+
+		if(m_bWindowRender)
+			SDL_SetRenderTarget(m_pRenderer, m_pTexture);
 
 		if (!m_rcInvalidate.IsEmpty())
 		{
 			//ClearAlpha(m_rcInvalidate);
-
 			SDL_Rect clipRect = { m_rcInvalidate.left, m_rcInvalidate.top,
 								m_rcInvalidate.right, m_rcInvalidate.bottom };
 			SDL_SetRenderClipRect(m_pRenderer, &clipRect);
-
-			DUITRACE(_T("BeginPaint: %s"), m_rcInvalidate.ToString());
 		}
 	}
 
 	void UIRender_Sdl::EndPaint()
 	{
-		if (m_pRenderer)
+		DUITRACE(_T("EndPaint"));
+		if (!m_pRenderer) return;
+
+		if (m_bWindowRender)
 		{
 			SDL_SetRenderTarget(m_pRenderer, NULL);
 			if (m_pTexture)
 				SDL_RenderTexture(m_pRenderer, m_pTexture, NULL, NULL);
 			SDL_RenderPresent(m_pRenderer);
-
-			SDL_SetRenderClipRect(m_pRenderer, NULL);
-			m_rcInvalidate.Empty();
-
-			DUITRACE(_T("EndPaint"));
 		}
+
+		SDL_SetRenderClipRect(m_pRenderer, NULL);
+		m_rcInvalidate.Empty();
 	}
 
 	bool UIRender_Sdl::CloneFrom(UIRender *pSrcRender)
@@ -97,9 +121,25 @@ namespace DuiLib {
 		if (m_nWidth == width && m_nHeight == height) return false;
 		m_nWidth = width;
 		m_nHeight = height;
-		if (m_pTexture) SDL_DestroyTexture(m_pTexture);
-		m_pTexture = SDL_CreateTexture(m_pRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, width, height);
-		SDL_SetRenderTarget(m_pRenderer, m_pTexture);
+		if (m_bWindowRender)
+		{
+			if (m_pTexture) SDL_DestroyTexture(m_pTexture);
+			m_pTexture = SDL_CreateTexture(m_pRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, width, height);
+			SDL_SetRenderTarget(m_pRenderer, m_pTexture);
+		}
+		else
+		{
+			//无窗口模式，需要重新创建render
+			if(m_pRenderer) SDL_DestroyRenderer(m_pRenderer);
+			m_curBmp = MakeRefPtr<UIBitmap>(UIGlobal::CreateBitmap());
+			m_curBmp->CreateFromData(NULL, width, height, 0);
+			SDL_PropertiesID props = SDL_CreateProperties();
+			if (props == 0) return false;
+			SDL_SetPointerProperty(props, SDL_PROP_RENDERER_CREATE_SURFACE_POINTER, (SDL_Surface*)m_curBmp->GetHandle());
+			SDL_SetStringProperty(props, SDL_PROP_RENDERER_CREATE_NAME_STRING, "software");
+			m_pRenderer = SDL_CreateRendererWithProperties(props);
+			SDL_DestroyProperties(props);
+		}
 		return true;
 	}
 
@@ -110,7 +150,11 @@ namespace DuiLib {
 
 	UIBitmap *UIRender_Sdl::GetBitmap()
 	{
-		return NULL;
+		if (m_bWindowRender)
+		{
+			return NULL;
+		}
+		return *(UIBitmap**)&m_curBmp;
 	}
 
 	int UIRender_Sdl::GetWidth() const
@@ -150,49 +194,6 @@ namespace DuiLib {
 		DUITRACE(_T("InvalidRect: %s"), m_rcInvalidate.ToString());
 	}
 
-	void UIRender_Sdl::SaveDC()
-	{
-		
-	}
-
-	void UIRender_Sdl::RestoreDC()
-	{
-		
-	}
-
-	CStdRefPtr<UIObject> UIRender_Sdl::SelectObject(UIObject *pObject)
-	{	
-		emUIOBJTYPE eType = pObject->ObjectType();
-		if(eType == OT_FONT)
-		{
-			
-		}
-		else if(eType == OT_PEN)
-		{
-			
-		}
-		else if(eType == OT_BRUSH)
-		{
-			
-		}
-		else if(eType == OT_BITMAP)
-		{
-			
-		}
-
-		return CStdRefPtr<UIObject>();
-	}
-
-	void UIRender_Sdl::RestoreObject(UIObject *pObject)
-	{
-		
-	}
-
-	void UIRender_Sdl::RestoreDefaultObject()
-	{
-		
-	}
-
 	DWORD UIRender_Sdl::SetPixel(int x, int y, DWORD dwColor)
 	{
 		// 简单实现
@@ -204,23 +205,86 @@ namespace DuiLib {
 
 	BOOL UIRender_Sdl::BitBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, DWORD dwRop)
 	{
-		return AlphaBlend(x, y, nWidth, nHeight, pSrcRender, xSrc, ySrc, nWidth, nHeight, 255);
+		return StretchBlt(x, y, nWidth, nHeight, pSrcRender, xSrc, ySrc, nWidth, nHeight);
 	}
 
 	BOOL UIRender_Sdl::StretchBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, DWORD dwRop)
 	{
-		return AlphaBlend(x, y, nWidth, nHeight, pSrcRender, xSrc, ySrc, nWidth, nHeight, 255);
+		UIRender_Sdl* pSrc = dynamic_cast<UIRender_Sdl*>(pSrcRender);
+		if (!pSrc) return FALSE;
+
+		if (!m_pRenderer || !pSrc->m_pRenderer)
+			return FALSE;
+
+		SDL_Rect rc = { xSrc, ySrc, nWidthSrc, nHeightSrc };
+		SDL_Surface* pSrcSurface = SDL_RenderReadPixels(pSrc->m_pRenderer, &rc);
+		if (!pSrcSurface) return FALSE;
+		if (nWidthSrc > pSrcSurface->w) rc.w = pSrcSurface->w;
+		if (nHeightSrc > pSrcSurface->h) rc.h = pSrcSurface->h;
+
+		//源区域矩形
+		SDL_FRect srcRect = { (float)rc.x, (float)rc.y, (float)rc.w, (float)rc.h };
+		// 目标区域矩形
+		SDL_FRect dstRect = { (float)x, (float)y, (float)nWidth, (float)nHeight };
+
+		SDL_Texture* texture = SDL_CreateTextureFromSurface(m_pRenderer, pSrcSurface);
+		if (texture)
+		{
+			SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST); //纹理缩放模式为最近邻（像素风格）
+			SDL_RenderTexture(m_pRenderer, texture, &srcRect, &dstRect);
+			SDL_DestroyTexture(texture);
+		}
+
+		SDL_DestroySurface(pSrcSurface);
+		return TRUE;
 	}
 
 	BOOL UIRender_Sdl::AlphaBlend(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, int alpha )
 	{
-		return TRUE;
+		UIRender_Sdl* pSrc = dynamic_cast<UIRender_Sdl*>(pSrcRender);
+		if (!pSrc || !m_pRenderer || !pSrc->m_pRenderer) return FALSE;
+
+		// 源矩形（注意边界修正）
+		SDL_Rect srcRect = { xSrc, ySrc, nWidthSrc, nHeightSrc };
+		// 从源渲染器读取像素（强制 ARGB8888 格式，保留 Alpha 通道）
+		SDL_Surface* srcSurface = SDL_RenderReadPixels(pSrc->m_pRenderer, &srcRect);
+		if (!srcSurface) return FALSE;
+
+		// 若实际读取的尺寸与请求不同，调整源区域宽度/高度（理论上不会发生，但确保安全）
+		if (nWidthSrc > srcSurface->w) srcRect.w = srcSurface->w;
+		if (nHeightSrc > srcSurface->h) srcRect.h = srcSurface->h;
+
+		// 源纹理矩形（浮点）
+		SDL_FRect srcTexRect = { (float)srcRect.x, (float)srcRect.y,
+								 (float)srcRect.w, (float)srcRect.h };
+		// 目标矩形（浮点，支持缩放）
+		SDL_FRect dstRect = { (float)x, (float)y, (float)nWidth, (float)nHeight };
+
+		// 创建纹理
+		SDL_Texture* texture = SDL_CreateTextureFromSurface(m_pRenderer, srcSurface);
+		BOOL result = FALSE;
+		if (texture)
+		{
+			// 设置混合模式（启用 Alpha 混合）
+			SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+			// 设置全局透明度调制
+			SDL_SetTextureAlphaMod(texture, (Uint8)alpha);
+			// 绘制（自动缩放）
+			result = SDL_RenderTexture(m_pRenderer, texture, &srcTexRect, &dstRect);
+			SDL_DestroyTexture(texture);
+		}
+
+		SDL_DestroySurface(srcSurface);
+		return result;
 	}
 
 	void UIRender_Sdl::DrawBitmapAlpha(int x, int y, int nWidth, int nHeight, UIBitmap *pUiBitmap, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, int alpha)
 	{
 		SDL_Texture* texture = SDL_CreateTextureFromSurface(m_pRenderer, (SDL_Surface *)pUiBitmap->GetHandle());
 		if (!texture) return;
+
+		// 设置纹理缩放模式为最近邻
+		SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
 
 		//设置纹理混合模式为 Alpha 混合
 		SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);

@@ -205,7 +205,14 @@ namespace DuiLib {
 		DeleteObject();
 
 		m_pDataBits = (BYTE*)malloc(width * height * 4);
-		memcpy(m_pDataBits, pImage, width * height * 4);
+		if (pImage)
+		{
+			memcpy(m_pDataBits, pImage, width * height * 4);
+		}
+		else
+		{
+			memset(m_pDataBits, 0, width * height * 4);
+		}
 
 		m_nWidth = width;
 		m_nHeight = height;

@@ -33,13 +33,6 @@ namespace DuiLib {
 
 		void InvalidRect(const RECT* lpRect);
 
-		virtual void SaveDC() override;
-		virtual void RestoreDC() override;
-
-		virtual CStdRefPtr<UIObject> SelectObject(UIObject *pObject) override;
-		virtual void RestoreObject(UIObject *pObject = NULL) override;
-		virtual void RestoreDefaultObject() override;
-
 		virtual DWORD SetPixel(int x, int y, DWORD dwColor) override;
 
 		virtual BOOL BitBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, DWORD dwRop = SRCCOPY ) override;
@@ -64,8 +57,10 @@ namespace DuiLib {
 		virtual SIZE GetTextSize(LPCTSTR pstrText, int iFont, UINT uStyle) override;
 
 	protected:
+		bool m_bWindowRender;   // 是否为窗口渲染模式
 		SDL_Renderer* m_pRenderer;
 		SDL_Texture* m_pTexture;
+		CStdRefPtr<UIBitmap> m_curBmp;
 		int m_nWidth;
 		int m_nHeight;
 		CDuiRect m_rcInvalidate;

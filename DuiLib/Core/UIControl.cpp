@@ -51,7 +51,7 @@ namespace DuiLib {
 
 		::ZeroMemory(&m_ptFloatPosition,sizeof(POINT));
 
-		__refCount = 1;
+		m_refCount = 1;
 		//////////////////////////////////////////////////////////////////////////
 
 		m_uTextStyle = 0;	
@@ -1145,7 +1145,7 @@ namespace DuiLib {
 	void CControlUI::Event(TEventUI& event)
 	{
 		if(!m_asOnEvent.IsEmpty()) 
-			if(GetManager()->ExecuteScript(m_asOnEvent, this, &event))
+			if(GetManager() && GetManager()->ExecuteScript(m_asOnEvent, this, &event))
 				return;
 		if( OnEvent(&event) ) DoEvent(event);
 	}
@@ -1265,7 +1265,7 @@ namespace DuiLib {
 
 	bool CControlUI::RemoveCustomAttribute(LPCTSTR pstrName)
 	{
-		if( pstrName == NULL || pstrName[0] == _T('\0') ) return NULL;
+		if( pstrName == NULL || pstrName[0] == _T('\0') ) return false;
 		CDuiString* pCostomAttr = static_cast<CDuiString*>(m_mCustomAttrHash.Find(pstrName));
 		if( !pCostomAttr ) return false;
 
@@ -2375,12 +2375,12 @@ namespace DuiLib {
 
 	void CControlUI::__AddRef()
 	{
-		__refCount++;
+		m_refCount++;
 	}
 
 	void CControlUI::__ReleaseRef()
 	{
-		if( --__refCount == 0 )
+		if( --m_refCount == 0 )
 			delete this;
 	}
 

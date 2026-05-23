@@ -6,6 +6,9 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# 优先查找静态库（在 find_library 之前设置）
+set(CMAKE_FIND_LIBRARY_SUFFIXES .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
+
 # 定义库类型（静态库，可改为 SHARED）
 option(BUILD_SHARED_LIBS "Build DuiLib as shared library" OFF)
 
@@ -60,7 +63,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../3rd/SDL_gfx
 )
 
-# 查找系统库（假设库文件位于 /usr/local/lib）
+# 查找系统库（优先静态库，路径可调整）
 find_library(SDL3_LIB NAMES SDL3 libSDL3 PATHS /usr/local/lib /usr/lib)
 find_library(SDL3_image_LIB NAMES SDL3_image SDL_image PATHS /usr/local/lib /usr/lib)
 find_library(SDL3_ttf_LIB NAMES SDL3_ttf SDL_ttf PATHS /usr/local/lib /usr/lib)
@@ -87,6 +90,19 @@ target_link_libraries(DuiLib
     ${EXTRA_LIBS}
 )
 
+# 平台特定链接库（静态链接时也需要）
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    target_link_libraries(DuiLib pthread dl)
+elseif(APPLE)
+    target_link_libraries(DuiLib
+        "-framework Cocoa"
+        "-framework OpenGL"
+        "-framework IOKit"
+        "-framework CoreVideo"
+        "-framework CoreFoundation"
+    )
+endif()
+
 # 导出头文件搜索路径（供外部项目使用）
 target_include_directories(DuiLib INTERFACE
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -103,5 +119,4 @@ install(TARGETS DuiLib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
 )
-
 install(DIRECTORY Core Control Utils Layout Render DESTINATION include/DuiLib FILES_MATCHING PATTERN "*.h")

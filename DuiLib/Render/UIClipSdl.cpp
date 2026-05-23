@@ -9,22 +9,22 @@ namespace DuiLib {
 UIClipSDL::UIClipSDL()
 	: m_pRenderer(nullptr)
 	, m_bClipSaved(false)
-{/*
+{
 	SDL_zero(m_oldClipRect);
-	SDL_zero(m_newClipRect);*/
+	SDL_zero(m_newClipRect);
 }
 
 UIClipSDL::~UIClipSDL()
 {
 	// 恢复裁剪矩形（避免影响后续绘制）
-// 	if (m_pRenderer && m_bClipSaved) 
-// 	{
-// 		SDL_SetRenderClipRect(m_pRenderer, &m_oldClipRect);
-// 	}
+	if (m_pRenderer && m_bClipSaved) 
+	{
+		SDL_SetRenderClipRect(m_pRenderer, &m_oldClipRect);
+	}
 }
 
 void UIClipSDL::GenerateClip(UIRender * pRender, RECT rc)
-{/*
+{
 	if (!pRender) return;
 	m_pRenderer = (SDL_Renderer * )pRender->GetHandle();
 	if (!m_pRenderer) return;
@@ -54,7 +54,7 @@ void UIClipSDL::GenerateClip(UIRender * pRender, RECT rc)
 	m_newClipRect = newRect;
 
 	//应用新的裁剪矩形
-	SDL_SetRenderClipRect(m_pRenderer, &m_newClipRect);*/
+	SDL_SetRenderClipRect(m_pRenderer, &m_newClipRect);
 }
 
 void UIClipSDL::GenerateRoundClip(UIRender * pRender, RECT rc, RECT rcItem, int roundX, int roundY)
@@ -64,18 +64,18 @@ void UIClipSDL::GenerateRoundClip(UIRender * pRender, RECT rc, RECT rcItem, int 
 
 void UIClipSDL::UseOldClipBegin(UIRender * pRender)
 {
-// 	if (!m_pRenderer || !m_bClipSaved) return;
-// 
-// 	// 临时恢复到旧的裁剪矩形
-// 	SDL_SetRenderClipRect(m_pRenderer, &m_oldClipRect);
+	if (!m_pRenderer || !m_bClipSaved) return;
+
+	// 临时恢复到旧的裁剪矩形
+	SDL_SetRenderClipRect(m_pRenderer, &m_oldClipRect);
 }
 
 void UIClipSDL::UseOldClipEnd(UIRender * pRender)
 {
-// 	if (!m_pRenderer || !m_bClipSaved) return;
-// 
-// 	// 恢复回新的裁剪矩形（即当前正在使用的裁剪区域）
-// 	SDL_SetRenderClipRect(m_pRenderer, &m_newClipRect);
+	if (!m_pRenderer || !m_bClipSaved) return;
+
+	// 恢复回新的裁剪矩形（即当前正在使用的裁剪区域）
+	SDL_SetRenderClipRect(m_pRenderer, &m_newClipRect);
 }
 
 } // namespace DuiLib

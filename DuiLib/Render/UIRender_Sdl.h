@@ -15,6 +15,8 @@ namespace DuiLib {
 		UIRender_Sdl();
 		virtual ~UIRender_Sdl();
 
+		void DestroyRender();
+
 		virtual void Init(CPaintManagerUI* pManager, PVOID pParam) override;
 		virtual HANDLE GetHandle() override;
 
@@ -32,6 +34,7 @@ namespace DuiLib {
 		virtual void ClearAlpha(const RECT &rc, int alpha = 0) override;
 
 		void InvalidRect(const RECT* lpRect);
+		CDuiRect GetInvalidRect();
 
 		virtual DWORD SetPixel(int x, int y, DWORD dwColor) override;
 
@@ -58,8 +61,9 @@ namespace DuiLib {
 
 	protected:
 		bool m_bWindowRender;   // 是否为窗口渲染模式
-		SDL_Renderer* m_pRenderer;
-		SDL_Texture* m_pTexture;
+		SDL_Renderer* m_pRenderer;		//渲染器
+		SDL_Texture* m_pTexture;		//离屏渲染纹理
+		TTF_TextEngine* m_ttfEngine;	// 文本引擎
 		CStdRefPtr<UIBitmap> m_curBmp;
 		int m_nWidth;
 		int m_nHeight;

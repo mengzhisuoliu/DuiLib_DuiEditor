@@ -374,10 +374,18 @@ BOOL CWindowSDL::PostMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
 void CWindowSDL::Invalidate()
 {
-	SDL_Event event;
-	event.type = SDL_EVENT_WINDOW_EXPOSED;
-	event.window.windowID = SDL_GetWindowID((SDL_Window*)m_hWnd);
-	SDL_PushEvent(&event);
+// 	SDL_Event event;
+// 	event.type = SDL_EVENT_WINDOW_EXPOSED;
+// 	event.window.windowID = SDL_GetWindowID((SDL_Window*)m_hWnd);
+// 	SDL_PushEvent(&event);
+ 	SDL_Event ev;
+	SDL_zero(ev);
+	ev.type = SDL_EVENT_USER;
+	ev.window.windowID = SDL_GetWindowID((SDL_Window*)m_hWnd);
+	ev.user.code = WM_PAINT;
+	ev.user.data1 = NULL;
+	ev.user.data2 = NULL;
+	SDL_PushEvent(&ev);
 }
 
 BOOL CWindowSDL::SetWindowPos(int x, int y, int cx, int cy, UINT uFlags)

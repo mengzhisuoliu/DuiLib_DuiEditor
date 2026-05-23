@@ -66,6 +66,16 @@ namespace DuiLib {
 		virtual void ClearAlpha(const RECT &rc, int alpha = 0) override;
 
 		virtual BOOL SaveFile(LPCTSTR pstrFileName) override;
+
+		//获取纹理，纹理持久化。不存在则创建新的，记得找个机会删除。
+		SDL_Texture* GetTexture(SDL_Renderer* pRenderer);
+
+		// 删除指定渲染器对应的纹理
+		void DeleteTexture(SDL_Renderer* pRenderer);
+
+		// 删除所有缓存纹理
+		void DeleteAllTextures();
+
 	protected:
 		virtual ~UIBitmap_SDL();
 	protected:
@@ -73,6 +83,8 @@ namespace DuiLib {
 		BYTE* m_pDataBits;
 		int m_nWidth;
 		int m_nHeight;
+
+		std::map<SDL_Renderer*, SDL_Texture*> m_textureMap;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////////////

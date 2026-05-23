@@ -90,6 +90,7 @@ public:
 
 	virtual BOOL Encode(const char* pszCode) { return FALSE; }
 
+#ifdef WIN32
     void DrawBarcode(HDC hDC, int iX, int iY0, int iY10, int iY11, const COLORREF clrBar, const COLORREF clrSpace, const int iPenW) {
         HPEN hPenBar = ::CreatePen(PS_SOLID, iPenW, clrBar);
         HPEN hPenSpace = ::CreatePen(PS_SOLID, iPenW, clrSpace);
@@ -122,7 +123,7 @@ public:
         ::DeleteObject(hPenBar);
         ::DeleteObject(hPenSpace);
     }
-
+#endif
 protected:
     BYTE	ia_Buf[4096];
     int		i_LenBuf;
@@ -144,12 +145,26 @@ public:
     ~Barcode39() {
     }
 
+    char* mystrupr(char* str)
+    {
+#ifdef WIN32
+        ::strupr(str);
+#else
+		if (!str) return str;
+		for (char* p = str; *p; ++p) 
+        {
+			*p = toupper((unsigned char)*p);
+		}
+#endif
+		return str;
+    }
+
     virtual BOOL Encode(const char*pszCodeIn) {
         int iLen = strlen(pszCodeIn);
 
         char*pszCode = new char[iLen + 3];
         sprintf(pszCode, "*%s*", pszCodeIn);
-        strupr(pszCode);
+        mystrupr(pszCode);
 
         BYTE*pFst = ia_Buf;
         BYTE*p0 = pFst, *p1;
@@ -166,9 +181,11 @@ public:
         return 1;
     }
 
+#ifdef WIN32
     void Draw39(HDC hDC, int iX, int iY0, int iY1, const COLORREF clrBar, const COLORREF clrSpace, const int iPenW) {
         DrawBarcode(hDC, iX, iY0, iY1, iY1, clrBar, clrSpace, iPenW);
     }
+#endif
 
 private:
     BYTE*P_GetNarrowWideBarSpace39(char ch, BYTE*pb) {
@@ -277,9 +294,11 @@ public:
         return 1;
     }
 
+	#ifdef WIN32
     void DrawI2of5(HDC hDC, int iX, int iY0, int iY1, const COLORREF clrBar, const COLORREF clrSpace, const int iPenW) {
         DrawBarcode(hDC, iX, iY0, iY1, iY1, clrBar, clrSpace, iPenW);
     }
+    #endif
 
 private:
     BYTE*P_GetNarrorWideBarSpaceI2of5(BYTE*pb, int ch) {
@@ -445,9 +464,11 @@ public:
         return 1;
     }
 
+	#ifdef WIN32
     void Draw93(HDC hDC, int iX, int iY0, int iY1, const COLORREF clrBar, const COLORREF clrSpace, const int iPenW) {
         DrawBarcode(hDC, iX, iY0, iY1, iY1, clrBar, clrSpace, iPenW);
     }
+    #endif
 
 private:
     BYTE*P_GetBarSpace93(BYTE*pb, int ch) {
@@ -726,9 +747,11 @@ public:
     BOOL Encode128B(const char* pszCode) { return P_Encode128((char*)pszCode, SUB::SETB); }
     BOOL Encode128C(const char* pszCode) { return P_Encode128((char*)pszCode, SUB::SETC); }
 
+	#ifdef WIN32
     void Draw128(HDC hDC, int iX, int iY0, int iY1, const COLORREF clrBar, const COLORREF clrSpace, const int iPenW) {
         DrawBarcode(hDC, iX, iY0, iY1, iY1, clrBar, clrSpace, iPenW);
     }
+    #endif
 
 private:
     struct SUB {
@@ -1120,9 +1143,11 @@ public:
         return 1;
     }
 
+	#ifdef WIN32
     void DrawEan13(HDC hDC, int iX, int iY0, int iY10, int iY11, const COLORREF clrBar, const COLORREF clrSpace, const int iPenW) {
         DrawBarcode(hDC, iX, iY0, iY10, iY11, clrBar, clrSpace, iPenW);
     }
+    #endif
 
 private:
     BOOL P_GetCountryCode(char ch, BYTE*pbCountryCode) {

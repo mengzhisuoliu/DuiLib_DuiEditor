@@ -5,19 +5,22 @@ project(TestDuiLib)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# 定义输出目录（可执行文件放在 MyProject/bin）
+# 优先查找静态库
+set(CMAKE_FIND_LIBRARY_SUFFIXES .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
+
+# 定义输出目录
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../bin)
 
 # 添加预处理器宏（DuiLib 使用 SDL 后端）
 add_definitions(-DDUILIB_SDL)
 
-# 包含 DuiLib 头文件目录
+# 包含 DuiLib 头文件
 set(DUILIB_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../../DuiLib)
 include_directories(
     ${DUILIB_ROOT}
 )
 
-# 包含 SDL 头文件目录（MyProject/3rd）
+# 包含 SDL 头文件
 set(SDL3_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../../3rd/SDL)
 set(SDL3_GFX_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../../3rd/SDL_gfx)
 set(SDL3_IMAGE_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../../3rd/SDL_image)
@@ -36,10 +39,10 @@ find_library(SDL3_IMAGE_LIB NAMES SDL3_image SDL_image PATHS /usr/local/lib /usr
 find_library(SDL3_TTF_LIB NAMES SDL3_ttf SDL_ttf PATHS /usr/local/lib /usr/lib)
 find_library(SDL3_GFX_LIB NAMES SDL3_gfx SDL_gfx PATHS /usr/local/lib /usr/lib)
 
-# DuiLib 静态库（假设生成的库名为 libDuiLib.a，位于 DuiLib/Lib）
+# DuiLib 静态库（假设已编译到 Lib 目录）
 set(DUILIB_LIB ${DUILIB_ROOT}/Lib/libDuiLib.a)
 
-# 测试程序的源文件（gcc 目录下的文件）
+# 测试程序的源文件
 set(SOURCES
     main.cpp
     App.cpp

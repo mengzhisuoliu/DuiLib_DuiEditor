@@ -496,12 +496,12 @@ BOOL CUIPropertyGridFontProperty::GetUnderline()
 
 void CUIPropertyGridFontProperty::SetItalic(BOOL bTrue)
 {
-	m_lf.lfItalic	= bTrue	?	255	: 0;
+	m_lf.lfItalic	= bTrue	?	TRUE	: 0;
 }
 
 BOOL CUIPropertyGridFontProperty::GetItalic()
 {
-	return m_lf.lfItalic == 255;
+	return m_lf.lfItalic == TRUE;
 }
 
 //////////////////////////////////////////////////////////////////////////

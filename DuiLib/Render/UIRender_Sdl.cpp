@@ -23,6 +23,7 @@ namespace DuiLib {
 		m_bWindowRender = true;
 		m_pRenderer = NULL;
 		m_pTexture = NULL;
+		m_ttfEngine = NULL;
 		m_nWidth = 0;
 		m_nHeight = 0;
 	}
@@ -30,13 +31,28 @@ namespace DuiLib {
 	UIRender_Sdl::~UIRender_Sdl()
 	{
 		if (m_pTexture) SDL_DestroyTexture(m_pTexture);
+		DestroyRender();
+	}
+
+	void UIRender_Sdl::DestroyRender()
+	{
+		//注意清理图片纹理缓存
+		if (m_pManager)
+		{
+			CPaintManagerSDLUI *pManager = dynamic_cast<CPaintManagerSDLUI*>(GetManager());
+			if (pManager)
+			{
+				pManager->ClearImageTexture(this);
+			}
+		}
+		if (m_ttfEngine) { TTF_DestroyRendererTextEngine(m_ttfEngine); m_ttfEngine = NULL; }
 		if (m_pRenderer != NULL) { SDL_DestroyRenderer(m_pRenderer); m_pRenderer = NULL; }
 	}
 
 	void UIRender_Sdl::Init(CPaintManagerUI* pManager, PVOID pParam)
 	{
 		if (m_pTexture) SDL_DestroyTexture(m_pTexture);
-		if (m_pRenderer != NULL) { SDL_DestroyRenderer(m_pRenderer); m_pRenderer = NULL; }
+		DestroyRender();
 
 		m_pManager = pManager;
 
@@ -65,6 +81,15 @@ namespace DuiLib {
 		}
 
 		SDL_SetRenderDrawBlendMode(m_pRenderer, SDL_BLENDMODE_BLEND);// 设置混合模式	
+
+		SDL_PropertiesID props2 = SDL_CreateProperties();
+		SDL_SetPointerProperty(props2, TTF_PROP_RENDERER_TEXT_ENGINE_RENDERER_POINTER, m_pRenderer);
+		// 设置图集纹理大小为2048，默认是1024。更大的尺寸可以减少纹理切换，但会增加显存占用。
+		SDL_SetNumberProperty(props2, TTF_PROP_RENDERER_TEXT_ENGINE_ATLAS_TEXTURE_SIZE_NUMBER, 2048);
+		//m_ttfEngine = TTF_CreateRendererTextEngine(m_pRenderer);
+		m_ttfEngine = TTF_CreateRendererTextEngineWithProperties(props2);
+		SDL_DestroyProperties(props2);
+
 		if (pManager)
 		{
 			CDuiRect rc;
@@ -91,6 +116,10 @@ namespace DuiLib {
 			SDL_Rect clipRect = { m_rcInvalidate.left, m_rcInvalidate.top,
 								m_rcInvalidate.right, m_rcInvalidate.bottom };
 			SDL_SetRenderClipRect(m_pRenderer, &clipRect);
+		}
+		else
+		{
+			SDL_SetRenderClipRect(m_pRenderer, NULL);
 		}
 	}
 
@@ -130,7 +159,7 @@ namespace DuiLib {
 		else
 		{
 			//无窗口模式，需要重新创建render
-			if(m_pRenderer) SDL_DestroyRenderer(m_pRenderer);
+			DestroyRender();
 			m_curBmp = MakeRefPtr<UIBitmap>(UIGlobal::CreateBitmap());
 			m_curBmp->CreateFromData(NULL, width, height, 0);
 			SDL_PropertiesID props = SDL_CreateProperties();
@@ -176,7 +205,7 @@ namespace DuiLib {
 	void UIRender_Sdl::ClearAlpha(const RECT &rc, int alpha)
 	{
 		SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, alpha);
-		SDL_FRect rect = { rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top };
+		SDL_FRect rect = { (float)rc.left, (float)rc.top, (float)(rc.right - rc.left), (float)(rc.bottom - rc.top) };
 		SDL_RenderFillRect(m_pRenderer, &rect);
 	}
 
@@ -192,6 +221,11 @@ namespace DuiLib {
 		else
 			m_rcInvalidate.Join(*lpRect);
 		DUITRACE(_T("InvalidRect: %s"), m_rcInvalidate.ToString());
+	}
+
+	CDuiRect UIRender_Sdl::GetInvalidRect()
+	{
+		return m_rcInvalidate;
 	}
 
 	DWORD UIRender_Sdl::SetPixel(int x, int y, DWORD dwColor)
@@ -280,23 +314,18 @@ namespace DuiLib {
 
 	void UIRender_Sdl::DrawBitmapAlpha(int x, int y, int nWidth, int nHeight, UIBitmap *pUiBitmap, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, int alpha)
 	{
-		SDL_Texture* texture = SDL_CreateTextureFromSurface(m_pRenderer, (SDL_Surface *)pUiBitmap->GetHandle());
+		UIBitmap_SDL* pBitmap = dynamic_cast<UIBitmap_SDL*>(pUiBitmap);
+		if (!pBitmap) return;
+
+		SDL_Texture* texture = pBitmap->GetTexture(m_pRenderer);
 		if (!texture) return;
-
-		// 设置纹理缩放模式为最近邻
-		SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
-
-		//设置纹理混合模式为 Alpha 混合
-		SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 
 		// 设置整体透明度调制（alpha 参数，0=完全透明，255=完全不透明）
 		SDL_SetTextureAlphaMod(texture, (Uint8)alpha);
 
-		SDL_FRect dstRect = { x, y, nWidth, nHeight };
-		SDL_FRect srcRect = { xSrc, ySrc, nWidthSrc, nHeightSrc };
+		SDL_FRect dstRect = { (float)x, (float)y, (float)nWidth, (float)nHeight };
+		SDL_FRect srcRect = { (float)xSrc, (float)ySrc, (float)nWidthSrc, (float)nHeightSrc };
 		SDL_RenderTexture(m_pRenderer, texture, &srcRect, &dstRect);
-
-		SDL_DestroyTexture(texture);
 	}
 
 	void UIRender_Sdl::DrawColor(const RECT& rc, const SIZE &round, DWORD dwColor)
@@ -306,7 +335,7 @@ namespace DuiLib {
 		bool bDraw = false;
 		Uint8 r = GetRValue(dwColor), g = GetGValue(dwColor), b = GetBValue(dwColor), a = (dwColor >> 24) & 0xFF;
 		SDL_SetRenderDrawColor(m_pRenderer, b, g, r, a);
-		SDL_FRect rect = { rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top };
+		SDL_FRect rect = { (float)rc.left, (float)rc.top, (float)(rc.right - rc.left), (float)(rc.bottom - rc.top) };
 		if (round.cx > 0 || round.cy > 0)
 		{
 			// 圆角矩形需要更复杂处理，这里简化为填充
@@ -395,20 +424,43 @@ namespace DuiLib {
 			return;
 		}
 
+		// 创建临时 TTF_Text 对象
+		TTF_Text* ttfText = TTF_CreateText(m_ttfEngine, ttfFont, utf8Text.toString(), utf8Text.GetLength());
+
+		// 设置颜色
 		SDL_Color color = GetSDLColor(dwColor);
-		SDL_Surface* surface = TTF_RenderText_Blended(ttfFont, utf8Text.toString(), utf8Text.GetLength(), color);
-		if (surface)
+		TTF_SetTextColor(ttfText, color.r, color.g, color.b, color.a);
+
+		// 对齐方式
+		int x = rc.left;
+		int y = rc.top;
+		int texW = 0, texH = 0;
+		TTF_GetTextSize(ttfText, &texW, &texH);
+		if (uStyle & DT_CENTER) 
 		{
-			SDL_Texture* texture = SDL_CreateTextureFromSurface(m_pRenderer, surface);
-			SDL_FRect dstRect = { rc.left, rc.top, surface->w, surface->h };
-			if (uStyle & DT_CENTER)
-				dstRect.x = rc.left + (rc.right - rc.left - surface->w) / 2;
-			if (uStyle & DT_VCENTER)
-				dstRect.y = rc.top + (rc.bottom - rc.top - surface->h) / 2;
-			SDL_RenderTexture(m_pRenderer, texture, NULL, &dstRect);
-			SDL_DestroyTexture(texture);
-			SDL_DestroySurface(surface);
+			x = rc.left + (rc.right - rc.left - texW) / 2;
 		}
+		else if (uStyle & DT_RIGHT) 
+		{
+			x = rc.right - texW;
+		}
+		if (uStyle & DT_VCENTER) 
+		{
+			y = rc.top + (rc.bottom - rc.top - texH) / 2;
+		}
+		else if (uStyle & DT_BOTTOM) 
+		{
+			y = rc.bottom - texH;
+		}
+
+		// 设置位置, 额外的偏移，不要设置
+		//TTF_SetTextPosition(ttfText, x, y);
+
+		// 绘制
+		TTF_DrawRendererText(ttfText, (float)x, (float)y);
+
+		// 销毁临时对象（引擎内部缓存字形和图集，不会丢失）
+		TTF_DestroyText(ttfText);
 	}
 
 	UIPath* UIRender_Sdl::CreatePath()

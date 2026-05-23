@@ -36,9 +36,7 @@ namespace DuiLib {
 		return interval;
 	}
 
-#ifdef _DEBUG
 	CMacroToStringMap CPaintManagerSDLUI::m_sdlEventString;
-#endif
 	std::map<UINT, WORD> CPaintManagerSDLUI::m_keySdlToWin32;
 	std::map<WORD, UINT> CPaintManagerSDLUI::m_keyWin32ToSdl;
 
@@ -108,17 +106,63 @@ namespace DuiLib {
 		return m_pRenderEngine;
 	}
 
+	void CPaintManagerSDLUI::ClearImageTexture(UIRender* pRender)
+	{
+		if (!pRender) return;
+
+		// 获取 SDL_Renderer*
+		SDL_Renderer* pSDLRenderer = static_cast<SDL_Renderer*>(pRender->GetHandle());
+		if (!pSDLRenderer) return;
+
+		// 遍历非共享图片资源
+		for (int i = 0; i < m_ResInfo.m_ImageHash.GetSize(); ++i) {
+			LPCTSTR key = m_ResInfo.m_ImageHash.GetAt(i);
+			if (!key) continue;
+			UIImage* pImage = static_cast<UIImage*>(m_ResInfo.m_ImageHash.Find(key));
+			if (pImage && pImage->bitmap) {
+				UIBitmap_SDL* pBitmapSDL = dynamic_cast<UIBitmap_SDL*>(pImage->bitmap);
+				if (pBitmapSDL) {
+					pBitmapSDL->DeleteTexture(pSDLRenderer);
+				}
+			}
+		}
+
+		// 遍历共享图片资源
+		for (int i = 0; i < m_SharedResInfo.m_ImageHash.GetSize(); ++i) {
+			LPCTSTR key = m_SharedResInfo.m_ImageHash.GetAt(i);
+			if (!key) continue;
+			UIImage* pImage = static_cast<UIImage*>(m_SharedResInfo.m_ImageHash.Find(key));
+			if (pImage && pImage->bitmap) {
+				UIBitmap_SDL* pBitmapSDL = dynamic_cast<UIBitmap_SDL*>(pImage->bitmap);
+				if (pBitmapSDL) {
+					pBitmapSDL->DeleteTexture(pSDLRenderer);
+				}
+			}
+		}
+	}
+
 	BOOL CPaintManagerSDLUI::InvalidateRect(UIWND hWnd, const RECT *lpRect, BOOL bErase)
 	{
 		if (m_pWindow)
 		{
+			if (lpRect && lpRect->left == 0 && lpRect->top == 0 && lpRect->right == 0 && lpRect->bottom == 0)
+				return FALSE;
+
 			UIRender_Sdl* pRender = (UIRender_Sdl*)Render();
 			pRender->InvalidRect(lpRect);
 
-			SDL_Event event;
-			event.type = SDL_EVENT_WINDOW_EXPOSED;
-			event.window.windowID = SDL_GetWindowID((SDL_Window*)m_hWndPaint);
-			SDL_PushEvent(&event);
+			Uint64 flags = SDL_GetWindowFlags((SDL_Window*)m_hWndPaint);
+			if (!(flags & SDL_WINDOW_MINIMIZED) && !(flags & SDL_WINDOW_HIDDEN)) 
+			{
+				SDL_Event ev;
+				SDL_zero(ev);
+				ev.type = SDL_EVENT_USER;
+				ev.window.windowID = SDL_GetWindowID((SDL_Window*)GetPaintWindow());
+				ev.user.code = WM_PAINT;
+				ev.user.data1 = NULL;
+				ev.user.data2 = NULL;
+				SDL_PushEvent(&ev);
+			}	
 		}
 		return TRUE;
 	}
@@ -421,6 +465,10 @@ namespace DuiLib {
 					{
 						uMsg = ev.user.code;
 					}
+					else if (ev.user.code == WM_PAINT)
+					{
+						uMsg = ev.user.code;
+					}
 				}
 			default: // Other events	SDL_CommonEvent	common
 				{
@@ -538,49 +586,62 @@ namespace DuiLib {
 		return false;
 	}
 
+	static void PrintSdlMessageInfo(SDL_Event &ev)
+	{
+		static UINT lastWindowID = 0;
+		static UINT lastEventType = 0;
+		if (lastWindowID != ev.window.windowID || lastEventType != ev.type)
+		{
+			CDuiString tmp;
+
+			if (ev.type == CWindowSDL::m_EVENT_SEND_MESSAGE)
+			{
+				CWindowSDL::SdlSendMessage* pMsg = (CWindowSDL::SdlSendMessage*)ev.user.data1;
+				tmp.Format(_T("winowID=%d, SDL_Event: %s, code=%s, wparam=%p, lparam=%p"),
+					ev.window.windowID, 
+					CPaintManagerSDLUI::m_sdlEventString.Lookup(ev.type).toString(),
+					CPaintManagerUI::m_wmEventString.Lookup(pMsg->uMsg).toString(), 
+					pMsg->wParam, 
+					pMsg->lParam);
+			}
+			else if (ev.type == SDL_EVENT_USER)
+			{
+				if (ev.user.code != WM_TIMER)
+				{
+					tmp.Format(_T("winowID=%d, SDL_Event: %s, code=%s, wparam=%p, lparam=%p"),
+						ev.window.windowID, 
+						CPaintManagerSDLUI::m_sdlEventString.Lookup(ev.type).toString(),
+						CPaintManagerUI::m_wmEventString.Lookup(ev.user.code).toString(), 
+						ev.user.data1, 
+						ev.user.data2);
+				}
+			}
+			else
+			{
+				tmp.Format(_T("winowID=%d, SDL_Event: %s"),
+					ev.window.windowID, 
+					CPaintManagerSDLUI::m_sdlEventString.Lookup(ev.type).toString());
+			}
+
+			if (!tmp.IsEmpty())
+			{
+				lastWindowID = ev.window.windowID;
+				lastEventType = ev.type;
+				DUITRACE(tmp.toString());
+			}
+		}
+	}
+
 	void CPaintManagerSDLUI::MessageLoop()
 	{
+		_init_wm_defined();
 		_init_sdl_defined();
 
 		SDL_Event ev;
 		while (SDL_WaitEvent(&ev))
 		{
 		#if defined _DEBUG //&& 0
-			static UINT lastWindowID = 0;
-			static UINT lastEventType = 0;
-			if (lastWindowID != ev.window.windowID || lastEventType != ev.type)
-			{
-				CDuiString tmp;
-
-				if (ev.type == CWindowSDL::m_EVENT_SEND_MESSAGE)
-				{
-					CWindowSDL::SdlSendMessage* pMsg = (CWindowSDL::SdlSendMessage*)ev.user.data1;
-					tmp.Format(_T("winowID=%d, SDL_Event: %s, code=%s, wparam=%p, lparam=%p"),
-						ev.window.windowID, m_sdlEventString.Lookup(ev.type).toString(),
-						m_wmEventString.Lookup(pMsg->uMsg).toString(), pMsg->wParam, pMsg->lParam);
-				}
-				else if (ev.type == SDL_EVENT_USER)
-				{
-					if (ev.user.code != WM_TIMER)
-					{
-						tmp.Format(_T("winowID=%d, SDL_Event: %s, code=%s, wparam=%p, lparam=%p"),
-							ev.window.windowID, m_sdlEventString.Lookup(ev.type).toString(),
-							m_wmEventString.Lookup(ev.user.code).toString(), ev.user.data1, ev.user.data2);
-					}
-				}
-				else if(ev.type != SDL_EVENT_WINDOW_EXPOSED)
-				{
-					tmp.Format(_T("winowID=%d, SDL_Event: %s"), 
-						ev.window.windowID, m_sdlEventString.Lookup(ev.type).toString());
-				}
-
-				if (!tmp.IsEmpty())
-				{
-					lastWindowID = ev.window.windowID;
-					lastEventType = ev.type;
-					DUITRACE(tmp.toString());
-				}
-			}
+			PrintSdlMessageInfo(ev);
 		#endif
 
 			if (ev.type == SDL_EVENT_WINDOW_DESTROYED)
@@ -712,12 +773,17 @@ namespace DuiLib {
 		{
 			return true;
 		}
+
 		CDuiRect rcClient;
 		GetClientRect(&rcClient);
-		if (rcClient.GetWidth() <= 0 || rcClient.GetHeight() <= 0)
+		if (rcClient.IsEmpty())
 			return true;
 
-		CDuiRect rcPaint = rcClient;
+		UIRender_Sdl* pRender = (UIRender_Sdl*)Render();
+		CDuiRect rcPaint = pRender->GetInvalidRect();
+		if (rcPaint.IsEmpty())
+			rcPaint = rcClient;
+
 		bool bNeedSizeMsg = false;
 
 		SetPainting(true);
@@ -884,7 +950,6 @@ namespace DuiLib {
  } while(0)
 	void CPaintManagerSDLUI::_init_sdl_defined()
 	{
-	#ifdef _DEBUG
 		MACROTOSTRINGMAP_ADD(m_sdlEventString, SDL_EVENT_FIRST);
 		MACROTOSTRINGMAP_ADD(m_sdlEventString, SDL_EVENT_QUIT);
 		MACROTOSTRINGMAP_ADD(m_sdlEventString, SDL_EVENT_TERMINATING);
@@ -1007,7 +1072,6 @@ namespace DuiLib {
 		MACROTOSTRINGMAP_ADD(m_sdlEventString, SDL_EVENT_ENUM_PADDING);
 		MACROTOSTRINGMAP_ADD(m_sdlEventString, CWindowSDL::m_EVENT_SEND_MESSAGE);
 		MACROTOSTRINGMAP_ADD(m_sdlEventString, CWindowSDL::m_EVENT_POST_MESSAGE);
-	#endif
 
 		// 字母键
 		MAPKEY_WIN32_SDL(SDLK_A, 'A');

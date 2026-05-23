@@ -24,6 +24,8 @@ namespace DuiLib {
 		virtual void Init(UIWND hWnd, LPCTSTR pstrName = NULL, CWindowWnd *pWindow=NULL) override;
 		virtual UIRender *Render() override;
 
+		void ClearImageTexture(UIRender *pRender);
+
 		virtual BOOL InvalidateRect(UIWND hWnd, const RECT *lpRect, BOOL bErase) override;
 		virtual void SetCursor(int nCursor) override;
 
@@ -66,9 +68,7 @@ namespace DuiLib {
 	private:
 		static void _init_sdl_defined();
 	public:
-	#ifdef _DEBUG
 		static CMacroToStringMap m_sdlEventString;
-	#endif
 		static std::map<UINT, WORD> m_keySdlToWin32;
 		static std::map<WORD, UINT> m_keyWin32ToSdl;
 	};

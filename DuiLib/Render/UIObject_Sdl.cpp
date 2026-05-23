@@ -185,6 +185,8 @@ namespace DuiLib {
 
 	UIBitmap_SDL::~UIBitmap_SDL()
 	{
+		DeleteAllTextures();
+
 		if (m_surface) { SDL_DestroySurface(m_surface); m_surface = NULL; }
 		if (m_pDataBits) { free(m_pDataBits); m_pDataBits = NULL; }
 		m_nWidth = 0;
@@ -193,6 +195,8 @@ namespace DuiLib {
 
 	void UIBitmap_SDL::DeleteObject()
 	{
+		DeleteAllTextures();
+
 		if (m_surface) { SDL_DestroySurface(m_surface); m_surface = NULL; }
 		if (m_pDataBits) { free(m_pDataBits); m_pDataBits = NULL; }
 		m_nWidth = 0;
@@ -258,17 +262,57 @@ namespace DuiLib {
 
 	void UIBitmap_SDL::Clear()
 	{
-		
+		DeleteAllTextures();
 	}
 
 	void UIBitmap_SDL::ClearAlpha(const RECT &rc, int alpha)
 	{
-		
+		DeleteAllTextures();
 	}
 
 	BOOL UIBitmap_SDL::SaveFile(LPCTSTR pstrFileName)
 	{
 		return FALSE;
+	}
+
+	SDL_Texture* UIBitmap_SDL::GetTexture(SDL_Renderer* pRenderer)
+	{
+		if (!pRenderer || !m_surface) return nullptr;
+
+		// 查找是否已为该渲染器创建过纹理
+		auto it = m_textureMap.find(pRenderer);
+		if (it != m_textureMap.end()) {
+			return it->second;
+		}
+
+		// 创建新纹理
+		SDL_Texture* texture = SDL_CreateTextureFromSurface(pRenderer, m_surface);
+		if (!texture) return nullptr;
+
+		SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+		SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST); // SDL_SCALEMODE_LINEAR);
+
+		// 存入 map
+		m_textureMap[pRenderer] = texture;
+		return texture;
+	}
+
+	void UIBitmap_SDL::DeleteTexture(SDL_Renderer* pRenderer)
+	{
+		if (!pRenderer) return;
+		auto it = m_textureMap.find(pRenderer);
+		if (it != m_textureMap.end()) {
+			if (it->second) SDL_DestroyTexture(it->second);
+			m_textureMap.erase(it);
+		}
+	}
+
+	void UIBitmap_SDL::DeleteAllTextures()
+	{
+		for (auto& pair : m_textureMap) {
+			if (pair.second) SDL_DestroyTexture(pair.second);
+		}
+		m_textureMap.clear();
 	}
 
 	//////////////////////////////////////////////////////////////////////////

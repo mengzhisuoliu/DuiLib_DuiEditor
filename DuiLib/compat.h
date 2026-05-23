@@ -28,6 +28,7 @@
 
 #ifdef __APPLE__
 #include <stdlib.h>
+#include <unistd.h>
 #include <mach-o/dyld.h>
 #include <sys/stat.h>
 #include <dirent.h>

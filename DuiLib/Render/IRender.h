@@ -75,7 +75,7 @@ namespace DuiLib {
 		UIFont()
 		{
 			id			= -1;
-			iSize		= 16;
+			iSize		= 12;
 			bBold		= false;
 			bUnderline	= false;
 			bItalic		= false;
@@ -109,7 +109,7 @@ namespace DuiLib {
 		virtual UIFont* Clone(CPaintManagerUI *pManager) = 0;
 
 		//获取字体高度
-		virtual int GetHeight(CPaintManagerUI *pManager) = 0;
+		virtual int GetHeight() = 0;
 
 		virtual int GetId()					{ return id;			}
 		virtual CDuiString GetFontName()	{ return sFontName;		}

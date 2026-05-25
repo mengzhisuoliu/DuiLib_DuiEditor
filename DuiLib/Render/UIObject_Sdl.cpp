@@ -7,6 +7,7 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////////////
+#ifdef DUILIB_SDL
 namespace DuiLib {
 	//////////////////////////////////////////////////////////////////////////
 	//
@@ -18,21 +19,22 @@ namespace DuiLib {
 
 	UIFont_SDL::~UIFont_SDL()
 	{
-		
+		if (m_pTTF) { TTF_CloseFont(m_pTTF); m_pTTF = NULL; }
 	}
 
 	void UIFont_SDL::DeleteObject()
 	{
-		
+		if (m_pTTF) { TTF_CloseFont(m_pTTF); m_pTTF = NULL; }
 	}
 
 	BOOL UIFont_SDL::CreateDefaultFont()
 	{
-		if (CPaintManagerUI::m_aFonts.GetSize() > 0)
+		if (CPaintManagerUI::m_aFontFiles.GetSize() > 0)
 		{
-			tagFontFileTTF* pTtfFile = static_cast<tagFontFileTTF*>(CPaintManagerUI::m_aFonts.GetAt(0));
-			m_pTTF = pTtfFile->pData;
-			return TRUE;
+			tagFontFile* ttfFile = static_cast<tagFontFile*>(CPaintManagerUI::m_aFontFiles.GetAt(0));
+			CDuiStringUtf8 utf8 = ttfFile->sPathName;
+			m_pTTF = TTF_OpenFont(utf8.toString(), GetSize());
+			return m_pTTF != NULL;
 		}
 		return FALSE;
 	}
@@ -61,19 +63,29 @@ namespace DuiLib {
 		return pNewFont;
 	}
 
-	int UIFont_SDL::GetHeight(CPaintManagerUI *pManager)
+	int UIFont_SDL::GetHeight()
 	{
+		if (m_pTTF) {
+			return TTF_GetFontHeight(m_pTTF);
+		}
 		return iSize;
 	}
 
 	BOOL UIFont_SDL::_buildFont(CPaintManagerUI *pManager)
 	{
-		for (int i = 0; i < CPaintManagerUI::m_aFonts.GetSize(); ++i)
+		for (int i = 0; i < CPaintManagerUI::m_aFontFiles.GetSize(); ++i)
 		{
-			tagFontFileTTF* pTtfFile = static_cast<tagFontFileTTF*>(CPaintManagerUI::m_aFonts.GetAt(i));
-			if (pTtfFile->sName == sFontName && pTtfFile->size == iSize)
+			tagFontFile* ttfFile = static_cast<tagFontFile*>(CPaintManagerUI::m_aFontFiles.GetAt(i));
+			if (ttfFile->sName == sFontName)
 			{
-				m_pTTF = pTtfFile->pData;
+				int dpi = pManager->GetDPIObj()->GetDPI();
+				int lfHeight = pManager ? pManager->GetDPIObj()->ScaleInt(iSize) : iSize;
+				float ptsize = (lfHeight * 72.0f) / dpi; // 像素转点, 为了视觉大小与WIN32兼容。
+
+				CDuiStringUtf8 utf8 = ttfFile->sPathName;
+				m_pTTF = TTF_OpenFont(utf8.toString(), ptsize);
+				TTF_SetFontSizeDPI(m_pTTF, ptsize, dpi, dpi);
+				return m_pTTF != NULL;
 			}
 		}
 		return TRUE;
@@ -346,4 +358,5 @@ namespace DuiLib {
 	}
 
 } // namespace DuiLib
+#endif //#ifdef DUILIB_SDL
 

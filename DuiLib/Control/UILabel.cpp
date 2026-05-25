@@ -88,8 +88,7 @@ namespace DuiLib
 		
 			if(IsAutoCalcHeight())
 			{
-				UIFont *pFont = GetManager()->GetFont(GetFont());
-				int h = pFont->GetHeight(GetManager());
+				int h = GetManager()->GetFontHeight(GetFont());
 				RECT rcTextPadding = GetTextPadding();
 				m_cxyFixed.cy = rcTextPadding.top + rcTextPadding.bottom + h + 4;		
 			}

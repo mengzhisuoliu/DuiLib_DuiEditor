@@ -211,7 +211,7 @@ CControlUI* CUIBuilder::Create(pugi::xml_node xmldoc, IDialogBuilderCallback* pC
 					}
 				}
 				if (pstrPath) {
-					pManager->ImportFontFile(pstrPath, NULL, 0); //这里原本是window载入字体的
+					pManager->AddFontArray(pstrPath); 
 				}
 			}
 		}

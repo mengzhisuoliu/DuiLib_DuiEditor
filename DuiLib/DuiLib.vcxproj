@@ -1106,6 +1106,7 @@
     <ClCompile Include="Render\UIObject_Cairo.cpp" />
     <ClCompile Include="Render\UIObject_gdi.cpp" />
     <ClCompile Include="Render\UIObject_gdiplus.cpp" />
+    <ClCompile Include="Render\UIObject_Sdl.cpp" />
     <ClCompile Include="Render\UIRenderFactory_Cairo.cpp" />
     <ClCompile Include="Render\UIRenderFactory_gdi.cpp" />
     <ClCompile Include="Render\UIRenderFactory_gdiplus.cpp" />
@@ -1269,6 +1270,7 @@
     <ClInclude Include="Render\UIObject_Cairo.h" />
     <ClInclude Include="Render\UIObject_gdi.h" />
     <ClInclude Include="Render\UIObject_gdiplus.h" />
+    <ClInclude Include="Render\UIObject_Sdl.h" />
     <ClInclude Include="Render\UIRenderFactory_Cairo.h" />
     <ClInclude Include="Render\UIRenderFactory_gdi.h" />
     <ClInclude Include="Render\UIRenderFactory_gdiplus.h" />

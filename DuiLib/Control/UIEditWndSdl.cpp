@@ -783,7 +783,7 @@ namespace DuiLib
 
 		UIFont* pFont = GetManager()->GetFont(m_pOwner->GetFont());
 		if (!pFont) pFont = GetManager()->GetDefaultFontInfo();
-		int caretHeight = pFont->GetHeight(GetManager());
+		int caretHeight = pFont->GetHeight();
 		caretHeight += 6;
 		if (caretHeight > rcClient.GetHeight()) caretHeight = rcClient.GetHeight();
 

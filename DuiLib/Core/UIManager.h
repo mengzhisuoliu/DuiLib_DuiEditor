@@ -131,6 +131,12 @@ namespace DuiLib {
 		UINT m_uState;
 	}TButtonState;
 
+	typedef struct UILIB_API tagFontFile
+	{
+		CDuiString sPathName;
+		CDuiString sName;
+	} TFontFileTTF;
+
 	typedef struct UILIB_API tagTPercentInfo
 	{
 		double left;
@@ -370,9 +376,14 @@ namespace DuiLib {
 		UIFont* GetDefaultFontInfo();
 		void SetDefaultFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic, bool bShared = false);
 		DWORD GetCustomFontCount(bool bShared = false) const;
-		
+
+		//从文件中安装字体
+		#ifdef WIN32
+		void AddFontArray(LPCTSTR pstrPath);
+		#endif
+
 		//从文件中安装字体, FontName=字体名字, size=字体大小
-		static void ImportFontFile(LPCTSTR pstrPath, LPCTSTR FontName, int size);
+		static void ImportFont(LPCTSTR pstrPath, LPCTSTR FontName);
 		
 		//增加字体
 		UIFont* AddFont(int id, LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic, bool bShared = false);
@@ -524,7 +535,7 @@ namespace DuiLib {
 
 		CDPI* GetDPIObj();
 		void ResetDPIAssets();
-		void SetDPI(int iDPI);
+		virtual void SetDPI(int iDPI);
 		static void SetAllDPI(int iDPI);
 
 		static bool TranslateMessage(const LPMSG pMsg);
@@ -678,6 +689,7 @@ namespace DuiLib {
 		CStdPtrArray m_aDelayedCleanup;
 		CStdPtrArray m_aAsyncNotify; //CDuiLock m_lockAsyncNotify; //add by liq99
 		CStdPtrArray m_aFoundControls;
+		CStdPtrArray m_aFonts;
 		CStdPtrArray m_aNeedMouseLeaveNeeded;
 		CStdStringPtrMap m_mNameHash;
 		CStdStringPtrMap m_mWindowCustomAttrHash;
@@ -748,7 +760,7 @@ namespace DuiLib {
 
 	public:
 		static CMacroToStringMap m_wmEventString;
-		static CStdPtrArray m_aFonts;
+		static CStdPtrArray m_aFontFiles;
 	};
 
 } // namespace DuiLib

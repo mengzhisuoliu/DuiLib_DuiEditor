@@ -447,6 +447,9 @@
     <ClCompile Include="Control\UIMenuWndSdl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Render\UIObject_Sdl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Control\UIWebBrowser.h">
@@ -864,6 +867,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Control\UIMenuWndSdl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\UIObject_Sdl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

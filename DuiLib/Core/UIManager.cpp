@@ -27,7 +27,7 @@ namespace DuiLib {
 	short CPaintManagerUI::m_L = 100;
 	CStdPtrArray CPaintManagerUI::m_aPreMessages;
 	CStdPtrArray CPaintManagerUI::m_aPlugins;
-	CStdPtrArray CPaintManagerUI::m_aFonts;
+	CStdPtrArray CPaintManagerUI::m_aFontFiles;
 
 	BOOL CPaintManagerUI::UIDESIGNMODE = FALSE;
 	BOOL CPaintManagerUI::UIDESIGNPREVIEW = FALSE;
@@ -1084,21 +1084,13 @@ namespace DuiLib {
 		}
 #endif
 
-		if (!m_aFonts.IsEmpty()) 
+
+		if (!m_aFontFiles.IsEmpty()) 
 		{
-			for (int i = 0; i < m_aFonts.GetSize(); ++i)
+			for (int i = 0; i < m_aFontFiles.GetSize(); ++i)
 			{
-			#ifdef DUILIB_WIN32
-				HANDLE handle = static_cast<HANDLE>(m_aFonts.GetAt(i));
-				::RemoveFontMemResourceEx(handle);
-			#elif defined DUILIB_SDL
-				tagFontFileTTF* pTtfFile = static_cast<tagFontFileTTF*>(m_aFonts.GetAt(i));
-				if (pTtfFile->pData)
-				{
-					TTF_CloseFont((TTF_Font*)pTtfFile->pData);
-				}
+				tagFontFile* pTtfFile = static_cast<tagFontFile*>(m_aFontFiles.GetAt(i));
 				delete pTtfFile;
-			#endif
 			}
 		}
 	}
@@ -1113,15 +1105,15 @@ namespace DuiLib {
 
 	void DuiLib::CPaintManagerUI::SetDPI(int iDPI)
 	{
-#ifdef DUILIB_WIN32
 		int scale1 = GetDPIObj()->GetScale();
 		GetDPIObj()->SetScale(iDPI);
 		int scale2 = GetDPIObj()->GetScale();
 		ResetDPIAssets();
 		RECT rcWnd = {0};
-		::GetWindowRect(GetPaintWindow(), &rcWnd);
+		GetWindowRect(&rcWnd);
 		RECT*  prcNewWindow = &rcWnd;
-		if (!::IsZoomed(GetPaintWindow())) {
+		if (!IsZoomed()) 
+		{
 			RECT rc = rcWnd;
 			rc.right = rcWnd.left + (rcWnd.right - rcWnd.left) * scale2 / scale1;
 			rc.bottom = rcWnd.top + (rcWnd.bottom - rcWnd.top) * scale2 / scale1;
@@ -1130,7 +1122,6 @@ namespace DuiLib {
 		SetWindowPos(prcNewWindow->left, prcNewWindow->top, prcNewWindow->right - prcNewWindow->left, prcNewWindow->bottom - prcNewWindow->top, SWP_NOZORDER | SWP_NOACTIVATE);
 		if (GetRoot() != NULL) GetRoot()->NeedUpdate();
 		PostMessage(UIMSG_SET_DPI, 0, 0);
-#endif
 	}
 
 	void DuiLib::CPaintManagerUI::SetAllDPI(int iDPI)
@@ -1710,25 +1701,25 @@ namespace DuiLib {
 		return pFontInfo;
 	}
 
-	void CPaintManagerUI::ImportFontFile(LPCTSTR pstrPath, LPCTSTR FontName, int size)
+#ifdef WIN32
+	void CPaintManagerUI::AddFontArray(LPCTSTR pstrPath) 
 	{
-#ifdef DUILIB_WIN32
 		CUIFile f;
 		if(!f.LoadFile(pstrPath)) return;
 
 		DWORD nFonts;
 		HANDLE hFont = ::AddFontMemResourceEx((LPVOID)f.GetData(), f.GetSize(), NULL, &nFonts);
 		m_aFonts.Add(hFont);
-#elif defined DUILIB_SDL
+	}
+#endif
+
+	void CPaintManagerUI::ImportFont(LPCTSTR pstrPath, LPCTSTR FontName)
+	{
 		CDuiStringUtf8 strUtf8 = CDuiString(pstrPath);
-		TTF_Font* pFont = TTF_OpenFont(strUtf8.toString(), size);
-		tagFontFileTTF* pTtfFile = new tagFontFileTTF;
+		tagFontFile* pTtfFile = new tagFontFile;
 		pTtfFile->sPathName = pstrPath;
 		pTtfFile->sName = FontName;
-		pTtfFile->size = size;
-		pTtfFile->pData = pFont;
-		m_aFonts.Add(pTtfFile);
-#endif
+		m_aFontFiles.Add(pTtfFile);
 	}
 
 	UIFont* CPaintManagerUI::GetFont(int id)
@@ -1784,7 +1775,9 @@ namespace DuiLib {
 
 	int CPaintManagerUI::GetFontHeight(int id)
 	{
-		return GetFont(id)->GetHeight(this);
+		UIFont *pFont = GetFont(id);
+		if(!pFont) return 12;
+		return pFont->GetHeight();
 	}
 
 	void CPaintManagerUI::RemoveFont(UIFont *uiFont, bool bShared)

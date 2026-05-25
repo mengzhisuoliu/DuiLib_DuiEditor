@@ -21,14 +21,14 @@ namespace DuiLib {
 
 		virtual UIFont* Clone(CPaintManagerUI *pManager) override;
 
-		virtual int GetHeight(CPaintManagerUI *pManager) override;
+		virtual int GetHeight() override;
 
 	protected:
 		virtual ~UIFont_SDL();
 
 		virtual BOOL _buildFont(CPaintManagerUI *pManager=NULL) override;
 	protected:
-		PVOID m_pTTF;
+		TTF_Font *m_pTTF;
 	};
 
 	//////////////////////////////////////////////////////////////////////////

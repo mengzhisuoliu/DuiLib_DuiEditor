@@ -35,8 +35,7 @@ namespace DuiLib
 
 				if(T::IsAutoCalcHeight())
 				{
-					UIFont *pFont = T::GetManager()->GetFont(T::GetFont());
-					int h = pFont->GetHeight(T::GetManager());
+					int h = T::GetManager()->GetFontHeight(T::GetFont());
 					szFact.cy = T::m_rcTextPadding.top + T::m_rcTextPadding.bottom + h + 4;
 				}
 

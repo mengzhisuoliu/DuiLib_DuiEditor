@@ -26,10 +26,6 @@ namespace DuiLib {
 			pango_font_description_free(m_pPangoFontDesc);
 			m_pPangoFontDesc = NULL;
 		}
-
-#ifdef WIN32
-		if(m_hFont) { ::DeleteObject(m_hFont); m_hFont = NULL; }
-#endif
 	}
 
 	void UIFont_pango::DeleteObject()
@@ -74,15 +70,8 @@ namespace DuiLib {
 		return pNewFont;
 	}
 
-	int UIFont_pango::GetHeight(CPaintManagerUI *pManager)
+	int UIFont_pango::GetHeight()
 	{
-#ifdef DUILIB_WIN32
-		TEXTMETRIC tm;
-		HFONT hOldFont = (HFONT)::SelectObject(pManager->GetPaintDC(), GetHFONT(pManager));
-		::GetTextMetrics(pManager->GetPaintDC(), &tm);
-		::SelectObject(pManager->GetPaintDC(), hOldFont);
-		return tm.tmHeight;
-#endif
 		if (m_pPangoFontDesc)
 		{
 			return pango_font_description_get_size(m_pPangoFontDesc) / PANGO_SCALE;

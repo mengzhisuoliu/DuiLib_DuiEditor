@@ -34,5 +34,29 @@ bool CMainFrame::OnMenuCommand(const MenuCmd *cmd)
 
 void CMainFrame::OnNotifyClick(TNotifyUI& msg)
 {
-
+	if (IsControl(msg, _T("dpi_96")))
+	{
+		GetManager()->SetDPI(96);
+		GetManager()->ResetDPIAssets();
+	}
+	if (IsControl(msg, _T("dpi_120")))
+	{
+		GetManager()->SetDPI(120);
+		GetManager()->ResetDPIAssets();
+	}
+	if (IsControl(msg, _T("dpi_144")))
+	{
+		GetManager()->SetDPI(144);
+		GetManager()->ResetDPIAssets();
+	}
+	if (IsControl(msg, _T("dpi_168")))
+	{
+		GetManager()->SetDPI(168);
+		GetManager()->ResetDPIAssets();
+	}
+	if (IsControl(msg, _T("dpi_192")))
+	{
+		GetManager()->SetDPI(192);
+		GetManager()->ResetDPIAssets();
+	}
 }

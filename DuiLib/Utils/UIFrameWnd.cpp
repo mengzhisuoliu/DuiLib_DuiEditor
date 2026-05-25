@@ -147,6 +147,8 @@ void CUIFrameWndBase::Notify(TNotifyUI& msg)
 		CUIForm* pForm = (CUIForm*)m_listForm.GetAt(i);
 		pForm->Notify(msg);
 	}
+
+	CUIFrmBase::Notify(msg);
 }
 
 LRESULT CUIFrameWndBase::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& bHandled)
@@ -174,6 +176,17 @@ LRESULT CUIFrameWndBase::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lPara
 
 LRESULT CUIFrameWndBase::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
+	//当你的窗口移动到DPI不同的显示器上时，会收到 WM_DPICHANGED 消息。
+	//直接修改当前显示设置改动dpi，不会收到此消息
+	if (uMsg == WM_DPICHANGED)
+	{
+		//wParam 的 HIWORD 包含窗口的新 dpi 的 Y 轴值。wParam 的 LOWORD 包含窗口的新 DPI 的 X 轴值。
+		//例如，96、120、144 或 192。对于 Windows 应用，X 轴和 Y 轴的值是相同的。
+		GetManager()->SetDPI(LOWORD(wParam));
+		GetManager()->ResetDPIAssets();
+		return 0;
+	}
+
 	if (uMsg == UIMSG_GRID_NOTIFY)
 	{
 		CGridUI* pGrid = (CGridUI*)wParam;

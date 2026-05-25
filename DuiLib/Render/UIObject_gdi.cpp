@@ -70,14 +70,8 @@ namespace DuiLib {
 		return pNewFont;
 	}
 
-	int UIFont_gdi::GetHeight(CPaintManagerUI *pManager)
+	int UIFont_gdi::GetHeight()
 	{
-		if(tm.tmHeight == 0)
-		{
-			HFONT hOldFont = (HFONT) ::SelectObject(pManager->GetPaintDC(), m_hFont);
-			::GetTextMetrics(pManager->GetPaintDC(), &tm);
-			::SelectObject(pManager->GetPaintDC(), hOldFont);
-		}
 		return tm.tmHeight;
 	}
 
@@ -101,6 +95,21 @@ namespace DuiLib {
 		m_hFont = ::CreateFontIndirect(&lf);
 		if( m_hFont == NULL ) 
 			return FALSE;
+
+		if(pManager)
+		{
+			HFONT hOldFont = (HFONT) ::SelectObject(pManager->GetPaintDC(), m_hFont);
+			::GetTextMetrics(pManager->GetPaintDC(), &tm);
+			::SelectObject(pManager->GetPaintDC(), hOldFont);
+		}
+		else
+		{
+			HDC hDC = ::GetDC(NULL);
+			HFONT hOldFont = (HFONT) ::SelectObject(hDC, m_hFont);
+			::GetTextMetrics(hDC, &tm);
+			::SelectObject(hDC, hOldFont);
+			::ReleaseDC(NULL, hDC);
+		}
 		return TRUE;
 	}
 

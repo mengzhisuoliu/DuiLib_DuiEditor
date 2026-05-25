@@ -6,15 +6,6 @@
 namespace DuiLib {
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
-
-	typedef struct UILIB_API tagFontFileTTF
-	{
-		CDuiString sPathName;
-		CDuiString sName;
-		int size;
-		PVOID pData; //TTF_Font ÷∏’Î
-	} TFontFileTTF;
-
 	class UILIB_API CPaintManagerSDLUI : public CPaintManagerUI
 	{
 	public:

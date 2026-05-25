@@ -361,6 +361,21 @@ namespace DuiLib {
 			case SDL_EVENT_DROP_FILE: 
 			case SDL_EVENT_DROP_TEXT: //, etc	SDL_DropEvent	drop
 				break;
+			case SDL_EVENT_DISPLAY_CONTENT_SCALE_CHANGED:
+				break;
+			case SDL_EVENT_WINDOW_DISPLAY_SCALE_CHANGED:
+				{
+					CWindowSDL::WindowInfo info;
+					if (CWindowSDL::FindWindowInfo(ev.window.windowID, &info))
+					{
+						uMsg = WM_DPICHANGED;
+
+						float scale = SDL_GetWindowDisplayScale((SDL_Window *)info.sdlWindow);
+						int dpi = (int)(96.0f * scale + 0.5f);
+						wparam = MAKEWPARAM(dpi, 0);
+					}
+					break;
+				}
 			case SDL_EVENT_KEY_DOWN:
 				{
 					uMsg = WM_KEYDOWN;

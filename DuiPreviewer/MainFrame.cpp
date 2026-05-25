@@ -236,7 +236,7 @@ void CMainFrame::LoadConfigXml()
 					}
 				}
 				if (pstrPath) {
-					pManager->ImportFontFile(pstrPath, NULL, 0); //这里原本是window载入字体的
+					pManager->AddFontArray(pstrPath); 
 				}
 			}
 		}

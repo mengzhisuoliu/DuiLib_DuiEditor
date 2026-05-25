@@ -21,7 +21,7 @@ namespace DuiLib {
 
 		virtual UIFont* Clone(CPaintManagerUI *pManager) override;
 
-		virtual int GetHeight(CPaintManagerUI *pManager) override;
+		virtual int GetHeight() override;
 
 	protected:
 		virtual ~UIFont_pango();

@@ -123,8 +123,11 @@ namespace DuiLib {
 				}
 				else if (_tcsicmp(pstrClass, _T("Import")) == 0) {
 					CDuiString strPath = node.attribute(_T("fontfile")).as_string();
-					if (!strPath.IsEmpty()) {
+					if (!strPath.IsEmpty()) 
+					{
+						#ifdef WIN32
 						pManager->AddFontArray(strPath.GetData());
+						#endif
 					}
 				}
 

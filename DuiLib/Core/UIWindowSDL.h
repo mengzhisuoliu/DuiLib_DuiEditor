@@ -44,6 +44,7 @@ public:
 	virtual void Close(UINT nRet = IDOK) override;
 	virtual void SetCursor(int nCursor) override;
 	void ShowWindow(bool bShow = true, bool bTakeFocus = true);
+	UINT ShowModal();
 
 	void CenterWindow();	// 居中，支持扩展屏幕
 
@@ -85,11 +86,22 @@ public:
 	static BOOL IsWindow(UIWND hWnd);
 	static BOOL IsChildWindow(UIWND hWnd);
 	static UIWND GetParentWindow(UIWND hWnd);
+	static BOOL SetForeground(UIWND hWnd);
 	static LRESULT SendMessage(UIWND hWnd, UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0);
 	static BOOL PostMessage(UIWND hWnd, UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0);
+
+	static BOOL GetMessage(PVOID ev, MSG* msg);
+	static BOOL TranslateMessage(PVOID ev, MSG* msg);
+	static LRESULT DispatchMessage(PVOID ev, MSG* msg);
 protected:
 	static std::map<UINT, WindowInfo> m_smap;
 	static CDuiLock m_smap_lock;
+
+public:
+	static void _init_sdl_defined();
+	static CMacroToStringMap m_sdlEventString;
+	static std::map<UINT, WORD> m_keySdlToWin32;
+	static std::map<WORD, UINT> m_keyWin32ToSdl;
 };	
 
 } // namespace DuiLib

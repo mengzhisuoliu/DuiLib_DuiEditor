@@ -258,7 +258,6 @@ namespace DuiLib {
 		CPaintManagerUI();
 		virtual ~CPaintManagerUI();
 
-		static void _init_wm_defined();
 	public:
 		virtual void Init(UIWND hWnd, LPCTSTR pstrName = NULL, CWindowWnd *pWindow=NULL);
 		virtual UIRender *Render() = 0;
@@ -759,7 +758,6 @@ namespace DuiLib {
 		static BOOL UIDESIGNPREVIEW;
 
 	public:
-		static CMacroToStringMap m_wmEventString;
 		static CStdPtrArray m_aFontFiles;
 	};
 

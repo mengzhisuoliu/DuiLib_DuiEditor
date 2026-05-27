@@ -32,18 +32,8 @@ namespace DuiLib {
 		rc.bottom = rc.top + MIN(cyFixed, szDrop.cy);
 
 		SDL_Window* pParentWnd = (SDL_Window *)m_pOwner->GetManager()->GetPaintWindow();
-		Uint32 flags = SDL_WINDOW_POPUP_MENU | SDL_WINDOW_BORDERLESS;
-		SDL_Window* pWindow = SDL_CreatePopupWindow(pParentWnd, rc.left, rc.top, rc.GetWidth(), rc.GetHeight(), flags);
-		if (!pWindow)
-		{
-			//CDuiString sError = CDuiStringUtf8(SDL_GetError());
-			return;
-		}
-		m_hWnd = (UIWND)pWindow;
-		m_id = SDL_GetWindowID(pWindow);
-		m_uOwnerThread = SDL_GetThreadID(NULL);
-		RegisterWindow((UINT_PTR)pWindow, this);
-		HandleMessage(WM_CREATE, 0, 0);
+		UIWND pWindow = Create((UIWND)pParentWnd, NULL, UI_WNDSTYLE_CHILD, 0, rc.left, rc.top, rc.GetWidth(), rc.GetHeight());
+		if (!pWindow) return;
 	}
 
 	LRESULT CComboWndSDL::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)

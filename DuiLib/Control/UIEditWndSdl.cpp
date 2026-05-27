@@ -85,17 +85,9 @@ namespace DuiLib
 		CDuiRect rc = CalPos();
 		rc.Deflate(1, 1, 1, 1);
 		CWindowSDL* pParentWnd = (CWindowSDL*)GetOwner()->GetManager()->GetWindow();
-		SDL_Window* hParentWnd = (SDL_Window*)pParentWnd->GetHWND();
 
-		// SDL3 创建弹出窗口（无边框，隐藏）
-		Uint32 flags = SDL_WINDOW_POPUP_MENU | SDL_WINDOW_BORDERLESS | SDL_WINDOW_HIDDEN;
-		SDL_Window* pWindow = SDL_CreatePopupWindow(hParentWnd, rc.left, rc.top, rc.GetWidth(), rc.GetHeight(), flags);
+		UIWND pWindow = Create(pParentWnd->GetHWND(), NULL, UI_WNDSTYLE_CHILD, 0, rc.left, rc.top, rc.GetWidth(), rc.GetHeight());
 		if (!pWindow) return;
-
-		m_hWnd = (UIWND)pWindow;
-		m_id = SDL_GetWindowID(pWindow);
-		m_uOwnerThread = SDL_GetThreadID(NULL);
-		RegisterWindow((UINT_PTR)pWindow, this);
 
 		// 初始化文本
 		m_sText = GetOwner()->GetText();
@@ -109,15 +101,6 @@ namespace DuiLib
 			m_selEnd = m_sText.GetLength();
 			m_cursorPos = m_selEnd;
 		}
-
-		m_pm.SetForceUseSharedRes(true);
-		m_pm.Init(m_hWnd, NULL, this);
-
-		// 显示窗口并设置焦点
-		ShowWindow();
-
-		// 强制重绘
-		Invalidate();
 	}
 
 	CDuiRect CEditWndSDL::CalPos()
@@ -175,6 +158,18 @@ namespace DuiLib
 	{
 		switch (uMsg)
 		{
+			case WM_CREATE:
+				{
+					m_pm.SetForceUseSharedRes(true);
+					m_pm.Init(m_hWnd, NULL, this);
+
+					// 显示窗口并设置焦点
+					ShowWindow();
+
+					// 强制重绘
+					Invalidate();
+				}
+				break;
 			case WM_PAINT:
 				OnPaint();
 				return 0;

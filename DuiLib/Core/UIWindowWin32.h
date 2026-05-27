@@ -28,6 +28,7 @@ namespace DuiLib {
 		static BOOL IsWindow(UIWND hWnd);
 		static BOOL IsChildWindow(UIWND hWnd);
 		static UIWND GetParentWindow(UIWND hWnd);
+		static BOOL SetForeground(UIWND hWnd);
 		static LRESULT SendMessage(UIWND hWnd, UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0);
 		static BOOL PostMessage(UIWND hWnd, UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0);
 

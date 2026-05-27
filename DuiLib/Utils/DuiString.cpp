@@ -1270,6 +1270,11 @@ namespace DuiLib
 			return it->second;
 		return _T("[Unknow]");
 	}
+
+	UINT CMacroToStringMap::GetSize()
+	{
+		return (UINT)m_arrString.size();
+	}
 	//////////////////////////////////////////////////////////////////////////
 	//
 	//

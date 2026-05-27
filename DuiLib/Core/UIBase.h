@@ -8,8 +8,6 @@ namespace DuiLib {
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
 
-#ifdef DUILIB_WIN32
-
 #define UI_WNDSTYLE_CONTAINER  (0)
 #define UI_WNDSTYLE_FRAME      (WS_VISIBLE | WS_OVERLAPPEDWINDOW)
 #define UI_WNDSTYLE_CHILD      (WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN)
@@ -22,23 +20,6 @@ namespace DuiLib {
 #define UI_CLASSSTYLE_FRAME      (CS_VREDRAW | CS_HREDRAW)
 #define UI_CLASSSTYLE_CHILD      (CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_SAVEBITS)
 #define UI_CLASSSTYLE_DIALOG     (CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_SAVEBITS)
-
-#else
-
-#define UI_WNDSTYLE_CONTAINER  (0)
-#define UI_WNDSTYLE_FRAME      (0)
-#define UI_WNDSTYLE_CHILD      (0)
-#define UI_WNDSTYLE_DIALOG     (0)
-
-#define UI_WNDSTYLE_EX_FRAME   (0)
-#define UI_WNDSTYLE_EX_DIALOG  (0)
-
-#define UI_CLASSSTYLE_CONTAINER  (0)
-#define UI_CLASSSTYLE_FRAME      (0)
-#define UI_CLASSSTYLE_CHILD      (0)
-#define UI_CLASSSTYLE_DIALOG     (0)
-
-#endif
 
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -103,6 +84,7 @@ namespace DuiLib {
 
 		void SetHandleMessage(BOOL bHandled);
 		BOOL IsHandleMessage();
+
 		virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 		virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 		virtual LRESULT HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -131,6 +113,9 @@ namespace DuiLib {
 		UIWND m_hWnd;
 		DuiLibPaintManagerUI m_pm;
 		BOOL m_bHandleMessage;
+	public:
+		static void _init_wm_defined();
+		static CMacroToStringMap m_wmEventString;
 	};
 
 } // namespace DuiLib

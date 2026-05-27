@@ -116,6 +116,11 @@ UIWND CWindowWin32::GetParentWindow(UIWND hWnd)
     return ::GetParent(hWnd);
 }
 
+BOOL CWindowWin32::SetForeground(UIWND hWnd)
+{
+    return ::SetForegroundWindow(hWnd);
+}
+
 LRESULT CWindowWin32::SendMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (IsWindow(hWnd))

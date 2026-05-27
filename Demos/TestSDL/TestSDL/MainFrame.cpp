@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "MainFrame.h"
 
+#include "DialogModal.h"
 
 CMainFrame::CMainFrame(void)
 {
@@ -58,5 +59,20 @@ void CMainFrame::OnNotifyClick(TNotifyUI& msg)
 	{
 		GetManager()->SetDPI(192);
 		GetManager()->ResetDPIAssets();
+	}
+
+
+	if (IsControl(msg, _T("btn_domodal")))
+	{
+		CDialogModal dlg;
+		dlg.DoModal(this);
+		return;
+	}
+
+	if (IsControl(msg, _T("btn_show_dialog")))
+	{
+		CDialogModal *dlg = new CDialogModal;
+		dlg->ShowDialog(this);
+		return;
 	}
 }

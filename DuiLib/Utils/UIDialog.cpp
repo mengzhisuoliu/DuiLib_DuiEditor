@@ -1,7 +1,6 @@
 #include "StdAfx.h"
 #include "UIFrameWnd.h"
 
-#ifdef DUILIB_WIN32
 namespace DuiLib{
 
 CUIDialog::CUIDialog(void)
@@ -40,11 +39,12 @@ CDuiString CUIDialog::GetSkinFile()
 	return m_sWindowClassName;
 }
 
-void CUIDialog::OnFinalMessage( HWND hWnd )
+void CUIDialog::OnFinalMessage( UIWND hWnd )
 {
-	if(::IsWindow(GetParent(hWnd)))
+	UIWND hParentWnd = DuiLibWindowWnd::GetParentWindow(hWnd);
+	if(DuiLibWindowWnd::IsWindow(hParentWnd))
 	{
-		SetForegroundWindow(::GetParent(hWnd));
+		DuiLibWindowWnd::SetForeground(hParentWnd);
 	}
 	CUIFrameWnd::OnFinalMessage(hWnd);
 
@@ -65,7 +65,8 @@ LRESULT CUIDialog::ResponseDefaultKeyEvent(WPARAM wParam)
 		if(pFocus && !pFocus->OnEnableResponseDefaultKeyEvent(wParam))
 			return S_FALSE;
 
-		::SetFocus(GetManager()->GetPaintWindow()); //让主窗口获取焦点，使内部的子窗口隐藏，从而获取子窗口内容。
+		GetManager()->SetWndFocus();
+		//::SetFocus(GetManager()->GetPaintWindow()); //让主窗口获取焦点，使内部的子窗口隐藏，从而获取子窗口内容。
 
 		CButtonUI *pBtnOk = dynamic_cast<CButtonUI *>(FindControl(_T("btn_ok")));
 		if(pBtnOk)
@@ -104,6 +105,7 @@ BOOL CUIDialog::IsEnterCloseOK() const { return m_bEnterCloseOK; }
 
 BOOL CUIDialog::IsEscCloseCancel() const { return m_bEscCloseCancel; }
 
+#ifdef DUILIB_WIN32
 UINT CUIDialog::DoModal(HWND hWndParent)
 {
 	Create(hWndParent, GetWindowClassName(), UI_WNDSTYLE_DIALOG|WS_SIZEBOX, WS_EX_WINDOWEDGE);
@@ -111,6 +113,7 @@ UINT CUIDialog::DoModal(HWND hWndParent)
 	_bModal = true;
 	return ShowModal();
 }
+#endif
 
 UINT CUIDialog::DoModal(CUIFrmBase *pParentWnd)
 {
@@ -123,6 +126,7 @@ UINT CUIDialog::DoModal(CUIFrmBase *pParentWnd)
 	return ShowModal();
 }
 
+#ifdef DUILIB_WIN32
 void CUIDialog::ShowDialog(HWND hWndParent)
 {
 	Create(hWndParent, GetWindowClassName(), WS_POPUP|UI_WNDSTYLE_FRAME, WS_EX_WINDOWEDGE);
@@ -130,6 +134,7 @@ void CUIDialog::ShowDialog(HWND hWndParent)
 	_bModal = false;
 	return ShowWindow();
 }
+#endif
 
 void CUIDialog::ShowDialog(CUIFrmBase *pParentWnd)
 {
@@ -270,4 +275,3 @@ void CUIDialog::RegScriptNotify(LPCTSTR sNotifyType, LPCTSTR sFunName)
 }
 
 } // namespace DuiLib{
-#endif //#ifdef DUILIB_WIN32

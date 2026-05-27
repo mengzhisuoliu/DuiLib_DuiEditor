@@ -56,12 +56,7 @@ namespace DuiLib {
 		virtual bool OnMouseMove(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 		virtual bool OnMouseWheel(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 
-	private:
-		static void _init_sdl_defined();
 	public:
-		static CMacroToStringMap m_sdlEventString;
-		static std::map<UINT, WORD> m_keySdlToWin32;
-		static std::map<WORD, UINT> m_keyWin32ToSdl;
 	};
 } // namespace DuiLib
 

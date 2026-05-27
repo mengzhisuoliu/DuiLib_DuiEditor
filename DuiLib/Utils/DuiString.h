@@ -1023,6 +1023,7 @@ namespace DuiLib
 	public:
 		void Add(int i, LPCTSTR s);
 		CDuiString Lookup(int i);
+		UINT GetSize();
 	protected:
 		std::map<int, CDuiString> m_arrString;
 	};

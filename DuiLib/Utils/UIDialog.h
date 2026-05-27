@@ -1,6 +1,5 @@
 #pragma once
 
-#ifdef DUILIB_WIN32
 namespace DuiLib {
 
 #define TMD_ADD		1
@@ -18,7 +17,7 @@ public:
 	virtual LPCTSTR GetWindowClassName() const override;
 	virtual CDuiString GetSkinFile() override;
 
-	virtual void OnFinalMessage( HWND hWnd );
+	virtual void OnFinalMessage( UIWND hWnd );
 	virtual LRESULT ResponseDefaultKeyEvent(WPARAM wParam);
 
 	//设置响应回车键和ESC的默认处理方式
@@ -27,11 +26,15 @@ public:
 	virtual BOOL IsEscCloseCancel() const;
 
 	//显示模态对话窗口
+	#ifdef DUILIB_WIN32
 	virtual UINT DoModal(HWND hWndParent);
+	#endif
 	virtual UINT DoModal(CUIFrmBase *pParentWnd = NULL);
 
 	//显示非模态对话窗口, 注意非模态窗口必须是new出来的。
+	#ifdef DUILIB_WIN32
 	virtual void ShowDialog(HWND hWndParent);
+	#endif
 	virtual void ShowDialog(CUIFrmBase *pParentWnd = NULL);
 
 	virtual void Notify(TNotifyUI& msg);
@@ -67,4 +70,3 @@ private:
 };
 
 } //namespace DuiLib {
-#endif //#ifdef DUILIB_WIN32

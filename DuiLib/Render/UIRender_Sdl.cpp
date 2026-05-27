@@ -350,7 +350,48 @@ namespace DuiLib {
 
 	void UIRender_Sdl::DrawGradient(const RECT& rc, DWORD dwFirst, DWORD dwSecond, bool bVertical, int nSteps)
 	{
-		
+		// 将 ARGB 颜色转换为 SDL_FColor（浮点 0.0-1.0 范围）
+		SDL_FColor c1;
+		c1.r = GetBValue(dwFirst) / 255.0f;
+		c1.g = GetGValue(dwFirst) / 255.0f;
+		c1.b = GetRValue(dwFirst) / 255.0f;
+		c1.a = ((dwFirst >> 24) & 0xFF) / 255.0f;
+
+		SDL_FColor c2;
+		c2.r = GetBValue(dwSecond) / 255.0f;
+		c2.g = GetGValue(dwSecond) / 255.0f;
+		c2.b = GetRValue(dwSecond) / 255.0f;
+		c2.a = ((dwSecond >> 24) & 0xFF) / 255.0f;
+
+		// 定义四个顶点
+		SDL_Vertex vertices[4];
+		// 位置
+		vertices[0].position.x = (float)rc.left;
+		vertices[0].position.y = (float)rc.top;
+		vertices[1].position.x = (float)rc.right;
+		vertices[1].position.y = (float)rc.top;
+		vertices[2].position.x = (float)rc.right;
+		vertices[2].position.y = (float)rc.bottom;
+		vertices[3].position.x = (float)rc.left;
+		vertices[3].position.y = (float)rc.bottom;
+
+		// 颜色（根据渐变方向设置）
+		if (bVertical) {
+			vertices[0].color = c1;
+			vertices[1].color = c1;
+			vertices[2].color = c2;
+			vertices[3].color = c2;
+		}
+		else {
+			vertices[0].color = c1;
+			vertices[1].color = c2;
+			vertices[2].color = c2;
+			vertices[3].color = c1;
+		}
+
+		// 索引（两个三角形构成矩形）
+		int indices[6] = { 0, 1, 2, 0, 2, 3 };
+		SDL_RenderGeometry(m_pRenderer, NULL, vertices, 4, indices, 6);
 	}
 
 	void UIRender_Sdl::DrawLine(int x1, int y1, int x2, int y2, int nSize, DWORD dwPenColor,int nStyle)

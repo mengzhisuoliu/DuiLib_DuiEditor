@@ -9,6 +9,8 @@ namespace DuiLib {
 //
 //
 
+static SDL_Window* s_lastFocusWindow = nullptr;
+
 UINT CWindowSDL::m_EVENT_SEND_MESSAGE = 0;
 UINT CWindowSDL::m_EVENT_POST_MESSAGE = 0;
 
@@ -753,13 +755,29 @@ BOOL CWindowSDL::TranslateMessage(PVOID ev1, MSG* msg)
 	{
 		msg->message = WM_PAINT;
 	}
-	else if (ev.type == SDL_EVENT_WINDOW_FOCUS_LOST)
+	else if (ev.type == SDL_EVENT_WINDOW_FOCUS_LOST) //失去焦点
 	{
 		msg->message = WM_KILLFOCUS;
+
+		// 获取新获得焦点的窗口句柄 (SDL_Window*)
+		SDL_Window* focusedWin = SDL_GetKeyboardFocus();
+		UIWND hNewFocus = NULL;
+		if (focusedWin)
+		{
+			CWindowSDL::WindowInfo info;
+			if (CWindowSDL::FindWindowInfoByPtr((UINT_PTR)focusedWin, &info))
+				hNewFocus = (UIWND)info.sdlWindow;
+		}
+		msg->wParam = (WPARAM)hNewFocus;   // 等效于Win32, 将要获得焦点的窗口句柄
+		msg->lParam = 0;
 	}
 	else if (ev.type == SDL_EVENT_WINDOW_FOCUS_GAINED)
 	{
 		msg->message = WM_SETFOCUS;
+		msg->wParam = (WPARAM)s_lastFocusWindow;   // 等效于Win32, 正在失去焦点的窗口句柄
+		msg->lParam = 0;
+
+		s_lastFocusWindow = SDL_GetWindowFromID(ev.window.windowID);
 	}
 	else if (ev.type == SDL_EVENT_USER) //	SDL_UserEvent	user
 	{
@@ -769,23 +787,29 @@ BOOL CWindowSDL::TranslateMessage(PVOID ev1, MSG* msg)
 			msg->message = ev.user.code;
 			msg->wParam = MAKEWPARAM(pTimer->uWinTimer, 0);
 		}
-		else if (ev.user.code == WM_CLOSE)
+		else
 		{
 			msg->message = ev.user.code;
 			msg->wParam = (WPARAM)ev.user.data1;
+			msg->lParam = (WPARAM)ev.user.data2;
 		}
-		else if (ev.user.code == WM_DESTROY)
-		{
-			msg->message = ev.user.code;
-		}
-		else if (ev.user.code == WM_QUIT)
-		{
-			msg->message = ev.user.code;
-		}
-		else if (ev.user.code == WM_PAINT)
-		{
-			msg->message = ev.user.code;
-		}
+// 		else if (ev.user.code == WM_CLOSE)
+// 		{
+// 			msg->message = ev.user.code;
+// 			msg->wParam = (WPARAM)ev.user.data1;
+// 		}
+// 		else if (ev.user.code == WM_DESTROY)
+// 		{
+// 			msg->message = ev.user.code;
+// 		}
+// 		else if (ev.user.code == WM_QUIT)
+// 		{
+// 			msg->message = ev.user.code;
+// 		}
+// 		else if (ev.user.code == WM_PAINT)
+// 		{
+// 			msg->message = ev.user.code;
+// 		}
 	}
 
 	return TRUE;

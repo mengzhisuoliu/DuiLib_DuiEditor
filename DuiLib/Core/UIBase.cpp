@@ -364,6 +364,7 @@ LRESULT CWindowWnd::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 
 LRESULT CWindowWnd::OnMouseWheel(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
 {
+	SetHandleMessage(FALSE);
 	return 0;
 }
 
@@ -441,6 +442,36 @@ LRESULT CWindowWnd::OnRButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPara
 }
 
 LRESULT CWindowWnd::OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnPrint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	SetHandleMessage(FALSE);
 	return 0;

@@ -25,13 +25,15 @@ bool CMainFrame::OnCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 bool CMainFrame::OnMenuCommand(const MenuCmd *cmd)
 {
+	CString str;
+	str.Format(_T("Äãµã»÷ÁË²Ëµ¥: name=%s, text=%s"), cmd->szName, cmd->szText);
 	return false;
 }
 
-// bool CMainFrame::OnMenuUpdateCommandUI(CMenuCmdUI *cmdUI)
-// {
-// 	return false;
-// }
+bool CMainFrame::OnMenuUpdateCommandUI(CMenuCmdUI *cmdUI)
+{
+	return false;
+}
 
 void CMainFrame::OnNotifyClick(TNotifyUI& msg)
 {
@@ -74,5 +76,10 @@ void CMainFrame::OnNotifyClick(TNotifyUI& msg)
 		CDialogModal *dlg = new CDialogModal;
 		dlg->ShowDialog(this);
 		return;
+	}
+
+	if (IsControl(msg, _T("windowmenubtn")))
+	{
+		CreateMenu(_T("Menu.xml"));
 	}
 }

@@ -71,7 +71,7 @@ public:
 
 		if( !bHandled ) 
 		{
-			return CWindowWin32::HandleMessage(uMsg, wParam, lParam);
+			return ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
 		}
 		return lRes;
 	}

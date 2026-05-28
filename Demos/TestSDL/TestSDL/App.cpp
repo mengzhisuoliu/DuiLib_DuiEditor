@@ -18,6 +18,7 @@ bool CApp::InitInstance(int argc, LPSTR argv[])
 	if(!__super::InitInstance(argc, argv))
 		return false;
 
+	CPaintManagerUI::ImportFont(GetAppPath() + _T("consola.ttf"), _T("consola"));
 	CPaintManagerUI::ImportFont(GetAppPath() + _T("宋体.ttc"), _T("微软雅黑"));
 
 	//建立主窗口

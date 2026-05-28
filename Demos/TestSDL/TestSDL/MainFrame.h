@@ -13,7 +13,7 @@ public:
 	virtual void InitWindow();
 	virtual bool OnCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	virtual bool OnMenuCommand(const MenuCmd *cmd);
-//	virtual bool OnMenuUpdateCommandUI(CMenuCmdUI *cmdUI);
+	virtual bool OnMenuUpdateCommandUI(CMenuCmdUI *cmdUI);
 	virtual void OnNotifyClick(TNotifyUI& msg);
 };
 

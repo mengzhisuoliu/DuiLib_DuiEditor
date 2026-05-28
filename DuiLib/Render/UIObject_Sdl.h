@@ -28,7 +28,8 @@ namespace DuiLib {
 
 		virtual BOOL _buildFont(CPaintManagerUI *pManager=NULL) override;
 	protected:
-		TTF_Font *m_pTTF;
+		TTF_Font *m_pTTF; //主字体
+		std::vector<TTF_Font*> m_vSpareFonts; //备用字体
 	};
 
 	//////////////////////////////////////////////////////////////////////////

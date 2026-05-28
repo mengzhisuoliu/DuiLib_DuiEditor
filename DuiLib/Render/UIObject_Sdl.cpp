@@ -20,23 +20,21 @@ namespace DuiLib {
 	UIFont_SDL::~UIFont_SDL()
 	{
 		if (m_pTTF) { TTF_CloseFont(m_pTTF); m_pTTF = NULL; }
+		for (auto pFont : m_vSpareFonts) TTF_CloseFont(pFont);
+		m_vSpareFonts.clear();
 	}
 
 	void UIFont_SDL::DeleteObject()
 	{
 		if (m_pTTF) { TTF_CloseFont(m_pTTF); m_pTTF = NULL; }
+		for (auto pFont : m_vSpareFonts) TTF_CloseFont(pFont);
+		m_vSpareFonts.clear();
 	}
 
 	BOOL UIFont_SDL::CreateDefaultFont()
 	{
-		if (CPaintManagerUI::m_aFontFiles.GetSize() > 0)
-		{
-			tagFontFile* ttfFile = static_cast<tagFontFile*>(CPaintManagerUI::m_aFontFiles.GetAt(0));
-			CDuiStringUtf8 utf8 = ttfFile->sPathName;
-			m_pTTF = TTF_OpenFont(utf8.toString(), GetSize());
-			return m_pTTF != NULL;
-		}
-		return FALSE;
+		DeleteObject();
+		return _buildFont(NULL);
 	}
 
 	UINT_PTR UIFont_SDL::GetHandle()
@@ -73,19 +71,80 @@ namespace DuiLib {
 
 	BOOL UIFont_SDL::_buildFont(CPaintManagerUI *pManager)
 	{
-		for (int i = 0; i < CPaintManagerUI::m_aFontFiles.GetSize(); ++i)
+		int nFontCount = CPaintManagerUI::m_aFontFiles.GetSize();
+		if (nFontCount == 0)
+			return FALSE;
+
+		// DPI 相关计算
+		int dpi = 96;
+		float ptsize = iSize;
+		if (pManager)
+		{
+			dpi = pManager->GetDPIObj()->GetDPI();
+			int lfHeight = pManager->GetDPIObj()->ScaleInt(iSize);
+			ptsize = (lfHeight * 72.0f) / dpi;   // 像素转点，视觉大小与 Win32 兼容
+		}
+		else
+		{
+			//直接获取主显示器的DPI
+			SDL_DisplayID primaryDisplay = SDL_GetPrimaryDisplay();
+			if (primaryDisplay != 0) 
+			{
+				float scale = SDL_GetDisplayContentScale(primaryDisplay);
+				if (scale > 0.0f) 
+				{
+					dpi = static_cast<int>(96.0f * scale);
+					float lfHeight = iSize * scale;
+					ptsize = lfHeight * 72.0f / dpi;
+				}
+			}
+		}
+
+		// 查找与字体名称匹配的主字体索引
+		int mainFontIndex = -1;
+		for (int i = 0; i < nFontCount; ++i) 
 		{
 			tagFontFile* ttfFile = static_cast<tagFontFile*>(CPaintManagerUI::m_aFontFiles.GetAt(i));
-			if (ttfFile->sName == sFontName)
+			if (ttfFile && ttfFile->sName == sFontName) 
 			{
-				int dpi = pManager->GetDPIObj()->GetDPI();
-				int lfHeight = pManager ? pManager->GetDPIObj()->ScaleInt(iSize) : iSize;
-				float ptsize = (lfHeight * 72.0f) / dpi; // 像素转点, 为了视觉大小与WIN32兼容。
+				mainFontIndex = i;
+				break;
+			}
+		}
 
-				CDuiStringUtf8 utf8 = ttfFile->sPathName;
-				m_pTTF = TTF_OpenFont(utf8.toString(), ptsize);
-				TTF_SetFontSizeDPI(m_pTTF, ptsize, dpi, dpi);
-				return m_pTTF != NULL;
+		// 如果未匹配到，使用默认逻辑：第一个字体作为主字体（索引0）
+		if (mainFontIndex == -1) 
+		{
+			mainFontIndex = 0;
+		}
+
+		// 创建主字体
+		tagFontFile* mainTtf = static_cast<tagFontFile*>(CPaintManagerUI::m_aFontFiles.GetAt(mainFontIndex));
+		if (!mainTtf)
+			return FALSE;
+		CDuiStringUtf8 utf8Path(mainTtf->sPathName);
+		m_pTTF = TTF_OpenFont(utf8Path.toString(), ptsize);
+		if (!m_pTTF) return FALSE;   // 主字体创建失败则整体失败
+		TTF_SetFontSizeDPI(m_pTTF, ptsize, dpi, dpi);
+
+		// 创建备用字体（遍历所有字体，跳过主字体使用的那个文件）
+		for (int i = 0; i < nFontCount; ++i) {
+			if (i == mainFontIndex) continue;
+			tagFontFile* spareTtf = static_cast<tagFontFile*>(CPaintManagerUI::m_aFontFiles.GetAt(i));
+			if (!spareTtf) continue;
+
+			CDuiStringUtf8 utf8SparePath(spareTtf->sPathName);
+			TTF_Font* pSpareFont = TTF_OpenFont(utf8SparePath.toString(), ptsize);
+			if (pSpareFont) 
+			{
+				if (TTF_AddFallbackFont(m_pTTF, pSpareFont)) 
+				{
+					m_vSpareFonts.push_back(pSpareFont); // 存储，以备未来释放
+				}
+				else 
+				{
+					TTF_CloseFont(pSpareFont); // 失败立即释放
+				}
 			}
 		}
 		return TRUE;

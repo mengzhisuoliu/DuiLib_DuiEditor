@@ -547,7 +547,7 @@ namespace DuiLib {
 		{
 			Close();
 		}
-		SetHandleMessage(FALSE);
+		bHandled = FALSE;
 		return 0;
 	}
 
@@ -560,7 +560,7 @@ namespace DuiLib {
 			m_pOwner->SetFocus();
 		}
 
-		SetHandleMessage(FALSE);
+		bHandled = FALSE;
 		return 0;
 	}
 

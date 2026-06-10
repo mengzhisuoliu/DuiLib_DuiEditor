@@ -554,7 +554,7 @@ LRESULT CDateTimeWndSDL::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 		return 0;
 	}
 
-	SetHandleMessage(FALSE);
+	bHandled = FALSE;
 	return 0;
 }
 

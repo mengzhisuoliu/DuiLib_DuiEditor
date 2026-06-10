@@ -233,7 +233,7 @@ LRESULT CUIFrameWndBase::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lP
 		}
 	}
 
-	SetHandleMessage(FALSE);
+	bHandled = FALSE;
 	return 0;
 }
 

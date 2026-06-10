@@ -27,7 +27,7 @@ UIWND CUIFrameWndWin32::Create(UIWND hwndParent, LPCTSTR pstrName, DWORD dwStyle
 LRESULT CUIFrameWndWin32::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	LRESULT lRet = CUIFrameWndBase::HandleCustomMessage(uMsg, wParam, lParam, bHandled);
-	if(IsHandleMessage()) return lRet;
+	if(bHandled) return lRet;
 
 	if(uMsg == UIMSG_INSERT_MSG)
 	{
@@ -44,7 +44,7 @@ LRESULT CUIFrameWndWin32::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM l
 		return 1;
 	}
 
-	SetHandleMessage(FALSE);
+	bHandled = FALSE;
 	return 0;
 }
 
@@ -152,6 +152,24 @@ LRESULT CUIFrameWndWin32::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 		::DeleteObject(hRgn);
 	}
 #endif
+
+	if (wParam == SIZE_MAXIMIZED) 
+	{
+		// 窗口已最大化
+		CControlUI* pMaxBtn = GetManager()->FindControl(_T("windowmaxbtn"));
+		CControlUI* pRestoreBtn = GetManager()->FindControl(_T("windowrestorebtn"));
+		if (pMaxBtn) pMaxBtn->SetVisible(false);
+		if (pRestoreBtn) pRestoreBtn->SetVisible(true);
+	}
+	else if (wParam == SIZE_RESTORED) 
+	{
+		// 窗口已还原（包括从最小化恢复）
+		CControlUI* pMaxBtn = GetManager()->FindControl(_T("windowmaxbtn"));
+		CControlUI* pRestoreBtn = GetManager()->FindControl(_T("windowrestorebtn"));
+		if (pMaxBtn) pMaxBtn->SetVisible(true);
+		if (pRestoreBtn) pRestoreBtn->SetVisible(false);
+	}
+
 	bHandled = FALSE;
 	return 0;
 }
@@ -164,6 +182,11 @@ LRESULT CUIFrameWndWin32::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 		::SendMessage(GetHWND(), WM_CLOSE, 0, 0);
 		return 0;
 	}
+
+	/*
+	//这里会有BUG，当调用::CallWindowProc(....，
+	//会有别的消息进入HandleMessage，导致 bHandled被覆盖，导致消息无法投递给系统窗口过程。
+	//改为在OnSize中调整按钮状态
 	BOOL bZoomed = GetManager()->IsZoomed();
 	LRESULT lRes = ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
 #if defined(WIN32) && !defined(UNDER_CE)
@@ -185,6 +208,9 @@ LRESULT CUIFrameWndWin32::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 	}
 #endif
 	return lRes;
+	*/
+	bHandled = FALSE;
+	return 0;
 }
 
 LRESULT CUIFrameWndWin32::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)

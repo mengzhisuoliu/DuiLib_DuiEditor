@@ -204,7 +204,7 @@ namespace DuiLib {
 
 		LRESULT lRes = 0;
 		if( m_pm.MessageHandler(uMsg, wParam, lParam, lRes) ) return lRes;
-		return ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
+		return DefaultWndProc(uMsg, wParam, lParam);
 	}
 
 	void CComboWndWin32::EnsureVisible(int iIndex)

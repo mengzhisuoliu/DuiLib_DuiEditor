@@ -676,7 +676,6 @@ BOOL CWindowSDL::TranslateMessage(PVOID ev1, MSG* msg)
 		if (CWindowSDL::FindWindowInfo(ev.window.windowID, &info))
 		{
 			msg->message = WM_DPICHANGED;
-
 			float scale = SDL_GetWindowDisplayScale(info.sdlWindow);
 			int dpi = (int)(96.0f * scale + 0.5f);
 			msg->wParam = MAKEWPARAM(dpi, 0);

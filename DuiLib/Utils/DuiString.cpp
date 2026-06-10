@@ -1268,7 +1268,9 @@ namespace DuiLib
 		std::map<int, CDuiString>::iterator it = m_arrString.find(i);
 		if (it != m_arrString.end())
 			return it->second;
-		return _T("[Unknow]");
+		CDuiString str;
+		str.Format(_T("[Unknow] = %X", i));
+		return str;
 	}
 
 	UINT CMacroToStringMap::GetSize()

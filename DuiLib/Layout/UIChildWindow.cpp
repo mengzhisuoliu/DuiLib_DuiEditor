@@ -71,7 +71,7 @@ public:
 
 		if( !bHandled ) 
 		{
-			return ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
+			return DefaultWndProc(uMsg, wParam, lParam);
 		}
 		return lRes;
 	}

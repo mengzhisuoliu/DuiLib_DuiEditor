@@ -86,7 +86,7 @@ namespace DuiLib {
 			static_cast<CControlUI*>(m_pOwner->GetItemAt(i))->SetPos(rcNull);
 		}
 		m_pOwner->SetFocus();
-		SetHandleMessage(FALSE);
+		bHandled = FALSE;
 		return 0;
 	}
 
@@ -94,7 +94,7 @@ namespace DuiLib {
 	{
 		CDuiPoint pt(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		m_bHitItem = IsHitItem(pt);
-		SetHandleMessage(FALSE);
+		bHandled = FALSE;
 		return 0;
 	}
 

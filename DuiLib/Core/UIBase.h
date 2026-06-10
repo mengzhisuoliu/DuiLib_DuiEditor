@@ -82,8 +82,7 @@ namespace DuiLib {
 		virtual BOOL GetWindowRect(LPRECT lpRect) = 0;
 		virtual BOOL GetClientRect(LPRECT lpRect) = 0;
 
-		void SetHandleMessage(BOOL bHandled);
-		BOOL IsHandleMessage();
+		virtual LRESULT DefaultWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam) { return 0; }
 
 		virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 		virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -117,7 +116,6 @@ namespace DuiLib {
 	public:
 		UIWND m_hWnd;
 		DuiLibPaintManagerUI m_pm;
-		BOOL m_bHandleMessage;
 	public:
 		static void _init_wm_defined();
 		static CMacroToStringMap m_wmEventString;

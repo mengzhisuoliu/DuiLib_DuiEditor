@@ -394,14 +394,9 @@ void CWindowWin32::ResizeClient(int cx /*= -1*/, int cy /*= -1*/)
     ::SetWindowPos(m_hWnd, NULL, 0, 0, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
 }
 
-// 子类重写HandleMessage时，
-// 不可继续调用 CWindowWin32::HandleMessage，
-// 应该调用 ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
-LRESULT CWindowWin32::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CWindowWin32::DefaultWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	LRESULT lRet = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
-	if(IsHandleMessage()) return lRet;
-    return ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
+	return ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
 }
 
 } // namespace DuiLib

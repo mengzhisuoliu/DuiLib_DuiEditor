@@ -223,7 +223,7 @@ namespace DuiLib
 		}
 		else bHandled = FALSE;
 
-		if( !bHandled ) return ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
+		if( !bHandled ) return DefaultWndProc(uMsg, wParam, lParam);
 		return lRes;
 	}
 

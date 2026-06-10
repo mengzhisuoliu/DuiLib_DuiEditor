@@ -47,7 +47,7 @@ namespace DuiLib {
 		virtual LPCTSTR GetSuperClassName() const;
 		virtual UINT GetClassStyle() const;
 
-		virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) override;
+		virtual LRESULT DefaultWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam) override;
 
 		static LRESULT CALLBACK __WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 		static LRESULT CALLBACK __ControlProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);

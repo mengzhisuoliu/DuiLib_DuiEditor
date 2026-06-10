@@ -910,7 +910,8 @@ static NSVGgradient* nsvg__createGradient(NSVGparser* p, const char* id, const f
 	nsvg__xformMultiply(grad->xform, xform);
 
 	grad->spread = data->spread;
-	memcpy(grad->stops, stops, nstops*sizeof(NSVGgradientStop));
+	if (nstops > 0)
+		memcpy(grad->stops, stops, nstops*sizeof(NSVGgradientStop));
 	grad->nstops = nstops;
 
 	*paintType = data->type;

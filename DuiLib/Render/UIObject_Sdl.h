@@ -39,7 +39,7 @@ namespace DuiLib {
 	public:
 		UIPen_SDL();
 		virtual void DeleteObject() override;
-		virtual BOOL CreatePen(int nStyle, int nWidth, DWORD dwColor) override;
+		virtual BOOL CreatePen(int nStyle, int nWidth, CDuiColor dwColor) override;
 	protected:
 		virtual ~UIPen_SDL();
 	private:
@@ -53,7 +53,7 @@ namespace DuiLib {
 		UIBitmap_SDL();
 		const emUIOBJTYPE ObjectType() const override {  return OT_BITMAP_SDL;  }
 		virtual void DeleteObject() override;
-		virtual BOOL CreateFromData(LPBYTE pImage, int width, int height, DWORD mask) override;
+		virtual BOOL CreateFromData(LPBYTE pImage, int width, int height, CDuiColor mask) override;
 
 		virtual UINT_PTR  GetHandle()	override;
 		virtual BYTE* GetBits() override;
@@ -64,7 +64,7 @@ namespace DuiLib {
 		virtual UIBitmap *Clone() override;
 
 		virtual void Clear() override;
-		virtual void ClearAlpha(const RECT &rc, int alpha = 0) override;
+		virtual void ClearAlpha(const CDuiRect &rc, int alpha = 0) override;
 
 		virtual BOOL SaveFile(LPCTSTR pstrFileName) override;
 
@@ -108,7 +108,7 @@ namespace DuiLib {
 		UIBrush_SDL();
 
 		virtual void DeleteObject() override;
-		virtual BOOL CreateSolidBrush(DWORD clr) override;
+		virtual BOOL CreateSolidBrush(CDuiColor clr) override;
 		virtual BOOL CreateBitmapBrush(UIBitmap *bitmap) override;
 
 	protected:

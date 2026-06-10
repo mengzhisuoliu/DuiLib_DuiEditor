@@ -41,7 +41,6 @@ namespace DuiLib
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
-//#ifdef DUILIB_GTK
 #ifndef WIN32
 	typedef struct tagPOINT
 	{
@@ -81,13 +80,47 @@ namespace DuiLib
 	public:
 		CDuiPoint();
 		CDuiPoint(const POINT& src);
+		CDuiPoint(const SIZE& src);
 		CDuiPoint(int x, int y);
 		CDuiPoint(LPARAM lParam);
 		CDuiPoint(LPCTSTR pstrValue);
+
 		bool FromString(LPCTSTR pstrValue); //从"x,y"构造POINT
 		CDuiString ToString();				//输出字符串"x,y"
 
+		// 类型转换
+		operator LPSIZE() const;                  // 转换为 SIZE*（实际指向自身，但注意 SIZE 布局与 POINT 相同）
+		operator SIZE() const;                    // 转换为 SIZE（返回 {x,y}）
 		operator PPOINT() throw();
+
+		// 赋值运算符
+		CDuiPoint& operator=(const POINT& src);
+		CDuiPoint& operator=(const SIZE& src);
+
+		// 比较运算符
+		bool operator==(const POINT& src) const;
+		bool operator!=(const POINT& src) const;
+		bool operator==(const SIZE& src) const;
+		bool operator!=(const SIZE& src) const;
+
+		// 算术运算符（与 POINT/SIZE）
+		CDuiPoint operator+(const POINT& src) const;
+		CDuiPoint operator-(const POINT& src) const;
+		CDuiPoint operator+(const SIZE& src) const;
+		CDuiPoint operator-(const SIZE& src) const;
+
+		// 复合赋值运算符
+		CDuiPoint& operator+=(const POINT& src);
+		CDuiPoint& operator-=(const POINT& src);
+		CDuiPoint& operator+=(const SIZE& src);
+		CDuiPoint& operator-=(const SIZE& src);
+
+		// 坐标操作
+		void SetPoint(int x, int y);
+		void Offset(int dx, int dy);
+		void Offset(const POINT& delta);
+		void Offset(const SIZE& delta);
+		bool IsEmpty() const;                     // x==0 && y==0
 	};
 
 
@@ -100,16 +133,64 @@ namespace DuiLib
 		CDuiSize();
 		CDuiSize(const SIZE& src);
 		CDuiSize(const RECT& rc);
+		CDuiSize(const POINT& pt);
 		CDuiSize(int cx, int cy);
 		CDuiSize(LPCTSTR pstrValue);
+
 		bool FromString(LPCTSTR pstrValue); //从"cx,cy"构造SIZE
 		CDuiString ToString();				//输出字符串"cx,cy"
+
+		void SetSize(int cx, int cy);
+		void SetSize(const SIZE& src);
+
+		// 类型转换
+		operator LPSIZE() throw();
+		operator POINT() const;
+		operator RECT() const;
+
+		// 赋值运算符
+		CDuiSize& operator=(const SIZE& src);
+
+		// 比较运算符
+		bool operator==(const SIZE& src) const;
+		bool operator!=(const SIZE& src) const;
+
+		bool operator==(const POINT& src) const;
+		bool operator!=(const POINT& src) const;
+
+		bool operator==(const RECT& src) const;
+		bool operator!=(const RECT& src) const;
+
+		// 算术运算符（二元）
+		CDuiSize operator+(const SIZE& src) const;
+		CDuiSize operator-(const SIZE& src) const;
+
+		CDuiSize operator+(const POINT& src) const;
+		CDuiSize operator-(const POINT& src) const;
+
+		CDuiSize operator+(const RECT& src) const;
+		CDuiSize operator-(const RECT& src) const;
+
+		// 复合赋值运算符
+		CDuiSize& operator+=(const SIZE& src);
+		CDuiSize& operator-=(const SIZE& src);
+
+		CDuiSize& operator+=(const POINT& src);
+		CDuiSize& operator-=(const POINT& src);
+
+		CDuiSize& operator+=(const RECT& src);
+		CDuiSize& operator-=(const RECT& src);
 
 		//放大
 		void Inflate(int x, int y);
 
 		//缩小
 		void Deflate(int x, int y);
+
+	#ifdef DUILIB_SDL
+		CDuiSize(const SDL_Rect& rc);               // 从 SDL_Rect 构造
+		CDuiSize& operator=(const SDL_Rect& rc);   // 赋值
+	#endif
 	};
 
 
@@ -125,12 +206,19 @@ namespace DuiLib
 		CDuiRect(int iLeft, int iTop, int iRight, int iBottom);
 		CDuiRect(const POINT &ptLeftTop, const SIZE &szWidthHeight);
 		CDuiRect(const POINT &ptLeftTop, const POINT &ptRightBottom);
+		CDuiRect(const SIZE& src);
 		CDuiRect(LPCTSTR pstrValue);
+
 		bool FromString(LPCTSTR pstrValue); //从"left,top,right,bottom"构造RECT
 		CDuiString ToString();				//输出字符串"left,top,right,bottom"
 
 		operator LPRECT() throw();
 		operator LPCRECT() const throw();
+		operator SIZE() const throw();
+
+		CDuiRect& operator=(const RECT& src);
+		CDuiRect& operator=(const SIZE& src);
+		CDuiRect& operator=(LPCTSTR pstrValue);
 
 		CDuiPoint LeftTop();
 		CDuiPoint RightBottom();
@@ -188,8 +276,105 @@ namespace DuiLib
 
 		//设置边距，获得除去边距后的区域
 		void SetPadding(const RECT& rc);
+		void SetInset(const RECT& rc);
+
+	#ifdef DUILIB_SDL
+		CDuiRect(const SDL_Rect& rc);               // 从 SDL_Rect 构造
+		SDL_Rect ToSDL_Rect() const;               // 转换为 SDL_Rect
+		operator SDL_Rect() const;                 // 隐式转换
+		CDuiRect& operator=(const SDL_Rect& rc);   // 赋值
+
+		CDuiRect(const SDL_FRect& rc);             // 从 SDL_FRect 构造
+		SDL_FRect ToSDL_FRect() const;             // 转换为 SDL_FRect
+		operator SDL_FRect() const;                // 隐式转换
+		CDuiRect& operator=(const SDL_FRect& rc);  // 赋值
+	#endif
 	};
 
+	// 兼容保留，不再使用
+	#define UIARGB(a,r,g,b)  ((COLORREF)((((BYTE)(b)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(r))<<16))  |(((DWORD)(BYTE)(a))<<24))  )
+	#define UIARGB_GetAValue(argb)      (LOBYTE((argb)>>24))
+	#define UIARGB_GetRValue(argb)      (LOBYTE((argb)>>16))
+	#define UIARGB_GetGValue(argb)      (LOBYTE(((WORD)(argb)) >> 8))
+	#define UIARGB_GetBValue(argb)      (LOBYTE(argb))
+	#define UIRGB(r,g,b)	((COLORREF)((((BYTE)(b)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(r))<<16))  |(((DWORD)(BYTE)(255))<<24))  )
+	#define UIARGB_2_RGB(argb)	(RGB(UIARGB_GetRValue(argb), UIARGB_GetGValue(argb), UIARGB_GetBValue(argb)))
+	#define RGB_2_UIRGB(rgb)	(UIRGB(GetRValue(rgb), GetGValue(rgb), GetBValue(rgb)))
+	//////////////////////////////////////////////////////////////////////////
+	// 
+	class UILIB_API CDuiColor
+	{
+	public:
+		CDuiColor();                                          // 默认透明（0x00000000）
+		CDuiColor(DWORD dwColor);                             // 直接使用 ARGB 值
+		CDuiColor(BYTE r, BYTE g, BYTE b);                    // 不透明 RGB，A = 255
+		CDuiColor(BYTE a, BYTE r, BYTE g, BYTE b);            // 完整 ARGB
+		CDuiColor(LPCTSTR pstrValue);                         // 从字符串解析
+		CDuiColor(int n);										// 直接使用 ARGB 值
+		CDuiColor(UINT n);										// 直接使用 ARGB 值
+
+		// 从字符串解析，支持格式：
+		// "0xAARRGGBB"  (例如 "0xFFFF0000" 表示红色)
+		// "#AARRGGBB"   (例如 "#FFFF0000")
+		// "a,r,g,b"     (例如 "255,255,0,0")
+		// "r,g,b"       (例如 "255,0,0"  此时 alpha 自动设为 255)
+		bool FromString(LPCTSTR pstrValue);
+
+		//输出字符串, 如："0xFF000000"
+		CDuiString ToString();				
+
+		void FromCOLORREF(COLORREF clr);
+		COLORREF ToCOLORREF();
+
+		// 获取各通道
+		BYTE GetA() const;
+		BYTE GetR() const;
+		BYTE GetG() const;
+		BYTE GetB() const;
+
+		// 设置各通道
+		void SetA(BYTE a);
+		void SetR(BYTE r);
+		void SetG(BYTE g);
+		void SetB(BYTE b);
+
+		// 直接获取/设置
+		DWORD GetColor() const;
+		void SetColor(DWORD dwColor);
+
+		// 类型转换
+		operator DWORD() const;
+
+		// 运算符重载
+		bool operator==(const CDuiColor& other) const;
+		bool operator!=(const CDuiColor& other) const;
+		bool operator==(int other) const;
+		bool operator!=(int other) const;
+		bool operator==(UINT other) const;
+		bool operator!=(UINT other) const;
+
+		// 赋值运算符重载
+		CDuiColor& operator=(DWORD dwColor);
+		CDuiColor& operator=(LPCTSTR pstrValue);
+		CDuiColor& operator=(int n); 
+		CDuiColor& operator=(unsigned int n);
+
+	#ifdef DUILIB_SDL
+		CDuiColor(const SDL_Color& color);                    // 从 SDL_Color 构造
+		SDL_Color ToSDL_Color();
+		operator SDL_Color() const;
+		CDuiColor& operator=(const SDL_Color& color);
+	#endif
+
+		// 静态预定义颜色
+		static CDuiColor Black;   // 0xFF000000
+		static CDuiColor White;   // 0xFFFFFFFF
+		static CDuiColor Red;     // 0xFFFF0000
+		static CDuiColor Green;   // 0xFF00FF00
+		static CDuiColor Blue;    // 0xFF0000FF
+	private:
+		DWORD m_dwColor;
+	};
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
 
@@ -283,7 +468,7 @@ namespace DuiLib
 		virtual ~TObjRefImpl() {}
 
 		//添加引用
-		virtual _REF_NUMBER AddRef()
+		virtual _REF_NUMBER AddRef() override
 		{
 #ifdef WIN32
 			return ::InterlockedIncrement(&m_cRef);
@@ -293,7 +478,7 @@ namespace DuiLib
 		}
 
 		//!释放引用
-		virtual _REF_NUMBER Release()
+		virtual _REF_NUMBER Release() override
 		{
 #ifdef WIN32
 			long lRet = ::InterlockedDecrement(&m_cRef);
@@ -308,7 +493,7 @@ namespace DuiLib
 		}
 
 		//!释放对象
-		virtual void OnFinalRelease()
+		virtual void OnFinalRelease() override
 		{
 			delete this;
 		}

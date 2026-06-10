@@ -7,16 +7,6 @@ namespace DuiLib {
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
 	//
-	static SDL_Color GetSDLColor(DWORD color)
-	{
-		SDL_Color c;
-		c.b = GetRValue(color);
-		c.g = GetGValue(color);
-		c.r = GetBValue(color);
-		c.a = (color >> 24) & 0xFF;
-		return c;
-	}
-
 	UIRender_Sdl::UIRender_Sdl()
 	{
 		m_pManager	= NULL;
@@ -69,7 +59,7 @@ namespace DuiLib {
 			m_bWindowRender = false;
 
 			m_curBmp = MakeRefPtr<UIBitmap>(UIGlobal::CreateBitmap());
-			m_curBmp->CreateFromData(NULL, 1, 1, 0);
+			m_curBmp->CreateFromData(NULL, 1, 1, CDuiColor());
 
 			//无窗口渲染
 			SDL_PropertiesID props = SDL_CreateProperties();
@@ -105,7 +95,7 @@ namespace DuiLib {
 
 	void UIRender_Sdl::BeginPaint()
 	{
-		DUITRACE(_T("BeginPaint: %s"), m_rcInvalidate.ToString());
+		//DUITRACE(_T("BeginPaint: %s"), m_rcInvalidate.ToString());
 
 		if(m_bWindowRender)
 			SDL_SetRenderTarget(m_pRenderer, m_pTexture);
@@ -113,8 +103,7 @@ namespace DuiLib {
 		if (!m_rcInvalidate.IsEmpty())
 		{
 			//ClearAlpha(m_rcInvalidate);
-			SDL_Rect clipRect = { m_rcInvalidate.left, m_rcInvalidate.top,
-								m_rcInvalidate.right, m_rcInvalidate.bottom };
+			SDL_Rect clipRect = m_rcInvalidate.ToSDL_Rect();
 			SDL_SetRenderClipRect(m_pRenderer, &clipRect);
 		}
 		else
@@ -125,7 +114,7 @@ namespace DuiLib {
 
 	void UIRender_Sdl::EndPaint()
 	{
-		DUITRACE(_T("EndPaint"));
+		//DUITRACE(_T("EndPaint"));
 		if (!m_pRenderer) return;
 
 		if (m_bWindowRender)
@@ -161,7 +150,7 @@ namespace DuiLib {
 			//无窗口模式，需要重新创建render
 			DestroyRender();
 			m_curBmp = MakeRefPtr<UIBitmap>(UIGlobal::CreateBitmap());
-			m_curBmp->CreateFromData(NULL, width, height, 0);
+			m_curBmp->CreateFromData(NULL, width, height, CDuiColor());
 			SDL_PropertiesID props = SDL_CreateProperties();
 			if (props == 0) return false;
 			SDL_SetPointerProperty(props, SDL_PROP_RENDERER_CREATE_SURFACE_POINTER, (SDL_Surface*)m_curBmp->GetHandle());
@@ -172,7 +161,7 @@ namespace DuiLib {
 		return true;
 	}
 
-	bool UIRender_Sdl::Resize(const RECT &rc)
+	bool UIRender_Sdl::Resize(const CDuiRect &rc)
 	{
 		return Resize(rc.right - rc.left, rc.bottom - rc.top);
 	}
@@ -202,14 +191,14 @@ namespace DuiLib {
 		SDL_RenderClear(m_pRenderer);
 	}
 
-	void UIRender_Sdl::ClearAlpha(const RECT &rc, int alpha)
+	void UIRender_Sdl::ClearAlpha(const CDuiRect &rc, int alpha)
 	{
 		SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, alpha);
 		SDL_FRect rect = { (float)rc.left, (float)rc.top, (float)(rc.right - rc.left), (float)(rc.bottom - rc.top) };
 		SDL_RenderFillRect(m_pRenderer, &rect);
 	}
 
-	void UIRender_Sdl::InvalidRect(const RECT* lpRect)
+	void UIRender_Sdl::InvalidRect(const CDuiRect* lpRect)
 	{
 		if (!lpRect)
 		{
@@ -220,7 +209,7 @@ namespace DuiLib {
 			m_rcInvalidate = *lpRect;
 		else
 			m_rcInvalidate.Join(*lpRect);
-		DUITRACE(_T("InvalidRect: %s"), m_rcInvalidate.ToString());
+		//DUITRACE(_T("InvalidRect: %s"), m_rcInvalidate.ToString());
 	}
 
 	CDuiRect UIRender_Sdl::GetInvalidRect()
@@ -228,13 +217,13 @@ namespace DuiLib {
 		return m_rcInvalidate;
 	}
 
-	DWORD UIRender_Sdl::SetPixel(int x, int y, DWORD dwColor)
+	CDuiColor UIRender_Sdl::SetPixel(int x, int y, CDuiColor dwColor)
 	{
 		// 简单实现
 		Uint8 r = GetRValue(dwColor), g = GetGValue(dwColor), b = GetBValue(dwColor), a = (dwColor >> 24) & 0xFF;
 		SDL_SetRenderDrawColor(m_pRenderer, r, g, b, a);
 		SDL_RenderPoint(m_pRenderer, x, y);
-		return 0;
+		return dwColor;
 	}
 
 	BOOL UIRender_Sdl::BitBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, DWORD dwRop)
@@ -328,7 +317,7 @@ namespace DuiLib {
 		SDL_RenderTexture(m_pRenderer, texture, &srcRect, &dstRect);
 	}
 
-	void UIRender_Sdl::DrawColor(const RECT& rc, const SIZE &round, DWORD dwColor)
+	void UIRender_Sdl::DrawColor(const CDuiRect& rc, const CDuiSize &round, CDuiColor dwColor)
 	{
 		if (dwColor <= 0x00FFFFFF) return;
 
@@ -348,7 +337,7 @@ namespace DuiLib {
 		const char *pErr = SDL_GetError();
 	}
 
-	void UIRender_Sdl::DrawGradient(const RECT& rc, DWORD dwFirst, DWORD dwSecond, bool bVertical, int nSteps)
+	void UIRender_Sdl::DrawGradient(const CDuiRect& rc, CDuiColor dwFirst, CDuiColor dwSecond, bool bVertical, int nSteps)
 	{
 		// 将 ARGB 颜色转换为 SDL_FColor（浮点 0.0-1.0 范围）
 		SDL_FColor c1;
@@ -394,60 +383,62 @@ namespace DuiLib {
 		SDL_RenderGeometry(m_pRenderer, NULL, vertices, 4, indices, 6);
 	}
 
-	void UIRender_Sdl::DrawLine(int x1, int y1, int x2, int y2, int nSize, DWORD dwPenColor,int nStyle)
+	void UIRender_Sdl::DrawLine(int x1, int y1, int x2, int y2, int nSize, CDuiColor dwPenColor,int nStyle)
 	{
-		SDL_Color color = GetSDLColor(dwPenColor);
-		SDL_SetRenderDrawColor(m_pRenderer, color.r, color.g, color.b, color.a);
-		thickLineRGBA(m_pRenderer, x1, y1, x2, y2, nSize, color.r, color.g, color.b, color.a);
+		CDuiColor clr(dwPenColor);
+		SDL_SetRenderDrawColor(m_pRenderer, clr.GetR(), clr.GetG(), clr.GetB(), clr.GetA());
+		thickLineRGBA(m_pRenderer, x1, y1, x2, y2, nSize, clr.GetR(), clr.GetG(), clr.GetB(), clr.GetA());
 	}
 
-	void UIRender_Sdl::DrawRect(const RECT& rc, int nSize, DWORD dwPenColor,int nStyle /*= PS_SOLID*/)
+	void UIRender_Sdl::DrawRect(const CDuiRect& rc, int nSize, CDuiColor dwPenColor,int nStyle /*= PS_SOLID*/)
 	{
 		if (nSize <= 0) return;
-		SDL_Color color = GetSDLColor(dwPenColor);
+		CDuiColor clr(dwPenColor);
 		int x = rc.left, y = rc.top, w = rc.right - rc.left, h = rc.bottom - rc.top;
 		// 使用 rectangleRGBA 绘制矩形边框，线宽通过循环 offset 实现
-		for (int i = 0; i < nSize; ++i) {
-			rectangleRGBA(m_pRenderer, x + i, y + i, x + w - i, y + h - i, color.r, color.g, color.b, color.a);
+		for (int i = 0; i < nSize; ++i) 
+		{
+			rectangleRGBA(m_pRenderer, x + i, y + i, x + w - i, y + h - i, clr.GetR(), clr.GetG(), clr.GetB(), clr.GetA());
 		}
 	}
 
-	void UIRender_Sdl::DrawRoundRect(const RECT& rc, int nSize, const SIZE& round, DWORD dwPenColor, int nStyle /*= PS_SOLID*/)
+	void UIRender_Sdl::DrawRoundRect(const CDuiRect& rc, int nSize, const CDuiSize& round, CDuiColor dwPenColor, int nStyle /*= PS_SOLID*/)
 	{
 		if (nSize <= 0) return;
-		SDL_Color color = GetSDLColor(dwPenColor);
+		CDuiColor clr(dwPenColor);
 		int x = rc.left, y = rc.top, w = rc.right - rc.left, h = rc.bottom - rc.top;
 		int rx = round.cx, ry = round.cy;
 		for (int i = 0; i < nSize; ++i) {
-			roundedRectangleRGBA(m_pRenderer, x + i, y + i, x + w - i, y + h - i, rx - i, color.r, color.g, color.b, color.a);
+			roundedRectangleRGBA(m_pRenderer, x + i, y + i, x + w - i, y + h - i, rx - i, 
+				clr.GetR(), clr.GetG(), clr.GetB(), clr.GetA());
 		}
 	}
 
-	void UIRender_Sdl::DrawEllipse(const RECT& rc, int nSize, DWORD dwPenColor, int nStyle)
+	void UIRender_Sdl::DrawEllipse(const CDuiRect& rc, int nSize, CDuiColor dwPenColor, int nStyle)
 	{
 		if (nSize <= 0) return;
-		SDL_Color color = GetSDLColor(dwPenColor);
+		CDuiColor clr(dwPenColor);
 		int cx = (rc.left + rc.right) / 2;
 		int cy = (rc.top + rc.bottom) / 2;
 		int rx = (rc.right - rc.left) / 2;
 		int ry = (rc.bottom - rc.top) / 2;
 		for (int i = 0; i < nSize; ++i) 
 		{
-			ellipseRGBA(m_pRenderer, cx, cy, rx - i, ry - i, color.r, color.g, color.b, color.a);
+			ellipseRGBA(m_pRenderer, cx, cy, rx - i, ry - i, clr.GetR(), clr.GetG(), clr.GetB(), clr.GetA());
 		}
 	}
 
-	void UIRender_Sdl::FillEllipse(const RECT& rc, DWORD dwColor)
+	void UIRender_Sdl::FillEllipse(const CDuiRect& rc, CDuiColor dwColor)
 	{
-		SDL_Color color = GetSDLColor(dwColor);
+		CDuiColor clr(dwColor);
 		int cx = (rc.left + rc.right) / 2;
 		int cy = (rc.top + rc.bottom) / 2;
 		int rx = (rc.right - rc.left) / 2;
 		int ry = (rc.bottom - rc.top) / 2;
-		filledEllipseRGBA(m_pRenderer, cx, cy, rx, ry, color.r, color.g, color.b, color.a);
+		filledEllipseRGBA(m_pRenderer, cx, cy, rx, ry, clr.GetR(), clr.GetG(), clr.GetB(), clr.GetA());
 	}
 
-	void UIRender_Sdl::DrawText(RECT& rc, LPCTSTR pstrText, DWORD dwColor, int iFont, UINT uStyle)
+	void UIRender_Sdl::DrawText(CDuiRect& rc, LPCTSTR pstrText, CDuiColor dwColor, int iFont, UINT uStyle)
 	{
 		CDuiStringUtf8 utf8Text(pstrText);
 
@@ -458,10 +449,33 @@ namespace DuiLib {
 
 		if (uStyle & DT_CALCRECT)
 		{
+			CDuiRect rcTemp = rc;
+
 			int w = 0, h = 0;
 			TTF_GetStringSize(ttfFont, utf8Text.toString(), utf8Text.GetLength(), &w, &h);
 			rc.right = rc.left + w;
 			rc.bottom = rc.top + h;
+
+			if (uStyle & DT_CENTER)
+			{
+				rc.left = rcTemp.left + (rcTemp.GetWidth() - w) / 2;
+				rc.right = rc.left + w;
+			}
+			else if (uStyle & DT_RIGHT)
+			{
+				rc.left = rcTemp.right - (rcTemp.GetWidth() + w);
+				rc.right = rcTemp.right;
+			}
+			if (uStyle & DT_VCENTER)
+			{
+				rc.top = rcTemp.top + (rcTemp.GetHeight() - h) / 2;
+				rc.bottom = rc.top + h;
+			}
+			else if (uStyle & DT_BOTTOM)
+			{
+				rc.top = rcTemp.bottom - (rcTemp.GetWidth() + h);
+				rc.bottom = rcTemp.bottom;
+			}
 			return;
 		}
 
@@ -469,8 +483,8 @@ namespace DuiLib {
 		TTF_Text* ttfText = TTF_CreateText(m_ttfEngine, ttfFont, utf8Text.toString(), utf8Text.GetLength());
 
 		// 设置颜色
-		SDL_Color color = GetSDLColor(dwColor);
-		TTF_SetTextColor(ttfText, color.r, color.g, color.b, color.a);
+		CDuiColor clr(dwColor);
+		TTF_SetTextColor(ttfText, clr.GetR(), clr.GetG(), clr.GetB(), clr.GetA());
 
 		// 对齐方式
 		int x = rc.left;
@@ -509,19 +523,19 @@ namespace DuiLib {
 		return new UIPath_SDL();
 	}
 
-	BOOL UIRender_Sdl::DrawPath(const UIPath* path, int nSize, DWORD dwColor)
+	BOOL UIRender_Sdl::DrawPath(const UIPath* path, int nSize, CDuiColor dwColor)
 	{
 		return FALSE;
 	}
 
-	BOOL UIRender_Sdl::FillPath(const UIPath* path, const DWORD dwColor)
+	BOOL UIRender_Sdl::FillPath(const UIPath* path, const CDuiColor dwColor)
 	{
 		return FALSE;
 	}
 
-	SIZE UIRender_Sdl::GetTextSize(LPCTSTR pstrText, int iFont, UINT uStyle )
+	CDuiSize UIRender_Sdl::GetTextSize(LPCTSTR pstrText, int iFont, UINT uStyle )
 	{	
-		SIZE sz = { 0 };
+		CDuiSize sz;
 		if (!m_pManager) return sz;
 		TTF_Font* ttfFont = (TTF_Font*)GetManager()->GetFont(iFont)->GetHandle();
 		if (!ttfFont) return sz;

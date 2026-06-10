@@ -18,6 +18,12 @@ namespace DuiLib
 		y = src.y;
 	}
 
+	CDuiPoint::CDuiPoint(const SIZE& src)
+	{
+		x = src.cx;
+		y = src.cy;
+	}
+
 	CDuiPoint::CDuiPoint(int _x, int _y)
 	{
 		x = _x;
@@ -52,9 +58,129 @@ namespace DuiLib
 		return sPoint;
 	}
 
+	CDuiPoint::operator LPSIZE() const
+	{
+		return (LPSIZE)this;   // POINT 和 SIZE 内存布局相同（两个 int）
+	}
+
+	CDuiPoint::operator SIZE() const
+	{
+		SIZE sz = { x, y };
+		return sz;
+	}
+
 	CDuiPoint::operator PPOINT() throw()
 	{
 		return this;
+	}
+
+	CDuiPoint& CDuiPoint::operator=(const POINT& src)
+	{
+		x = src.x;
+		y = src.y;
+		return *this;
+	}
+
+	CDuiPoint& CDuiPoint::operator=(const SIZE& src)
+	{
+		x = src.cx;
+		y = src.cy;
+		return *this;
+	}
+
+	bool CDuiPoint::operator==(const POINT& src) const
+	{
+		return x == src.x && y == src.y;
+	}
+
+	bool CDuiPoint::operator!=(const POINT& src) const
+	{
+		return !(*this == src);
+	}
+
+	bool CDuiPoint::operator==(const SIZE& src) const
+	{
+		return x == src.cx && y == src.cy;
+	}
+
+	bool CDuiPoint::operator!=(const SIZE& src) const
+	{
+		return !(*this == src);
+	}
+
+	CDuiPoint CDuiPoint::operator+(const POINT& src) const
+	{
+		return CDuiPoint(x + src.x, y + src.y);
+	}
+
+	CDuiPoint CDuiPoint::operator-(const POINT& src) const
+	{
+		return CDuiPoint(x - src.x, y - src.y);
+	}
+
+	CDuiPoint CDuiPoint::operator+(const SIZE& src) const
+	{
+		return CDuiPoint(x + src.cx, y + src.cy);
+	}
+
+	CDuiPoint CDuiPoint::operator-(const SIZE& src) const
+	{
+		return CDuiPoint(x - src.cx, y - src.cy);
+	}
+
+	CDuiPoint& CDuiPoint::operator+=(const POINT& src)
+	{
+		x += src.x;
+		y += src.y;
+		return *this;
+	}
+
+	CDuiPoint& CDuiPoint::operator-=(const POINT& src)
+	{
+		x -= src.x;
+		y -= src.y;
+		return *this;
+	}
+
+	CDuiPoint& CDuiPoint::operator+=(const SIZE& src)
+	{
+		x += src.cx;
+		y += src.cy;
+		return *this;
+	}
+
+	CDuiPoint& CDuiPoint::operator-=(const SIZE& src)
+	{
+		x -= src.cx;
+		y -= src.cy;
+		return *this;
+	}
+
+	void CDuiPoint::SetPoint(int _x, int _y)
+	{
+		x = _x;
+		y = _y;
+	}
+
+	void CDuiPoint::Offset(int dx, int dy)
+	{
+		x += dx;
+		y += dy;
+	}
+
+	void CDuiPoint::Offset(const POINT& delta)
+	{
+		Offset(delta.x, delta.y);
+	}
+
+	void CDuiPoint::Offset(const SIZE& delta)
+	{
+		Offset(delta.cx, delta.cy);
+	}
+
+	bool CDuiPoint::IsEmpty() const
+	{
+		return x == 0 && y == 0;
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -76,6 +202,12 @@ namespace DuiLib
 	{
 		cx = rc.right - rc.left;
 		cy = rc.bottom - rc.top;
+	}
+
+	CDuiSize::CDuiSize(const POINT& pt)
+	{
+		cx = pt.x;
+		cy = pt.y;
 	}
 
 	CDuiSize::CDuiSize(int _cx, int _cy)
@@ -106,6 +238,144 @@ namespace DuiLib
 		return sSize;
 	}
 
+	void CDuiSize::SetSize(int cx, int cy)
+	{
+		CDuiSize::cx = cx;
+		CDuiSize::cy = cy;
+	}
+
+	void CDuiSize::SetSize(const SIZE& src)
+	{
+		cx = src.cx;
+		cy = src.cy;
+	}
+
+	CDuiSize::operator LPSIZE() throw()
+	{
+		return this;
+	}
+
+	CDuiSize::operator POINT() const
+	{
+		POINT pt = { cx, cy };
+		return pt;
+	}
+
+	CDuiSize::operator RECT() const
+	{
+		RECT rc = { 0, 0, cx, cy };
+		return rc;
+	}
+
+	CDuiSize& CDuiSize::operator=(const SIZE& src)
+	{
+		cx = src.cx;
+		cy = src.cy;
+		return *this;
+	}
+
+	bool CDuiSize::operator==(const SIZE& src) const
+	{
+		return cx == src.cx && cy == src.cy;
+	}
+
+	bool CDuiSize::operator!=(const SIZE& src) const
+	{
+		return !(*this == src);
+	}
+
+	bool CDuiSize::operator==(const POINT& src) const
+	{
+		return cx == src.x && cy == src.y;
+	}
+
+	bool CDuiSize::operator!=(const POINT& src) const
+	{
+		return !(*this == src);
+	}
+
+	bool CDuiSize::operator==(const RECT& src) const
+	{
+		return (cx == src.right - src.left) && (cy == src.bottom - src.top);
+	}
+
+	bool CDuiSize::operator!=(const RECT& src) const
+	{
+		return !(*this == src);
+	}
+
+	CDuiSize CDuiSize::operator+(const SIZE& src) const
+	{
+		return CDuiSize(cx + src.cx, cy + src.cy);
+	}
+
+	CDuiSize CDuiSize::operator-(const SIZE& src) const
+	{
+		return CDuiSize(cx - src.cx, cy - src.cy);
+	}
+
+	CDuiSize CDuiSize::operator+(const POINT& src) const
+	{
+		return CDuiSize(cx + src.x, cy + src.y);
+	}
+
+	CDuiSize CDuiSize::operator-(const POINT& src) const
+	{
+		return CDuiSize(cx - src.x, cy - src.y);
+	}
+
+	CDuiSize CDuiSize::operator+(const RECT& src) const
+	{
+		return CDuiSize(cx + (src.right - src.left), cy + (src.bottom-src.top));
+	}
+
+	CDuiSize CDuiSize::operator-(const RECT& src) const
+	{
+		return CDuiSize(cx - (src.right - src.left), cy - (src.bottom - src.top));
+	}
+
+	CDuiSize& CDuiSize::operator+=(const SIZE& src)
+	{
+		cx += src.cx;
+		cy += src.cy;
+		return *this;
+	}
+
+	CDuiSize& CDuiSize::operator-=(const SIZE& src)
+	{
+		cx -= src.cx;
+		cy -= src.cy;
+		return *this;
+	}
+
+	CDuiSize& CDuiSize::operator+=(const POINT& src)
+	{
+		cx += src.x;
+		cy += src.y;
+		return *this;
+	}
+
+	CDuiSize& CDuiSize::operator-=(const POINT& src)
+	{
+		cx -= src.x;
+		cy -= src.y;
+		return *this;
+	}
+
+	CDuiSize& CDuiSize::operator+=(const RECT& src)
+	{
+		cx += src.right - src.left;
+		cy += src.bottom - src.top;
+		return *this;
+	}
+
+	CDuiSize& CDuiSize::operator-=(const RECT& src)
+	{
+		cx -= src.right - src.left;
+		cy -= src.bottom - src.top;
+		return *this;
+	}
+
 	//放大
 	void CDuiSize::Inflate(int x, int y)
 	{
@@ -119,6 +389,22 @@ namespace DuiLib
 		cx -= x;
 		cy -= y;
 	}
+
+
+	#ifdef DUILIB_SDL
+	CDuiSize::CDuiSize(const SDL_Rect& rc)
+	{
+		cx = rc.w;
+		cy = rc.h;
+	}
+
+	CDuiSize& CDuiSize::operator=(const SDL_Rect& rc)
+	{
+		cx = rc.w;
+		cy = rc.h;
+		return *this;
+	}
+	#endif
 /////////////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -164,6 +450,14 @@ namespace DuiLib
 		SetRect(ptLeftTop, ptRightBottom);
 	}
 
+	CDuiRect::CDuiRect(const SIZE& src)
+	{
+		left = 0;
+		top = 0;
+		right = src.cx;
+		bottom = src.cy;
+	}
+
 	CDuiRect::CDuiRect(LPCTSTR pstrValue)
 	{
 		FromString(pstrValue);
@@ -196,6 +490,36 @@ namespace DuiLib
 	CDuiRect::operator LPCRECT() const throw()
 	{
 		return this;
+	}
+
+	CDuiRect::operator SIZE() const throw()
+	{
+		SIZE sz = {GetWidth(), GetHeight()};
+		return sz;
+	}
+
+	CDuiRect& CDuiRect::operator=(const RECT& src)
+	{
+		left = src.left;
+		top = src.top;
+		right = src.right;
+		bottom = src.bottom;
+		return *this;
+	}
+
+	CDuiRect& CDuiRect::operator=(const SIZE& src)
+	{
+		left = 0;
+		top = 0;
+		right = src.cx;
+		bottom = src.cy;
+		return *this;
+	}
+
+	CDuiRect& CDuiRect::operator=(LPCTSTR pstrValue)
+	{
+		FromString(pstrValue);
+		return *this;
 	}
 
 	CDuiPoint CDuiRect::LeftTop()
@@ -433,8 +757,6 @@ namespace DuiLib
 #endif
 	}
 
-	//bool CDuiRect::operator == (LPCRECT lpRect) const { return EqualRect(lpRect); };
-
 	void CDuiRect::SetPadding(const RECT& rc)
 	{
 		left += rc.left;
@@ -442,10 +764,277 @@ namespace DuiLib
 		top += rc.top;
 		bottom -= rc.bottom;
 	}
+
+	void CDuiRect::SetInset(const RECT& rc)
+	{
+		left += rc.left;
+		right -= rc.right;
+		top += rc.top;
+		bottom -= rc.bottom;
+	}
+
+#ifdef DUILIB_SDL
+	CDuiRect::CDuiRect(const SDL_Rect& rc)
+	{
+		left = rc.x;
+		top = rc.y;
+		right = rc.x + rc.w;
+		bottom = rc.y + rc.h;
+	}
+
+	SDL_Rect CDuiRect::ToSDL_Rect() const
+	{
+		SDL_Rect rc;
+		rc.x = left;
+		rc.y = top;
+		rc.w = GetWidth();
+		rc.h = GetHeight();
+		return rc;
+	}
+
+	CDuiRect::operator SDL_Rect() const
+	{
+		return ToSDL_Rect();
+	}
+
+	CDuiRect& CDuiRect::operator=(const SDL_Rect& rc)
+	{
+		left = rc.x;
+		top = rc.y;
+		right = rc.x + rc.w;
+		bottom = rc.y + rc.h;
+		return *this;
+	}
+
+	CDuiRect::CDuiRect(const SDL_FRect& rc)
+	{
+		left = (int)rc.x;
+		top = (int)rc.y;
+		right = (int)(rc.x + rc.w);
+		bottom = (int)(rc.y + rc.h);
+	}
+
+	SDL_FRect CDuiRect::ToSDL_FRect() const
+	{
+		SDL_FRect rc;
+		rc.x = (float)left;
+		rc.y = (float)top;
+		rc.w = (float)GetWidth();
+		rc.h = (float)GetHeight();
+		return rc;
+	}
+
+	CDuiRect::operator SDL_FRect() const
+	{
+		return ToSDL_FRect();
+	}
+
+	CDuiRect& CDuiRect::operator=(const SDL_FRect& rc)
+	{
+		left = (int)rc.x;
+		top = (int)rc.y;
+		right = (int)(rc.x + rc.w);
+		bottom = (int)(rc.y + rc.h);
+		return *this;
+	}
+#endif // DUILIB_SDL
+
+	//////////////////////////////////////////////////////////////////////////
+	// 
+	// 
+	CDuiColor::CDuiColor() : m_dwColor(0x00000000) {}
+
+	CDuiColor::CDuiColor(DWORD dwColor) : m_dwColor(dwColor) {}
+
+	CDuiColor::CDuiColor(BYTE r, BYTE g, BYTE b)
+		: m_dwColor(0x00000000 | ((DWORD)r << 16) | ((DWORD)g << 8) | b) {}
+
+	CDuiColor::CDuiColor(BYTE a, BYTE r, BYTE g, BYTE b)
+		: m_dwColor(((DWORD)a << 24) | ((DWORD)r << 16) | ((DWORD)g << 8) | b) {}
+
+	CDuiColor::CDuiColor(LPCTSTR pstrValue)
+	{
+		if (!FromString(pstrValue)) 
+		{
+			m_dwColor = 0x00000000;
+		}
+	}
+
+	CDuiColor::CDuiColor(int n)
+	{
+		m_dwColor = (DWORD)n;
+	}
+
+	CDuiColor::CDuiColor(UINT n)
+	{
+		m_dwColor = (DWORD)n;
+	}
+
+	bool CDuiColor::FromString(LPCTSTR pstrValue)
+	{
+		if (!pstrValue || !*pstrValue) return false;
+
+		// 跳过前导空格
+		while (*pstrValue == _T(' ') || *pstrValue == _T('\t')) ++pstrValue;
+
+		// 格式1: "0xAARRGGBB"
+		if (pstrValue[0] == _T('0') && (pstrValue[1] == _T('x') || pstrValue[1] == _T('X')))
+		{
+			DWORD dw = 0;
+			if (_stscanf(pstrValue, _T("%lx"), &dw) == 1)
+			{
+				m_dwColor = dw;
+				return true;
+			}
+			return false;
+		}
+
+		// 格式2: "#AARRGGBB"
+		if (pstrValue[0] == _T('#'))
+		{
+			int len = _tcslen(pstrValue + 1);
+			if (len == 8)  // #AARRGGBB
+			{
+				TCHAR buf[3] = { 0 };
+				buf[0] = pstrValue[1]; buf[1] = pstrValue[2];
+				BYTE a = (BYTE)_tcstol(buf, NULL, 16);
+				buf[0] = pstrValue[3]; buf[1] = pstrValue[4];
+				BYTE r = (BYTE)_tcstol(buf, NULL, 16);
+				buf[0] = pstrValue[5]; buf[1] = pstrValue[6];
+				BYTE g = (BYTE)_tcstol(buf, NULL, 16);
+				buf[0] = pstrValue[7]; buf[1] = pstrValue[8];
+				BYTE b = (BYTE)_tcstol(buf, NULL, 16);
+				m_dwColor = ((DWORD)a << 24) | ((DWORD)r << 16) | ((DWORD)g << 8) | b;
+				return true;
+			}
+			else if (len == 6)  // #RRGGBB (alpha=255)
+			{
+				TCHAR buf[3] = { 0 };
+				buf[0] = pstrValue[1]; buf[1] = pstrValue[2];
+				BYTE r = (BYTE)_tcstol(buf, NULL, 16);
+				buf[0] = pstrValue[3]; buf[1] = pstrValue[4];
+				BYTE g = (BYTE)_tcstol(buf, NULL, 16);
+				buf[0] = pstrValue[5]; buf[1] = pstrValue[6];
+				BYTE b = (BYTE)_tcstol(buf, NULL, 16);
+				m_dwColor = 0xFF000000 | ((DWORD)r << 16) | ((DWORD)g << 8) | b;
+				return true;
+			}
+			return false;
+		}
+
+		// 格式3: "a,r,g,b" 或 "r,g,b"
+		int a = 255, r = 0, g = 0, b = 0;
+		int matched = _stscanf(pstrValue, _T("%d,%d,%d,%d"), &a, &r, &g, &b);
+		if (matched == 4)
+		{
+			m_dwColor = ((DWORD)(BYTE)a << 24) | ((DWORD)(BYTE)r << 16) | ((DWORD)(BYTE)g << 8) | (BYTE)b;
+			return true;
+		}
+		matched = _stscanf(pstrValue, _T("%d,%d,%d"), &r, &g, &b);
+		if (matched == 3)
+		{
+			m_dwColor = 0xFF000000 | ((DWORD)(BYTE)r << 16) | ((DWORD)(BYTE)g << 8) | (BYTE)b;
+			return true;
+		}
+
+		return false;
+	}
+
+	CDuiString CDuiColor::ToString()
+	{
+		CDuiString s;
+		s.Format(_T("0x%02X%02X%02X%02X"), GetA(), GetR(), GetG(), GetB());
+		return s;
+	}
+
+	void CDuiColor::FromCOLORREF(COLORREF cr)
+	{
+		BYTE r = GetRValue(cr);
+		BYTE g = GetGValue(cr);
+		BYTE b = GetBValue(cr);
+		m_dwColor = 0xFF000000 | ((DWORD)r << 16) | ((DWORD)g << 8) | b;
+	}
+
+	COLORREF CDuiColor::ToCOLORREF()
+	{
+		return RGB(GetR(), GetG(), GetB());
+	}
+
+	BYTE CDuiColor::GetA() const { return (BYTE)(m_dwColor >> 24); }
+	BYTE CDuiColor::GetR() const { return (BYTE)(m_dwColor >> 16); }
+	BYTE CDuiColor::GetG() const { return (BYTE)(m_dwColor >> 8); }
+	BYTE CDuiColor::GetB() const { return (BYTE)(m_dwColor); }
+	void CDuiColor::SetA(BYTE a) { m_dwColor = (m_dwColor & 0x00FFFFFF) | ((DWORD)a << 24); }
+	void CDuiColor::SetR(BYTE r) { m_dwColor = (m_dwColor & 0xFF00FFFF) | ((DWORD)r << 16); }
+	void CDuiColor::SetG(BYTE g) { m_dwColor = (m_dwColor & 0xFFFF00FF) | ((DWORD)g << 8); }
+	void CDuiColor::SetB(BYTE b) { m_dwColor = (m_dwColor & 0xFFFFFF00) | (DWORD)b; }
+	DWORD CDuiColor::GetColor() const { return m_dwColor; }
+	void CDuiColor::SetColor(DWORD dwColor) { m_dwColor = dwColor; }
+
+
+	CDuiColor::operator DWORD() const { return m_dwColor; }
+
+	bool CDuiColor::operator==(const CDuiColor& other) const { return m_dwColor == other.m_dwColor; }
+	bool CDuiColor::operator!=(const CDuiColor& other) const { return m_dwColor != other.m_dwColor; }
+	bool CDuiColor::operator==(int other) const { return m_dwColor == (DWORD)other; }
+	bool CDuiColor::operator!=(int other) const { return m_dwColor != (DWORD)other; }
+	bool CDuiColor::operator==(UINT other) const { return m_dwColor == (DWORD)other; }
+	bool CDuiColor::operator!=(UINT other) const { return m_dwColor != (DWORD)other; }
+
+	CDuiColor& CDuiColor::operator=(DWORD dwColor)
+	{
+		m_dwColor = dwColor;
+		return *this;
+	}
+
+	CDuiColor& CDuiColor::operator=(LPCTSTR pstrValue)
+	{
+		if (!FromString(pstrValue)) 
+		{
+			m_dwColor = 0x00000000;
+		}
+		return *this;
+	}
+
+	CDuiColor& CDuiColor::operator=(int n)
+	{
+		m_dwColor = (DWORD)n;
+		return *this;
+	}
+
+	CDuiColor& CDuiColor::operator=(unsigned int n)
+	{
+		m_dwColor = n;
+		return *this;
+	}
+
+	#ifdef DUILIB_SDL
+	CDuiColor::CDuiColor(const SDL_Color& color)
+	{
+		m_dwColor = ((DWORD)color.a << 24) | ((DWORD)color.r << 16) | ((DWORD)color.g << 8) | color.b;
+	}
+	SDL_Color CDuiColor::ToSDL_Color()
+	{
+		return { GetR(), GetG(), GetB(), GetA() };
+	}
+	CDuiColor::operator SDL_Color() const { return SDL_Color{ GetR(), GetG(), GetB(), GetA() }; }
+	CDuiColor& CDuiColor::operator=(const SDL_Color& color)
+	{
+		m_dwColor = ((DWORD)color.a << 24) | ((DWORD)color.r << 16) | ((DWORD)color.g << 8) | color.b;
+		return *this;
+	}
+	#endif
+
+	// 静态常量初始化
+	CDuiColor CDuiColor::Black(0xFF000000);
+	CDuiColor CDuiColor::White(0xFFFFFFFF);
+	CDuiColor CDuiColor::Red(0xFFFF0000);
+	CDuiColor CDuiColor::Green(0xFF00FF00);
+	CDuiColor CDuiColor::Blue(0xFF0000FF);
+
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
 	//
-
 	CStdPtrArray::CStdPtrArray(int iPreallocSize) : m_ppVoid(NULL), m_nCount(0), m_nAllocated(iPreallocSize), m_bSaveIndexMap(false)
 	{
 		ASSERT(iPreallocSize>=0);

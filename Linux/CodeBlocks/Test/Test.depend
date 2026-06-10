@@ -4456,3 +4456,428 @@
 
 1695710813 /home/test/Desktop/DuiLib/DuiLib/Control/UITracker.h
 
+1778313274 source:/home/test/Desktop/DuiLib-SDL/Linux/CodeBlocks/Test/App.cpp
+	"App.h"
+
+1778313274 /home/test/Desktop/DuiLib-SDL/Linux/CodeBlocks/Test/App.h
+	"MainFrame.h"
+
+1778313274 /home/test/Desktop/DuiLib-SDL/Linux/CodeBlocks/Test/MainFrame.h
+	"UIlib.h"
+
+1780631587 /home/test/Desktop/DuiLib-SDL/DuiLib/UIlib.h
+	"compat.h"
+	<windows.h>
+	<windowsx.h>
+	<commctrl.h>
+	<stddef.h>
+	<richedit.h>
+	<tchar.h>
+	<assert.h>
+	<crtdbg.h>
+	<malloc.h>
+	<comdef.h>
+	<gdiplus.h>
+	"Utils/DuiString.h"
+	"Utils/Md5.h"
+	"Utils/Utils.h"
+	"Utils/unzip.h"
+	"Utils/VersionHelpers.h"
+	"Core/UIFile.h"
+	"Core/UIXmlAttribute.h"
+	"Core/UIXmlNode.h"
+	"Core/UIXmlDocument.h"
+	"Utils/observer_impl_base.h"
+	"Utils/UIDelegate.h"
+	"Utils/TrayIcon.h"
+	"Utils/DPI.h"
+	"Utils/DpiWin32.h"
+	"Utils/DpiGtk.h"
+	"Utils/DpiSdl.h"
+	"Core/UIDefine.h"
+	"Utils/UIShadowBase.h"
+	"Utils/UIShadowWin32.h"
+	"Utils/UIShadowGtk.h"
+	"Utils/UIShadowSdl.h"
+	"Core/UIResourceManager.h"
+	"Core/UILangManager.h"
+	"Render/IRender.h"
+	"Core/UIScript.h"
+	"Core/UIManager.h"
+	"Core/UIManagerWin32.h"
+	"Core/UIManagerGtk.h"
+	"Core/UIManagerSDL.h"
+	"Core/UIBase.h"
+	"Core/UIWindowWin32.h"
+	"Core/UIWindowGtk.h"
+	"Core/UIWindowSDL.h"
+	"Core/ControlFactory.h"
+	"Control/UIAnimation.h"
+	"Core/UIControl.h"
+	"Core/UIContainer.h"
+	"Core/UIDlgBuilder.h"
+	"Utils/WinImplBase.h"
+	"Layout/UIVerticalLayout.h"
+	"Layout/UIHorizontalLayout.h"
+	"Layout/UITileLayout.h"
+	"Layout/UIDynamicLayout.h"
+	"Layout/UITabLayout.h"
+	"Layout/UIChildLayout.h"
+	"Control/UILabel.h"
+	"Control/UIText.h"
+	"Control/UIEdit.h"
+	"Control/UIGifAnim.h"
+	"Layout/UIAnimationTabLayout.h"
+	"Control/UIButton.h"
+	"Control/UIOption.h"
+	"Control/UITabCtrl.h"
+	"Control/UIList.h"
+	"Control/UICombo.h"
+	"Control/UIScrollBar.h"
+	"Control/UITreeView.h"
+	"Control/UIProgress.h"
+	"Control/UISlider.h"
+	"Control/UIRichEdit.h"
+	"Control/UIDateTime.h"
+	"Control/UIIPAddress.h"
+	"Control/UIIPAddressEx.h"
+	"Control/UIActiveX.h"
+	"Control/UIWebBrowser.h"
+	"Control/UIFlash.h"
+	"Control/UIMenu.h"
+	"Control/UIMenuWndWin32.h"
+	"Control/UIMenuWndGtk.h"
+	"Control/UIMenuWndSdl.h"
+	"Control/UIGroupBox.h"
+	"Control/UIRollText.h"
+	"Control/UIColorPalette.h"
+	"Control/UIListEx.h"
+	"Control/UIHotKey.h"
+	"Control/UIFadeButton.h"
+	"Control/UIRing.h"
+	"Control/UIIconButton.h"
+	"Control/UIDateTimeEx.h"
+	"Control/UIComboEx.h"
+	"Control/UIImageBoxEx.h"
+	"Control/UIRollTextEx.h"
+	"Control/UIMsgWnd.h"
+	"Control/UIPicture.h"
+	"Control/UIPictureBox.h"
+	"Control/UIQRCode.h"
+	"Control/UIBarCode.h"
+	"Control/UIGrid.h"
+	"Control/ITreeUI.h"
+	"Control/UITree.h"
+	"Control/UITreeItem.h"
+	"Control/UITracker.h"
+	"Control/UISpin.h"
+	"Layout/UITableLayout.h"
+	"Layout/UIChildWindow.h"
+	"Utils/UIApplication.h"
+	"Utils/UIApplicationWin32.h"
+	"Utils/UIApplicationGtk.h"
+	"Utils/UIApplicationSdl.h"
+	"Utils/UIFrameBase.h"
+	"Utils/UIFrameWnd.h"
+	"Utils/UIFrameWndWin32.h"
+	"Utils/UIFrameWndGtk.h"
+	"Utils/UIFrameWndSdl.h"
+	"Utils/UIForm.h"
+	"Utils/UIDialog.h"
+	"Core/UIGlobal.h"
+
+1780629260 /home/test/Desktop/DuiLib-SDL/DuiLib/compat.h
+	<wchar.h>
+	<cstring>
+	<string>
+	<syslog.h>
+	<stdarg.h>
+	<assert.h>
+	<unistd.h>
+	<sys/types.h>
+	<sys/stat.h>
+	<dirent.h>
+	<stdlib.h>
+	<unistd.h>
+	<mach-o/dyld.h>
+	<sys/stat.h>
+	<dirent.h>
+
+1780629260 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/DuiString.h
+	<vector>
+	<map>
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/Md5.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/Utils.h
+	"OAIdl.h"
+	<vector>
+	<map>
+	<mutex>
+	"DuiString.h"
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/unzip.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/VersionHelpers.h
+	<specstrings.h>
+
+1778313207 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIFile.h
+
+1778313207 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIXmlAttribute.h
+
+1778313207 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIXmlNode.h
+
+1778313207 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIXmlDocument.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/observer_impl_base.h
+	<map>
+	<vector>
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/UIDelegate.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/TrayIcon.h
+	<ShellAPI.h>
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/DPI.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/DpiWin32.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/DpiGtk.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/DpiSdl.h
+
+1779090403 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIDefine.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/UIShadowBase.h
+	<map>
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/UIShadowWin32.h
+	<map>
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/UIShadowGtk.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/UIShadowSdl.h
+
+1778313207 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIResourceManager.h
+
+1778313207 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UILangManager.h
+
+1779681004 /home/test/Desktop/DuiLib-SDL/DuiLib/Render/IRender.h
+
+1778313207 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIScript.h
+
+1780629260 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIManager.h
+
+1780629260 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIManagerWin32.h
+
+1778313207 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIManagerGtk.h
+
+1780629260 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIManagerSDL.h
+
+1780629260 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIBase.h
+
+1780629260 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIWindowWin32.h
+
+1778313207 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIWindowGtk.h
+
+1780629260 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIWindowSDL.h
+
+1778313207 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/ControlFactory.h
+	<map>
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIAnimation.h
+
+1779436637 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIControl.h
+
+1778313207 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIContainer.h
+
+1778313207 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIDlgBuilder.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/WinImplBase.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Layout/UIVerticalLayout.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Layout/UIHorizontalLayout.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Layout/UITileLayout.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Layout/UIDynamicLayout.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Layout/UITabLayout.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Layout/UIChildLayout.h
+
+1779681004 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UILabel.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIText.h
+
+1779092699 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIEdit.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIGifAnim.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Layout/UIAnimationTabLayout.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIButton.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIOption.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UITabCtrl.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIList.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UICombo.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIScrollBar.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UITreeView.h
+	<vector>
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIProgress.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UISlider.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIRichEdit.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIDateTime.h
+
+1780629260 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIIPAddress.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIIPAddressEx.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIActiveX.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIWebBrowser.h
+	<MsHTML.h>
+	"Utils/WebBrowserEventHandler.h"
+	<ExDisp.h>
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/WebBrowserEventHandler.h
+	<ExDisp.h>
+	<ExDispid.h>
+	<mshtmhst.h>
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIFlash.h
+	"Utils/FlashEventHandler.h"
+	"Utils/flash11.tlh"
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/FlashEventHandler.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/flash11.tlh
+	<comdef.h>
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIMenu.h
+	"../Utils/observer_impl_base.h"
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIMenuWndWin32.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIMenuWndGtk.h
+
+1780629260 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIMenuWndSdl.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIGroupBox.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIRollText.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIColorPalette.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIListEx.h
+	"Layout/UIVerticalLayout.h"
+	"Layout/UIHorizontalLayout.h"
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIHotKey.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIFadeButton.h
+	"UIAnimation.h"
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIRing.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIIconButton.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIDateTimeEx.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIComboEx.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIImageBoxEx.h
+	"atlimage.h"
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIRollTextEx.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIMsgWnd.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIPicture.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIPictureBox.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIQRCode.h
+
+1779436637 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIBarCode.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIGrid.h
+	"UIGridHeader.h"
+	"UIGridBody.h"
+	"UIGridRowUI.h"
+	"UIGridCell.h"
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIGridHeader.h
+	"IGridUI.h"
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/IGridUI.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIGridBody.h
+	"IGridUI.h"
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIGridRowUI.h
+	"IGridUI.h"
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UIGridCell.h
+	"IGridUI.h"
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/ITreeUI.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UITree.h
+
+1778313208 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UITreeItem.h
+
+1779090403 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UITracker.h
+
+1779090403 /home/test/Desktop/DuiLib-SDL/DuiLib/Control/UISpin.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Layout/UITableLayout.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Layout/UIChildWindow.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/UIApplication.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/UIApplicationWin32.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/UIApplicationGtk.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/UIApplicationSdl.h
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/UIFrameBase.h
+
+1779090403 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/UIFrameWnd.h
+	<list>
+
+1779090403 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/UIFrameWndWin32.h
+	<list>
+
+1779090403 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/UIFrameWndGtk.h
+	<list>
+
+1779090403 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/UIFrameWndSdl.h
+	<list>
+
+1778313209 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/UIForm.h
+
+1780629260 /home/test/Desktop/DuiLib-SDL/DuiLib/Utils/UIDialog.h
+
+1778313207 /home/test/Desktop/DuiLib-SDL/DuiLib/Core/UIGlobal.h
+
+1778313274 source:/home/test/Desktop/DuiLib-SDL/Linux/CodeBlocks/Test/main.cpp
+	<stdlib.h>
+	"App.h"
+
+1778313274 source:/home/test/Desktop/DuiLib-SDL/Linux/CodeBlocks/Test/MainFrame.cpp
+	"MainFrame.h"
+

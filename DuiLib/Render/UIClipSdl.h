@@ -13,8 +13,8 @@ namespace DuiLib {
 		UIClipSDL();
 		virtual ~UIClipSDL();
 	public:
-		virtual void GenerateClip(UIRender *pRender, RECT rc) override;
-		virtual void GenerateRoundClip(UIRender *pRender, RECT rc, RECT rcItem, int roundX, int roundY) override;
+		virtual void GenerateClip(UIRender *pRender, CDuiRect rc) override;
+		virtual void GenerateRoundClip(UIRender *pRender, CDuiRect rc, CDuiRect rcItem, int roundX, int roundY) override;
 		virtual void UseOldClipBegin(UIRender *pRender) override;
 		virtual void UseOldClipEnd(UIRender* pRender) override;
 	protected:

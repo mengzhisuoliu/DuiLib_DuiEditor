@@ -24,9 +24,9 @@ namespace DuiLib {
 		::DeleteObject(m_hRgn);
 	}
 
-	void UIClipWin32::GenerateClip(UIRender *pRender, RECT rc)
+	void UIClipWin32::GenerateClip(UIRender *pRender, CDuiRect rc)
 	{
-		RECT rcClip = { 0 };
+		CDuiRect rcClip;
 		::GetClipBox(pRender->GetDC(), &rcClip);
 		m_hOldRgn = ::CreateRectRgnIndirect(&rcClip);
 		m_hRgn = ::CreateRectRgnIndirect(&rc);
@@ -37,9 +37,9 @@ namespace DuiLib {
 		m_szRound.cy = 0;
 	}
 
-	void UIClipWin32::GenerateRoundClip(UIRender *pRender, RECT rc, RECT rcItem, int roundX, int roundY)
+	void UIClipWin32::GenerateRoundClip(UIRender *pRender, CDuiRect rc, CDuiRect rcItem, int roundX, int roundY)
 	{
-		RECT rcClip = { 0 };
+		CDuiRect rcClip;
 		::GetClipBox(pRender->GetDC(), &rcClip);
 		m_hOldRgn = ::CreateRectRgnIndirect(&rcClip);
 		m_hRgn = ::CreateRectRgnIndirect(&rc);

@@ -79,11 +79,11 @@ namespace DuiLib
 		LPCTSTR GetBkDisabledImage();
 		void SetBkDisabledImage(LPCTSTR pStrImage);
 
-		virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+		virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
 		virtual void DoEvent(TEventUI& event) override;
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
-		virtual bool DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl) override;
+		virtual bool DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl) override;
 
 		void PaintBk(UIRender *pRender);
 		void PaintButton1(UIRender *pRender);

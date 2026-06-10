@@ -44,7 +44,7 @@ namespace DuiLib
 		InitGifImage();
 	}
 
-	bool CGifAnimUI::DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl)
+	bool CGifAnimUI::DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl)
 	{
 		//if( !::IntersectRect( &m_rcPaint, &rcPaint, &m_rcItem ) ) return true;
 		if( !m_rcPaint.Intersect(rcPaint, m_rcItem ) ) return true;

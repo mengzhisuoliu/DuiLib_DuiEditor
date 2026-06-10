@@ -30,10 +30,10 @@ namespace DuiLib {
 		float		as_float(float def = 0) const;
 		bool		as_bool(bool def = false) const;
 
-		POINT		as_point(int def_x=0, int def_y=0) const;
-		SIZE		as_size(int defc_x=0, int def_cy=0) const;
-		RECT		as_rect(int def_left=0, int def_top=0, int def_right=0, int def_bottom=0) const;
-		DWORD		as_uicolor(DWORD def_color = 0) const;
+		CDuiPoint		as_point(int def_x=0, int def_y=0) const;
+		CDuiSize		as_size(int defc_x=0, int def_cy=0) const;
+		CDuiRect		as_rect(int def_left=0, int def_top=0, int def_right=0, int def_bottom=0) const;
+		CDuiColor		as_uicolor(CDuiColor def_color = 0) const;
 
 		bool set_name(LPCSTR rhs);
 		bool set_name(LPCWSTR rhs);
@@ -49,10 +49,10 @@ namespace DuiLib {
 		bool set_value(float rhs, int precision);
 		bool set_value(bool rhs);
 
-		bool set_value(POINT rhs);
-		bool set_value(SIZE rhs);
-		bool set_value(RECT rhs);
-		bool set_uicolor(DWORD rhs);
+		bool set_value(CDuiPoint rhs);
+		bool set_value(CDuiSize rhs);
+		bool set_value(CDuiRect rhs);
+		bool set_uicolor(CDuiColor rhs);
 
 		// Get next/previous attribute in the attribute list of the parent node
 		CXmlAttributeUI next_attribute() const;

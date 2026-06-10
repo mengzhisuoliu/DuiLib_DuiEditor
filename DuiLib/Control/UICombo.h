@@ -34,8 +34,8 @@ namespace DuiLib {
 
 		CDuiString GetDropBoxAttributeList();
 		void SetDropBoxAttributeList(LPCTSTR pstrList);
-		SIZE GetDropBoxSize() const;
-		void SetDropBoxSize(SIZE szDropBox);
+		CDuiSize GetDropBoxSize() const;
+		void SetDropBoxSize(CDuiSize szDropBox);
 
 		virtual UINT GetListType() override;
 		virtual TListInfoUI* GetListInfo() override;
@@ -54,13 +54,13 @@ namespace DuiLib {
 
 		virtual bool Activate() override;
 
-		virtual SIZE EstimateSize(SIZE szAvailable) override;
-		virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
-		virtual void Move(SIZE szOffset, bool bNeedInvalidate = true) override;
+		virtual CDuiSize EstimateSize(CDuiSize szAvailable) override;
+		virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
+		virtual void Move(CDuiSize szOffset, bool bNeedInvalidate = true) override;
 		virtual void DoEvent(TEventUI& event) override;
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
-		virtual bool DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl);
+		virtual bool DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl) override;
 		virtual bool DrawDropButtonImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify=NULL);
 		virtual void PaintText(UIRender *pRender) override;
 
@@ -97,10 +97,10 @@ namespace DuiLib {
 
 		void SetTipValue(LPCTSTR pStrTipValue);
 		CDuiString GetTipValue();
-		void SetTipValueColor(LPCTSTR pStrColor);
-		DWORD GetTipValueColor();
+		void SetTipValueColor(CDuiColor dwColor);
+		CDuiColor GetTipValueColor();
 
-		RECT GetDropButtonRect();
+		CDuiRect GetDropButtonRect();
 	protected:
 		CComboWnd* m_pWindow;
 
@@ -108,7 +108,7 @@ namespace DuiLib {
 		
 		bool	m_bShowShadow;
 		CDuiString m_sDropBoxAttributes;
-		SIZE m_szDropBox;
+		CDuiSize m_szDropBox;
 
 		TListInfoUI m_ListInfo;
 
@@ -121,7 +121,7 @@ namespace DuiLib {
 		CDuiString m_dbFocusedImage;
 		CDuiString m_dbDisabledImage;
 		CDuiString m_sTipValue;
-		DWORD m_dwTipValueColor;
+		CDuiColor m_dwTipValueColor;
 	};
 
 } // namespace DuiLib

@@ -296,9 +296,8 @@ void CMainFrame::OnNotifyClick(TNotifyUI& msg)
 
 	if(IsControl(msg, _T("btn_domodal")))
 	{
-// 		CDialog1 dlg;
-// 		dlg.DoModal(this);
-//		CPaintManagerUI::SetRenderEngineType(DuiLib_Render_Default);
+		CDialog1 dlg;
+		dlg.DoModal(this);
 	}
 
 	if(IsControl(msg, _T("btn_show_dialog")))

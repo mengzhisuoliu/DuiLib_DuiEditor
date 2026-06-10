@@ -16,7 +16,7 @@ public:
 		static MenuObserverImpl s_context_menu_observer;
 		return s_context_menu_observer;
 	}
-	static CMenuWndSDL* CreateMenu(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
+	static CMenuWndSDL* CreateMenu(CMenuElementUI* pOwner, STRINGorID xml, CDuiPoint point,
 		CPaintManagerUI* pMainPaintManager, CStdStringPtrMap* pMenuCheckInfo = NULL,
 		DWORD dwAlignment = eMenuAlignment_Left | eMenuAlignment_Top);
 	static void DestroyMenu();
@@ -25,7 +25,7 @@ public:
 public:
 	CMenuWndSDL();
 	~CMenuWndSDL();
-	void Close(UINT nRet = IDOK);
+	virtual void Close(UINT nRet = IDOK) override;
 	bool isClosing;
 	/*
 	 *	@pOwner 一级菜单不要指定这个参数，这是菜单内部使用的
@@ -36,22 +36,21 @@ public:
 	 *	@dwAlignment		菜单的出现位置，默认出现在鼠标的右下侧。
 	 */
 
-    void Init(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
+    void Init(CMenuElementUI* pOwner, STRINGorID xml, CDuiPoint point,
 		CPaintManagerUI* pMainPaintManager, CStdStringPtrMap* pMenuCheckInfo = NULL,
 		DWORD dwAlignment = eMenuAlignment_Left | eMenuAlignment_Top);
     LPCTSTR GetWindowClassName() const;
-    void OnFinalMessage(UIWND hWnd);
-	void Notify(TNotifyUI& msg);
-	CControlUI* CreateControl(LPCTSTR pstrClassName);
+    void OnFinalMessage(UIWND hWnd) override;
+	void Notify(TNotifyUI& msg) override;
+	CControlUI* CreateControl(LPCTSTR pstrClassName) override;
 
-	//modify by liqs99, 下面4个函数改为虚函数
-	virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-	virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-	virtual LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-	virtual LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-	virtual LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+	virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+	virtual LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+	virtual LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+	virtual LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
 
-	BOOL Receive(ContextMenuParam param);
+	virtual BOOL Receive(ContextMenuParam param) override;
 
 	// 获取根菜单控件，用于动态添加子菜单
 	CMenuUI* GetMenuUI();
@@ -65,7 +64,7 @@ public:
 
 public:
 
-	POINT			m_BasedPoint;
+	CDuiPoint			m_BasedPoint;
 	STRINGorID		m_xml;
     CMenuElementUI* m_pOwner;
     CMenuUI*	m_pLayout;

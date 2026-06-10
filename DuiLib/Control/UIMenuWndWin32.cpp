@@ -59,7 +59,7 @@ namespace DuiLib {
 		return TRUE;
 	}
 
-	CMenuWndWin32* CMenuWndWin32::CreateMenu(CMenuElementUI* pOwner, STRINGorID xml, POINT point, CPaintManagerUI* pMainPaintManager, CStdStringPtrMap* pMenuCheckInfo /*= NULL*/, DWORD dwAlignment /*= eMenuAlignment_Left | eMenuAlignment_Top*/)
+	CMenuWndWin32* CMenuWndWin32::CreateMenu(CMenuElementUI* pOwner, STRINGorID xml, CDuiPoint point, CPaintManagerUI* pMainPaintManager, CStdStringPtrMap* pMenuCheckInfo /*= NULL*/, DWORD dwAlignment /*= eMenuAlignment_Left | eMenuAlignment_Top*/)
 	{
 		CMenuWndWin32* pMenu = new CMenuWndWin32;
 		pMenu->Init(pOwner, xml, point, pMainPaintManager, pMenuCheckInfo, dwAlignment);
@@ -106,7 +106,7 @@ namespace DuiLib {
 		return NULL;
 	}
 
-	void CMenuWndWin32::Init(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
+	void CMenuWndWin32::Init(CMenuElementUI* pOwner, STRINGorID xml, CDuiPoint point,
 		CPaintManagerUI* pMainPaintManager, CStdStringPtrMap* pMenuCheckInfo/* = NULL*/,
 		DWORD dwAlignment/* = eMenuAlignment_Left | eMenuAlignment_Top*/)
 	{
@@ -128,7 +128,7 @@ namespace DuiLib {
 
 		CMenuWndWin32::GetGlobalContextMenuObserver().AddReceiver(this);
 
-		Create((m_pOwner == NULL) ? pMainPaintManager->GetPaintWindow() : m_pOwner->GetManager()->GetPaintWindow(), NULL, WS_POPUP , WS_EX_TOOLWINDOW | WS_EX_TOPMOST, CDuiRect());
+		Create((m_pOwner == NULL) ? pMainPaintManager->GetPaintWindow() : m_pOwner->GetManager()->GetPaintWindow(), NULL, WS_POPUP , WS_EX_TOOLWINDOW | WS_EX_TOPMOST, 0,0,0,0);
 		
 		// HACK: Don't deselect the parent's caption
 		HWND hWndParent = m_hWnd;
@@ -206,7 +206,7 @@ namespace DuiLib {
 			LONG styleValue = ::GetWindowLong(*this, GWL_STYLE);
 			styleValue &= ~WS_CAPTION;
 			::SetWindowLong(*this, GWL_STYLE, styleValue | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
-			RECT rcClient;
+			CDuiRect rcClient;
 			::GetClientRect(*this, &rcClient);
 			::SetWindowPos(*this, NULL, rcClient.left, rcClient.top, rcClient.right - rcClient.left, \
 				rcClient.bottom - rcClient.top, SWP_FRAMECHANGED);
@@ -359,10 +359,10 @@ namespace DuiLib {
 			return;
 		}
 
-		RECT rcWorkArea;
+		CDuiRect rcWorkArea;
 		SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
 
-		POINT ptBase = m_BasedPoint;
+		CDuiPoint ptBase = m_BasedPoint;
 		//ptBase.y += GetSystemMetrics(SM_CYMENU); // 加上任务栏的高度
 
 		HMONITOR hMonitor = MonitorFromPoint(ptBase, MONITOR_DEFAULTTONEAREST);
@@ -373,7 +373,7 @@ namespace DuiLib {
 			return;
 		}
 
-		SIZE szAvailable = { rcWorkArea.right - rcWorkArea.left, rcWorkArea.bottom - rcWorkArea.top };
+		CDuiSize szAvailable = rcWorkArea;
 		szAvailable = pMenuRoot->EstimateSize(szAvailable);
 		CDuiRect rcInset = pMenuRoot->GetInset();
 		szAvailable.cx += rcInset.left + rcInset.right;
@@ -409,8 +409,8 @@ namespace DuiLib {
 	void CMenuWndWin32::ResizeSubMenu()
 	{
 		// Position the popup window in absolute space
-		RECT rcOwner = m_pOwner->GetPos();
-		RECT rc = rcOwner;
+		CDuiRect rcOwner = m_pOwner->GetPos();
+		CDuiRect rc = rcOwner;
 
 		int cxFixed = 0;
 		int cyFixed = 0;
@@ -424,18 +424,18 @@ namespace DuiLib {
 		CDuiRect rcWork;
 		GetWindowRect(m_pOwner->GetManager()->GetPaintWindow(), &rcWork);
 #endif
-		SIZE szAvailable = { rcWork.right - rcWork.left, rcWork.bottom - rcWork.top };
+		CDuiSize szAvailable = rcWork;
 
 		for( int it = 0; it < m_pOwner->GetCount(); it++ ) {
 			if(m_pOwner->GetItemAt(it)->GetInterface(_T("MenuElement")) != NULL ){
 				CControlUI* pControl = static_cast<CControlUI*>(m_pOwner->GetItemAt(it));
-				SIZE sz = pControl->EstimateSize(szAvailable);
+				CDuiSize sz = pControl->EstimateSize(szAvailable);
 				cyFixed += sz.cy;
 				if( cxFixed < sz.cx ) cxFixed = sz.cx;
 			}
 		}
 
-		RECT rcWindow;
+		CDuiRect rcWindow;
 		m_pOwner->GetManager()->GetWindowRect(&rcWindow);
 
 		rc.top = rcOwner.top;
@@ -450,7 +450,7 @@ namespace DuiLib {
 		LONG chRightAlgin = 0;
 		LONG chBottomAlgin = 0;
 
-		RECT rcPreWindow = {0};
+		CDuiRect rcPreWindow;
 		MenuObserverImpl::Iterator iterator(CMenuWndWin32::GetGlobalContextMenuObserver());
 		MenuMenuReceiverImplBase* pReceiver = iterator.next();
 		while( pReceiver != NULL ) {
@@ -539,7 +539,7 @@ namespace DuiLib {
 	}
 	LRESULT CMenuWndWin32::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		SIZE szRoundCorner = m_pm.GetRoundCorner();
+		CDuiSize szRoundCorner = m_pm.GetRoundCorner();
 		if( !::IsIconic(*this) ) {
 			CDuiRect rcWnd;
 			::GetWindowRect(*this, &rcWnd);

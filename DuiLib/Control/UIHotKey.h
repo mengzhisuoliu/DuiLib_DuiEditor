@@ -13,7 +13,7 @@ namespace DuiLib{
 
 	public:
 		void Init(CHotKeyUI * pOwner);
-		RECT CalPos();
+		CDuiRect CalPos();
 		LPCTSTR GetWindowClassName() const;
 		void OnFinalMessage(HWND hWnd);
 		LPCTSTR GetSuperClassName() const;
@@ -46,13 +46,13 @@ namespace DuiLib{
 		virtual UINT GetControlFlags() const override;
 		virtual void SetText(LPCTSTR pstrText) override;
 		
-		virtual void SetNativeBkColor(DWORD dwBkColor);
-		virtual DWORD GetNativeBkColor() const;
+		virtual void SetNativeBkColor(CDuiColor dwBkColor);
+		virtual CDuiColor GetNativeBkColor() const;
 
-		virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+		virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
 		virtual void SetVisible(bool bVisible = true) override;
 		virtual void SetInternVisible(bool bVisible = true) override;
-		virtual SIZE EstimateSize(SIZE szAvailable) override;
+		virtual CDuiSize EstimateSize(CDuiSize szAvailable) override;
 		virtual void DoEvent(TEventUI& event) override;
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 

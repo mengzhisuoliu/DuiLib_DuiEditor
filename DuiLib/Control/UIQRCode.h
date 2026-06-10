@@ -39,7 +39,7 @@ public:
 	//二维码文本字符串编码，当GetText()不为空时有效。
 	void SetQrCodeEncoding(LPCTSTR sEncoding);
 
-	virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+	virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
 	virtual void PaintText(UIRender *pRender) override;
 
 	virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;

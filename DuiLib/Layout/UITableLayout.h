@@ -28,11 +28,11 @@ namespace DuiLib
 		bool IsColAutoCalcWidth(int col) const;
 		void SetColAutoCalcWidth(int col, bool bAutoCalcWidth);
 
-		RECT GetColInset(int col) const;
-		void SetColInset(int col, RECT rcInset);
+		CDuiRect GetColInset(int col) const;
+		void SetColInset(int col, CDuiRect rcInset);
 
-		RECT GetColTextPadding(int col) const;
-		void SetColTextPadding(int col, RECT rc);
+		CDuiRect GetColTextPadding(int col) const;
+		void SetColTextPadding(int col, CDuiRect rc);
 
 		void SetDefRowHeight(int height);
 		int GetDefRowHeight() const;
@@ -40,7 +40,7 @@ namespace DuiLib
 		virtual void DoInit() override;
 		virtual void DoEvent(TEventUI& event) override;
 
-		virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+		virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
 
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 	protected:
@@ -49,8 +49,8 @@ namespace DuiLib
 		int m_aColMaxWidth[MAX_TABLE_COLUMN_COUNT];
 		bool m_aColAutoCalcWidth[MAX_TABLE_COLUMN_COUNT];
 
-		RECT m_aColInset[MAX_TABLE_COLUMN_COUNT];
-		RECT m_aColTextPadding[MAX_TABLE_COLUMN_COUNT];
+		CDuiRect m_aColInset[MAX_TABLE_COLUMN_COUNT];
+		CDuiRect m_aColTextPadding[MAX_TABLE_COLUMN_COUNT];
 
 		int   m_nDefRowHeight;				//default row's height
 	};
@@ -73,7 +73,7 @@ namespace DuiLib
 		virtual bool AddAt(CControlUI* pControl, int iIndex) override;
 
 		virtual void DoInit() override;
-		virtual SIZE EstimateSize(SIZE szAvailable) override;
+		virtual CDuiSize EstimateSize(CDuiSize szAvailable) override;
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 	};
 
@@ -103,15 +103,15 @@ namespace DuiLib
 		virtual void SetAutoCalcWidth(bool bAutoCalcWidth) override;
 
 		virtual CDuiRect GetInset() const override;
-		virtual void SetInset(RECT rcInset) override;
+		virtual void SetInset(CDuiRect rcInset) override;
 
-		virtual RECT GetTextPadding() const override;
-		virtual void SetTextPadding(RECT rc) override;
+		virtual CDuiRect GetTextPadding() const override;
+		virtual void SetTextPadding(CDuiRect rc) override;
 
 		virtual void SetTextStyle(UINT uStyle) override; //需要在代码中设定，xml中配置不生效。
 
 		virtual void DoInit() override;
-		virtual SIZE EstimateSize(SIZE szAvailable) override;
+		virtual CDuiSize EstimateSize(CDuiSize szAvailable) override;
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 	};
 }

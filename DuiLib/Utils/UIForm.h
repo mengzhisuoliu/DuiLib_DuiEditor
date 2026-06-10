@@ -19,8 +19,8 @@ public:
 	void SetFrameWnd(CUIFrameWndBase *pFrame) { m_pFrame = pFrame; m_pManager = (DuiLibPaintManagerUI *)m_pFrame->GetManager(); }
 	CUIFrameWndBase *GetFrameWnd() const { return m_pFrame; }
 
-	virtual CPaintManagerUI* GetManager() { return m_pManager; } //{ return GetFrameWnd()->GetManager(); }
-	virtual CControlUI *GetRoot();
+	virtual CPaintManagerUI* GetManager() override { return m_pManager; } //{ return GetFrameWnd()->GetManager(); }
+	virtual CControlUI *GetRoot() override;
 
 	virtual void OnUpdateView() {} //弃用，为了兼容保留
 

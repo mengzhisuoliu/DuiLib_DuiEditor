@@ -11,7 +11,7 @@ class UILIB_API CMsgWndUI : public CRichEditUI
 	struct TMsgWnd
 	{
 		CDuiString sText;
-		DWORD dwColor;
+		CDuiColor dwColor;
 	};
 public:
 	CMsgWndUI(void);

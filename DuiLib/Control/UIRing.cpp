@@ -49,7 +49,7 @@ namespace DuiLib
 		}
 
 		if(m_pBkimage != NULL) {
-			RECT rcItem = m_rcItem;
+			CDuiRect rcItem = m_rcItem;
 			int iWidth = rcItem.right - rcItem.left;
 			int iHeight = rcItem.bottom - rcItem.top;
 			Gdiplus::PointF centerPos(rcItem.left + iWidth/2, rcItem.top + iHeight/2);

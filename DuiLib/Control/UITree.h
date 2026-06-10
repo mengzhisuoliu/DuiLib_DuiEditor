@@ -18,7 +18,7 @@ public:
 	virtual LPCTSTR GetClass() const override;
 	virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
-	virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+	virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
 
 	virtual void LineUp() override;
 	virtual void LineDown() override;
@@ -66,10 +66,10 @@ public:
 public:
 	virtual void DoInit() override;
 	virtual void DoEvent(TEventUI& event) override;
-	virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
-	void BuildRows(RECT rc, bool bNeedInvalidate = true);
-	virtual void SetScrollPos(SIZE szPos, bool bMsg = true) override;
-	virtual void ProcessScrollBar(RECT rc, int cxRequired, int cyRequired) override;
+	virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
+	void BuildRows(CDuiRect rc, bool bNeedInvalidate = true);
+	virtual void SetScrollPos(CDuiSize szPos, bool bMsg = true) override;
+	virtual void ProcessScrollBar(CDuiRect rc, int cxRequired, int cyRequired) override;
 
 	virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;	
 

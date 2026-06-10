@@ -31,15 +31,15 @@ namespace DuiLib {
 		virtual ~CTxtWinHost();
 
 		ITextServices* GetTextServices(void) { return pserv; }
-		void SetClientRect(RECT *prc);
-		RECT* GetClientRect() { return &rcClient; }
+		void SetClientRect(CDuiRect *prc);
+		CDuiRect* GetClientRect() { return &rcClient; }
 		BOOL IsWordWrap(void) { return fWordWrap; }
 		void SetWordWrap(BOOL fWordWrap);
 		BOOL IsReadOnly();
 		void SetReadOnly(BOOL fReadOnly);
 
 		void SetFont(HFONT hFont);
-		void SetColor(DWORD dwColor);
+		void SetColor(CDuiColor dwColor);
 
 		SIZEL* GetExtent();
 		void SetExtent(SIZEL *psizelExtent);
@@ -74,7 +74,7 @@ namespace DuiLib {
 
 		BOOL GetActiveState(void) { return fInplaceActive; }
 
-		BOOL DoSetCursor(RECT *prc, POINT *pt);
+		BOOL DoSetCursor(CDuiRect *prc, CDuiPoint *pt);
 
 		void SetTransparent(BOOL fTransparent);
 
@@ -175,7 +175,7 @@ namespace DuiLib {
 		DWORD		dwEventMask;			// DoEvent mask to pass on to parent window
 		LONG		icf;
 		LONG		ipf;
-		RECT		rcClient;				// Client Rect for this control
+		CDuiRect		rcClient;				// Client Rect for this control
 		SIZEL		sizelExtent;			// Extent array
 		CHARFORMAT2W cf;					// Default character format
 		PARAFORMAT2	pf;					    // Default paragraph format

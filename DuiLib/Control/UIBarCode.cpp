@@ -99,7 +99,7 @@ int CBarCodeUI::GetBarCodeSize() const
 	return m_nBarCodeSize;
 }
 
-void CBarCodeUI::SetPos(RECT rc, bool bNeedInvalidate)
+void CBarCodeUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 {
 	CDynamicLayoutUI::SetPos(rc, bNeedInvalidate);
 	MakeBarcodeImage();
@@ -154,7 +154,7 @@ void CBarCodeUI::MakeBarcodeImage()
 		m_rcCode.bottom = rc.GetHeight();
 
 		m_qrRender->Resize(m_rcCode.GetWidth(), m_rcCode.GetHeight());
-		m_qrRender->DrawBackColor(m_rcCode, CDuiSize(0,0), UIRGB(255,255,255));
+		m_qrRender->DrawBackColor(m_rcCode, CDuiSize(0,0), CDuiColor::Black);
 
 		m_rcCode.right = 0;
 
@@ -172,9 +172,9 @@ void CBarCodeUI::MakeBarcodeImage()
 			iY = m_rcCode.bottom;//(*pb & 0x04) ? m_rcCode.bottom : m_rcCode.top;
 			for (i1 = 0; i1 < iNum1; i1++) {
 				if (bBar)	
-					m_qrRender->DrawLine(iX, m_rcCode.top, iX, iY, GetBarCodeSize(), UIRGB(0,0,0));
+					m_qrRender->DrawLine(iX, m_rcCode.top, iX, iY, GetBarCodeSize(), CDuiColor::Black);
 				else
-					m_qrRender->DrawLine(iX, m_rcCode.top, iX, iY, GetBarCodeSize(), UIRGB(255,255,255));
+					m_qrRender->DrawLine(iX, m_rcCode.top, iX, iY, GetBarCodeSize(), CDuiColor::White);
 				iX += GetBarCodeSize();
 				if(iX > m_rcCode.right) 
 					m_rcCode.right = iX;

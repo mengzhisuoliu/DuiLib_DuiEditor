@@ -39,19 +39,19 @@ namespace DuiLib {
 		m_iOldSel = m_pOwner->GetCurSel();
 
 		// Position the popup window in absolute space
-		SIZE szDrop = m_pOwner->GetDropBoxSize();
-		RECT rcOwner = pOwner->GetPos();
-		RECT rc = rcOwner;
+		CDuiSize szDrop = m_pOwner->GetDropBoxSize();
+		CDuiRect rcOwner = pOwner->GetPos();
+		CDuiRect rc = rcOwner;
 		rc.top = rc.bottom;		// 父窗口left、bottom位置作为弹出窗口起点
 		rc.bottom = rc.top + szDrop.cy;	// 计算弹出窗口高度
 		if( szDrop.cx > 0 ) rc.right = rc.left + szDrop.cx;	// 计算弹出窗口宽度
 
-		SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
+		CDuiSize szAvailable = rc;
 		int cyFixed = 0;
 		for( int it = 0; it < pOwner->GetCount(); it++ ) {
 			CControlUI* pControl = static_cast<CControlUI*>(pOwner->GetItemAt(it));
 			if( !pControl->IsVisible() ) continue;
-			SIZE sz = pControl->EstimateSize(szAvailable);
+			CDuiSize sz = pControl->EstimateSize(szAvailable);
 			cyFixed += sz.cy;
 		}
 		cyFixed += 4;
@@ -72,7 +72,7 @@ namespace DuiLib {
 			::MapWindowRect(pOwner->GetManager()->GetPaintWindow(), HWND_DESKTOP, &rc);
 		}
 
-		Create(pOwner->GetManager()->GetPaintWindow(), NULL, WS_POPUP, WS_EX_TOOLWINDOW, rc);
+		Create(pOwner->GetManager()->GetPaintWindow(), NULL, WS_POPUP, WS_EX_TOOLWINDOW, rc.left, rc.top, rc.GetWidth(), rc.GetHeight());
 		// HACK: Don't deselect the parent's caption
 		HWND hWndParent = m_hWnd;
 		while( ::GetParent(hWndParent) != NULL ) hWndParent = ::GetParent(hWndParent);
@@ -93,7 +93,7 @@ namespace DuiLib {
 		delete this;
 	}
 
-	bool CComboWndWin32::IsHitItem(POINT ptMouse)
+	bool CComboWndWin32::IsHitItem(CDuiPoint ptMouse)
 	{
 		CControlUI* pControl = m_pm.FindControl(ptMouse);
 		if(pControl != NULL) {
@@ -145,18 +145,18 @@ namespace DuiLib {
 		}
 		else if( uMsg == WM_CLOSE ) {
 			m_pOwner->SetManager(m_pOwner->GetManager(), m_pOwner->GetParent(), false);
-			RECT rcNull = { 0 };
+			CDuiRect rcNull;
 			for( int i = 0; i < m_pOwner->GetCount(); i++ ) static_cast<CControlUI*>(m_pOwner->GetItemAt(i))->SetPos(rcNull);
 			m_pOwner->SetFocus();
 		}
 		else if( uMsg == WM_LBUTTONDOWN ) {
-			POINT pt = { 0 };
+			CDuiPoint pt;
 			::GetCursorPos(&pt);
 			::ScreenToClient(m_pm.GetPaintWindow(), &pt);
 			m_bHitItem = IsHitItem(pt);
 		}
 		else if( uMsg == WM_LBUTTONUP ) {
-			POINT pt = { 0 };
+			CDuiPoint pt;
 			::GetCursorPos(&pt);
 			::ScreenToClient(m_pm.GetPaintWindow(), &pt);
 			if(m_bHitItem && IsHitItem(pt)) {
@@ -211,8 +211,8 @@ namespace DuiLib {
 	{
 		if( m_pOwner->GetCurSel() < 0 ) return;
 		m_pLayout->FindSelectable(m_pOwner->GetCurSel(), false);
-		RECT rcItem = m_pLayout->GetItemAt(iIndex)->GetPos();
-		RECT rcList = m_pLayout->GetPos();
+		CDuiRect rcItem = m_pLayout->GetItemAt(iIndex)->GetPos();
+		CDuiRect rcList = m_pLayout->GetPos();
 		CScrollBarUI* pHorizontalScrollBar = m_pLayout->GetHorizontalScrollBar();
 		if( pHorizontalScrollBar && pHorizontalScrollBar->IsVisible() ) rcList.bottom -= pHorizontalScrollBar->GetFixedHeight();
 		int iPos = m_pLayout->GetScrollPos().cy;
@@ -226,8 +226,9 @@ namespace DuiLib {
 	void CComboWndWin32::Scroll(int dx, int dy)
 	{
 		if( dx == 0 && dy == 0 ) return;
-		SIZE sz = m_pLayout->GetScrollPos();
-		m_pLayout->SetScrollPos(CDuiSize(sz.cx + dx, sz.cy + dy));
+		CDuiSize sz = m_pLayout->GetScrollPos();
+		sz.Inflate(dx, dy);
+		m_pLayout->SetScrollPos(sz);
 	}
 
 #if(_WIN32_WINNT >= 0x0501)

@@ -59,17 +59,17 @@ namespace DuiLib {
 
 		void AttachAnimationControl(CControlUI* pOwner);
 
-		virtual BOOL StartAnimation(int nElapse, int nTotalFrame, int nAnimationID = 0, BOOL bLoop = FALSE);
-		virtual void StopAnimation(int nAnimationID = 0);
-		virtual BOOL IsAnimationRunning(int nAnimationID);
-		virtual int GetCurrentFrame(int nAnimationID = 0);
-		virtual BOOL SetCurrentFrame(int nFrame, int nAnimationID = 0);
+		virtual BOOL StartAnimation(int nElapse, int nTotalFrame, int nAnimationID = 0, BOOL bLoop = FALSE) override;
+		virtual void StopAnimation(int nAnimationID = 0) override;
+		virtual BOOL IsAnimationRunning(int nAnimationID) override;
+		virtual int GetCurrentFrame(int nAnimationID = 0) override;
+		virtual BOOL SetCurrentFrame(int nFrame, int nAnimationID = 0) override;
 
-		virtual void OnAnimationStart(int nAnimationID, BOOL bFirstLoop) {};
-		virtual void OnAnimationStep(int nTotalFrame, int nCurFrame, int nAnimationID) {};
-		virtual void OnAnimationStop(int nAnimationID) {};
+		virtual void OnAnimationStart(int nAnimationID, BOOL bFirstLoop) override {};
+		virtual void OnAnimationStep(int nTotalFrame, int nCurFrame, int nAnimationID) override {};
+		virtual void OnAnimationStop(int nAnimationID) override {};
 
-		virtual void OnAnimationElapse(int nAnimationID);
+		virtual void OnAnimationElapse(int nAnimationID) override;
 
 	protected:
 		CAnimationData* GetAnimationDataByID(int nAnimationID);

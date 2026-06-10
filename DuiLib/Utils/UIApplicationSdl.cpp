@@ -17,6 +17,9 @@ bool CUIApplicationSDL::InitInstance(int argc, char* argv[])
 {
 	m_strAppPath = CPaintManagerUI::GetInstancePath();
 
+	//小键盘直接根据NUMLOCK灯亮否转码
+	SDL_SetHint(SDL_HINT_KEYCODE_OPTIONS, "hide_numpad");
+
 	//输入法候选窗口
 	SDL_SetHint(SDL_HINT_IME_IMPLEMENTED_UI, "composition,candidates");
 

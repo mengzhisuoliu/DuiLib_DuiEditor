@@ -46,19 +46,19 @@ public:
 
 	void EnsureVisible(int row, int col); //滚动使单元格可见。
 
-	virtual BOOL SetRowCount(int rows);
-	virtual int GetRowCount();
-	virtual BOOL SetColumnCount(int cols);
-	virtual int GetColumnCount();
+	virtual BOOL SetRowCount(int rows) override;
+	virtual int GetRowCount() override;
+	virtual BOOL SetColumnCount(int cols) override;
+	virtual int GetColumnCount() override;
 
-	virtual BOOL SetFixedRowCount(int rows);
-	virtual int GetFixedRowCount();
+	virtual BOOL SetFixedRowCount(int rows) override;
+	virtual int GetFixedRowCount() override;
 
-	virtual BOOL SetRowHeight(int row, int height);
-	virtual int  GetRowHeight(int row, BOOL bScaleByDPI=FALSE);
+	virtual BOOL SetRowHeight(int row, int height) override;
+	virtual int  GetRowHeight(int row, BOOL bScaleByDPI=FALSE) override;
 
-	virtual BOOL SetColumnWidth(int col, int width);
-	virtual int  GetColumnWidth(int col, BOOL bScaleByDPI=FALSE);
+	virtual BOOL SetColumnWidth(int col, int width) override;
+	virtual int  GetColumnWidth(int col, BOOL bScaleByDPI=FALSE) override;
 
 	//设置整列单元格类型
 	void SetCellType(int col, GridCellType cellType);
@@ -91,7 +91,7 @@ public:
 	CGridCellUI *GetCellUI(int row, int col);
 	CGridCellUI *GetCellUI(const TCellID &cellID);
 	CGridCellUI *GetCellUI(TCellData *pCellData);
-	CGridCellUI *GetCellUIFromPoint(const POINT &pt);
+	CGridCellUI *GetCellUIFromPoint(const CDuiPoint &pt);
 
 	CGridRowUI *GetRowUI(int row);
 
@@ -101,9 +101,9 @@ public:
 	BOOL IsFixedRow(int row);
 	BOOL IsFixedCol(int col);
 
-	virtual void SetFocusCell(int row, int col);
-	virtual void SetFocusCell(const TCellID &cellID);
-	virtual const TCellID &GetFocusCell() const;
+	virtual void SetFocusCell(int row, int col) override;
+	virtual void SetFocusCell(const TCellID &cellID) override;
+	virtual const TCellID &GetFocusCell() const override;
 
 	//设置col列是否允许点击表头排序
 	void SetColumnSort(int col, BOOL bSort);
@@ -134,12 +134,12 @@ public:
 	virtual void DoInit() override;
 	virtual void DoEvent(TEventUI& event) override;
 	bool OnSizeColumnOrRow(TEventUI& event);
-	virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
-	virtual void BuildRows(RECT rc, bool bNeedInvalidate = true);
+	virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
+	virtual void BuildRows(CDuiRect rc, bool bNeedInvalidate = true);
 	virtual void OnDrawItem(int nBeginRow, int nEndRow);
-	virtual void SetScrollPos(SIZE szPos, bool bMsg) override;
-	virtual void ProcessScrollBar(RECT rc, int cxRequired, int cyRequired) override;
-	virtual bool DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl) override;
+	virtual void SetScrollPos(CDuiSize szPos, bool bMsg) override;
+	virtual void ProcessScrollBar(CDuiRect rc, int cxRequired, int cyRequired) override;
+	virtual bool DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl) override;
 	virtual void PaintBorder(UIRender *pRender) override;
 
 public:

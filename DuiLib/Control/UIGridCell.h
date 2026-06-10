@@ -39,8 +39,8 @@ public:
 	virtual CDuiString GetText() const override;
 	virtual void SetText(LPCTSTR pstrText) override;
 
-	virtual DWORD GetTextColor() const override;
-	virtual void SetTextColor(DWORD dwColor) override;
+	virtual CDuiColor GetTextColor() const override;
+	virtual void SetTextColor(CDuiColor dwColor) override;
 
 	bool IsMergedWithOthers();
 
@@ -59,7 +59,7 @@ public:
 	virtual bool IsFocused() const override;
 	virtual bool IsHotState() const override;
 
-	RECT GetCellPos();
+	CDuiRect GetCellPos();
 
 	void CreateInnerControl();
 	void DeleteInnerControl();
@@ -70,11 +70,11 @@ public:
 	void OnCellKillFocus();
 
 	virtual void DoInit() override;
-	virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
-	virtual SIZE EstimateSize(SIZE szAvailable) override;
+	virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
+	virtual CDuiSize EstimateSize(CDuiSize szAvailable) override;
 
 	virtual void DoEvent(TEventUI& event) override;
-	virtual bool DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl) override;
+	virtual bool DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl) override;
 	virtual void PaintBkColor(UIRender *pRender) override;
 	virtual void PaintBkImage(UIRender *pRender) override;
 	virtual void PaintStatusImage(UIRender *pRender) override;
@@ -89,9 +89,9 @@ protected:
 	int m_row, m_col;
 	CControlUI *m_pInnerControl;
 	int		m_nSeparatorType; //1=drag width, 2=drag height
-	RECT m_rcPaint2;
+	CDuiRect m_rcPaint2;
 protected:
-	RECT m_rcMerge;
+	CDuiRect m_rcMerge;
 	bool m_bMergeWithOther;
 	GridCellType m_celltype;
 };

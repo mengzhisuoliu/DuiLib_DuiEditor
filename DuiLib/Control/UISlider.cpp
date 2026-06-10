@@ -37,15 +37,15 @@ namespace DuiLib
 		m_nStep = step;
 	}
 
-	void CSliderUI::SetThumbSize(SIZE szXY)
+	void CSliderUI::SetThumbSize(CDuiSize szXY)
 	{
 		m_szThumb = szXY;
 	}
 
-	RECT CSliderUI::GetThumbRect() const
+	CDuiRect CSliderUI::GetThumbRect(bool bUseNew) const
 	{
-		RECT rcThumb = {0};
-		SIZE m_szThumb = CSliderUI::m_szThumb;
+		CDuiRect rcThumb;
+		CDuiSize m_szThumb = CSliderUI::m_szThumb;
 		if (GetManager() != NULL) {
 			GetManager()->GetDPIObj()->ScaleSize(&m_szThumb);
 		}
@@ -199,7 +199,7 @@ namespace DuiLib
 				Invalidate();
 			}
 
-			POINT pt = event.ptMouse;
+			CDuiPoint pt = event.ptMouse;
 			CDuiRect rcThumb = GetThumbRect();
 			//if( IsEnabled() && ::PtInRect(&rcThumb, event.ptMouse) ) 
 			if( IsEnabled() && rcThumb.PtInRect(event.ptMouse) ) 
@@ -216,7 +216,7 @@ namespace DuiLib
 		}
 		if( event.Type == UIEVENT_SETCURSOR )
 		{
-			RECT rcThumb = GetThumbRect();
+			CDuiRect rcThumb = GetThumbRect();
 			if( IsEnabled()) {
 				//::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_HAND)));
 				GetManager()->SetCursor(DUI_HAND);
@@ -248,13 +248,7 @@ namespace DuiLib
 		if( _tcsicmp(pstrName, _T("thumbimage")) == 0 ) SetThumbImage(pstrValue);
 		else if( _tcsicmp(pstrName, _T("thumbhotimage")) == 0 ) SetThumbHotImage(pstrValue);
 		else if( _tcsicmp(pstrName, _T("thumbpushedimage")) == 0 ) SetThumbPushedImage(pstrValue);
-		else if( _tcsicmp(pstrName, _T("thumbsize")) == 0 ) {
-			SIZE szXY = {0};
-			LPTSTR pstr = NULL;
-			szXY.cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
-			szXY.cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr); 
-			SetThumbSize(szXY);
-		}
+		else if( _tcsicmp(pstrName, _T("thumbsize")) == 0 ) SetThumbSize(pstrValue);
 		else if( _tcsicmp(pstrName, _T("step")) == 0 ) {
 			SetChangeStep(_ttoi(pstrValue));
 		}
@@ -268,7 +262,7 @@ namespace DuiLib
 	{
 		CProgressUI::PaintForeImage(pRender);
 
-		RECT rcThumb = GetThumbRect();
+		CDuiRect rcThumb = GetThumbRect();
 		rcThumb.left -= m_rcItem.left;
 		rcThumb.top -= m_rcItem.top;
 		rcThumb.right -= m_rcItem.left;

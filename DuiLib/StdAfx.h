@@ -121,65 +121,6 @@ private:
 #define GDIPLUS_STARTUP_INSTANCE
 #endif //DUILIB_WIN32
 
-#ifdef DUILIB_GTK
-#include <gtk/gtk.h>
-#endif
-
-#ifdef DUILIB_GTK
-#	ifdef WIN32
-#		include "cairo-win32.h"
-#		include "pango/pangocairo.h"
-#		include "pango/pangoWin32.h"
-#		include "gdk-pixbuf/gdk-pixbuf.h"
-#		include "gdk/gdk.h"
-#		ifdef _WIN64
-#			ifdef _DEBUG
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/debug/lib/cairo.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/debug/lib/pango-1.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/debug/lib/pangocairo-1.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/debug/lib/pangowin32-1.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/debug/lib/glib-2.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/debug/lib/gdk_pixbuf-2.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/debug/lib/gobject-2.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/debug/lib/gtk-3.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/debug/lib/gdk-3.0.lib")
-#			else
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/release/lib/cairo.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/release/lib/pangocairo-1.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/release/lib/pango-1.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/release/lib/pangowin32-1.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/release/lib/glib-2.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/release/lib/gdk_pixbuf-2.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/release/lib/gobject-2.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/release/lib/gtk-3.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/x64/release/lib/gdk-3.0.lib")
-#			endif
-#		else
-#			ifdef _DEBUG
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/debug/lib/cairo.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/debug/lib/pangocairo-1.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/debug/lib/pango-1.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/debug/lib/pangowin32-1.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/debug/lib/glib-2.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/debug/lib/gdk_pixbuf-2.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/debug/lib/gobject-2.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/debug/lib/gtk-3.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/debug/lib/gdk-3.0.lib")
-#			else
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/release/lib/cairo.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/release/lib/pangocairo-1.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/release/lib/pango-1.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/release/lib/pangowin32-1.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/release/lib/glib-2.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/release/lib/gdk_pixbuf-2.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/release/lib/gobject-2.0.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/release/lib/gtk-3.lib")
-#				pragma comment(lib, "E:/wingtk/gtk-build/gtk/Win32/release/lib/gdk-3.0.lib")
-#			endif
-#		endif
-#	endif
-#endif
-
 #ifdef DUILIB_SDL
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
@@ -217,7 +158,6 @@ private:
 #endif
 
 #include "Render/UIClipWin32.h"
-#include "Render/UIClipGtk.h"
 #include "Render/UIClipSdl.h"
 
 //{{AFX_INSERT_LOCATION}}

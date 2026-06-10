@@ -67,7 +67,7 @@ public:
 		REG_METHOD_FUNPR(UIRender, UIBitmap *, GetBitmap, () );
 
 		REG_METHOD_FUNPR(UIRender, bool, Resize, (int width, int height) );
-		REG_METHOD_FUNPR(UIRender, bool, Resize, (const RECT &rc) );
+		REG_METHOD_FUNPR(UIRender, bool, Resize, (const CDuiRect &rc) );
 
 		//擦除当前画布。
 		REG_METHOD_FUNPR(UIRender, void, Clear, () );
@@ -86,48 +86,48 @@ public:
 		REG_METHOD_FUNPR(UIRender, BOOL, StretchBlt, (int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, DWORD dwRop) );
 
 		//绘制位图
-		//REG_METHOD_FUNPR(UIRender, void, DrawBitmap, (HBITMAP hBitmap, const RECT& rc, const RECT& rcPaint, const RECT& rcBmpPart, const RECT& rcCorners, bool bAlpha, BYTE uFade, bool hole, bool xtiled, bool ytiled) );
+		//REG_METHOD_FUNPR(UIRender, void, DrawBitmap, (HBITMAP hBitmap, const CDuiRect& rc, const CDuiRect& rcPaint, const CDuiRect& rcBmpPart, const CDuiRect& rcCorners, bool bAlpha, BYTE uFade, bool hole, bool xtiled, bool ytiled) );
 
 		//画颜色(填充颜色)
-		REG_METHOD_FUNPR(UIRender, void, DrawColor, (const RECT& rc, const SIZE &round, DWORD color) );
+		REG_METHOD_FUNPR(UIRender, void, DrawColor, (const CDuiRect& rc, const CDuiSize &round, CDuiColor color) );
 
 		//画渐变色
-		REG_METHOD_FUNPR(UIRender, void, DrawGradient, (const RECT& rc, DWORD dwFirst, DWORD dwSecond, bool bVertical, int nSteps) );
+		REG_METHOD_FUNPR(UIRender, void, DrawGradient, (const CDuiRect& rc, CDuiColor dwFirst, CDuiColor dwSecond, bool bVertical, int nSteps) );
 
 		//画线  MoveTo(rc.left, rc.top)，LineTo(rc.right, rc.bottom)
-		REG_METHOD_FUNPR(UIRender, void, DrawLine, (const RECT& rc, int nSize, DWORD dwPenColor,int nStyle) );
+		REG_METHOD_FUNPR(UIRender, void, DrawLine, (const CDuiRect& rc, int nSize, CDuiColor dwPenColor,int nStyle) );
 
 		//画边框
-		REG_METHOD_FUNPR(UIRender, void, DrawRect, (const RECT& rc, int nSize, DWORD dwPenColor,int nStyle) );
+		REG_METHOD_FUNPR(UIRender, void, DrawRect, (const CDuiRect& rc, int nSize, CDuiColor dwPenColor,int nStyle) );
 
 		//画圆角边框
-		REG_METHOD_FUNPR(UIRender, void, DrawRoundRect, (const RECT& rc, int nSize, const SIZE &round, DWORD dwPenColor,int nStyle) );
+		REG_METHOD_FUNPR(UIRender, void, DrawRoundRect, (const CDuiRect& rc, int nSize, const CDuiSize &round, CDuiColor dwPenColor,int nStyle) );
 
 		//画椭圆
-		REG_METHOD_FUNPR(UIRender, void, DrawEllipse, (const RECT& rc, int nSize, DWORD dwPenColor, int nStyle) );
+		REG_METHOD_FUNPR(UIRender, void, DrawEllipse, (const CDuiRect& rc, int nSize, CDuiColor dwPenColor, int nStyle) );
 
 		//绘制文本
-		REG_METHOD_FUNPR(UIRender, void, DrawText, (RECT& rc, const RECT &rcTextPadding, LPCTSTR pstrText, DWORD dwTextColor, int iFont, UINT uStyle) );
+		REG_METHOD_FUNPR(UIRender, void, DrawText, (CDuiRect& rc, const CDuiRect &rcTextPadding, LPCTSTR pstrText, CDuiColor dwTextColor, int iFont, UINT uStyle) );
 
 		//绘制文字的占用的空间大小
-		REG_METHOD_FUNPR(UIRender, SIZE, GetTextSize, (LPCTSTR pstrText, int iFont, UINT uStyle) );
+		REG_METHOD_FUNPR(UIRender, CDuiSize, GetTextSize, (LPCTSTR pstrText, int iFont, UINT uStyle) );
 
 		//////////////////////////////////////////////////////////////////////////
 
 		//画背景色
-		REG_METHOD_FUNPR(UIRender, void, DrawBackColor, (const RECT& rc, const SIZE &round, DWORD dwBackColor, DWORD dwBackColor2, DWORD dwBackColor3, bool bVertical) );
+		REG_METHOD_FUNPR(UIRender, void, DrawBackColor, (const CDuiRect& rc, const CDuiSize &round, CDuiColor dwBackColor, CDuiColor dwBackColor2, CDuiColor dwBackColor3, bool bVertical) );
 
 		//画边框
-		REG_METHOD_FUNPR(UIRender, void, DrawBorder, (const RECT &rcItem, int nBorderSize, SIZE szBorderRound, RECT rcBorderSize, DWORD dwColor, int nBorderStyle) );
+		REG_METHOD_FUNPR(UIRender, void, DrawBorder, (const CDuiRect &rcItem, int nBorderSize, CDuiSize szBorderRound, CDuiRect rcBorderSize, CDuiColor dwColor, int nBorderStyle) );
 
 		//绘制带背景颜色的文本
-		REG_METHOD_FUNPR(UIRender, void, DrawText, (RECT& rc, const RECT &rcTextPadding, LPCTSTR pstrText,DWORD dwTextColor, int iFont, UINT uStyle, DWORD dwTextBKColor) );
+		REG_METHOD_FUNPR(UIRender, void, DrawText, (CDuiRect& rc, const CDuiRect &rcTextPadding, LPCTSTR pstrText,CDuiColor dwTextColor, int iFont, UINT uStyle, CDuiColor dwTextBKColor) );
 
 		//根据TDrawInfo绘制图像
-		REG_METHOD_FUNPR(UIRender, bool, DrawImageInfo, (const RECT& rcItem, const RECT& rcPaint, const TDrawInfo* pDrawInfo, HINSTANCE instance) );
+		REG_METHOD_FUNPR(UIRender, bool, DrawImageInfo, (const CDuiRect& rcItem, const CDuiRect& rcPaint, const TDrawInfo* pDrawInfo, HINSTANCE instance) );
 
 		//根据字符串属性绘制图像
-		REG_METHOD_FUNPR(UIRender, bool, DrawImageString, (const RECT& rcItem, const RECT& rcPaint, LPCTSTR pStrImage, LPCTSTR pStrModify, HINSTANCE instance) );
+		REG_METHOD_FUNPR(UIRender, bool, DrawImageString, (const CDuiRect& rcItem, const CDuiRect& rcPaint, LPCTSTR pStrImage, LPCTSTR pStrModify, HINSTANCE instance) );
 		
 	}
 };

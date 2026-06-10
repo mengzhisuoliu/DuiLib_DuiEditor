@@ -11,25 +11,25 @@ class UILIB_API CTrackerUI: public CContainerUI
 	DECLARE_DUICONTROL(CTrackerUI)
 public:
 	CTrackerUI();
-	LPCTSTR GetClass() const;
-	LPVOID GetInterface(LPCTSTR pstrName);
-	UINT GetControlFlags() const;
+	virtual LPCTSTR GetClass() const override;
+	virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+	virtual UINT GetControlFlags() const override;
 
 	// 0    1    2
 	// 3    4    5
 	// 6    7    8
-	RECT GetSizerRect(int iIndex);
-	int GetSizerCursor(POINT& pt, int& iCursor);
-	void PaintBorder(UIRender *pRender);
-	void DoEvent(TEventUI& event);
+	CDuiRect GetSizerRect(int iIndex);
+	int GetSizerCursor(CDuiPoint& pt, int& iCursor);
+	virtual void PaintBorder(UIRender *pRender) override;
+	virtual void DoEvent(TEventUI& event) override;
 	void MoveRect(int cx, int cy);
 	void SizeRect(int cx, int cy);
 	int GetCorIndex(int fx, int fy, int sx, int sy);
 	//void DoPostPaint(HDC hDC, const RECT& rcPaint);
-	RECT GetRect();
+	CDuiRect GetRect();
 protected:
 	int m_iCursor;
-	RECT m_rcNewPos;
+	CDuiRect m_rcNewPos;
 	bool m_bMouseDown;
 };
 

@@ -79,7 +79,7 @@ namespace DuiLib {
 					CDuiString ImageName	= node.attribute(_T("name")).as_string();
 					LPCTSTR pImageResType	= node.attribute(_T("restype")).as_string();
 					bool shared				= node.attribute(_T("shared")).as_bool();
-					DWORD mask				= node.attribute(_T("mask")).as_uicolor();
+					CDuiColor mask			= node.attribute(_T("mask")).as_uicolor();
 
 					if( !ImageName.IsEmpty() ) 
 						pManager->AddImage(ImageName.GetData(), pImageResType, mask, false, shared);
@@ -169,32 +169,32 @@ namespace DuiLib {
 						pstrValue = attr.value();
 						if( _tcsicmp(pstrName, _T("size")) == 0 ) 
 						{
-							SIZE sz = attr.as_size();
+							CDuiSize sz = attr.as_size();
 							pManager->SetInitSize(pManager->GetDPIObj()->ScaleInt(sz.cx), pManager->GetDPIObj()->ScaleInt(sz.cy));
 						} 
 						else if( _tcsicmp(pstrName, _T("sizebox")) == 0 ) 
 						{
-							RECT rcSizeBox = attr.as_rect();   
+							CDuiRect rcSizeBox = attr.as_rect();
 							pManager->SetSizeBox(rcSizeBox);
 						}
 						else if( _tcsicmp(pstrName, _T("caption")) == 0 ) 
 						{
-							RECT rcCaption = attr.as_rect();  
+							CDuiRect rcCaption = attr.as_rect();
 							pManager->SetCaptionRect(rcCaption);
 						}
 						else if( _tcsicmp(pstrName, _T("roundcorner")) == 0 ) 
 						{
-							SIZE sz = attr.as_size();
+							CDuiSize sz = attr.as_size();
 							pManager->SetRoundCorner(sz.cx, sz.cy);
 						}
 						else if( _tcsicmp(pstrName, _T("mininfo")) == 0 ) 
 						{
-							SIZE sz = attr.as_size();
+							CDuiSize sz = attr.as_size();
 							pManager->SetMinInfo(sz.cx, sz.cy);
 						}
 						else if( _tcsicmp(pstrName, _T("maxinfo")) == 0 ) 
 						{
-							SIZE sz = attr.as_size();
+							CDuiSize sz = attr.as_size();
 							pManager->SetMaxInfo(sz.cx, sz.cy);
 						}
 						else if( _tcsicmp(pstrName, _T("showdirty")) == 0 ) {
@@ -223,27 +223,27 @@ namespace DuiLib {
 						}
 						else if( _tcsicmp(pstrName, _T("disabledfontcolor")) == 0 ) 
 						{
-							DWORD clrColor = attr.as_uicolor();
+							CDuiColor clrColor = attr.as_uicolor();
 							pManager->SetDefaultDisabledColor(clrColor);
 						} 
 						else if( _tcsicmp(pstrName, _T("defaultfontcolor")) == 0 ) 
 						{
-							DWORD clrColor = attr.as_uicolor();
+							CDuiColor clrColor = attr.as_uicolor();
 							pManager->SetDefaultFontColor(clrColor);
 						}
 						else if( _tcsicmp(pstrName, _T("linkfontcolor")) == 0 ) 
 						{
-							DWORD clrColor = attr.as_uicolor();
+							CDuiColor clrColor = attr.as_uicolor();
 							pManager->SetDefaultLinkFontColor(clrColor);
 						} 
 						else if( _tcsicmp(pstrName, _T("linkhoverfontcolor")) == 0 ) 
 						{
-							DWORD clrColor = attr.as_uicolor();
+							CDuiColor clrColor = attr.as_uicolor();
 							pManager->SetDefaultLinkHoverFontColor(clrColor);
 						} 
 						else if( _tcsicmp(pstrName, _T("selectedcolor")) == 0 ) 
 						{
-							DWORD clrColor = attr.as_uicolor();
+							CDuiColor clrColor = attr.as_uicolor();
 							pManager->SetDefaultSelectedBkColor(clrColor);
 						} 
 						else if( _tcsicmp(pstrName, _T("shadowsize")) == 0 ) 
@@ -260,17 +260,17 @@ namespace DuiLib {
 						}
 						else if( _tcsicmp(pstrName, _T("shadowposition")) == 0 ) 
 						{
-							SIZE sz = attr.as_size();
+							CDuiSize sz = attr.as_size();
 							pManager->GetShadow()->SetPosition(sz.cx, sz.cy);
 						}
 						else if( _tcsicmp(pstrName, _T("shadowcolor")) == 0 ) 
 						{
-							DWORD clrColor = attr.as_uicolor();
+							CDuiColor clrColor = attr.as_uicolor();
 							pManager->GetShadow()->SetColor(clrColor);
 						}
 						else if( _tcsicmp(pstrName, _T("shadowcorner")) == 0 ) 
 						{
-							RECT rcCorner = attr.as_rect();   
+							CDuiRect rcCorner = attr.as_rect();
 							pManager->GetShadow()->SetShadowCorner(rcCorner);
 						}
 						else if( _tcsicmp(pstrName, _T("shadowimage")) == 0 ) 

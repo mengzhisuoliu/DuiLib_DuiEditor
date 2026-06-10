@@ -47,9 +47,9 @@ public:
 		REG_OBJECT_PROPERTY(TDrawInfo, CDuiString, sDrawModify);
 		REG_OBJECT_PROPERTY(TDrawInfo, CDuiString, sImageName);
 		REG_OBJECT_PROPERTY(TDrawInfo, CDuiString, sResType);
-		REG_OBJECT_PROPERTY(TDrawInfo, RECT, rcDest);
-		REG_OBJECT_PROPERTY(TDrawInfo, RECT, rcSource);
-		REG_OBJECT_PROPERTY(TDrawInfo, RECT, rcCorner);
+		REG_OBJECT_PROPERTY(TDrawInfo, CDuiRect, rcDest);
+		REG_OBJECT_PROPERTY(TDrawInfo, CDuiRect, rcSource);
+		REG_OBJECT_PROPERTY(TDrawInfo, CDuiRect, rcCorner);
 		REG_OBJECT_PROPERTY(TDrawInfo, DWORD, dwMask);
 		REG_OBJECT_PROPERTY(TDrawInfo, BYTE, uFade);
 		REG_OBJECT_PROPERTY(TDrawInfo, bool, bHole);

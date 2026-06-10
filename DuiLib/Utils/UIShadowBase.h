@@ -29,7 +29,7 @@ public:
 
 	// 图片阴影的函数
 	virtual bool SetImage(LPCTSTR szImage) { return false; }
-	virtual bool SetShadowCorner(RECT rcCorner) { return false; }	// 九宫格方式描述阴影
+	virtual bool SetShadowCorner(CDuiRect rcCorner) { return false; }	// 九宫格方式描述阴影
 
 	// 把自己的阴影样式复制到传入参数
 	virtual bool CopyShadow(CShadowBaseUI* pShadow) { return false; }

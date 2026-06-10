@@ -30,8 +30,8 @@ public:
 	virtual bool AddAt(CControlUI* pControl, int iIndex) override;
 
 	virtual void DoInit() override;
-	virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
-	virtual SIZE EstimateSize(SIZE szAvailable) override;
+	virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
+	virtual CDuiSize EstimateSize(CDuiSize szAvailable) override;
 
 	virtual void DoEvent(TEventUI& event) override;
 	virtual void PaintBkColor(UIRender *pRender) override;

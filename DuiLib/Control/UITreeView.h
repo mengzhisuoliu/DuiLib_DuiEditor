@@ -53,15 +53,15 @@ namespace DuiLib
 		bool GetVisibleFolderBtn();
 		void SetVisibleCheckBtn(bool _IsVisibled);
 		bool GetVisibleCheckBtn();
-		void SetItemTextColor(DWORD _dwItemTextColor);
-		DWORD GetItemTextColor() const;
-		void SetItemHotTextColor(DWORD _dwItemHotTextColor);
-		DWORD GetItemHotTextColor() const;
-		void SetSelItemTextColor(DWORD _dwSelItemTextColor);
-		DWORD GetSelItemTextColor() const;
-		void SetSelItemHotTextColor(DWORD _dwSelHotItemTextColor);
-		DWORD GetSelItemHotTextColor() const;
-		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+		void SetItemTextColor(CDuiColor _dwItemTextColor);
+		CDuiColor GetItemTextColor() const;
+		void SetItemHotTextColor(CDuiColor _dwItemHotTextColor);
+		CDuiColor GetItemHotTextColor() const;
+		void SetSelItemTextColor(CDuiColor _dwSelItemTextColor);
+		CDuiColor GetSelItemTextColor() const;
+		void SetSelItemHotTextColor(CDuiColor _dwSelHotItemTextColor);
+		CDuiColor GetSelItemHotTextColor() const;
+		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
 		CStdPtrArray GetTreeNodes();
 		int			 GetTreeIndex();
@@ -82,10 +82,10 @@ namespace DuiLib
 		long	m_iTreeLavel;
 		bool	m_bIsVisable;
 		bool	m_bIsCheckBox;
-		DWORD	m_dwItemTextColor;
-		DWORD	m_dwItemHotTextColor;
-		DWORD	m_dwSelItemTextColor;
-		DWORD	m_dwSelItemHotTextColor;
+		CDuiColor	m_dwItemTextColor;
+		CDuiColor	m_dwItemHotTextColor;
+		CDuiColor	m_dwSelItemTextColor;
+		CDuiColor	m_dwSelItemHotTextColor;
 
 		CTreeViewUI*			pTreeView;
 		CHorizontalLayoutUI*	pHoriz;
@@ -127,10 +127,10 @@ namespace DuiLib
 		virtual bool GetVisibleCheckBtn();
 		virtual void SetItemMinWidth(UINT _ItemMinWidth);
 		virtual UINT GetItemMinWidth();
-		virtual void SetItemTextColor(DWORD _dwItemTextColor);
-		virtual void SetItemHotTextColor(DWORD _dwItemHotTextColor);
-		virtual void SetSelItemTextColor(DWORD _dwSelItemTextColor);
-		virtual void SetSelItemHotTextColor(DWORD _dwSelHotItemTextColor);
+		virtual void SetItemTextColor(CDuiColor _dwItemTextColor);
+		virtual void SetItemHotTextColor(CDuiColor _dwItemHotTextColor);
+		virtual void SetSelItemTextColor(CDuiColor _dwSelItemTextColor);
+		virtual void SetSelItemHotTextColor(CDuiColor _dwSelHotItemTextColor);
 		
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 	private:

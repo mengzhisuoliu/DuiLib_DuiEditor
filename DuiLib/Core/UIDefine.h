@@ -75,7 +75,7 @@ namespace DuiLib
 		CDuiString sVirtualWnd;
 		CControlUI* pSender;
 		DWORD dwTimestamp;
-		POINT ptMouse;
+		CDuiPoint ptMouse;
 		WPARAM wParam;
 		LPARAM lParam;
 	} TNotifyUI;

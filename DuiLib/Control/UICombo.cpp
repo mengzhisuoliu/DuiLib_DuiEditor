@@ -1,11 +1,9 @@
 #include "StdAfx.h"
 
 #include "UIComboWndWin32.h"
-#include "UIComboWndGtk.h"
 #include "UIComboWndSdl.h"
 
 #include "UIEditWndWin32.h"
-#include "UIEditWndGtk.h"
 #include "UIEditWndSdl.h"
 namespace DuiLib {
 
@@ -354,7 +352,7 @@ namespace DuiLib {
 		CControlUI::DoEvent(event);
 	}
 
-	SIZE CComboUI::EstimateSize(SIZE szAvailable)
+	CDuiSize CComboUI::EstimateSize(CDuiSize szAvailable)
 	{
 		if( IsAutoCalcHeight() ) return CDuiSize(m_cxyFixed.cx, m_pManager->GetFontHeight(-1) + 12);
 		return CControlUI::EstimateSize(szAvailable);
@@ -392,12 +390,12 @@ namespace DuiLib {
 		m_sDropBoxAttributes = pstrList;
 	}
 
-	SIZE CComboUI::GetDropBoxSize() const
+	CDuiSize CComboUI::GetDropBoxSize() const
 	{
 		return m_szDropBox;
 	}
 
-	void CComboUI::SetDropBoxSize(SIZE szDropBox)
+	void CComboUI::SetDropBoxSize(CDuiSize szDropBox)
 	{
 		m_szDropBox = szDropBox;
 	}
@@ -415,7 +413,7 @@ namespace DuiLib {
 		Invalidate();
 	}
 
-	void CComboUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void CComboUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 	{
 		CDuiRect rcPos = rc;
 
@@ -424,7 +422,7 @@ namespace DuiLib {
 			// 隐藏下拉窗口
 			if(m_pWindow && DuiLibWindowWnd::IsWindow(m_pWindow->GetHWND())) m_pWindow->Close();
 			// 所有元素大小置为0
-			RECT rcNull = { 0 };
+			CDuiRect rcNull;
 			for( int i = 0; i < m_items.GetSize(); i++ ) static_cast<CControlUI*>(m_items[i])->SetPos(rcNull);
 			// 调整位置
 			CControlUI::SetPos(rc, bNeedInvalidate);
@@ -437,7 +435,7 @@ namespace DuiLib {
 		}
 	}
 
-	void CComboUI::Move(SIZE szOffset, bool bNeedInvalidate)
+	void CComboUI::Move(CDuiSize szOffset, bool bNeedInvalidate)
 	{
 		CControlUI::Move(szOffset, bNeedInvalidate);
 		if( m_pWindow != NULL ) 
@@ -456,19 +454,11 @@ namespace DuiLib {
 		else if( _tcsicmp(pstrName, _T("dropbox")) == 0 ) SetDropBoxAttributeList(pstrValue);
 		else if( _tcsicmp(pstrName, _T("dropboxsize")) == 0)
 		{
-			SIZE szDropBoxSize = { 0 };
-			LPTSTR pstr = NULL;
-			szDropBoxSize.cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
-			szDropBoxSize.cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
-			SetDropBoxSize(szDropBoxSize);
+			SetDropBoxSize(pstrValue);
 		}
 		else if( _tcsicmp(pstrName, _T("dropbuttonsize")) == 0 )
 		{
-			SIZE cx = { 0 };
-			LPTSTR pstr = NULL;
-			cx.cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
-			cx.cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-			m_szDropButtonSize = cx;
+			m_szDropButtonSize = CDuiSize(pstrValue);
 		}
 		else if( _tcsicmp(pstrName, _T("dropbuttonnormalimage")) == 0 ) SetdbNormalImage(pstrValue);
 		else if( _tcsicmp(pstrName, _T("dropbuttonhotimage")) == 0 ) SetdbHotImage(pstrValue);
@@ -487,7 +477,7 @@ namespace DuiLib {
 		else CContainerUI::SetAttribute(pstrName, pstrValue);
 	}
 
-	bool CComboUI::DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl)
+	bool CComboUI::DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl)
 	{
 		if(!CControlUI::DoPaint(pRender, rcPaint, pStopControl))
 			return false;
@@ -527,7 +517,7 @@ namespace DuiLib {
 
 	bool CComboUI::DrawDropButtonImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify)
 	{
-		RECT rcButton = GetDropButtonRect();
+		CDuiRect rcButton = GetDropButtonRect();
 		return pRender->DrawImageString(rcButton, rcButton, pStrImage, pStrModify, m_instance);
 	}
 
@@ -558,8 +548,8 @@ namespace DuiLib {
 		CDuiString sText = GetText();
 		if(sText.IsEmpty()) return;
 
-		RECT rcText = m_rcItem;
-		DWORD dwColor = 0;
+		CDuiRect rcText = m_rcItem;
+		CDuiColor dwColor = 0;
 		int iFont = -1;
 		CDuiRect rcTextPadding = GetTextPadding();
 
@@ -635,7 +625,7 @@ namespace DuiLib {
 	CDuiRect CComboUI::GetClientPos()
 	{
 		CDuiRect rcPos = m_rcItem;
-		RECT rcButton = GetDropButtonRect();
+		CDuiRect rcButton = GetDropButtonRect();
 		rcPos.right = rcButton.left;
 		rcPos.right -= 1;
 		return rcPos;
@@ -830,30 +820,26 @@ namespace DuiLib {
 		return m_sTipValue;
 	}
 
-	void CComboUI::SetTipValueColor( LPCTSTR pStrColor )
+	void CComboUI::SetTipValueColor(CDuiColor dwColor )
 	{
-		if( *pStrColor == _T('#')) pStrColor = ::CharNext(pStrColor);
-		LPTSTR pstr = NULL;
-		DWORD clrColor = _tcstoul(pStrColor, &pstr, 16);
-
-		m_dwTipValueColor = clrColor;
+		m_dwTipValueColor = dwColor;
 	}
 
-	DWORD CComboUI::GetTipValueColor()
+	CDuiColor CComboUI::GetTipValueColor()
 	{
 		return m_dwTipValueColor;
 	}
 
-	RECT CComboUI::GetDropButtonRect()
+	CDuiRect CComboUI::GetDropButtonRect()
 	{
-		RECT rc = m_rcItem;
+		CDuiRect rc = m_rcItem;
 		rc.top++;
 		rc.bottom--;
 		rc.right--;
 		rc.left = rc.right - (rc.bottom - rc.top);
 
-		SIZE sz = m_szDropButtonSize;
-		RECT rcButton;
+		CDuiSize sz = m_szDropButtonSize;
+		CDuiRect rcButton;
 		rcButton.left = rc.left + (rc.right - rc.left)/2 - sz.cx/2;
 		rcButton.right = rcButton.left + sz.cx;
 		rcButton.top = rc.top + (rc.bottom - rc.top)/2 - sz.cy/2;

@@ -92,9 +92,6 @@ namespace DuiLib {
 		m_szInitWindowSize.cx = 0;
 		m_szInitWindowSize.cy = 0;
 		m_szRoundCorner.cx = m_szRoundCorner.cy = 0;
-		::ZeroMemory(&m_rcSizeBox, sizeof(m_rcSizeBox));
-		::ZeroMemory(&m_rcCaption, sizeof(m_rcCaption));
-		::ZeroMemory(&m_rcLayeredInset, sizeof(m_rcLayeredInset));
 		//::ZeroMemory(&m_rcLayeredUpdate, sizeof(m_rcLayeredUpdate));
 		m_ptLastMousePos.x = m_ptLastMousePos.y = -1;
 
@@ -493,12 +490,12 @@ namespace DuiLib {
 		return m_sName;
 	}
 
-	POINT CPaintManagerUI::GetLastMousePos() const
+	CDuiPoint CPaintManagerUI::GetLastMousePos() const
 	{
 		return m_ptLastMousePos;
 	}
 
-	SIZE CPaintManagerUI::GetInitSize()
+	CDuiSize CPaintManagerUI::GetInitSize()
 	{
 		return m_szInitWindowSize;
 	}
@@ -512,27 +509,27 @@ namespace DuiLib {
 		}
 	}
 
-	RECT& CPaintManagerUI::GetSizeBox()
+	CDuiRect& CPaintManagerUI::GetSizeBox()
 	{
 		return m_rcSizeBox;
 	}
 
-	void CPaintManagerUI::SetSizeBox(RECT& rcSizeBox)
+	void CPaintManagerUI::SetSizeBox(CDuiRect rcSizeBox)
 	{
 		m_rcSizeBox = rcSizeBox;
 	}
 
-	RECT& CPaintManagerUI::GetCaptionRect()
+	CDuiRect& CPaintManagerUI::GetCaptionRect()
 	{
 		return m_rcCaption;
 	}
 
-	void CPaintManagerUI::SetCaptionRect(RECT& rcCaption)
+	void CPaintManagerUI::SetCaptionRect(CDuiRect rcCaption)
 	{
 		m_rcCaption = rcCaption;
 	}
 
-	SIZE CPaintManagerUI::GetRoundCorner() const
+	CDuiSize CPaintManagerUI::GetRoundCorner() const
 	{
 		return m_szRoundCorner;
 	}
@@ -543,9 +540,9 @@ namespace DuiLib {
 		m_szRoundCorner.cy = cy;
 	}
 
-	SIZE CPaintManagerUI::GetMinInfo()  
+	CDuiSize CPaintManagerUI::GetMinInfo()
 	{ 
-		SIZE sz;
+		CDuiSize sz;
 		sz.cx = GetDPIObj()->ScaleInt(	m_szMinWindow.cx );
 		sz.cy = GetDPIObj()->ScaleInt(	m_szMinWindow.cy);
 		return sz;
@@ -559,9 +556,9 @@ namespace DuiLib {
 		m_szMinWindow.cy = cy;
 	}
 
-	SIZE CPaintManagerUI::GetMaxInfo()  
+	CDuiSize CPaintManagerUI::GetMaxInfo()
 	{ 
-		SIZE sz;
+		CDuiSize sz;
 		sz.cx = GetDPIObj()->ScaleInt(m_szMaxWindow.cx);
   sz.cy = GetDPIObj()->ScaleInt(m_szMaxWindow.cy);
 		return sz;
@@ -630,12 +627,12 @@ namespace DuiLib {
 		return m_bLayered;
 	}
 
-	RECT& CPaintManagerUI::GetLayeredInset()
+	CDuiRect& CPaintManagerUI::GetLayeredInset()
 	{
 		return m_rcLayeredInset;
 	}
 
-	void CPaintManagerUI::SetLayeredInset(RECT& rcLayeredInset)
+	void CPaintManagerUI::SetLayeredInset(CDuiRect& rcLayeredInset)
 	{
 		m_rcLayeredInset = rcLayeredInset;
 		m_bLayeredChanged = true;
@@ -663,7 +660,7 @@ namespace DuiLib {
 	{
 		m_diLayered.sDrawString = pstrImage;
 		m_diLayered.Parse(pstrImage, NULL, this);
-		RECT rcNull = {0};
+		CDuiRect rcNull;
 		Render()->DrawImageInfo(rcNull, rcNull, &m_diLayered);
 		m_bLayeredChanged = true;
 		Invalidate();
@@ -723,14 +720,14 @@ namespace DuiLib {
 	}
 	void CPaintManagerUI::Invalidate()
 	{
-		RECT rcClient = { 0 };
+		CDuiRect rcClient;
 		GetClientRect(&rcClient);
 		//::UnionRect(&m_rcLayeredUpdate, &m_rcLayeredUpdate, &rcClient);
 		m_rcLayeredUpdate.Union(m_rcLayeredUpdate, rcClient);
 		InvalidateRect(m_hWndPaint, NULL, FALSE);
 	}
 
-	void CPaintManagerUI::Invalidate(RECT& rcItem)
+	void CPaintManagerUI::Invalidate(CDuiRect& rcItem)
 	{
 		if( rcItem.left < 0 ) rcItem.left = 0;
 		if( rcItem .top < 0 ) rcItem.top = 0;
@@ -952,12 +949,12 @@ namespace DuiLib {
 		GetDPIObj()->SetScale(iDPI);
 		int scale2 = GetDPIObj()->GetScale();
 		ResetDPIAssets();
-		RECT rcWnd = {0};
+		CDuiRect rcWnd;
 		GetWindowRect(&rcWnd);
-		RECT*  prcNewWindow = &rcWnd;
+		CDuiRect*  prcNewWindow = &rcWnd;
 		if (!IsZoomed()) 
 		{
-			RECT rc = rcWnd;
+			CDuiRect rc = rcWnd;
 			rc.right = rcWnd.left + (rcWnd.right - rcWnd.left) * scale2 / scale1;
 			rc.bottom = rcWnd.top + (rcWnd.bottom - rcWnd.top) * scale2 / scale1;
 			prcNewWindow = &rc;
@@ -1376,12 +1373,12 @@ namespace DuiLib {
 		m_bForceUseSharedRes = bForce;
 	}
 
-	DWORD CPaintManagerUI::GetDefaultDisabledColor() const
+	CDuiColor CPaintManagerUI::GetDefaultDisabledColor() const
 	{
 		return m_ResInfo.m_dwDefaultDisabledColor;
 	}
 
-	void CPaintManagerUI::SetDefaultDisabledColor(DWORD dwColor, bool bShared)
+	void CPaintManagerUI::SetDefaultDisabledColor(CDuiColor dwColor, bool bShared)
 	{
 		if (bShared)
 		{
@@ -1395,12 +1392,12 @@ namespace DuiLib {
 		}
 	}
 
-	DWORD CPaintManagerUI::GetDefaultFontColor() const
+	CDuiColor CPaintManagerUI::GetDefaultFontColor() const
 	{
 		return m_ResInfo.m_dwDefaultFontColor;
 	}
 
-	void CPaintManagerUI::SetDefaultFontColor(DWORD dwColor, bool bShared)
+	void CPaintManagerUI::SetDefaultFontColor(CDuiColor dwColor, bool bShared)
 	{
 		if (bShared)
 		{
@@ -1414,12 +1411,12 @@ namespace DuiLib {
 		}
 	}
 
-	DWORD CPaintManagerUI::GetDefaultLinkFontColor() const
+	CDuiColor CPaintManagerUI::GetDefaultLinkFontColor() const
 	{
 		return m_ResInfo.m_dwDefaultLinkFontColor;
 	}
 
-	void CPaintManagerUI::SetDefaultLinkFontColor(DWORD dwColor, bool bShared)
+	void CPaintManagerUI::SetDefaultLinkFontColor(CDuiColor dwColor, bool bShared)
 	{
 		if (bShared)
 		{
@@ -1433,12 +1430,12 @@ namespace DuiLib {
 		}
 	}
 
-	DWORD CPaintManagerUI::GetDefaultLinkHoverFontColor() const
+	CDuiColor CPaintManagerUI::GetDefaultLinkHoverFontColor() const
 	{
 		return m_ResInfo.m_dwDefaultLinkHoverFontColor;
 	}
 
-	void CPaintManagerUI::SetDefaultLinkHoverFontColor(DWORD dwColor, bool bShared)
+	void CPaintManagerUI::SetDefaultLinkHoverFontColor(CDuiColor dwColor, bool bShared)
 	{
 		if (bShared)
 		{
@@ -1452,12 +1449,12 @@ namespace DuiLib {
 		}
 	}
 
-	DWORD CPaintManagerUI::GetDefaultSelectedBkColor() const
+	CDuiColor CPaintManagerUI::GetDefaultSelectedBkColor() const
 	{
 		return m_ResInfo.m_dwDefaultSelectedBkColor;
 	}
 
-	void CPaintManagerUI::SetDefaultSelectedBkColor(DWORD dwColor, bool bShared)
+	void CPaintManagerUI::SetDefaultSelectedBkColor(CDuiColor dwColor, bool bShared)
 	{
 		if (bShared)
 		{
@@ -1727,7 +1724,7 @@ namespace DuiLib {
 		return data;
 	}
 
-	const UIImage* CPaintManagerUI::GetImageEx(LPCTSTR bitmap, LPCTSTR type, DWORD mask, int width, int height, DWORD fillcolor, bool bUseHSL, HINSTANCE instance)
+	const UIImage* CPaintManagerUI::GetImageEx(LPCTSTR bitmap, LPCTSTR type, CDuiColor mask, int width, int height, CDuiColor fillcolor, bool bUseHSL, HINSTANCE instance)
 	{
 		CDuiString sImageName = bitmap;
 		if(width !=0 || height != 0 || fillcolor != 0)
@@ -1825,7 +1822,7 @@ namespace DuiLib {
 		return data;
 	}
 
-	const UIImage* CPaintManagerUI::AddImage(LPCTSTR bitmap, LPCTSTR type, DWORD mask, int width, int height, DWORD fillcolor, bool bUseHSL, bool bShared, HINSTANCE instance)
+	const UIImage* CPaintManagerUI::AddImage(LPCTSTR bitmap, LPCTSTR type, CDuiColor mask, int width, int height, CDuiColor fillcolor, bool bUseHSL, bool bShared, HINSTANCE instance)
 	{
 		if( bitmap == NULL || bitmap[0] == _T('\0') ) return NULL;
 
@@ -2244,7 +2241,7 @@ namespace DuiLib {
 		return m_pRoot;
 	}
 
-	CControlUI* CPaintManagerUI::FindControl(POINT pt) const
+	CControlUI* CPaintManagerUI::FindControl(CDuiPoint pt) const
 	{
 		//ASSERT(m_pRoot);
 		if(!m_pRoot) return NULL;
@@ -2264,7 +2261,7 @@ namespace DuiLib {
 // 		return static_cast<CControlUI*>(m_mNameHash.Find(strName));
 // 	}
 
-	CControlUI* CPaintManagerUI::FindSubControlByPoint(CControlUI* pParent, POINT pt) const
+	CControlUI* CPaintManagerUI::FindSubControlByPoint(CControlUI* pParent, CDuiPoint pt) const
 	{
 		if( pParent == NULL ) pParent = GetRoot();
 		//ASSERT(pParent);
@@ -2564,14 +2561,14 @@ namespace DuiLib {
 					case WM_LBUTTONDBLCLK:
 					case WM_LBUTTONUP:
 						{
-							POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+							CDuiPoint pt(lParam);
 							m_ptLastMousePos = pt;
 						}
 						break;
 					case WM_CONTEXTMENU:
 					case WM_MOUSEWHEEL:
 						{
-							POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+							CDuiPoint pt(lParam);
 							ScreenToClient(&pt);
 							m_ptLastMousePos = pt;
 						}
@@ -2774,7 +2771,7 @@ namespace DuiLib {
 		// and we need to remove them on focus change).
 		if (!m_bNoActivate) SetWndFocus();
 		if (m_pRoot == NULL) return false;
-		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		CDuiPoint pt(lParam);
 		m_ptLastMousePos = pt;
 		CControlUI* pControl = FindControl(pt);
 		if (pControl == NULL) return false;
@@ -2797,7 +2794,7 @@ namespace DuiLib {
 
 	bool CPaintManagerUI::OnLButtonUp(WPARAM wParam, LPARAM lParam, LRESULT& lRes)
 	{
-		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		CDuiPoint pt(lParam);
 		m_ptLastMousePos = pt;
 		if (m_pEventClick == NULL) return false;
 		ReleaseCapture();
@@ -2826,7 +2823,7 @@ namespace DuiLib {
 		//双击时事件的处理顺序是 1左键按下 -- 2左键弹起  -- 3双击 
 		//左键弹起时，写了m_pEventClick = NULL; 双击之后没机会进行m_pEventClick = NULL了
 
-		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		CDuiPoint pt(lParam);
 		m_ptLastMousePos = pt;
 		CControlUI* pControl = FindControl(pt);
 		if (pControl == NULL) return false;
@@ -2849,7 +2846,7 @@ namespace DuiLib {
 	bool CPaintManagerUI::OnRButtonDown(WPARAM wParam, LPARAM lParam, LRESULT& lRes)
 	{
 		if (!m_bNoActivate) SetWndFocus();
-		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		CDuiPoint pt(lParam);
 		m_ptLastMousePos = pt;
 		CControlUI* pControl = FindControl(pt);
 		if (pControl == NULL) return false;
@@ -2873,7 +2870,7 @@ namespace DuiLib {
 	bool CPaintManagerUI::OnRButtonUp(WPARAM wParam, LPARAM lParam, LRESULT& lRes)
 	{
 		if (m_bMouseCapture) ReleaseCapture();
-		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		CDuiPoint pt(lParam);
 		m_ptLastMousePos = pt;
 		m_pEventClick = FindControl(pt);
 		if (m_pEventClick == NULL) return false;
@@ -2899,7 +2896,7 @@ namespace DuiLib {
 	bool CPaintManagerUI::OnMButtonDown(WPARAM wParam, LPARAM lParam, LRESULT& lRes)
 	{
 		if (!m_bNoActivate) SetWndFocus();
-		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		CDuiPoint pt(lParam);
 		m_ptLastMousePos = pt;
 		CControlUI* pControl = FindControl(pt);
 		if (pControl == NULL) return false;
@@ -2923,7 +2920,7 @@ namespace DuiLib {
 	bool CPaintManagerUI::OnMButtonUp(WPARAM wParam, LPARAM lParam, LRESULT& lRes)
 	{
 		if (m_bMouseCapture) ReleaseCapture();
-		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		CDuiPoint pt(lParam);
 		m_ptLastMousePos = pt;
 		m_pEventClick = FindControl(pt);
 		if (m_pEventClick == NULL) return false;
@@ -3005,7 +3002,7 @@ namespace DuiLib {
 	#endif
 		if (m_bMouseCapture) return true;
 
-		POINT pt = { 0 };
+		CDuiPoint pt;
 		GetCursorPos(&pt);
 		ScreenToClient(&pt);
 		CControlUI* pControl = FindControl(pt);
@@ -3138,7 +3135,7 @@ namespace DuiLib {
 	{
 		CDuiString sImageName = pStrImage;
 		CDuiString sImageResType = _T("");
-		DWORD dwMask = 0;
+		CDuiColor dwMask = 0;
 		CDuiString sItem;
 		CDuiString sValue;
 		LPTSTR pstr = NULL;
@@ -3179,8 +3176,7 @@ namespace DuiLib {
 					}
 					else if( sItem == _T("mask") ) 
 					{
-						if( sValue[0] == _T('#')) dwMask = _tcstoul(sValue.GetData() + 1, &pstr, 16);
-						else dwMask = _tcstoul(sValue.GetData(), &pstr, 16);
+						dwMask = sValue;
 					}
 
 				}
@@ -3293,7 +3289,7 @@ namespace DuiLib {
 		return false;
 	}
 
-	bool CPaintManagerUI::ExecuteScript(LPCTSTR lpszFunName, CControlUI *pControl, UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl)
+	bool CPaintManagerUI::ExecuteScript(LPCTSTR lpszFunName, CControlUI *pControl, UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl)
 	{
 		IScriptManager *pScriptEngine = GetScriptEngine();
 		if(!pScriptEngine)

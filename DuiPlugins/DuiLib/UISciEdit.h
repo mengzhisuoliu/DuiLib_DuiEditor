@@ -17,7 +17,7 @@ public:
 
 	virtual void DoInit();
 
-	void SetPos(RECT rc, bool bNeedInvalidate  = true);
+	void SetPos(CDuiRect rc, bool bNeedInvalidate  = true);
 	void SetInternVisible(bool bVisible);
 
 	virtual void OnSciNotify(SCNotification *pMsg);

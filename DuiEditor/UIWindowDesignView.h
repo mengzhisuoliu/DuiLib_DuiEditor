@@ -17,7 +17,7 @@ public:
 
 	virtual HWND GetSafeHwnd() { return GetHWND(); }
 	virtual HWND CreateUiWindow(HWND hwndParent, LPCTSTR pstrWindowName,DWORD dwStyle, DWORD dwExStyle) 
-	{ return CreateDuiWindow(hwndParent, pstrWindowName, dwStyle, dwExStyle); }
+	{ return Create(hwndParent, pstrWindowName, dwStyle, dwExStyle, 0, 0, 0, 0); }
 public:
 	CUITrackerMuliti m_tracker;
 	CContainerUI *m_pDragToControl;

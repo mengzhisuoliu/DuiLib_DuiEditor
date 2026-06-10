@@ -6,7 +6,7 @@ namespace DuiLib
 	IMPLEMENT_DUICONTROL(CVerticalLayoutUI)
 	CVerticalLayoutUI::CVerticalLayoutUI() : m_iSepHeight(0), m_bImmMode(false)
 	{
-		::ZeroMemory(&m_rcNewPos, sizeof(m_rcNewPos));
+		
 	}
 
 	LPCTSTR CVerticalLayoutUI::GetClass() const
@@ -26,7 +26,7 @@ namespace DuiLib
 		else return 0;
 	}
 
-	SIZE CVerticalLayoutUI::EstimateSize(SIZE szAvailable)
+	CDuiSize CVerticalLayoutUI::EstimateSize(CDuiSize szAvailable)
 	{
 		if(IsAnimationRunning(ANIMATION_ID_SHOW) || IsAnimationRunning(ANIMATION_ID_HIDE)) {
 			return m_szAnimationCurrect;
@@ -39,14 +39,14 @@ namespace DuiLib
 
 		if(IsAutoCalcWidth() || IsAutoCalcHeight())
 		{
-			SIZE sz = {0};
+			CDuiSize sz;
 			for (int it=0; it<GetCount(); it++)
 			{
-				SIZE szControl = {0};
+				CDuiSize szControl;
 				CControlUI *pControl = GetItemAt(it);
 				if(!pControl->IsVisible()) continue;
 				szControl = pControl->EstimateSize(szAvailable);
-				RECT padding = pControl->GetPadding();
+				CDuiRect padding = pControl->GetPadding();
 				if(IsAutoCalcWidth())
 				{
 					if(sz.cx < szControl.cx + padding.left + padding.right)
@@ -60,7 +60,7 @@ namespace DuiLib
 				}
 			}
 
-			RECT rcInset = GetInset();
+			CDuiRect rcInset = GetInset();
 			if(IsAutoCalcWidth())
 			{
 				sz.cx += rcInset.left + rcInset.right;
@@ -76,15 +76,15 @@ namespace DuiLib
 		return CControlUI::EstimateSize(szAvailable);
 	}
 
-	void CVerticalLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void CVerticalLayoutUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 	{
 		SetPosVerticalLayout(rc, bNeedInvalidate);
 	}
 
-	void CVerticalLayoutUI::DoPostPaint(UIRender *pRender, const RECT& rcPaint)
+	void CVerticalLayoutUI::DoPostPaint(UIRender *pRender, const CDuiRect& rcPaint)
 	{
 		if( IsCaptureState() && !m_bImmMode ) {
-			RECT rcSeparator = GetThumbRect(true);
+			CDuiRect rcSeparator = GetThumbRect(true);
 			pRender->DrawColor(rcSeparator, CDuiSize(0,0), 0xAA000000);
 		}
 	}
@@ -153,7 +153,7 @@ namespace DuiLib
 				if( IsCaptureState() ) {
 					LONG cy = event.ptMouse.y - m_ptLastMouse.y;
 					m_ptLastMouse = event.ptMouse;
-					RECT rc = m_rcNewPos;
+					CDuiRect rc = m_rcNewPos;
 					if( m_iSepHeight >= 0 ) {
 						if( cy > 0 && event.ptMouse.y < m_rcNewPos.bottom + m_iSepHeight ) return;
 						if( cy < 0 && event.ptMouse.y > m_rcNewPos.bottom ) return;
@@ -212,7 +212,7 @@ namespace DuiLib
 		CContainerUI::DoEvent(event);
 	}
 
-	RECT CVerticalLayoutUI::GetThumbRect(bool bUseNew) const
+	CDuiRect CVerticalLayoutUI::GetThumbRect(bool bUseNew) const
 	{
 		if( IsCaptureState() && bUseNew) {
 			if( m_iSepHeight >= 0 ) 
@@ -239,7 +239,7 @@ namespace DuiLib
 		CDuiRect rc = m_rcItem;
 
 		// Adjust for inset
-		RECT rcInset = GetInset();
+		CDuiRect rcInset = GetInset();
 		rc.left += rcInset.left;
 		rc.top += rcInset.top;
 		rc.right -= rcInset.right;
@@ -250,7 +250,7 @@ namespace DuiLib
 		if( m_items.GetSize() == 0) return false;
 
 		// Determine the minimum size
-		SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
+		CDuiSize szAvailable = rc;
 		if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) 
 			szAvailable.cx += m_pHorizontalScrollBar->GetScrollRange();
 		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) 
@@ -260,7 +260,7 @@ namespace DuiLib
 		int nAdjustables = 0;
 		int cyFixed = 0;
 		int nEstimateNum = 0;
-		SIZE szControlAvailable;
+		CDuiSize szControlAvailable;
 		int iControlMaxWidth = 0;
 		int iControlMaxHeight = 0;
 		for( int it1 = 0; it1 < m_items.GetSize(); it1++ ) {
@@ -268,7 +268,7 @@ namespace DuiLib
 			if( !pControl->IsVisible() && !pControl->IsPaneVisible() ) continue; //隐藏的控件也要计算的
 			if( pControl->IsFloat() ) continue;
 			szControlAvailable = szAvailable;
-			RECT rcPadding = pControl->GetPadding();
+			CDuiRect rcPadding = pControl->GetPadding();
 			szControlAvailable.cx -= rcPadding.left + rcPadding.right;
 			iControlMaxWidth = pControl->GetFixedWidth();
 			iControlMaxHeight = pControl->GetFixedHeight();
@@ -276,7 +276,7 @@ namespace DuiLib
 			if (iControlMaxHeight <= 0) iControlMaxHeight = pControl->GetMaxHeight();
 			if (szControlAvailable.cx > iControlMaxWidth) szControlAvailable.cx = iControlMaxWidth;
 			if (szControlAvailable.cy > iControlMaxHeight) szControlAvailable.cy = iControlMaxHeight;
-			SIZE sz = pControl->EstimateSize(szControlAvailable);
+			CDuiSize sz = pControl->EstimateSize(szControlAvailable);
 			if(sz.cy == 0 && pControl->GetFixedHeightPercent() > 0)
 			{
 				sz.cy = szAvailable.cy * pControl->GetFixedHeightPercent() / 100;
@@ -304,7 +304,7 @@ namespace DuiLib
 		int cyExpand = 0;
 		if( nAdjustables > 0 ) cyExpand = MAX(0, (szAvailable.cy - cyFixed) / nAdjustables);
 		// Position the elements
-		SIZE szRemaining = szAvailable;
+		CDuiSize szRemaining = szAvailable;
 		int iPosY = rc.top;
 		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) {
 			iPosY -= m_pVerticalScrollBar->GetScrollPos();
@@ -336,7 +336,7 @@ namespace DuiLib
 			}
 
 			iEstimate += 1;
-			RECT rcPadding = pControl->GetPadding();
+			CDuiRect rcPadding = pControl->GetPadding();
 			szRemaining.cy -= rcPadding.top;
 
 			szControlAvailable = szRemaining;
@@ -349,7 +349,7 @@ namespace DuiLib
 			if (szControlAvailable.cy > iControlMaxHeight) szControlAvailable.cy = iControlMaxHeight;
 			cyFixedRemaining = cyFixedRemaining - (rcPadding.top + rcPadding.bottom);
 			if (iEstimate > 1) cyFixedRemaining = cyFixedRemaining - m_iChildPadding;
-			SIZE sz = pControl->EstimateSize(szControlAvailable);
+			CDuiSize sz = pControl->EstimateSize(szControlAvailable);
 			if(sz.cy == 0 && pControl->GetFixedHeightPercent() > 0)
 			{
 				sz.cy = szAvailable.cy * pControl->GetFixedHeightPercent() / 100;
@@ -385,7 +385,7 @@ namespace DuiLib
 					iPosX += m_pHorizontalScrollBar->GetScrollRange() / 2;
 					iPosX -= m_pHorizontalScrollBar->GetScrollPos();
 				}
-				RECT rcCtrl = { iPosX - sz.cx/2, iPosY + rcPadding.top, iPosX + sz.cx - sz.cx/2, iPosY + sz.cy + rcPadding.top };
+				CDuiRect rcCtrl( iPosX - sz.cx/2, iPosY + rcPadding.top, iPosX + sz.cx - sz.cx/2, iPosY + sz.cy + rcPadding.top );
 				//pControl->SetPos(rcCtrl, false);		
 				if(pControl == pChildControl) 
 				{ 
@@ -399,7 +399,7 @@ namespace DuiLib
 					iPosX += m_pHorizontalScrollBar->GetScrollRange();
 					iPosX -= m_pHorizontalScrollBar->GetScrollPos();
 				}
-				RECT rcCtrl = { iPosX - rcPadding.right - sz.cx, iPosY + rcPadding.top, iPosX - rcPadding.right, iPosY + sz.cy + rcPadding.top };
+				CDuiRect rcCtrl( iPosX - rcPadding.right - sz.cx, iPosY + rcPadding.top, iPosX - rcPadding.right, iPosY + sz.cy + rcPadding.top );
 				//pControl->SetPos(rcCtrl, false);
 				if(pControl == pChildControl) 
 				{ 
@@ -412,7 +412,7 @@ namespace DuiLib
 				if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) {
 					iPosX -= m_pHorizontalScrollBar->GetScrollPos();
 				}
-				RECT rcCtrl = { iPosX + rcPadding.left, iPosY + rcPadding.top, iPosX + rcPadding.left + sz.cx, iPosY + sz.cy + rcPadding.top };
+				CDuiRect rcCtrl( iPosX + rcPadding.left, iPosY + rcPadding.top, iPosX + rcPadding.left + sz.cx, iPosY + sz.cy + rcPadding.top );
 				//pControl->SetPos(rcCtrl, false);
 				if(pControl == pChildControl) 
 				{ 

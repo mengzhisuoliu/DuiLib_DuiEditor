@@ -14,7 +14,7 @@ public:
 	virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
 	virtual void DoInit() override;
-	virtual SIZE EstimateSize(SIZE szAvailable) override;
+	virtual CDuiSize EstimateSize(CDuiSize szAvailable) override;
 
 	virtual void PaintText(UIRender *pRender) override;
 

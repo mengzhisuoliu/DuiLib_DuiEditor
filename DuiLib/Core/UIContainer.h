@@ -57,7 +57,7 @@ namespace DuiLib {
 		virtual void SetMouseEnabled(bool bEnable = true) override;
 
 		virtual CDuiRect GetInset() const;
-		virtual void SetInset(RECT rcInset); // 设置内边距，相当于设置客户区
+		virtual void SetInset(CDuiRect rcInset); // 设置内边距，相当于设置客户区
 		virtual int GetChildPadding() const;
 		virtual void SetChildPadding(int iPadding);
 		virtual UINT GetChildAlign() const;
@@ -74,16 +74,16 @@ namespace DuiLib {
 		virtual int FindSelectable(int iIndex, bool bForward = true) const;
 
 		virtual CDuiRect GetClientPos() override;
-		virtual SIZE EstimateSize(SIZE szAvailable) override;
-		virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+		virtual CDuiSize EstimateSize(CDuiSize szAvailable) override;
+		virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
 		virtual bool CalcPos(CControlUI *pChildControl, CDuiRect &rcChild) override; //子控件调用, 询问父控件，你将会给我分配多大的rect。
-		virtual void Move(SIZE szOffset, bool bNeedInvalidate = true) override;
-		virtual bool DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl) override;
+		virtual void Move(CDuiSize szOffset, bool bNeedInvalidate = true) override;
+		virtual bool DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl) override;
 
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
 		virtual void SetManager(CPaintManagerUI* pManager, CControlUI* pParent, bool bInit = true) override;
-		CControlUI* FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFlags);
+		virtual CControlUI* FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFlags) override;
 
 		bool SetSubControlText(LPCTSTR pstrSubControlName,LPCTSTR pstrText);
 		bool SetSubControlFixedHeight(LPCTSTR pstrSubControlName,int cy);
@@ -96,9 +96,9 @@ namespace DuiLib {
 		const CDuiString GetSubControlUserData(LPCTSTR pstrSubControlName);
 		CControlUI* FindSubControl(LPCTSTR pstrSubControlName);
 
-		virtual SIZE GetScrollPos() const;
-		virtual SIZE GetScrollRange() const;
-		virtual void SetScrollPos(SIZE szPos, bool bMsg = true);
+		virtual CDuiSize GetScrollPos() const;
+		virtual CDuiSize GetScrollRange() const;
+		virtual void SetScrollPos(CDuiSize szPos, bool bMsg = true);
 		virtual void SetScrollStepSize(int nSize);
 		virtual int GetScrollStepSize() const;
 		virtual void LineUp();
@@ -119,10 +119,10 @@ namespace DuiLib {
 
 	protected:
 		virtual void SetFloatPos(int iIndex);
-		virtual void ProcessScrollBar(RECT rc, int cxRequired, int cyRequired);
+		virtual void ProcessScrollBar(CDuiRect rc, int cxRequired, int cyRequired);
 	protected:
-		void SetPosHorizontalLayout(RECT rc, bool bNeedInvalidate = true);
-		void SetPosVerticalLayout(RECT rc, bool bNeedInvalidate = true);
+		void SetPosHorizontalLayout(CDuiRect rc, bool bNeedInvalidate = true);
+		void SetPosVerticalLayout(CDuiRect rc, bool bNeedInvalidate = true);
 	protected:
 		CStdPtrArray m_items;
 		CDuiRect m_rcInset;

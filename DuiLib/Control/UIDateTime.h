@@ -17,7 +17,7 @@ namespace DuiLib
 		virtual LPCTSTR GetClass() const override;
 		virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
-		virtual void DoInit();
+		virtual void DoInit() override;
 
 		SYSTEMTIME& GetTime();
 		void SetTime(SYSTEMTIME* pst);
@@ -25,17 +25,17 @@ namespace DuiLib
 		void SetFormatStyle(UINT uStyle);
 		UINT GetFormatStyle();
 
-		virtual void SetText(LPCTSTR pstrText);
-		virtual CDuiString GetText() const;
+		virtual void SetText(LPCTSTR pstrText) override;
+		virtual CDuiString GetText() const override;
 
-		void SetPos(RECT rc, bool bNeedInvalidate = true);
-		void Move(SIZE szOffset, bool bNeedInvalidate = true);
-		void SetVisible(bool bVisible = true);
-		void SetInternVisible(bool bVisible = true);
-		void DoEvent(TEventUI& event);
+		void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
+		void Move(CDuiSize szOffset, bool bNeedInvalidate = true) override;
+		void SetVisible(bool bVisible = true) override;
+		void SetInternVisible(bool bVisible = true) override;
+		void DoEvent(TEventUI& event) override;
 		virtual void PaintText(UIRender *pRender) override;
 
-		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
 	protected:
 		SYSTEMTIME m_sysTime;

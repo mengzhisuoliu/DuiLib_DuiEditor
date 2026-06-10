@@ -78,25 +78,25 @@ namespace DuiLib
 		m_aColAutoCalcWidth[col] = bAutoCalcWidth;
 	}
 
-	RECT CTableLayoutUI::GetColInset(int col) const
+	CDuiRect CTableLayoutUI::GetColInset(int col) const
 	{
 		if(col < 0 || col >= MAX_TABLE_COLUMN_COUNT) return CDuiRect(0,0,0,0);
 		return m_aColInset[col];
 	}
 
-	void CTableLayoutUI::SetColInset(int col, RECT rcInset)
+	void CTableLayoutUI::SetColInset(int col, CDuiRect rcInset)
 	{
 		if(col < 0 || col >= MAX_TABLE_COLUMN_COUNT) return;
 		m_aColInset[col] = rcInset;
 	}
 
-	RECT CTableLayoutUI::GetColTextPadding(int col) const
+	CDuiRect CTableLayoutUI::GetColTextPadding(int col) const
 	{
 		if(col < 0 || col >= MAX_TABLE_COLUMN_COUNT) return CDuiRect(0,0,0,0);
 		return m_aColTextPadding[col];
 	}
 
-	void CTableLayoutUI::SetColTextPadding(int col, RECT rc)
+	void CTableLayoutUI::SetColTextPadding(int col, CDuiRect rc)
 	{
 		if(col < 0 || col >= MAX_TABLE_COLUMN_COUNT) return;
 		m_aColTextPadding[col] = rc;
@@ -126,17 +126,13 @@ namespace DuiLib
 		CVerticalLayoutUI::DoEvent(event);
 	}
 
-	void CTableLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void CTableLayoutUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 	{
 		CControlUI::SetPos(rc, bNeedInvalidate);
 		rc = m_rcItem;
 
 		// Adjust for inset
-		RECT rcInset = GetInset();
-		rc.left += rcInset.left;
-		rc.top += rcInset.top;
-		rc.right -= rcInset.right;
-		rc.bottom -= rcInset.bottom;
+		rc.SetInset(GetInset());
 		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
 		if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
 
@@ -146,7 +142,7 @@ namespace DuiLib
 		}
 
 		// Determine the minimum size
-		SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
+		CDuiSize szAvailable = rc;
 		if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) 
 			szAvailable.cx += m_pHorizontalScrollBar->GetScrollRange();
 		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) 
@@ -156,7 +152,7 @@ namespace DuiLib
 		int nAdjustables = 0;
 		int cyFixed = 0;
 		int nEstimateNum = 0;
-		SIZE szControlAvailable;
+		CDuiSize szControlAvailable;
 		int iControlMaxWidth = 0;
 		int iControlMaxHeight = 0;
 		for( int it1 = 0; it1 < m_items.GetSize(); it1++ ) {
@@ -164,7 +160,7 @@ namespace DuiLib
 			if( !pControl->IsVisible() ) continue;
 			if( pControl->IsFloat() ) continue;
 			szControlAvailable = szAvailable;
-			RECT rcPadding = pControl->GetPadding();
+			CDuiRect rcPadding = pControl->GetPadding();
 			szControlAvailable.cx -= rcPadding.left + rcPadding.right;
 			iControlMaxWidth = pControl->GetFixedWidth();
 			iControlMaxHeight = pControl->GetFixedHeight();
@@ -172,7 +168,7 @@ namespace DuiLib
 			if (iControlMaxHeight <= 0) iControlMaxHeight = pControl->GetMaxHeight();
 			if (szControlAvailable.cx > iControlMaxWidth) szControlAvailable.cx = iControlMaxWidth;
 			if (szControlAvailable.cy > iControlMaxHeight) szControlAvailable.cy = iControlMaxHeight;
-			SIZE sz = pControl->EstimateSize(szControlAvailable);
+			CDuiSize sz = pControl->EstimateSize(szControlAvailable);
 			if( sz.cy == 0 ) {
 				nAdjustables++;
 			}
@@ -195,7 +191,7 @@ namespace DuiLib
 		int cyExpand = 0;
 		if( nAdjustables > 0 ) cyExpand = MAX(0, (szAvailable.cy - cyFixed) / nAdjustables);
 		// Position the elements
-		SIZE szRemaining = szAvailable;
+		CDuiSize szRemaining = szAvailable;
 		int iPosY = rc.top;
 		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) {
 			iPosY -= m_pVerticalScrollBar->GetScrollPos();
@@ -224,7 +220,7 @@ namespace DuiLib
 			}
 
 			iEstimate += 1;
-			RECT rcPadding = pControl->GetPadding();
+			CDuiRect rcPadding = pControl->GetPadding();
 			szRemaining.cy -= rcPadding.top;
 
 			szControlAvailable = szRemaining;
@@ -237,7 +233,7 @@ namespace DuiLib
 			if (szControlAvailable.cy > iControlMaxHeight) szControlAvailable.cy = iControlMaxHeight;
 			cyFixedRemaining = cyFixedRemaining - (rcPadding.top + rcPadding.bottom);
 			if (iEstimate > 1) cyFixedRemaining = cyFixedRemaining - m_iChildPadding;
-			SIZE sz = pControl->EstimateSize(szControlAvailable);
+			CDuiSize sz = pControl->EstimateSize(szControlAvailable);
 			if( sz.cy == 0 ) {
 				iAdjustable++;
 				sz.cy = cyExpand;
@@ -266,7 +262,7 @@ namespace DuiLib
 					iPosX += m_pHorizontalScrollBar->GetScrollRange() / 2;
 					iPosX -= m_pHorizontalScrollBar->GetScrollPos();
 				}
-				RECT rcCtrl = { iPosX - sz.cx/2, iPosY + rcPadding.top, iPosX + sz.cx - sz.cx/2, iPosY + sz.cy + rcPadding.top };
+				CDuiRect rcCtrl(iPosX - sz.cx/2, iPosY + rcPadding.top, iPosX + sz.cx - sz.cx/2, iPosY + sz.cy + rcPadding.top);
 				pControl->SetPos(rcCtrl, false);
 			}
 			else if (iChildAlign == DT_RIGHT) {
@@ -275,7 +271,7 @@ namespace DuiLib
 					iPosX += m_pHorizontalScrollBar->GetScrollRange();
 					iPosX -= m_pHorizontalScrollBar->GetScrollPos();
 				}
-				RECT rcCtrl = { iPosX - rcPadding.right - sz.cx, iPosY + rcPadding.top, iPosX - rcPadding.right, iPosY + sz.cy + rcPadding.top };
+				CDuiRect rcCtrl(iPosX - rcPadding.right - sz.cx, iPosY + rcPadding.top, iPosX - rcPadding.right, iPosY + sz.cy + rcPadding.top );
 				pControl->SetPos(rcCtrl, false);
 			}
 			else {
@@ -283,7 +279,7 @@ namespace DuiLib
 				if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) {
 					iPosX -= m_pHorizontalScrollBar->GetScrollPos();
 				}
-				RECT rcCtrl = { iPosX + rcPadding.left, iPosY + rcPadding.top, iPosX + rcPadding.left + sz.cx, iPosY + sz.cy + rcPadding.top };
+				CDuiRect rcCtrl( iPosX + rcPadding.left, iPosY + rcPadding.top, iPosX + rcPadding.left + sz.cx, iPosY + sz.cy + rcPadding.top );
 				pControl->SetPos(rcCtrl, false);
 			}
 
@@ -367,11 +363,11 @@ namespace DuiLib
 
 	}
 
-	SIZE CTRUI::EstimateSize(SIZE szAvailable)
+	CDuiSize CTRUI::EstimateSize(CDuiSize szAvailable)
 	{
 		if(GetFixedHeight() == 0 && GetParent() && GetParent()->GetInterface(DUI_CTR_TABLELAYOUT))
 		{
-			SIZE sz = {0};
+			CDuiSize sz;
 			CTableLayoutUI *pTable = (CTableLayoutUI *)GetParent();
 			sz.cy = pTable->GetDefRowHeight();
 	
@@ -379,11 +375,11 @@ namespace DuiLib
 			{
 				for (int it=0; it<GetCount(); it++)
 				{
-					SIZE szControl = {0};
+					CDuiSize szControl;
 					CControlUI *pControl = GetItemAt(it);
 					if(!pControl->IsVisible()) continue;
 					szControl = pControl->EstimateSize(szAvailable);
-					RECT padding = pControl->GetPadding();
+					CDuiRect padding = pControl->GetPadding();
 					sz.cx += szControl.cx + padding.left + padding.right;
 				}
 			}
@@ -545,7 +541,7 @@ namespace DuiLib
 		return pTable->GetColInset(pRow->GetItemIndex((CTDUI *)this));
 	}
 
-	void CTDUI::SetInset(RECT rcInset)
+	void CTDUI::SetInset(CDuiRect rcInset)
 	{
 		CTRUI *pRow = GetRow();
 		CTableLayoutUI *pTable = GetTable();
@@ -557,7 +553,7 @@ namespace DuiLib
 			pTable->NeedUpdate();
 	}
 
-	RECT CTDUI::GetTextPadding() const
+	CDuiRect CTDUI::GetTextPadding() const
 	{
 		CTRUI *pRow = GetRow();
 		CTableLayoutUI *pTable = GetTable();
@@ -566,7 +562,7 @@ namespace DuiLib
 		return pTable->GetColTextPadding(pRow->GetItemIndex((CTDUI *)this));
 	}
 
-	void CTDUI::SetTextPadding(RECT rc)
+	void CTDUI::SetTextPadding(CDuiRect rc)
 	{
 		CTRUI *pRow = GetRow();
 		CTableLayoutUI *pTable = GetTable();
@@ -611,7 +607,7 @@ namespace DuiLib
 
 	}
 
-	SIZE CTDUI::EstimateSize(SIZE szAvailable)
+	CDuiSize CTDUI::EstimateSize(CDuiSize szAvailable)
 	{
 		//return COptionLayoutUI::EstimateSize(szAvailable);
 		if(IsAutoCalcWidth())
@@ -622,7 +618,7 @@ namespace DuiLib
 			{
 				for (int it=0; it<GetCount(); it++)
 				{
-					SIZE szControl = {0};
+					CDuiSize szControl;
 					CControlUI *pControl = GetItemAt(it);
 					if(!pControl->IsVisible()) continue;
 					szControl = pControl->EstimateSize(szAvailable);
@@ -632,8 +628,8 @@ namespace DuiLib
 			else
 			{
 				CDuiString sText = GetText();
-				RECT rcTextPadding = GetTextPadding();
-				RECT rcText = {0, 0, szAvailable.cx, szAvailable.cy};
+				CDuiRect rcTextPadding = GetTextPadding();
+				CDuiRect rcText = szAvailable;
 				int nLinks = 0;
 				GetManager()->Render()->DrawText(rcText, GetTextPadding(), sText, m_dwTextColor, m_iFont, DT_CALCRECT | m_uTextStyle);
 				needWidth = MulDiv(rcText.right - rcText.left + GetManager()->GetDPIObj()->ScaleInt(rcTextPadding.left) + GetManager()->GetDPIObj()->ScaleInt(rcTextPadding.right), 100, GetManager()->GetDPIObj()->GetScale());
@@ -647,7 +643,7 @@ namespace DuiLib
 			}
 		}
 
-		SIZE sz;
+		CDuiSize sz;
 		sz.cx = GetFixedWidth();
 		sz.cy = szAvailable.cy;
 		return m_pManager->GetDPIObj()->ScaleSize(sz);	

@@ -40,8 +40,8 @@ namespace DuiLib
 		if( sText.IsEmpty() ) return;
 
 		CDuiRect rcText = m_rcItem;
-		SIZE szAvailable = { rcText.right - rcText.left, rcText.bottom - rcText.top };
-		SIZE sz = CalcrectSize(szAvailable);
+		CDuiSize szAvailable = rcText;
+		CDuiSize sz = CalcrectSize(szAvailable);
 
 		//¼ÆËãÎÄ×ÖÇøÓò
 		rcText.left = rcText.left + 20;
@@ -49,7 +49,7 @@ namespace DuiLib
 		rcText.right = rcText.left + sz.cx + 10;
 		rcText.bottom = rcText.top + sz.cy;
 
-		DWORD dwTextColor = m_dwTextColor;
+		CDuiColor dwTextColor = m_dwTextColor;
 		if(!IsEnabled()) dwTextColor = m_dwDisabledTextColor;
 		pRender->DrawText(rcText, CDuiRect(0,0,0,0), sText, dwTextColor, m_iFont, m_uTextStyle, GetAdjustColor(m_dwBackColor));
 	}
@@ -63,12 +63,12 @@ namespace DuiLib
 			CDuiRect rcItem = m_rcItem;
 
 			CDuiRect rcText = m_rcItem;
-			SIZE szAvailable = { rcText.right - rcText.left, rcText.bottom - rcText.top };
-			SIZE sz = CalcrectSize(szAvailable);
+			CDuiSize szAvailable = rcText;
+			CDuiSize sz = CalcrectSize(szAvailable);
 
 			rcItem.top += sz.cy/2 + 1;
 
-			DWORD dwColor = 0;
+			CDuiColor dwColor = 0;
 
 			if(dwColor == 0 && !IsEnabled() && GetDisableBorderColor() != 0)
 				dwColor = GetDisableBorderColor();
@@ -92,15 +92,15 @@ namespace DuiLib
 		PaintText(pRender);
 	}
 
-	SIZE CGroupBoxUI::CalcrectSize(SIZE szAvailable)
+	CDuiSize CGroupBoxUI::CalcrectSize(CDuiSize szAvailable)
 	{
-		SIZE cxyFixed = GetFixedXY();
-		RECT rcText = { 0, 0, MAX(szAvailable.cx, cxyFixed.cx), 20 };
+		CDuiSize cxyFixed = GetFixedXY();
+		CDuiRect rcText( 0, 0, MAX(szAvailable.cx, cxyFixed.cx), 20 );
 		
 		CDuiString sText = GetText();
 
 		GetManager()->Render()->DrawText(rcText, CDuiRect(0,0,0,0), sText, m_dwTextColor, m_iFont, DT_CALCRECT | m_uTextStyle);
-		SIZE cXY = {rcText.right - rcText.left, rcText.bottom - rcText.top};
+		CDuiSize cXY = rcText;
 		return cXY;
 	}
 

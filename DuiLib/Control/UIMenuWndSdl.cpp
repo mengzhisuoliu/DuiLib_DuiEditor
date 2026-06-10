@@ -57,7 +57,7 @@ namespace DuiLib {
 		return TRUE;
 	}
 
-	CMenuWndSDL* CMenuWndSDL::CreateMenu(CMenuElementUI* pOwner, STRINGorID xml, POINT point, CPaintManagerUI* pMainPaintManager, CStdStringPtrMap* pMenuCheckInfo /*= NULL*/, DWORD dwAlignment /*= eMenuAlignment_Left | eMenuAlignment_Top*/)
+	CMenuWndSDL* CMenuWndSDL::CreateMenu(CMenuElementUI* pOwner, STRINGorID xml, CDuiPoint point, CPaintManagerUI* pMainPaintManager, CStdStringPtrMap* pMenuCheckInfo /*= NULL*/, DWORD dwAlignment /*= eMenuAlignment_Left | eMenuAlignment_Top*/)
 	{
 		CMenuWndSDL* pMenu = new CMenuWndSDL;
 		pMenu->Init(pOwner, xml, point, pMainPaintManager, pMenuCheckInfo, dwAlignment);
@@ -83,7 +83,7 @@ namespace DuiLib {
 	
 	MenuItemInfo* CMenuWndSDL::SetMenuItemInfo(LPCTSTR pstrName, bool bChecked)
 	{
-		if(pstrName == NULL || lstrlen(pstrName) <= 0) return NULL;
+		if(pstrName == NULL || _tcslen(pstrName) <= 0) return NULL;
 
 		CStdStringPtrMap* mCheckInfos = CMenuWndSDL::GetGlobalContextMenuObserver().GetMenuCheckInfo();
 		if (mCheckInfos != NULL)
@@ -104,7 +104,7 @@ namespace DuiLib {
 		return NULL;
 	}
 
-	void CMenuWndSDL::Init(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
+	void CMenuWndSDL::Init(CMenuElementUI* pOwner, STRINGorID xml, CDuiPoint point,
 		CPaintManagerUI* pMainPaintManager, CStdStringPtrMap* pMenuCheckInfo/* = NULL*/,
 		DWORD dwAlignment/* = eMenuAlignment_Left | eMenuAlignment_Top*/)
 	{
@@ -131,7 +131,7 @@ namespace DuiLib {
 			hParentWnd = pMainPaintManager->GetPaintWindow();
 		else
 			hParentWnd = m_pOwner->GetManager()->GetPaintWindow();
-		Create(hParentWnd, NULL, WS_POPUP , WS_EX_TOOLWINDOW | WS_EX_TOPMOST, CDuiRect());
+		Create(hParentWnd, NULL, WS_POPUP , WS_EX_TOOLWINDOW | WS_EX_TOPMOST, 0,0,0,0);
 	}
 
 	LPCTSTR CMenuWndSDL::GetWindowClassName() const
@@ -200,7 +200,7 @@ namespace DuiLib {
 		bool bShowShadow = false;
 		if( m_pOwner != NULL) 
 		{
-			RECT rcClient;
+			CDuiRect rcClient;
 			GetClientRect(&rcClient);
 			SetWindowPos(rcClient.left, rcClient.top, rcClient.right - rcClient.left, \
 				rcClient.bottom - rcClient.top, SWP_FRAMECHANGED);
@@ -245,7 +245,7 @@ namespace DuiLib {
 			m_pm.GetDPIObj()->SetScale(CMenuWndSDL::GetGlobalContextMenuObserver().GetManager()->GetDPIObj()->GetDPI());
 			CDialogBuilder builder;
 
-			CControlUI* pRoot = builder.Create(m_xml,UINT(0), this, &m_pm);
+			CControlUI* pRoot = builder.Create(m_xml, NULL, this, &m_pm);
 			bShowShadow = m_pm.GetShadow()->IsShowShadow();
 			m_pm.GetShadow()->ShowShadow(false);
 			m_pm.AttachDialog(pRoot);
@@ -344,65 +344,55 @@ namespace DuiLib {
 	*/
 	void CMenuWndSDL::ResizeMenu()
 	{
-		//优化版修复扩展屏幕存在时，菜单弹出位置不正确的问题 2023年3月26 段先生 QQ547453134  
-		//计算边界问题
 		CMenuUI* pMenuRoot = static_cast<CMenuUI*>(m_pm.GetRoot());
 		if (!pMenuRoot)
-		{
-			//获取菜单根节点失败
 			return;
+
+		// 获取鼠标点所在的显示器工作区
+		SDL_Point ptBase = { m_BasedPoint.x, m_BasedPoint.y };
+		SDL_DisplayID displayID = SDL_GetDisplayForPoint(&ptBase);
+		if (displayID == 0)
+			displayID = SDL_GetPrimaryDisplay();
+
+		SDL_Rect rcWork;
+		if (!SDL_GetDisplayUsableBounds(displayID, &rcWork)) {
+			// 获取失败，回退到整个显示器边界
+			SDL_GetDisplayBounds(displayID, &rcWork);
 		}
 
-		RECT rcWorkArea;
-		SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
-
-		POINT ptBase = m_BasedPoint;
-		//ptBase.y += GetSystemMetrics(SM_CYMENU); // 加上任务栏的高度
-
-		HMONITOR hMonitor = MonitorFromPoint(ptBase, MONITOR_DEFAULTTONEAREST);
-		MONITORINFO mi = { sizeof(mi) };
-		if (!GetMonitorInfo(hMonitor, &mi))
-		{
-			// 无法获取显示器信息
-			return;
-		}
-
-		SIZE szAvailable = { rcWorkArea.right - rcWorkArea.left, rcWorkArea.bottom - rcWorkArea.top };
+		// 计算菜单所需尺寸
+		CDuiSize szAvailable = rcWork;
 		szAvailable = pMenuRoot->EstimateSize(szAvailable);
 		CDuiRect rcInset = pMenuRoot->GetInset();
 		szAvailable.cx += rcInset.left + rcInset.right;
 		szAvailable.cy += rcInset.top + rcInset.bottom;
 		m_pm.SetInitSize(szAvailable.cx, szAvailable.cy);
 
-		const int nWidth = m_pm.GetInitSize().cx;
-		const int nHeight = m_pm.GetInitSize().cy;
+		int nWidth = m_pm.GetInitSize().cx;
+		int nHeight = m_pm.GetInitSize().cy;
 
-		if (ptBase.x < mi.rcWork.left)
-		{
-			ptBase.x = mi.rcWork.left;
-		}
-		else if (ptBase.x + nWidth > mi.rcWork.right)
-		{
-			ptBase.x = mi.rcWork.right - nWidth;
-		}
+		// 调整基点坐标（确保菜单位于工作区内）
+		int x = m_BasedPoint.x;
+		int y = m_BasedPoint.y;
 
-		if (ptBase.y + nHeight > mi.rcWork.bottom)
-		{
-			ptBase.y = mi.rcWork.bottom - nHeight;
-		}
+		if (x < rcWork.x)
+			x = rcWork.x;
+		else if (x + nWidth > rcWork.x + rcWork.w)
+			x = rcWork.x + rcWork.w - nWidth;
 
-		if (ptBase.y < mi.rcWork.top)
-		{
-			ptBase.y = mi.rcWork.top;
-		}
+		if (y + nHeight > rcWork.y + rcWork.h)
+			y = rcWork.y + rcWork.h - nHeight;
+		if (y < rcWork.y)
+			y = rcWork.y;
 
-		SetWindowPos(ptBase.x, ptBase.y, nWidth, nHeight, SWP_SHOWWINDOW);
+		// 应用窗口位置与尺寸
+		SetWindowPos(x, y, nWidth, nHeight, SWP_SHOWWINDOW);
 	}
 
 	void CMenuWndSDL::ResizeSubMenu()
 	{
 		// 获取父窗口 (SDL_Window*)
-		SDL_Window* pParentWnd = (SDL_Window *)m_pOwner->GetManager()->GetPaintWindow();
+		SDL_Window* pParentWnd = m_pOwner->GetManager()->GetPaintWindow();
 		if (!pParentWnd) return;
 
 		// 父窗口屏幕位置与尺寸
@@ -411,13 +401,12 @@ namespace DuiLib {
 		SDL_GetWindowSize(pParentWnd, &parentW, &parentH);
 
 		// 控件在父窗口客户区中的相对位置，转为屏幕坐标
-		RECT rcOwner = m_pOwner->GetPos();
-		RECT rcOwnerScreen = {
+		CDuiRect rcOwner = m_pOwner->GetPos();
+		CDuiRect rcOwnerScreen(
 			rcOwner.left + parentX,
 			rcOwner.top + parentY,
 			rcOwner.right + parentX,
-			rcOwner.bottom + parentY
-		};
+			rcOwner.bottom + parentY);
 
 		// 基于触发点获取显示器工作区
 		SDL_Point ptBase = { rcOwnerScreen.left, rcOwnerScreen.top };
@@ -427,24 +416,24 @@ namespace DuiLib {
 		SDL_Rect rcWork;
 		SDL_GetDisplayUsableBounds(displayID, &rcWork);   // 工作区（不含任务栏）
 
-		SIZE szAvailable = { rcWork.w, rcWork.h };
+		CDuiSize szAvailable = rcWork;
 
 		// 计算子菜单所需尺寸
 		int cxFixed = 0, cyFixed = 0;
 		for (int it = 0; it < m_pOwner->GetCount(); ++it) {
 			CControlUI* pControl = static_cast<CControlUI*>(m_pOwner->GetItemAt(it));
 			if (pControl->GetInterface(_T("MenuElement")) != nullptr) {
-				SIZE sz = pControl->EstimateSize(szAvailable);
+				CDuiSize sz = pControl->EstimateSize(szAvailable);
 				cyFixed += sz.cy;
 				if (cxFixed < sz.cx) cxFixed = sz.cx;
 			}
 		}
 
 		// 父窗口屏幕矩形
-		RECT rcWindow = { parentX, parentY, parentX + parentW, parentY + parentH };
+		CDuiRect rcWindow = { parentX, parentY, parentX + parentW, parentY + parentH };
 
 		// 初始菜单位置：右侧对齐父窗口，顶部对齐控件顶部
-		RECT rc = rcOwnerScreen;
+		CDuiRect rc = rcOwnerScreen;
 		rc.bottom = rc.top + cyFixed;
 		rc.left = rcWindow.right;
 		rc.right = rc.left + cxFixed + 2;   // +2 为边距
@@ -457,9 +446,9 @@ namespace DuiLib {
 			auto pContextMenu = dynamic_cast<CMenuWndSDL*>(pReceiver);
 			if (pContextMenu) {
 				SDL_Rect rcPre;
-				SDL_GetWindowPosition((SDL_Window*)pContextMenu->m_hWnd, &rcPre.x, &rcPre.y);
-				SDL_GetWindowSize((SDL_Window*)pContextMenu->m_hWnd, &rcPre.w, &rcPre.h);
-				RECT rcPreWindow = { rcPre.x, rcPre.y, rcPre.x + rcPre.w, rcPre.y + rcPre.h };
+				SDL_GetWindowPosition(pContextMenu->m_hWnd, &rcPre.x, &rcPre.y);
+				SDL_GetWindowSize(pContextMenu->m_hWnd, &rcPre.w, &rcPre.h);
+				CDuiRect rcPreWindow(rcPre.x, rcPre.y, rcPre.x + rcPre.w, rcPre.y + rcPre.h);
 
 				bReachRight = (rcPreWindow.left >= rcWindow.right);
 				bReachBottom = (rcPreWindow.top >= rcWindow.bottom);
@@ -498,8 +487,8 @@ namespace DuiLib {
 
 		// 应用窗口位置与尺寸（加上 Inset 高度）
 		int finalHeight = (rc.bottom - rc.top) + m_pLayout->GetInset().top + m_pLayout->GetInset().bottom;
-		SDL_SetWindowPosition((SDL_Window *)m_hWnd, rc.left, rc.top);
-		SDL_SetWindowSize((SDL_Window*)m_hWnd, rc.right - rc.left, finalHeight);
+		SDL_SetWindowPosition(m_hWnd, rc.left, rc.top);
+		SDL_SetWindowSize(m_hWnd, rc.right - rc.left, finalHeight);
 	}
 
 	void CMenuWndSDL::setDPI(int DPI) 

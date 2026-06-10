@@ -11,11 +11,11 @@ namespace DuiLib
 
 	void CEditWndWin32::Init()
 	{
-		RECT rcPos = CalPos();
+		CDuiRect rcPos = CalPos();
 		UINT uStyle = 0;
 		if(m_pOwner->GetManager()->IsLayered()) {
 			uStyle = WS_POPUP | ES_AUTOHSCROLL | WS_VISIBLE;
-			RECT rcWnd={0};
+			CDuiRect rcWnd;
 			::GetWindowRect(m_pOwner->GetManager()->GetPaintWindow(), &rcWnd);
 			rcPos.left += rcWnd.left;
 			rcPos.right += rcWnd.left;
@@ -32,7 +32,7 @@ namespace DuiLib
 		if( IsPasswordMode() ) uStyle |= ES_PASSWORD;
 		if( IsMultiLine()) uStyle |= ES_MULTILINE | ES_AUTOVSCROLL;
 		if( IsWantReturn()) uStyle |= ES_WANTRETURN;
-		Create(m_pOwner->GetManager()->GetPaintWindow(), NULL, uStyle, 0, rcPos);
+		Create(m_pOwner->GetManager()->GetPaintWindow(), NULL, uStyle, 0, rcPos.left, rcPos.top, rcPos.GetWidth(), rcPos.GetHeight());
 
 		m_font = MakeRefPtr<UIFont>(m_pOwner->GetManager()->CloneFont(m_pOwner->GetFont()));
 		::SendMessage(m_hWnd, WM_SETFONT, (WPARAM)m_font->GetHFONT(m_pOwner->GetManager()), (LPARAM)TRUE);
@@ -81,7 +81,7 @@ namespace DuiLib
 		}
 
 		CControlUI* pParent = m_pOwner;
-		RECT rcParent;
+		CDuiRect rcParent;
 		while( pParent = pParent->GetParent() ) {
 			if( !pParent->IsVisible() ) {
 				rcPos.left = rcPos.top = rcPos.right = rcPos.bottom = 0;
@@ -144,7 +144,7 @@ namespace DuiLib
 		else if( uMsg == OCM_COMMAND ) {
 			if( GET_WM_COMMAND_CMD(wParam, lParam) == EN_CHANGE ) lRes = OnEditChanged(uMsg, wParam, lParam, bHandled);
 			else if( GET_WM_COMMAND_CMD(wParam, lParam) == EN_UPDATE ) {
-				RECT rcClient;
+				CDuiRect rcClient;
 				::GetClientRect(m_hWnd, &rcClient);
 				::InvalidateRect(m_hWnd, &rcClient, FALSE);
 			}
@@ -164,22 +164,22 @@ namespace DuiLib
 			//if (m_pOwner->GetManager()->IsLayered() && !m_pOwner->GetManager()->IsPainting()) {
 			//	m_pOwner->GetManager()->AddNativeWindow(m_pOwner, m_hWnd);
 			//}
-			DWORD clrColor = GetNativeEditBkColor();
+			CDuiColor clrColor = GetNativeEditBkColor();
 			if( clrColor == 0xFFFFFFFF ) 
 				return 0;
 			::SetBkMode((HDC)wParam, TRANSPARENT);
-			DWORD dwTextColor = m_pOwner->GetTextColor();
+			CDuiColor dwTextColor = m_pOwner->GetTextColor();
 			::SetTextColor((HDC)wParam, RGB(GetBValue(dwTextColor),GetGValue(dwTextColor),GetRValue(dwTextColor)));
 			return (LRESULT)m_brush->GetHBrush();
 		}
 		else if( uMsg == WM_SIZE)
 		{
 			//OutputDebugString(_T("InitNativeRender \r\n"));
-			DWORD clrColor = GetNativeEditBkColor();
+			CDuiColor clrColor = GetNativeEditBkColor();
 			if (clrColor < 0xFF000000) 
 			{
 				CPaintManagerWin32UI *pManager = (CPaintManagerWin32UI *)m_pOwner->GetManager();
-				RECT rcWnd = pManager->GetNativeWindowRect(m_hWnd);
+				CDuiRect rcWnd = pManager->GetNativeWindowRect(m_hWnd);
 				m_bmpBrush = MakeRefPtr<UIBitmap>(pManager->CreateControlBackBitmap(m_pOwner, rcWnd, clrColor));
 				m_brush = MakeRefPtr<UIBrush>(UIGlobal::CreateBrush());
 				m_brush->CreateBitmapBrush(m_bmpBrush);
@@ -214,7 +214,7 @@ namespace DuiLib
 		else if( uMsg == WM_TIMER ) {
 			if (wParam == CARET_TIMERID) {
 				m_bDrawCaret = !m_bDrawCaret;
-				RECT rcClient;
+				CDuiRect rcClient;
 				::GetClientRect(m_hWnd, &rcClient);
 				::InvalidateRect(m_hWnd, &rcClient, FALSE);
 				return 0;

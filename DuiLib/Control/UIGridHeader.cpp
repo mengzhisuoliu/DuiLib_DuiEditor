@@ -59,12 +59,12 @@ void CGridHeaderUI::DoInit()
 {
 }
 
-void CGridHeaderUI::SetPos(RECT rc, bool bNeedInvalidate)
+void CGridHeaderUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 {
 	CVerticalLayoutUI::SetPos(rc, bNeedInvalidate);
 }
 
-SIZE CGridHeaderUI::EstimateSize(SIZE szAvailable)
+CDuiSize CGridHeaderUI::EstimateSize(CDuiSize szAvailable)
 {
 	return CVerticalLayoutUI::EstimateSize(szAvailable);
 }

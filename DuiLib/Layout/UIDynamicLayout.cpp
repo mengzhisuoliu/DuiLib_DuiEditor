@@ -10,7 +10,7 @@ namespace DuiLib
 		memset(&m_rcNewPos, 0, sizeof(m_rcNewPos));
 
 		m_pCalcControl = NULL;
-		memset(&m_rcCalcChild, 0, sizeof(RECT));
+		memset(&m_rcCalcChild, 0, sizeof(CDuiRect));
 		m_bCalcResult = false;
 
 		m_eLayout = Layout_HorizontalLayout;
@@ -43,12 +43,12 @@ namespace DuiLib
 
 	emLayoutType CDynamicLayoutUI::GetLayout() const { return m_eLayout; }
 
-	SIZE CDynamicLayoutUI::EstimateSize(SIZE szAvailable)
+	CDuiSize CDynamicLayoutUI::EstimateSize(CDuiSize szAvailable)
 	{
 		return CContainerUI::EstimateSize(szAvailable);
 	}
 
-	void CDynamicLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void CDynamicLayoutUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 	{
 		if(GetLayout() == Layout_HorizontalLayout)
 		{
@@ -60,10 +60,10 @@ namespace DuiLib
 		}
 	}
 
-	void CDynamicLayoutUI::DoPostPaint(UIRender *pRender, const RECT& rcPaint)
+	void CDynamicLayoutUI::DoPostPaint(UIRender *pRender, const CDuiRect& rcPaint)
 	{
 		if( IsCaptureState() && !m_bImmMode ) {
-			RECT rcSeparator = GetThumbRect(true);
+			CDuiRect rcSeparator = GetThumbRect(true);
 			pRender->DrawColor(rcSeparator, CDuiSize(0,0), 0xAA000000);
 		}
 	}
@@ -174,7 +174,7 @@ namespace DuiLib
 				if( IsCaptureState() ) {
 					LONG cx = event.ptMouse.x - m_ptLastMouse.x;
 					m_ptLastMouse = event.ptMouse;
-					RECT rc = m_rcNewPos;
+					CDuiRect rc = m_rcNewPos;
 					if( m_iSepWidth >= 0 ) {
 						if( cx > 0 && event.ptMouse.x < m_rcNewPos.right - m_iSepWidth ) return;
 						if( cx < 0 && event.ptMouse.x > m_rcNewPos.right ) return;
@@ -248,7 +248,7 @@ namespace DuiLib
 				if( IsCaptureState() ) {
 					LONG cy = event.ptMouse.y - m_ptLastMouse.y;
 					m_ptLastMouse = event.ptMouse;
-					RECT rc = m_rcNewPos;
+					CDuiRect rc = m_rcNewPos;
 					if( m_iSepHeight >= 0 ) {
 						if( cy > 0 && event.ptMouse.y < m_rcNewPos.bottom + m_iSepHeight ) return;
 						if( cy < 0 && event.ptMouse.y > m_rcNewPos.bottom ) return;
@@ -309,7 +309,7 @@ namespace DuiLib
 		CContainerUI::DoEvent(event);
 	}
 
-	RECT CDynamicLayoutUI::GetThumbRect(bool bUseNew) const
+	CDuiRect CDynamicLayoutUI::GetThumbRect(bool bUseNew) const
 	{
 		if(m_eSepAction == eSepWidth)
 		{

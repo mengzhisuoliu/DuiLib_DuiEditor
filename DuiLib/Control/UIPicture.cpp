@@ -143,8 +143,8 @@ void CPictureUI::PaintBkImage(UIRender *pRender)
 		pDrawInfo = it->second;
 	}
 
-	RECT rcItem = m_rcItem;
-	RECT rcDest = m_rcItem;
+	CDuiRect rcItem = m_rcItem;
+	CDuiRect rcDest = m_rcItem;
 	if( pDrawInfo->rcDest.left != 0 || pDrawInfo->rcDest.top != 0 ||
 		pDrawInfo->rcDest.right != 0 || pDrawInfo->rcDest.bottom != 0 ) {
 			rcDest.left = rcItem.left + pDrawInfo->rcDest.left;
@@ -155,7 +155,7 @@ void CPictureUI::PaintBkImage(UIRender *pRender)
 			if( rcDest.bottom > rcItem.bottom ) rcDest.bottom = rcItem.bottom;
 	}
 
-	RECT rcSource = pDrawInfo->rcSource;
+	CDuiRect rcSource = pDrawInfo->rcSource;
 	if( rcSource.left == 0 && rcSource.right == 0 && rcSource.top == 0 && rcSource.bottom == 0 ) {
 		rcSource.right = pImageInfo->nWidth;
 		rcSource.bottom = pImageInfo->nHeight;
@@ -163,7 +163,7 @@ void CPictureUI::PaintBkImage(UIRender *pRender)
 	if (rcSource.right > pImageInfo->nWidth) rcSource.right = pImageInfo->nWidth;
 	if (rcSource.bottom > pImageInfo->nHeight) rcSource.bottom = pImageInfo->nHeight;
 
-	RECT rcCorner = {0};
+	CDuiRect rcCorner;
 	pRender->DrawBitmap(pImageInfo->bitmap, rcDest, m_rcPaint, rcSource, rcCorner, GetManager()->IsLayered() ? true : pImageInfo->bAlpha, pDrawInfo->uFade, pDrawInfo->bHole, pDrawInfo->bTiledX, pDrawInfo->bTiledY);
 
 	if(IsAutoPlay() && m_idEventTimer == 0 && m_frames.GetSize() > 1)
@@ -291,7 +291,7 @@ void CPictureUI::SetAutoSize(bool bIsAuto)
 	m_bIsAutoSize = bIsAuto; 
 	if(m_bIsAutoSize)
 	{
-		SIZE sz = {0};
+		CDuiSize sz;
 		for (int i=0; i<m_frames.GetSize(); i++)
 		{
 			UIImage *pImageInfo = (UIImage *)m_frames.GetAt(i);
@@ -306,8 +306,8 @@ bool CPictureUI::IsAutoSize() const			{ return m_bIsAutoSize; }
 
 CDuiRect CPictureUI::GetTrackRect()
 {
-	RECT rcPos = GetPos();
-	RECT rc;
+	CDuiRect rcPos = GetPos();
+	CDuiRect rc;
 	rc.left = m_rcTracker.left - rcPos.left;
 	rc.top = m_rcTracker.top - rcPos.top;
 	rc.right = rc.left + m_rcTracker.GetWidth();
@@ -402,7 +402,7 @@ bool CPictureUI::__LoadImageFromMemory(LPBYTE pData, DWORD dwSize)
 	}
 
 	UIImage *pImageInfo = UIGlobal::CreateImage();
-	pImageInfo->LoadImageFromMemory(pData, dwSize, 0, 0, 0,0, GetManager());
+	pImageInfo->LoadImageFromMemory(pData, dwSize, CDuiColor(), 0, 0, CDuiColor(), GetManager());
 	if(!pImageInfo) return false;
 	if(!m_frames.Add(pImageInfo))
 	{

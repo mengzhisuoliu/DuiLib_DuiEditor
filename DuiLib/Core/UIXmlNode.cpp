@@ -438,7 +438,7 @@ UINT_PTR CXmlNodeUI::internal_object() const
 
 struct ui_xml_string_writer : ui_pugi::xml_writer
 {
-	virtual void write(const void* data, size_t size)
+	virtual void write(const void* data, size_t size) override
 	{
 		m_str += std::string((const char *)data, size);
 	}

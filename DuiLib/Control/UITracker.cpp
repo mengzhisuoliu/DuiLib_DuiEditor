@@ -30,12 +30,12 @@ UINT CTrackerUI::GetControlFlags() const
 	return UIFLAG_SETCURSOR;
 }
 
-RECT CTrackerUI::GetRect()
+CDuiRect CTrackerUI::GetRect()
 {
 	return m_rcNewPos;
 }
 
-RECT CTrackerUI::GetSizerRect(int iIndex)
+CDuiRect CTrackerUI::GetSizerRect(int iIndex)
 {
 	LONG lMiddleX = (m_rcItem.left + m_rcItem.right) / 2;
 	LONG lMiddleY = (m_rcItem.top + m_rcItem.bottom) / 2;
@@ -65,11 +65,11 @@ RECT CTrackerUI::GetSizerRect(int iIndex)
 	return CDuiRect();
 }
 
-int CTrackerUI::GetSizerCursor(POINT& pt, int& iCursor)
+int CTrackerUI::GetSizerCursor(CDuiPoint& pt, int& iCursor)
 {
 	LONG SIZER_WIDTH = m_rcInset.left*2;
 	LONG SIZER_TO_ROOT = 20;	
-	RECT rcRoot = m_pManager->GetRoot()->GetPos();
+	CDuiRect rcRoot = m_pManager->GetRoot()->GetPos();
 
 	iCursor = -1;
 	for( int i = 8; i >= 0; --i ) {
@@ -169,7 +169,7 @@ void CTrackerUI::PaintBorder(UIRender *pRender)
 void CTrackerUI::MoveRect(int cx, int cy)
 {
 	CDuiRect rcParent = m_pParent->GetPos();
-	RECT rcCurPos = m_rcNewPos;
+	CDuiRect rcCurPos = m_rcNewPos;
 
 	//只能在区域移动
 	if (cx >= 0) {
@@ -210,7 +210,7 @@ void CTrackerUI::MoveRect(int cx, int cy)
 void CTrackerUI::SizeRect(int movex, int movey)
 {
 	CDuiRect rcParent = m_pParent->GetPos();
-	RECT rcCurPos = m_rcNewPos;
+	CDuiRect rcCurPos = m_rcNewPos;
 
 	if (movex < rcParent.left)
 		movex = rcParent.left;

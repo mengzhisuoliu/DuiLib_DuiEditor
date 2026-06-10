@@ -17,20 +17,19 @@ namespace DuiLib
 		virtual void SetEditText(LPCTSTR sText) override;
 
 		virtual void OnFinalMessage(UIWND hWnd) override;
-		LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) override;
 		BOOL OnSdlEvent(const void* pEvent) override;
 
 	protected:
-		// 消息处理
-		void OnPaint();
-		void OnKeyDown(WPARAM wParam, LPARAM lParam);
-		void OnChar(WPARAM wParam, LPARAM lParam);
-		void OnLButtonDown(WPARAM wParam, LPARAM lParam);
-		void OnLButtonUp(WPARAM wParam, LPARAM lParam);
-		void OnMouseMove(WPARAM wParam, LPARAM lParam);
-		void OnSetFocus(WPARAM wParam, LPARAM lParam);
-		void OnKillFocus(WPARAM wParam, LPARAM lParam);
-		void OnTimer(WPARAM wParam, LPARAM lParam);
+		virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+		virtual LRESULT OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+		virtual LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+		virtual LRESULT OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+		virtual LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+		virtual LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+		virtual LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+		virtual LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+		virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+		virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
 
 		// 编辑操作
 		void InsertText(const CDuiString& text);
@@ -46,7 +45,7 @@ namespace DuiLib
 		void PasteFromClipboard();
 
 		// 辅助函数
-		int GetCharPosFromPoint(const POINT& pt);
+		int GetCharPosFromPoint(const CDuiPoint& pt);
 		int GetCharXPos(int charIndex);
 		CDuiRect GetCaretPos();
 

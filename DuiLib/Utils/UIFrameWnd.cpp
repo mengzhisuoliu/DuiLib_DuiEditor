@@ -374,7 +374,7 @@ void CUIFrameWndBase::UIAction(TUIAction *act, bool bAsync)
 			TCellData *pCell = pGrid->GetCellData(p->row, p->col);
 			if(pCell)
 			{
-				pCell->SetTextColor(act->wParam);
+				pCell->SetTextColor((DWORD)act->wParam);
 			}
 		}
 		return;

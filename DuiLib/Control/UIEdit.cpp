@@ -2,7 +2,6 @@
 #include "UIEdit.h"
 
 #include "UIEditWndWin32.h"
-#include "UIEditWndGtk.h"
 #include "UIEditWndSdl.h"
 
 namespace DuiLib
@@ -110,8 +109,8 @@ namespace DuiLib
 				else if( m_pWindow != NULL )
 				{
 					if (!m_bAutoSelAll) {
-						RECT rcTextPadding = GetTextPadding();
-						POINT pt = event.ptMouse;
+						CDuiRect rcTextPadding = GetTextPadding();
+						CDuiPoint pt = event.ptMouse;
 						pt.x -= m_rcItem.left + rcTextPadding.left;
 						pt.y -= m_rcItem.top + rcTextPadding.top;
 						//Edit_SetSel(*m_pWindow, 0, 0);
@@ -185,7 +184,7 @@ namespace DuiLib
 // 			m_pWindow->edit_ReplaceSel(lpszReplace);
 	}
 	
-	void CEditUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void CEditUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 	{
 		CControlUI::SetPos(rc, bNeedInvalidate);
 		if( m_pWindow != NULL ) 
@@ -195,7 +194,7 @@ namespace DuiLib
 		}
 	}
 
-	void CEditUI::Move(SIZE szOffset, bool bNeedInvalidate)
+	void CEditUI::Move(CDuiSize szOffset, bool bNeedInvalidate)
 	{
 		CControlUI::Move(szOffset, bNeedInvalidate);
 		if( m_pWindow != NULL ) 
@@ -216,7 +215,7 @@ namespace DuiLib
 		if( !IsVisible() && m_pWindow != NULL ) m_pManager->SetFocus(NULL);
 	}
 
-	SIZE CEditUI::EstimateSize(SIZE szAvailable)
+	CDuiSize CEditUI::EstimateSize(CDuiSize szAvailable)
 	{
 		if(IsAutoCalcHeight() && !IsMultiLine()) 
 			return CDuiSize(m_cxyFixed.cx, m_pManager->GetFontHeight(GetFont()) + 6);
@@ -235,26 +234,9 @@ namespace DuiLib
 		else if( _tcsicmp(pstrName, _T("multiline")) == 0 ) SetMultiLine(_tcsicmp(pstrValue, _T("true")) == 0);
 		else if( _tcsicmp(pstrName, _T("wantreturn")) == 0 ) SetWantReturn(_tcsicmp(pstrValue, _T("true")) == 0);
 		else if( _tcsicmp(pstrName, _T("tipvalue")) == 0 ) SetTipValue(pstrValue);
-		else if( _tcsicmp(pstrName, _T("tipvaluecolor")) == 0 ) 
-		{
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-			SetTipValueColor(clrColor);
-		}
-		else if( _tcsicmp(pstrName, _T("nativetextcolor")) == 0 ) 
-		{
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-			SetNativeEditTextColor(clrColor);
-		}
-		else if( _tcsicmp(pstrName, _T("nativebkcolor")) == 0 ) {
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-			SetNativeEditBkColor(clrColor);
-		}
+		else if( _tcsicmp(pstrName, _T("tipvaluecolor")) == 0 ) SetTipValueColor(pstrValue);
+		else if( _tcsicmp(pstrName, _T("nativetextcolor")) == 0 ) SetNativeEditTextColor(pstrValue);
+		else if (_tcsicmp(pstrName, _T("nativebkcolor")) == 0) SetNativeEditBkColor(pstrValue);
 		else CLabelUI::SetAttribute(pstrName, pstrValue);
 	}
 
@@ -265,8 +247,8 @@ namespace DuiLib
 			return;
 
 		CDuiString sText = GetText();
-		RECT rcText = m_rcItem;
-		DWORD dwColor = 0;
+		CDuiRect rcText = m_rcItem;
+		CDuiColor dwColor = 0;
 		int iFont = -1;
 
 		if(sText.IsEmpty())
@@ -419,19 +401,19 @@ namespace DuiLib
 		return false;
 	}
 
-	DWORD CEditWnd::GetNativeEditBkColor() const
+	CDuiColor CEditWnd::GetNativeEditBkColor() const
 	{
 		if(m_pOwner->GetInterface(DUI_CTR_EDIT))
 			return ((CEditUI *)m_pOwner)->GetNativeEditBkColor();
 		//return UIARGB(0, 0, 0, 0);
-		return UIARGB(255,255,255,255); //内嵌窗口的背景透明时，应该仿照WIN32的方式，暂时返回白色。
+		return CDuiColor::White; //内嵌窗口的背景透明时，应该仿照WIN32的方式，暂时返回白色。
 	}
 
-	DWORD CEditWnd::GetNativeEditTextColor() const
+	CDuiColor CEditWnd::GetNativeEditTextColor() const
 	{
 		if(m_pOwner->GetInterface(DUI_CTR_EDIT))
 			return ((CEditUI *)m_pOwner)->GetNativeEditTextColor();
-		return UIARGB(255,0,0,0);
+		return CDuiColor::Black;
 	}
 
 	bool CEditWnd::IsAutoSelAll()

@@ -60,7 +60,7 @@ void CGridBodyUI::DoInit()
 {
 }
 
-void CGridBodyUI::SetPos(RECT rc, bool bNeedInvalidate)
+void CGridBodyUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 {
 	//return CContainerUI::SetPos(rc, bNeedInvalidate);
 	CControlUI::SetPos(rc, bNeedInvalidate);
@@ -196,12 +196,12 @@ void CGridBodyUI::SetPos(RECT rc, bool bNeedInvalidate)
 	*/
 }
 
-SIZE CGridBodyUI::EstimateSize(SIZE szAvailable)
+CDuiSize CGridBodyUI::EstimateSize(CDuiSize szAvailable)
 {
 	return CContainerUI::EstimateSize(szAvailable);
 }
 
-bool CGridBodyUI::DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl)
+bool CGridBodyUI::DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl)
 {
 	return CContainerUI::DoPaint(pRender, rcPaint, pStopControl);
 }

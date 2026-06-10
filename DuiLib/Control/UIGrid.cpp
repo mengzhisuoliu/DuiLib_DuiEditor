@@ -906,7 +906,7 @@ namespace DuiLib
 		return pCell;
 	}
 
-	CGridCellUI *CGridUI::GetCellUIFromPoint(const POINT &pt)
+	CGridCellUI *CGridUI::GetCellUIFromPoint(const CDuiPoint &pt)
 	{
 		CGridCellUI *pCellUI = NULL;
 
@@ -1669,13 +1669,13 @@ LABEL_END:
 		return false;
 	}
 
-	void CGridUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void CGridUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 	{
 		CControlUI::SetPos(rc, bNeedInvalidate);
 		rc = m_rcItem;
 
 		// Adjust for inset
-		RECT rcInset = GetInset();
+		CDuiRect rcInset = GetInset();
 		rc.left += rcInset.left;
 		rc.top += rcInset.top;
 		rc.right -= rcInset.right;
@@ -1688,7 +1688,7 @@ LABEL_END:
 			return;
 		}
 
-		SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
+		CDuiSize szAvailable = rc;
 		int iPosX = rc.left;
 		if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible())// && !IsFitColumns()) 
 		{
@@ -1761,13 +1761,13 @@ LABEL_END:
 			nGridWidth += GetColumnWidth(i, TRUE);
 		}
 
-		SIZE szHeader = m_pHeader->EstimateSize(szAvailable);
-		RECT rcCtrl = {iPosX, rc.top, iPosX + nGridWidth, rc.top + szHeader.cy };
+		CDuiSize szHeader = m_pHeader->EstimateSize(szAvailable);
+		CDuiRect rcCtrl(iPosX, rc.top, iPosX + nGridWidth, rc.top + szHeader.cy);
 		m_pHeader->SetPos(rcCtrl);
 
 		szAvailable.cy -= szHeader.cy;
 		//SIZE szBody = m_pBody->EstimateSize(szAvailable);
-		RECT rcCtrl2 = {iPosX, rc.top+szHeader.cy, iPosX + nGridWidth, rc.bottom};
+		CDuiRect rcCtrl2(iPosX, rc.top+szHeader.cy, iPosX + nGridWidth, rc.bottom);
 		m_pBody->SetPos(rcCtrl2);
 
 		int cxNeeded = nGridWidth;
@@ -1778,7 +1778,7 @@ LABEL_END:
 		ProcessScrollBar(rc, cxNeeded, cyNeeded);
 	}
 
-	void CGridUI::BuildRows(RECT rc, bool bNeedInvalidate)
+	void CGridUI::BuildRows(CDuiRect rc, bool bNeedInvalidate)
 	{
 		CDuiRect rcItem = rc;
 
@@ -1857,7 +1857,7 @@ LABEL_END:
 		for (int i=0; i<m_pBody->GetCount(); i++)
 		{
 			CGridRowUI *pRowUI = (CGridRowUI *)m_pBody->GetItemAt(i);
-			RECT rcRow = { rcItem.left, iPosY, rcItem.right, iPosY + GetRowHeight(nCurrentRow, TRUE) };
+			CDuiRect rcRow(rcItem.left, iPosY, rcItem.right, iPosY + GetRowHeight(nCurrentRow, TRUE) );
 			pRowUI->SetPos(rcRow, bNeedInvalidate);
 
 			if(pRowUI->GetRow() != nCurrentRow)
@@ -1908,7 +1908,7 @@ LABEL_END:
 		SendGridNotify(DUI_MSGTYPE_DRAWITEM, nBeginRow, nEndRow);
 	}
 
-	void CGridUI::SetScrollPos(SIZE szPos, bool bMsg)
+	void CGridUI::SetScrollPos(CDuiSize szPos, bool bMsg)
 	{
 		int cx = 0;
 		int cy = 0;
@@ -1929,7 +1929,7 @@ LABEL_END:
 
 		if( cx == 0 && cy == 0 ) return;
 
-		RECT rcPos;
+		CDuiRect rcPos;
 		for( int it2 = 0; it2 < m_items.GetSize(); it2++ ) {
 			CControlUI* pControl = static_cast<CControlUI*>(m_items[it2]);
 			if( !pControl->IsVisible() ) continue;
@@ -1955,7 +1955,7 @@ LABEL_END:
 		}
 	}
 
-	void CGridUI::ProcessScrollBar(RECT rc, int cxRequired, int cyRequired)
+	void CGridUI::ProcessScrollBar(CDuiRect rc, int cxRequired, int cyRequired)
 	{
 		while (m_pHorizontalScrollBar)
 		{
@@ -1986,7 +1986,7 @@ LABEL_END:
 			}
 			else
 			{
-				RECT rcScrollBarPos = { rc.left, rc.bottom, rc.right, rc.bottom + m_pHorizontalScrollBar->GetFixedHeight() };
+				CDuiRect rcScrollBarPos( rc.left, rc.bottom, rc.right, rc.bottom + m_pHorizontalScrollBar->GetFixedHeight() );
 				m_pHorizontalScrollBar->SetPos(rcScrollBarPos);
 
 				if (m_pHorizontalScrollBar->GetScrollRange() != cxScroll) 
@@ -2002,7 +2002,7 @@ LABEL_END:
 			break;
 		}
 
-		RECT rcBody = m_pBody->GetPos();
+		CDuiRect rcBody = m_pBody->GetPos();
 		int nBodyHeight = rcBody.bottom - rcBody.top;
 		while (m_pVerticalScrollBar)
 		{
@@ -2030,7 +2030,7 @@ LABEL_END:
 				break;
 			}
 
-			RECT rcScrollBarPos = { rc.right, m_rcItem.top, rc.right + m_pVerticalScrollBar->GetFixedWidth(), m_rcItem.bottom };
+			CDuiRect rcScrollBarPos( rc.right, m_rcItem.top, rc.right + m_pVerticalScrollBar->GetFixedWidth(), m_rcItem.bottom );
 			m_pVerticalScrollBar->SetPos(rcScrollBarPos);
 
 			if (m_pVerticalScrollBar->GetScrollRange() != cyScroll)
@@ -2046,7 +2046,7 @@ LABEL_END:
 		}
 	}
 
-	bool CGridUI::DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl)
+	bool CGridUI::DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl)
 	{
 		SetMergeCellsNeedPaint(-1, -1, true);
 
@@ -2075,7 +2075,7 @@ LABEL_END:
 						CDuiRect rcCell = pCell->GetCellPos();
 						CDuiRect rcItem = pCell->GetInnerControl()->GetPos();
 
-						POINT ptCenter = rcCell.CenterPoint();
+						CDuiPoint ptCenter = rcCell.CenterPoint();
 						CDuiRect rcItemNew;
 						rcItemNew.left = ptCenter.x - rcItem.GetWidth()/2;
 						rcItemNew.right = ptCenter.x + rcItem.GetWidth()/2;
@@ -2197,10 +2197,7 @@ LABEL_END:
 		}
 		else if( _tcsicmp(pstrName, _T("linecolor")) == 0 )
 		{
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-			SetLineColor(clrColor);
+			SetLineColor(pstrValue);
 		}	
 		else if( _tcsicmp(pstrName, _T("sizecolumn")) == 0 )	
 		{
@@ -2245,14 +2242,7 @@ LABEL_END:
 		}
 		else if( _tcsicmp(pstrName, _T("ascendingimage")) == 0 ) SetSortAscendingImage(pstrValue);
 		else if( _tcsicmp(pstrName, _T("descendingimage")) == 0 ) SetSortDescendingImage(pstrValue);
-		else if( _tcsicmp(pstrName, _T("sorticonsize")) == 0 )
-		{
-			SIZE sz = { 0 };
-			LPTSTR pstr = NULL;
-			sz.cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
-			sz.cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-			SetSortIconSize(sz);
-		}
+		else if( _tcsicmp(pstrName, _T("sorticonsize")) == 0 ) SetSortIconSize(pstrValue);
 		//////////////////////////////////////////////////////////////////////////
 		else if( _tcsicmp(pstrName, _T("fixedrow")) == 0 )
 		{

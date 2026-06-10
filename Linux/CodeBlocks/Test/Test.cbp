@@ -14,22 +14,24 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-DDUILIB_SDL" />
 					<Add directory="include" />
 					<Add directory="../../../DuiLib" />
+					<Add directory="../../../3rd/SDL/include" />
+					<Add directory="../../../3rd/SDL_gfx" />
+					<Add directory="../../../3rd/SDL_image/include" />
+					<Add directory="../../../3rd/SDL_ttf/include" />
 				</Compiler>
 				<ResourceCompiler>
 					<Add option="-Wl,--hash-style=sysv,-Bsymbolic,-rpath=./ -no-pie" />
 				</ResourceCompiler>
 				<Linker>
 					<Add option="-Wl,--hash-style=sysv,-Bsymbolic,-rpath=./ -no-pie" />
-					<Add library="gtk-3" />
-					<Add library="gobject-2.0" />
-					<Add library="glib-2.0" />
-					<Add library="gdk-3" />
-					<Add library="cairo" />
-					<Add library="gdk_pixbuf-2.0" />
-					<Add library="pangocairo-1.0" />
-					<Add library="pango-1.0" />
+					<Add library="../../../DuiLib/Lib/libDuiLib.a" />
+					<Add library="/usr/local/lib/libSDL3.so" />
+					<Add library="/usr/local/lib/libSDL3_image.so" />
+					<Add library="/usr/local/lib/libSDL3_gfx.so" />
+					<Add library="/usr/local/lib/libSDL3_ttf.so" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -52,7 +54,6 @@
 		</Compiler>
 		<Linker>
 			<Add option="`pkg-config gtk+-2.0 --libs`" />
-			<Add library="../../../bin/libDuiLib.a" />
 		</Linker>
 		<Unit filename="App.cpp" />
 		<Unit filename="App.h" />

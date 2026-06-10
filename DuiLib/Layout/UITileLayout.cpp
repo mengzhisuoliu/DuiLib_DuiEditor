@@ -46,12 +46,12 @@ namespace DuiLib
 		NeedUpdate();
 	}
 
-	SIZE CTileLayoutUI::GetItemSize() const
+	CDuiSize CTileLayoutUI::GetItemSize() const
 	{
 		return m_szItem;
 	}
 
-	void CTileLayoutUI::SetItemSize(SIZE szSize)
+	void CTileLayoutUI::SetItemSize(CDuiSize szSize)
 	{
 		if( m_szItem.cx != szSize.cx || m_szItem.cy != szSize.cy ) {
 			m_szItem = szSize;
@@ -71,25 +71,19 @@ namespace DuiLib
 
 	void CTileLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	{
-		if( _tcscmp(pstrName, _T("itemsize")) == 0 ) {
-			SIZE szItem = { 0 };
-			LPTSTR pstr = NULL;
-			szItem.cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
-			szItem.cy = _tcstol(pstr + 1, &pstr, 10);   ASSERT(pstr);     
-			SetItemSize(szItem);
-		}
+		if( _tcscmp(pstrName, _T("itemsize")) == 0 ) SetItemSize(pstrValue);
 		else if( _tcscmp(pstrName, _T("columns")) == 0 ) SetFixedColumns(_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("childvpadding")) == 0 ) SetChildVPadding(_ttoi(pstrValue));
 		else CContainerUI::SetAttribute(pstrName, pstrValue);
 	}
 
-	void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void CTileLayoutUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 	{
 		CControlUI::SetPos(rc, bNeedInvalidate);
 		rc = m_rcItem;
 
 		// Adjust for inset
-		RECT rcInset = GetInset();
+		CDuiRect rcInset = GetInset();
 		rc.left += rcInset.left;
 		rc.top += rcInset.top;
 		rc.right -= rcInset.right;
@@ -103,7 +97,7 @@ namespace DuiLib
 		}
 
 		// Determine the minimum size
-		SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
+		CDuiSize szAvailable = rc;
 		if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) 
 			szAvailable.cx += m_pHorizontalScrollBar->GetScrollRange();
 		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) 
@@ -119,7 +113,7 @@ namespace DuiLib
 			arrItems.Add(pControl);
 		}
 
-		SIZE szItem = GetItemSize();
+		CDuiSize szItem = GetItemSize();
 		GetManager()->GetDPIObj()->ScaleSize(&szItem);
 
 		int cxNeeded = 0;
@@ -181,8 +175,8 @@ namespace DuiLib
 				continue;
 			}
 
-			RECT rcPadding = pControl->GetPadding();
-			SIZE sz = szItem;
+			CDuiRect rcPadding = pControl->GetPadding();
+			CDuiSize sz = szItem;
 			sz.cx -= rcPadding.left + rcPadding.right;
 			sz.cy -= rcPadding.top + rcPadding.bottom;
 			if( sz.cx > pControl->GetMaxWidth() ) sz.cx = pControl->GetMaxWidth();
@@ -204,43 +198,43 @@ namespace DuiLib
 			}
 			if (iChildAlign == DT_CENTER) {
 				if (iChildVAlign == DT_VCENTER) {
-					RECT rcCtrl = { iPosX + (szItem.cx-sz.cx)/2+rcPadding.left, iPosY + (szItem.cy-sz.cy)/2+rcPadding.top, iPosX + (szItem.cx-sz.cx)/2 + sz.cx-rcPadding.right, iPosY + (szItem.cy-sz.cy)/2 + sz.cy-rcPadding.bottom };
+					CDuiRect rcCtrl( iPosX + (szItem.cx-sz.cx)/2+rcPadding.left, iPosY + (szItem.cy-sz.cy)/2+rcPadding.top, iPosX + (szItem.cx-sz.cx)/2 + sz.cx-rcPadding.right, iPosY + (szItem.cy-sz.cy)/2 + sz.cy-rcPadding.bottom );
 					pControl->SetPos(rcCtrl, false);
 				}
 				else if (iChildVAlign == DT_BOTTOM) {
-					RECT rcCtrl = { iPosX + (szItem.cx-sz.cx)/2+rcPadding.left, iPosY + szItem.cy - sz.cy+rcPadding.top, iPosX + (szItem.cx-sz.cx)/2 + sz.cx-rcPadding.right, iPosY + szItem.cy-rcPadding.bottom };
+					CDuiRect rcCtrl( iPosX + (szItem.cx-sz.cx)/2+rcPadding.left, iPosY + szItem.cy - sz.cy+rcPadding.top, iPosX + (szItem.cx-sz.cx)/2 + sz.cx-rcPadding.right, iPosY + szItem.cy-rcPadding.bottom );
 					pControl->SetPos(rcCtrl, false);
 				}
 				else {
-					RECT rcCtrl = { iPosX + (szItem.cx-sz.cx)/2+rcPadding.left, iPosY+rcPadding.top, iPosX + (szItem.cx-sz.cx)/2 + sz.cx-rcPadding.right, iPosY + sz.cy-rcPadding.bottom };
+					CDuiRect rcCtrl( iPosX + (szItem.cx-sz.cx)/2+rcPadding.left, iPosY+rcPadding.top, iPosX + (szItem.cx-sz.cx)/2 + sz.cx-rcPadding.right, iPosY + sz.cy-rcPadding.bottom );
 					pControl->SetPos(rcCtrl, false);
 				}
 			}
 			else if (iChildAlign == DT_RIGHT) {
 				if (iChildVAlign == DT_VCENTER) {
-					RECT rcCtrl = { iPosX + szItem.cx - sz.cx+rcPadding.left, iPosY + (szItem.cy-sz.cy)/2+rcPadding.top, iPosX + szItem.cx-rcPadding.right, iPosY + (szItem.cy-sz.cy)/2 + sz.cy-rcPadding.bottom };
+					CDuiRect rcCtrl( iPosX + szItem.cx - sz.cx+rcPadding.left, iPosY + (szItem.cy-sz.cy)/2+rcPadding.top, iPosX + szItem.cx-rcPadding.right, iPosY + (szItem.cy-sz.cy)/2 + sz.cy-rcPadding.bottom );
 					pControl->SetPos(rcCtrl, false);
 				}
 				else if (iChildVAlign == DT_BOTTOM) {
-					RECT rcCtrl = { iPosX + szItem.cx - sz.cx+rcPadding.left, iPosY + szItem.cy - sz.cy+rcPadding.top, iPosX + szItem.cx-rcPadding.right, iPosY + szItem.cy-rcPadding.bottom };
+					CDuiRect rcCtrl( iPosX + szItem.cx - sz.cx+rcPadding.left, iPosY + szItem.cy - sz.cy+rcPadding.top, iPosX + szItem.cx-rcPadding.right, iPosY + szItem.cy-rcPadding.bottom );
 					pControl->SetPos(rcCtrl, false);
 				}
 				else {
-					RECT rcCtrl = { iPosX + szItem.cx - sz.cx+rcPadding.left, iPosY+rcPadding.top, iPosX + szItem.cx-rcPadding.right, iPosY + sz.cy-rcPadding.bottom };
+					CDuiRect rcCtrl( iPosX + szItem.cx - sz.cx+rcPadding.left, iPosY+rcPadding.top, iPosX + szItem.cx-rcPadding.right, iPosY + sz.cy-rcPadding.bottom );
 					pControl->SetPos(rcCtrl, false);
 				}
 			}
 			else {
 				if (iChildVAlign == DT_VCENTER) {
-					RECT rcCtrl = { iPosX+rcPadding.left, iPosY + (szItem.cy-sz.cy)/2+rcPadding.top, iPosX + sz.cx-rcPadding.right, iPosY + (szItem.cy-sz.cy)/2 + sz.cy-rcPadding.bottom };
+					CDuiRect rcCtrl( iPosX+rcPadding.left, iPosY + (szItem.cy-sz.cy)/2+rcPadding.top, iPosX + sz.cx-rcPadding.right, iPosY + (szItem.cy-sz.cy)/2 + sz.cy-rcPadding.bottom );
 					pControl->SetPos(rcCtrl, false);
 				}
 				else if (iChildVAlign == DT_BOTTOM) {
-					RECT rcCtrl = { iPosX+rcPadding.left, iPosY + szItem.cy - sz.cy+rcPadding.top, iPosX + sz.cx-rcPadding.right, iPosY + szItem.cy-rcPadding.bottom };
+					CDuiRect rcCtrl( iPosX+rcPadding.left, iPosY + szItem.cy - sz.cy+rcPadding.top, iPosX + sz.cx-rcPadding.right, iPosY + szItem.cy-rcPadding.bottom );
 					pControl->SetPos(rcCtrl, false);
 				}
 				else {
-					RECT rcCtrl = { iPosX+rcPadding.left, iPosY+rcPadding.top, iPosX + sz.cx-rcPadding.right, iPosY + sz.cy-rcPadding.bottom };
+					CDuiRect rcCtrl( iPosX+rcPadding.left, iPosY+rcPadding.top, iPosX + sz.cx-rcPadding.right, iPosY + sz.cy-rcPadding.bottom );
 					pControl->SetPos(rcCtrl, false);
 				}
 			}

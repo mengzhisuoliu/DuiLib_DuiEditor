@@ -25,7 +25,7 @@ public:
 protected:
 	bool Activate();
 	virtual CDuiString GetText() const;
-	virtual bool DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl);
+	virtual bool DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl);
 	virtual void PaintText(UIRender *pRender);
 	virtual void PaintBkColor(UIRender *pRender);
 	virtual void PaintBorder(UIRender *pRender);

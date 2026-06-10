@@ -167,7 +167,7 @@ namespace DuiLib {
 		
 	}
 
-	BOOL UIPen_SDL::CreatePen(int nStyle, int nWidth, DWORD dwColor)
+	BOOL UIPen_SDL::CreatePen(int nStyle, int nWidth, CDuiColor dwColor)
 	{
 		return FALSE;
 	}
@@ -190,7 +190,7 @@ namespace DuiLib {
 		
 	}
 
-	BOOL UIBrush_SDL::CreateSolidBrush(DWORD clr)
+	BOOL UIBrush_SDL::CreateSolidBrush(CDuiColor clr)
 	{
         return FALSE;
 	}
@@ -275,7 +275,7 @@ namespace DuiLib {
 	}
 
 
-	BOOL UIBitmap_SDL::CreateFromData(LPBYTE pImage, int width, int height, DWORD mask)
+	BOOL UIBitmap_SDL::CreateFromData(LPBYTE pImage, int width, int height, CDuiColor mask)
 	{
 		DeleteObject();
 
@@ -336,7 +336,7 @@ namespace DuiLib {
 		DeleteAllTextures();
 	}
 
-	void UIBitmap_SDL::ClearAlpha(const RECT &rc, int alpha)
+	void UIBitmap_SDL::ClearAlpha(const CDuiRect &rc, int alpha)
 	{
 		DeleteAllTextures();
 	}
@@ -398,7 +398,6 @@ namespace DuiLib {
 		nHeight			= 0;
 		bAlpha		= false;
 		bUseHSL		= false;
-		dwMask		= 0;
 		delay		= 0;
 	}
 

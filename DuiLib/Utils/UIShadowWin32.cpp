@@ -26,7 +26,6 @@ CShadowWin32UI::CShadowWin32UI(void)
 		, m_bIsShowShadow(false)
 		, m_bIsDisableShadow(false)
 {
-	::ZeroMemory(&m_rcShadowCorner, sizeof(RECT));
 	m_ppm = NULL;
 }
 
@@ -137,19 +136,21 @@ LRESULT CALLBACK CShadowUI::ParentProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
 			break;
 		}
 	case WM_WINDOWPOSCHANGED:
-		RECT WndRect;
-		GetWindowRect(hwnd, &WndRect);
-		if (pThis->m_bIsImageMode) {
-			SetWindowPos(pThis->m_hWnd, hwnd, WndRect.left - pThis->m_nSize, WndRect.top - pThis->m_nSize, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+		{
+			CDuiRect WndRect;
+			GetWindowRect(hwnd, &WndRect);
+			if (pThis->m_bIsImageMode) {
+				SetWindowPos(pThis->m_hWnd, hwnd, WndRect.left - pThis->m_nSize, WndRect.top - pThis->m_nSize, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+			}
+			else {
+				SetWindowPos(pThis->m_hWnd, hwnd, WndRect.left + pThis->m_nxOffset - pThis->m_nSize, WndRect.top + pThis->m_nyOffset - pThis->m_nSize, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+			}
+			break;
 		}
-		else {
-			SetWindowPos(pThis->m_hWnd, hwnd, WndRect.left + pThis->m_nxOffset - pThis->m_nSize, WndRect.top + pThis->m_nyOffset - pThis->m_nSize, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
-		}
-		break;
 	case WM_MOVE:
 		if(pThis->m_Status & SS_VISABLE)
 		{
-			RECT WndRect;
+			CDuiRect WndRect;
 			GetWindowRect(hwnd, &WndRect);
 			if (pThis->m_bIsImageMode) {
 				SetWindowPos(pThis->m_hWnd, hwnd, WndRect.left - pThis->m_nSize, WndRect.top - pThis->m_nSize, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
@@ -261,7 +262,7 @@ void GetLastErrorMessage() {          //Formats GetLastError() value.
 void CShadowWin32UI::Update(HWND hParent)
 {
 	if(!m_bIsShowShadow || !(m_Status & SS_VISABLE)) return;
-	RECT WndRect;
+	CDuiRect WndRect;
 	GetWindowRect(hParent, &WndRect);
 	int nShadWndWid;
 	int nShadWndHei;
@@ -305,10 +306,10 @@ void CShadowWin32UI::Update(HWND hParent)
 		CDuiRect rcPaint(0, 0, nShadWndWid, nShadWndHei);
 		const UIImage* data = m_pManager->GetImageEx((LPCTSTR)m_sShadowImage, NULL, 0);
 		if( !data ) return;    
-		RECT rcBmpPart = {0};
+		CDuiRect rcBmpPart;
 		rcBmpPart.right = data->nWidth;
 		rcBmpPart.bottom = data->nHeight;
-		RECT corner = m_rcShadowCorner;
+		CDuiRect corner = m_rcShadowCorner;
 		m_ppm->Render()->Init(m_ppm, hMemDC);
 		m_ppm->Render()->Resize(rcPaint);
 		m_ppm->Render()->DrawBitmap(data->bitmap, rcPaint, rcPaint, rcBmpPart, corner, data->bAlpha, 0xFF, true, false, false);
@@ -321,7 +322,7 @@ void CShadowWin32UI::Update(HWND hParent)
 		MakeShadow((UINT32 *)pvBits, hParent, &WndRect);
 	}
 
-	POINT ptDst;
+	CDuiPoint ptDst;
 	if (m_bIsImageMode)
 	{
 		ptDst.x = WndRect.left - m_nSize;
@@ -333,8 +334,8 @@ void CShadowWin32UI::Update(HWND hParent)
 		ptDst.y = WndRect.top + m_nyOffset - m_nSize;
 	}
 
-	POINT ptSrc = {0, 0};
-	SIZE WndSize = {nShadWndWid, nShadWndHei};
+	CDuiPoint ptSrc;
+	CDuiSize WndSize(nShadWndWid, nShadWndHei);
 	BLENDFUNCTION blendPixelFunction= { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
 	MoveWindow(m_hWnd, ptDst.x, ptDst.y, nShadWndWid, nShadWndHei, FALSE);
 	BOOL bRet= ::UpdateLayeredWindow(m_hWnd, NULL, &ptDst, &WndSize, hMemDC, &ptSrc, 0, &blendPixelFunction, ULW_ALPHA);
@@ -345,7 +346,7 @@ void CShadowWin32UI::Update(HWND hParent)
 	DeleteDC(hMemDC);
 }
 
-void CShadowWin32UI::MakeShadow(UINT32 *pShadBits, HWND hParent, RECT *rcParent)
+void CShadowWin32UI::MakeShadow(UINT32 *pShadBits, HWND hParent, CDuiRect* rcParent)
 {
 	// The shadow algorithm:
 	// Get the region of parent window,
@@ -359,8 +360,8 @@ void CShadowWin32UI::MakeShadow(UINT32 *pShadBits, HWND hParent, RECT *rcParent)
 	GetWindowRgn(hParent, hParentRgn);
 
 	// Determine the Start and end point of each horizontal scan line
-	SIZE szParent = {rcParent->right - rcParent->left, rcParent->bottom - rcParent->top};
-	SIZE szShadow = {szParent.cx + 2 * m_nSize, szParent.cy + 2 * m_nSize};
+	CDuiSize szParent = *rcParent;
+	CDuiSize szShadow(szParent.cx + 2 * m_nSize, szParent.cy + 2 * m_nSize);
 	// Extra 2 lines (set to be empty) in ptAnchors are used in dilation
 	int nAnchors = max(szParent.cy, szShadow.cy);	// # of anchor points pares
 	int (*ptAnchors)[2] = new int[nAnchors + 2][2];
@@ -683,7 +684,7 @@ bool CShadowWin32UI::SetImage(LPCTSTR szImage)
 	return true;
 }
 
-bool CShadowWin32UI::SetShadowCorner(RECT rcCorner)
+bool CShadowWin32UI::SetShadowCorner(CDuiRect rcCorner)
 {
 	if (rcCorner.left < 0 || rcCorner.top < 0 || rcCorner.right < 0 || rcCorner.bottom < 0) return false;
 

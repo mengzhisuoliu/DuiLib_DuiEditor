@@ -105,15 +105,13 @@ BOOL CUIDialog::IsEnterCloseOK() const { return m_bEnterCloseOK; }
 
 BOOL CUIDialog::IsEscCloseCancel() const { return m_bEscCloseCancel; }
 
-#ifdef DUILIB_WIN32
-UINT CUIDialog::DoModal(HWND hWndParent)
+UINT CUIDialog::DoModal(UIWND hWndParent)
 {
 	Create(hWndParent, GetWindowClassName(), UI_WNDSTYLE_DIALOG|WS_SIZEBOX, WS_EX_WINDOWEDGE);
 	CenterWindow();
 	_bModal = true;
 	return ShowModal();
 }
-#endif
 
 UINT CUIDialog::DoModal(CUIFrmBase *pParentWnd)
 {
@@ -126,15 +124,13 @@ UINT CUIDialog::DoModal(CUIFrmBase *pParentWnd)
 	return ShowModal();
 }
 
-#ifdef DUILIB_WIN32
-void CUIDialog::ShowDialog(HWND hWndParent)
+void CUIDialog::ShowDialog(UIWND hWndParent)
 {
 	Create(hWndParent, GetWindowClassName(), WS_POPUP|UI_WNDSTYLE_FRAME, WS_EX_WINDOWEDGE);
 	CenterWindow();
 	_bModal = false;
 	return ShowWindow();
 }
-#endif
 
 void CUIDialog::ShowDialog(CUIFrmBase *pParentWnd)
 {

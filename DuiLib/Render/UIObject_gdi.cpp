@@ -136,7 +136,7 @@ namespace DuiLib {
 		return m_hPen;
 	}
 
-	BOOL UIPen_gdi::CreatePen(int nStyle, int nWidth, DWORD dwColor)
+	BOOL UIPen_gdi::CreatePen(int nStyle, int nWidth, CDuiColor dwColor)
 	{
 		DeleteObject();
 
@@ -182,10 +182,10 @@ namespace DuiLib {
 		return TRUE;
 	}
 
-	BOOL UIBrush_gdi::CreateSolidBrush(DWORD clr)
+	BOOL UIBrush_gdi::CreateSolidBrush(CDuiColor clr)
 	{
 		DeleteObject();
-		m_hBrush = ::CreateSolidBrush(RGB(GetBValue(clr), GetGValue(clr), GetRValue(clr)));
+		m_hBrush = ::CreateSolidBrush(clr.ToCOLORREF());
 		return m_hBrush != NULL;
 	}
 
@@ -202,13 +202,13 @@ namespace DuiLib {
 	UIPath_gdi::UIPath_gdi()
 	{
 		m_hDC = NULL;
-		memset(&m_curPoint, 0, sizeof(POINT));
+		memset(&m_curPoint, 0, sizeof(CDuiPoint));
 	}
 
 	UIPath_gdi::UIPath_gdi(HDC hDC)
 	{
 		m_hDC = hDC;
-		memset(&m_curPoint, 0, sizeof(POINT));
+		memset(&m_curPoint, 0, sizeof(CDuiPoint));
 	}
 
 	UIPath_gdi::~UIPath_gdi()
@@ -245,7 +245,7 @@ namespace DuiLib {
 		
 		if(m_curPoint.x != x1 && m_curPoint.y != y1)
 		{
-			POINT lastPoint;
+			CDuiPoint lastPoint;
 			::MoveToEx(m_hDC, x1, y1, &lastPoint);
 		}
 		::LineTo(m_hDC, x2, y2);
@@ -257,7 +257,7 @@ namespace DuiLib {
 	BOOL UIPath_gdi::AddLines(CDuiPoint *points, int count)
 	{
 		if(m_hDC == NULL) return FALSE;
-		POINT pt;
+		CDuiPoint pt;
 		::MoveToEx(m_hDC, points[0].x, points[0].y, &pt);
 		for (int i=1; i<count; i++)
 		{
@@ -344,7 +344,7 @@ namespace DuiLib {
 		return m_hBitmap != NULL;
 	}
 
-	BOOL UIBitmap_gdi::CreateFromData(LPBYTE pImage, int width, int height, DWORD mask)
+	BOOL UIBitmap_gdi::CreateFromData(LPBYTE pImage, int width, int height, CDuiColor mask)
 	{
 		if(!CreateARGB32Bitmap(NULL, width, height, TRUE))
 			return FALSE;
@@ -431,7 +431,7 @@ namespace DuiLib {
 		memset(m_pBits, 0, m_nWidth * m_nHeight * sizeof(DWORD));
 	}
 
-	void UIBitmap_gdi::ClearAlpha(const RECT &rc, int alpha)
+	void UIBitmap_gdi::ClearAlpha(const CDuiRect &rc, int alpha)
 	{
 		if (m_pBits == NULL)
 			return;
@@ -565,7 +565,6 @@ namespace DuiLib {
 		nHeight			= 0;
 		bAlpha		= false;
 		bUseHSL		= false;
-		dwMask		= 0;
 		delay		= 0;
 	}
 

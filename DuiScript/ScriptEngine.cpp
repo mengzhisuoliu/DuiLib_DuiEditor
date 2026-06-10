@@ -14,6 +14,7 @@
 #include "RegPOINT.h"
 #include "regSIZE.h"
 #include "regRECT.h"
+#include "regColor.h"
 #include "RegTNotifyUI.h"
 #include "RegTEvent.h"
 #include "RegCControlUI.h"
@@ -315,6 +316,8 @@ void CScriptEngine::Init()
 	r = engine->RegisterObjectType("HFONT", sizeof(HFONT), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_PRIMITIVE);	assert( r >= 0 );
 	r = engine->RegisterObjectType("CLSID", sizeof(CLSID), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_PRIMITIVE);	assert( r >= 0 );
 
+	r = engine->RegisterObjectType("UIWND", sizeof(UIWND), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_PRIMITIVE);	assert( r >= 0 );
+
 	//把CDuiString注册到脚本中，使成为脚本标准字符串类型
 	regCDuiString::Register(engine);
 	regCBufferUI::Register(engine);
@@ -338,6 +341,7 @@ void CScriptEngine::Init()
 	regPOINT::Register(engine);
 	regRECT::Register(engine);
 	regSIZE::Register(engine);
+	regColor::Register(engine);
 
 	regCLangManagerUI::Register(engine);
 	regCPaintManagerUI::Register_Prepare(engine);

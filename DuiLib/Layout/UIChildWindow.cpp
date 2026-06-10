@@ -43,11 +43,11 @@ public:
 		}
 		else if( uMsg == WM_PAINT)
 		{
-			RECT rc = m_pOwner->GetPos();
+			CDuiRect rc = m_pOwner->GetPos();
 			PAINTSTRUCT ps = { 0 };
 			::BeginPaint(m_hWnd, &ps);
 
-			RECT rcPaint;
+			CDuiRect rcPaint;
 			::GetClientRect(m_hWnd, &rcPaint);
 
 			m_pm.Render()->Resize(rcPaint);
@@ -76,17 +76,17 @@ public:
 		return lRes;
 	}
 
-	RECT CalPos()
+	CDuiRect CalPos()
 	{
 		CDuiRect rcPos = m_pOwner->GetPos();
-		RECT rcInset = m_pOwner->GetInset();
+		CDuiRect rcInset = m_pOwner->GetInset();
 		rcPos.left += rcInset.left;
 		rcPos.top += rcInset.top;
 		rcPos.right -= rcInset.right;
 		rcPos.bottom -= rcInset.bottom;
 
 		CContainerUI* pParent = m_pOwner;
-		RECT rcParent;
+		CDuiRect rcParent;
 		while( pParent = (CContainerUI*)pParent->GetParent() ) {
 			if( !pParent->IsVisible() ) {
 				rcPos.left = rcPos.top = rcPos.right = rcPos.bottom = 0;
@@ -167,13 +167,13 @@ void CChildWindowUI::DoEvent(TEventUI& event)
 	CContainerUI::DoEvent(event);
 }
 
-void CChildWindowUI::SetPos(RECT rc, bool bNeedInvalidate)
+void CChildWindowUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 {
 	CContainerUI::SetPos(rc, bNeedInvalidate);
 
 	if(m_pWindow && ::IsWindow(m_pWindow->GetHWND()))
 	{
-		RECT rcPos = ((CChildWnd *)m_pWindow)->CalPos();
+		CDuiRect rcPos = ((CChildWnd *)m_pWindow)->CalPos();
 		::SetWindowPos(m_pWindow->GetHWND(), NULL, rcPos.left, rcPos.top, rcPos.right - rcPos.left, 
 			rcPos.bottom - rcPos.top, SWP_NOZORDER | SWP_NOACTIVATE);   
 // 		::SetWindowPos(m_pWindow->GetHWND(), NULL, rc.left, rc.top, rc.right - rc.left, 
@@ -181,13 +181,13 @@ void CChildWindowUI::SetPos(RECT rc, bool bNeedInvalidate)
 	}
 }
 
-void CChildWindowUI::Move(SIZE szOffset, bool bNeedInvalidate)
+void CChildWindowUI::Move(CDuiSize szOffset, bool bNeedInvalidate)
 {
 	CContainerUI::Move(szOffset, bNeedInvalidate);
 
 	if(m_pWindow && ::IsWindow(m_pWindow->GetHWND()))
 	{
-		RECT rcPos = ((CChildWnd *)m_pWindow)->CalPos();
+		CDuiRect rcPos = ((CChildWnd *)m_pWindow)->CalPos();
 		::SetWindowPos(m_pWindow->GetHWND(), NULL, rcPos.left, rcPos.top, rcPos.right - rcPos.left, 
 			rcPos.bottom - rcPos.top, SWP_NOZORDER | SWP_NOACTIVATE);  
 	}

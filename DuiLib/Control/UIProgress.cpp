@@ -102,7 +102,7 @@ namespace DuiLib
 		if( m_nValue > m_nMax ) m_nValue = m_nMax;
 		if( m_nValue < m_nMin ) m_nValue = m_nMin;
 
-		RECT rc = m_rcItem;
+		CDuiRect rc = m_rcItem;
 		if( m_bHorizontal ) {
 			rc.right = m_rcItem.left + (m_nValue - m_nMin) * (m_rcItem.right - m_rcItem.left) / (m_nMax - m_nMin);
 		}
@@ -120,7 +120,7 @@ namespace DuiLib
 		if( m_nValue > m_nMax ) m_nValue = m_nMax;
 		if( m_nValue < m_nMin ) m_nValue = m_nMin;
 
-		RECT rc = {0};
+		CDuiRect rc;
 		if( m_bHorizontal ) {
 			rc.right = (m_nValue - m_nMin) * (m_rcItem.right - m_rcItem.left) / (m_nMax - m_nMin);
 			rc.bottom = m_rcItem.bottom - m_rcItem.top;

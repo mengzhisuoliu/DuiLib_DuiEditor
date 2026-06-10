@@ -15,9 +15,9 @@ namespace DuiLib{
 			{
 				break;
 			}
-			RECT rcPos = CalPos();
+			CDuiRect rcPos = CalPos();
 			UINT uStyle = WS_CHILD | ES_AUTOHSCROLL;
-			HWND hWnd = Create(m_pOwner->GetManager()->GetPaintWindow(), NULL, uStyle, 0, rcPos);
+			HWND hWnd = Create(m_pOwner->GetManager()->GetPaintWindow(), NULL, uStyle, 0, rcPos.left, rcPos.top, rcPos.GetWidth(), rcPos.GetHeight());
 			if (!IsWindow(hWnd))
 			{
 				break;
@@ -34,10 +34,10 @@ namespace DuiLib{
 	}
 
 
-	RECT CHotKeyWnd::CalPos()
+	CDuiRect CHotKeyWnd::CalPos()
 	{
 		CDuiRect rcPos = m_pOwner->GetPos();
-		RECT rcInset = m_pOwner->GetTextPadding();
+		CDuiRect rcInset = m_pOwner->GetTextPadding();
 		rcPos.left += rcInset.left;
 		rcPos.top += rcInset.top;
 		rcPos.right -= rcInset.right;
@@ -73,7 +73,7 @@ namespace DuiLib{
 		else if( uMsg == OCM_COMMAND ) {
 			if( GET_WM_COMMAND_CMD(wParam, lParam) == EN_CHANGE ) lRes = OnEditChanged(uMsg, wParam, lParam, bHandled);
 			else if( GET_WM_COMMAND_CMD(wParam, lParam) == EN_UPDATE ) {
-				RECT rcClient;
+				CDuiRect rcClient;
 				::GetClientRect(m_hWnd, &rcClient);
 				::InvalidateRect(m_hWnd, &rcClient, FALSE);
 			}
@@ -89,8 +89,8 @@ namespace DuiLib{
 		{
 			PAINTSTRUCT ps = { 0 };
 			HDC hDC = ::BeginPaint(m_hWnd, &ps);
-			DWORD dwTextColor = m_pOwner->GetTextColor();
-			DWORD dwBkColor = m_pOwner->GetNativeBkColor();
+			CDuiColor dwTextColor = m_pOwner->GetTextColor();
+			CDuiColor dwBkColor = m_pOwner->GetNativeBkColor();
 			CDuiString strText = GetHotKeyName();
 			::RECT rect;
 			::GetClientRect(m_hWnd, &rect);
@@ -355,21 +355,21 @@ namespace DuiLib{
 		Invalidate();
 	}
 
-	void CHotKeyUI::SetNativeBkColor(DWORD dwBkColor)
+	void CHotKeyUI::SetNativeBkColor(CDuiColor dwBkColor)
 	{
 		m_dwHotKeybkColor = dwBkColor;
 	}
 
-	DWORD CHotKeyUI::GetNativeBkColor() const
+	CDuiColor CHotKeyUI::GetNativeBkColor() const
 	{
 		return m_dwHotKeybkColor;
 	}
 
-	void CHotKeyUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void CHotKeyUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 	{
 		CControlUI::SetPos(rc, bNeedInvalidate);
 		if( m_pWindow != NULL ) {
-			RECT rcPos = m_pWindow->CalPos();
+			CDuiRect rcPos = m_pWindow->CalPos();
 			::SetWindowPos(m_pWindow->GetHWND(), NULL, rcPos.left, rcPos.top, rcPos.right - rcPos.left, 
 				rcPos.bottom - rcPos.top, SWP_NOZORDER | SWP_NOACTIVATE);        
 		}
@@ -386,7 +386,7 @@ namespace DuiLib{
 		if( !IsVisible() && m_pWindow != NULL ) m_pManager->SetFocus(NULL);
 	}
 
-	SIZE CHotKeyUI::EstimateSize(SIZE szAvailable)
+	CDuiSize CHotKeyUI::EstimateSize(CDuiSize szAvailable)
 	{
 		if( m_cxyFixed.cy == 0 ) return CDuiSize(m_cxyFixed.cx, m_pManager->GetFontHeight(GetFont()) + 6);
 		return CControlUI::EstimateSize(szAvailable);
@@ -394,12 +394,7 @@ namespace DuiLib{
 
 	void CHotKeyUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	{
-		if( _tcscmp(pstrName, _T("nativebkcolor")) == 0 ) {
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-			SetNativeBkColor(clrColor);
-		}
+		if( _tcscmp(pstrName, _T("nativebkcolor")) == 0 ) SetNativeBkColor(pstrValue);
 		else CLabelUI::SetAttribute(pstrName, pstrValue);
 	}
 

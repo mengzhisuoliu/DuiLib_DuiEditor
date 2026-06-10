@@ -11,7 +11,6 @@ TCellData::TCellData()
 {
 	m_state = 0;
 	m_tag = 0;
-	m_dwTextColor = 0;
 }
 
 void TCellData::Select(BOOL bSelected) 
@@ -65,8 +64,8 @@ UINT_PTR TCellData::GetTag() const { return m_tag; }
 CDuiString TCellData::GetUserData(){ return m_sUserData; }
 void TCellData::SetUserData(LPCTSTR pstrText){ m_sUserData = pstrText; }
 
-void TCellData::SetTextColor(DWORD dwColor) { m_dwTextColor = dwColor; }
-DWORD TCellData::GetTextColor() const { return m_dwTextColor; }
+void TCellData::SetTextColor(CDuiColor dwColor) { m_dwTextColor = dwColor; }
+CDuiColor TCellData::GetTextColor() const { return m_dwTextColor; }
 
 //////////////////////////////////////////////////////////////////////////
 //

@@ -59,7 +59,7 @@ namespace DuiLib
 		m_bUseRoll = FALSE;
 	}
 
-	void CRollTextUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void CRollTextUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 	{
 		CLabelUI::SetPos(rc, bNeedInvalidate);
 		m_nText_W_H = 0;			//布局变化重新计算
@@ -90,10 +90,10 @@ namespace DuiLib
 	{
 		if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
 		if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
-		DWORD dwTextColor = IsEnabled() ? m_dwTextColor : m_dwDisabledTextColor;
+		CDuiColor dwTextColor = IsEnabled() ? m_dwTextColor : m_dwDisabledTextColor;
 		CDuiString sText = GetText();
 		if( sText.IsEmpty() ) return;
-		RECT rcTextPadding = GetTextPadding();
+		CDuiRect rcTextPadding = GetTextPadding();
 		CDuiRect  rcClient;
 		rcClient = m_rcItem;
 		rcClient.left += rcTextPadding.left;
@@ -126,7 +126,7 @@ namespace DuiLib
 			}
 		}
 
-		RECT rc = rcClient;
+		CDuiRect rc = rcClient;
 
 		UINT uTextStyle = DT_WORDBREAK | DT_EDITCONTROL;
 
@@ -141,7 +141,7 @@ namespace DuiLib
 		}
 
 		
-		pRender->DrawText(rc, CDuiRect(0,0,0,0), sText, dwTextColor, m_iFont, uTextStyle);
+		pRender->DrawText(rc, CDuiRect(), sText, dwTextColor, m_iFont, uTextStyle);
 		
 
 		if(m_nText_W_H == 0)

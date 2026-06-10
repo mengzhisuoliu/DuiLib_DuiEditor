@@ -27,17 +27,17 @@ public:
 
 	virtual CControlUI* CreateControl(LPCTSTR pstrClass) override { return NULL; }
 
-	virtual CDuiString QueryControlText(LPCTSTR lpstrId, LPCTSTR lpstrType) { return _T(""); }
+	virtual CDuiString QueryControlText(LPCTSTR lpstrId, LPCTSTR lpstrType) override { return _T(""); }
 
-	CControlUI *GetRoot(); 
+	CControlUI *GetRoot() override;
 	void AttachVirtualForm(CUIFrmBase *pForm);
 	void DetachVirtualForm(CUIFrmBase *pForm);
 
 	virtual void Notify(TNotifyUI& msg) override;
 
-	virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled);;
-	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);;
-	virtual LRESULT HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled) override;
+	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+	virtual LRESULT HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
 public:
 	virtual void InitWindow(){}
 

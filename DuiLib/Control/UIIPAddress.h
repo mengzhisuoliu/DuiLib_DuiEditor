@@ -3,10 +3,9 @@
 
 #pragma once
 
-#ifdef DUILIB_WIN32
 namespace DuiLib
 {
-	//class CIPAddressWnd;
+	class CIPAddressWnd;
 
 	/// IP控件
 	class UILIB_API CIPAddressUI : public CLabelUI
@@ -23,9 +22,6 @@ namespace DuiLib
 		DWORD GetIP();
 		void SetIP(DWORD dwIP);
 
-		BOOL IsStaticWindow() const;
-		void SetStaticWindow(BOOL bStaticWindow);
-
 		virtual void SetText(LPCTSTR pstrText) override;
 		virtual CDuiString GetText() const override;
 
@@ -34,8 +30,8 @@ namespace DuiLib
 
 		void UpdateText();
 
-		virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
-		virtual void Move(SIZE szOffset, bool bNeedInvalidate = true) override;
+		virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
+		virtual void Move(CDuiSize szOffset, bool bNeedInvalidate = true) override;
 		virtual void SetVisible(bool bVisible = true) override;
 		virtual void SetInternVisible(bool bVisible = true) override;
 		virtual void DoEvent(TEventUI& event) override;
@@ -47,8 +43,6 @@ namespace DuiLib
 		int		m_nIPUpdateFlag;
 
 		CIPAddressWnd* m_pWindow;
-		BOOL m_bStaicWindow;		//失去焦点时，不要隐藏内部窗口
 	};
 }
-#endif //#ifdef DUILIB_WIN32
 #endif // __UIIPADDRESS_H__

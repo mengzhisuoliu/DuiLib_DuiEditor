@@ -680,6 +680,7 @@
     <ClInclude Include="RegCDialog.h" />
     <ClInclude Include="RegCDuiString.h" />
     <ClInclude Include="regCLangManagerUI.h" />
+    <ClInclude Include="regColor.h" />
     <ClInclude Include="regCRenderEngine.h" />
     <ClInclude Include="regPaintManagerUI.h" />
     <ClInclude Include="RegPOINT.h" />

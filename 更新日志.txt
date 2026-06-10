@@ -456,3 +456,24 @@ CXmlNodeUI child(LPCWSTR name) const;
 1，跨平台方案改为SDL3,目前正在开发完善中，不影响原有的windows使用。
 
 
+2026-06-06
+1, 把所有RECT替换为CDuiRect, SIZE替换为CDuiSize, POINT替换为CDuiPoint, DWORD颜色改为CDuiColor。改动量很大。
+会影响应用层继承控件，比如 SetPos(RECT ..) 要改为 SetPos(CDuiRect ..)。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

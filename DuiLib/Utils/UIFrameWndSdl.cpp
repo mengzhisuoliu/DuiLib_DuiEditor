@@ -78,11 +78,6 @@ LRESULT CUIFrameWndSDL::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lPa
 
 LRESULT CUIFrameWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	// 调整窗口样式
-// 	LONG styleValue = ::GetWindowLong(*this, GWL_STYLE);
-// 	styleValue &= ~WS_CAPTION;
-// 	::SetWindowLong(*this, GWL_STYLE, styleValue | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
-
 	// 关联UI管理器
 	GetManager()->Init(GetHWND(), GetManagerName(), this);
 	// 注册PreMessage回调
@@ -115,19 +110,18 @@ LRESULT CUIFrameWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	GetManager()->AddNotifier(this);
 
 	// 设置 HitTest 回调，用于无边框窗口的拖拽调整大小和移动
-	SDL_Window* sdlWindow = (SDL_Window*)GetHWND();
-	SDL_SetWindowHitTest(sdlWindow, HitTestCallback, this);
+	SDL_SetWindowHitTest(GetHWND(), HitTestCallback, this);
 
 	// 窗口初始化完毕
 	__InitWindow();
 
-	SDL_ShowWindow(sdlWindow);
+	ShowWindow();
 	return 0;
 }
 
 LRESULT CUIFrameWndSDL::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	CDuiPoint ptEvent(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+	CDuiPoint ptEvent(lParam);
 
 	CDuiRect rcClient;
 	GetManager()->GetClientRect(&rcClient);
@@ -169,11 +163,11 @@ LRESULT CUIFrameWndSDL::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 {
 	if (wParam == SC_MINIMIZE)
 	{
-		SDL_MinimizeWindow((SDL_Window*)m_hWnd);
+		SDL_MinimizeWindow(m_hWnd);
 	}
 	else if (wParam == SC_MAXIMIZE)
 	{
-		if (SDL_MaximizeWindow((SDL_Window*)m_hWnd))
+		if (SDL_MaximizeWindow(m_hWnd))
 		{
 			CControlUI* pControl = static_cast<CControlUI*>(GetManager()->FindControl(_T("windowmaxbtn")));
 			if (pControl) pControl->SetVisible(false);
@@ -183,7 +177,7 @@ LRESULT CUIFrameWndSDL::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	}
 	else if (wParam == SC_RESTORE)
 	{
-		if (SDL_RestoreWindow((SDL_Window*)m_hWnd))
+		if (SDL_RestoreWindow(m_hWnd))
 		{
 			CControlUI* pControl = static_cast<CControlUI*>(GetManager()->FindControl(_T("windowmaxbtn")));
 			if (pControl) pControl->SetVisible(true);

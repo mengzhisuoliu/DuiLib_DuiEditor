@@ -18,15 +18,15 @@ namespace DuiLib
 		virtual int ScaleInt(int iValue);
 		virtual int  ScaleIntBack(int iValue);
 
-		RECT ScaleRect(RECT rcRect);
+		CDuiRect ScaleRect(const CDuiRect& rcRect);
 		void ScaleRect(RECT *pRect);
 		void ScaleRectBack(RECT *pRect);
 
-		POINT ScalePoint(POINT ptPoint);
-		void ScalePoint(POINT *pPoint);
-		void ScalePointBack(POINT *pPoint);
+		CDuiPoint ScalePoint(CDuiPoint ptPoint);
+		void ScalePoint(CDuiPoint *pPoint);
+		void ScalePointBack(CDuiPoint *pPoint);
 
-		SIZE ScaleSize(SIZE szSize);
+		CDuiSize ScaleSize(const CDuiSize& szSize);
 		void ScaleSize(SIZE *pSize);
 		void ScaleSizeBack(SIZE *pSize);
 

@@ -38,16 +38,16 @@ namespace DuiLib {
 		CComboUI*	m_pComboBoxUI;
 
 	public:
-		virtual BOOL CheckColumEditable(int nColum);
-		virtual CEditUI* GetEditUI();
+		virtual BOOL CheckColumEditable(int nColum) override;
+		virtual CEditUI* GetEditUI() override;
 
-		virtual BOOL CheckColumComboBoxable(int nColum);
-		virtual CComboUI* GetComboBoxUI();
+		virtual BOOL CheckColumComboBoxable(int nColum) override;
+		virtual CComboUI* GetComboBoxUI() override;
 
 		virtual BOOL CheckColumCheckBoxable(int nColum);
 
 	public:
-		virtual void Notify(TNotifyUI& msg);
+		virtual void Notify(TNotifyUI& msg) override;
 		BOOL	m_bAddMessageFilter;
 		int		m_nRow,m_nColum;
 		void	SetEditRowAndColum(int nRow,int nColum) { m_nRow = nRow; m_nColum = nColum; };
@@ -58,12 +58,12 @@ namespace DuiLib {
 		virtual void SetTextArrayCallback(IListComboCallbackUI* pCallback);
 
 	public:
-		void OnListItemClicked(int nIndex, int nColum, RECT* lpRCColum, LPCTSTR lpstrText);
+		void OnListItemClicked(int nIndex, int nColum, CDuiRect* lpRCColum, LPCTSTR lpstrText);
 		void OnListItemChecked(int nIndex, int nColum, BOOL bChecked);
 
 	public:
-		void SetColumItemColor(int nIndex, int nColum, DWORD iBKColor);
-		BOOL GetColumItemColor(int nIndex, int nColum, DWORD& iBKColor);
+		void SetColumItemColor(int nIndex, int nColum, CDuiColor iBKColor);
+		BOOL GetColumItemColor(int nIndex, int nColum, CDuiColor& iBKColor);
 
 	private:
 		void HideEditAndComboCtrl();
@@ -89,9 +89,9 @@ namespace DuiLib {
 		void SetSepImage(LPCTSTR pStrImage);
 
 		virtual void DoEvent(TEventUI& event) override;
-		virtual SIZE EstimateSize(SIZE szAvailable) override;
+		virtual CDuiSize EstimateSize(CDuiSize szAvailable) override;
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
-		RECT GetThumbRect(bool bUseNew = false) const;
+		virtual CDuiRect GetThumbRect(bool bUseNew = false) const override;
 
 		virtual void PaintText(UIRender *pRender) override;
 		virtual void PaintStatusImage(UIRender *pRender) override;
@@ -137,7 +137,7 @@ namespace DuiLib {
 		CDuiString m_sCheckBoxSelectedImage;
 		CDuiString m_sCheckBoxForeImage;
 
-		SIZE m_cxyCheckBox;
+		CDuiSize m_cxyCheckBox;
 
 	public:
 		BOOL DrawCheckBoxImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify = NULL);
@@ -157,7 +157,7 @@ namespace DuiLib {
 		LPCTSTR GetCheckBoxForeImage();
 		void SetCheckBoxForeImage(LPCTSTR pStrImage);
 
-		void GetCheckBoxRect(RECT &rc);	
+		void GetCheckBoxRect(CDuiRect &rc);	
 
 		int GetCheckBoxWidth() const;       // 实际大小位置使用GetPos获取，这里得到的是预设的参考值
 		void SetCheckBoxWidth(int cx);      // 预设的参考值
@@ -196,9 +196,9 @@ namespace DuiLib {
 		CDuiString* GetLinkContent(int iIndex);
 
 		virtual void DoEvent(TEventUI& event) override;
-		virtual SIZE EstimateSize(SIZE szAvailable) override;
+		virtual CDuiSize EstimateSize(CDuiSize szAvailable) override;
 
-		virtual void DrawItemText(UIRender *pRender, const RECT& rcItem) override;
+		virtual void DrawItemText(UIRender *pRender, const CDuiRect& rcItem) override;
 
 	protected:
 		enum { MAX_LINK = 8 };
@@ -222,13 +222,13 @@ namespace DuiLib {
 		CDuiString m_sCheckBoxSelectedImage;
 		CDuiString m_sCheckBoxForeImage;
 
-		SIZE m_cxyCheckBox;
+		CDuiSize m_cxyCheckBox;
 
 	public:
-		virtual bool DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl);
-		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-		virtual void PaintStatusImage(UIRender *pRender);
-		BOOL DrawCheckBoxImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify, RECT& rcCheckBox);
+		virtual bool DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl) override;
+		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
+		virtual void PaintStatusImage(UIRender *pRender) override;
+		BOOL DrawCheckBoxImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify, CDuiRect& rcCheckBox);
 		LPCTSTR GetCheckBoxNormalImage();
 		void SetCheckBoxNormalImage(LPCTSTR pStrImage);
 		LPCTSTR GetCheckBoxHotImage();
@@ -245,8 +245,8 @@ namespace DuiLib {
 		LPCTSTR GetCheckBoxForeImage();
 		void SetCheckBoxForeImage(LPCTSTR pStrImage);
 
-		void GetCheckBoxRect(int nIndex, RECT &rc);	
-		void GetColumRect(int nColum, RECT &rc);
+		void GetCheckBoxRect(int nIndex, CDuiRect &rc);	
+		void GetColumRect(int nColum, CDuiRect &rc);
 
 		int GetCheckBoxWidth() const;       // 实际大小位置使用GetPos获取，这里得到的是预设的参考值
 		void SetCheckBoxWidth(int cx);      // 预设的参考值
@@ -257,7 +257,7 @@ namespace DuiLib {
 		BOOL GetCheck() const;
 
 	public:
-		int HitTestColum(POINT ptMouse);
+		int HitTestColum(CDuiPoint ptMouse);
 		BOOL CheckColumEditable(int nColum);
 
 	private:
@@ -271,8 +271,8 @@ namespace DuiLib {
 		COLUMCOLORNODE ColumCorlorArray[UILIST_MAX_COLUMNS];
 
 	public:
-		void SetColumItemColor(int nColum, DWORD iBKColor);
-		BOOL GetColumItemColor(int nColum, DWORD& iBKColor);
+		void SetColumItemColor(int nColum, CDuiColor iBKColor);
+		BOOL GetColumItemColor(int nColum, CDuiColor& iBKColor);
 
 	};
 } // namespace DuiLib

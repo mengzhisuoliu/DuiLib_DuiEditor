@@ -92,7 +92,6 @@ CGridCellUI::CGridCellUI() : m_pOwner(NULL)
 	m_pInnerControl = NULL;
 	m_nSeparatorType = 0;
 
-	::ZeroMemory(&m_rcMerge, sizeof(m_rcMerge));
 	m_bMergeWithOther = false;
 	m_celltype = celltypeText;
 }
@@ -161,7 +160,7 @@ void CGridCellUI::SetText(LPCTSTR pstrText)
 	COptionLayoutUI::SetText(pstrText);
 }
 
-DWORD CGridCellUI::GetTextColor() const
+CDuiColor CGridCellUI::GetTextColor() const
 {
 	if(!GetOwner()) return COptionLayoutUI::GetTextColor();
 
@@ -175,7 +174,7 @@ DWORD CGridCellUI::GetTextColor() const
 	return COptionLayoutUI::GetTextColor();
 }
 
-void CGridCellUI::SetTextColor(DWORD dwColor)
+void CGridCellUI::SetTextColor(CDuiColor dwColor)
 {
 	if(!GetOwner()) return COptionLayoutUI::SetTextColor(dwColor);
 
@@ -310,7 +309,7 @@ bool CGridCellUI::IsHotState() const
 	return false;
 }
 
-RECT CGridCellUI::GetCellPos()
+CDuiRect CGridCellUI::GetCellPos()
 {
 	if(!GetOwner()) return GetPos();
 	CGridUI *pGrid = (CGridUI *)GetOwner();
@@ -574,17 +573,17 @@ void CGridCellUI::DoInit()
 
 }
 
-void CGridCellUI::SetPos(RECT rc, bool bNeedInvalidate)
+void CGridCellUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 {
 	return COptionLayoutUI::SetPos(rc, bNeedInvalidate);
 }
 
-SIZE CGridCellUI::EstimateSize(SIZE szAvailable)
+CDuiSize CGridCellUI::EstimateSize(CDuiSize szAvailable)
 {
 	if(!GetOwner())
 		return COptionLayoutUI::EstimateSize(szAvailable);
 
-	SIZE sz = {0,0};
+	CDuiSize sz;
 	sz.cx = GetOwner()->GetColumnWidth(m_col);
 	if(sz.cx > szAvailable.cx) sz.cx = szAvailable.cx;
 	return sz;
@@ -605,7 +604,7 @@ void CGridCellUI::DoEvent(TEventUI& event)
 	COptionLayoutUI::DoEvent(event);
 }
 
-bool CGridCellUI::DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl)
+bool CGridCellUI::DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl)
 {
 	if(!GetOwner()) 
 		return COptionLayoutUI::DoPaint(pRender, rcPaint, pStopControl);
@@ -623,7 +622,7 @@ bool CGridCellUI::DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pS
 
 void CGridCellUI::PaintBkColor(UIRender *pRender)
 {
-	DWORD dwBackColor = 0;
+	CDuiColor dwBackColor = 0;
 
 	if(dwBackColor == 0 && !IsEnabled() && GetDisabledBkColor() != 0) 
 		dwBackColor = GetDisabledBkColor();
@@ -674,7 +673,7 @@ void CGridCellUI::PaintForeImage(UIRender *pRender)
 	{
 		CDuiRect rcItem = GetCellPos();
 
-		SIZE szIcon = pGrid->GetSortIconSize();
+		CDuiSize szIcon = pGrid->GetSortIconSize();
 
 		rcItem.top++;
 		rcItem.bottom--;
@@ -705,16 +704,16 @@ void CGridCellUI::PaintText(UIRender *pRender)
 
 	CDuiString sText = GetText();
 
-	RECT rcTextPadding = GetTextPadding();
+	CDuiRect rcTextPadding = GetTextPadding();
 	GetManager()->GetDPIObj()->ScaleRect(&rcTextPadding);
 	int nLinks = 0;
-	RECT rc = m_rcPaint2;
+	CDuiRect rc = m_rcPaint2;
 	rc.left += rcTextPadding.left;
 	rc.right -= rcTextPadding.right;
 	rc.top += rcTextPadding.top;
 	rc.bottom -= rcTextPadding.bottom;
 
-	DWORD dwColor = IsEnabled() ? GetTextColor() : GetDisabledTextColor();
+	CDuiColor dwColor = IsEnabled() ? GetTextColor() : GetDisabledTextColor();
 	if(IsEnabled())
 	{
 		if((IsSelected() || IsFocused()) && (GetSelectedTextColor() != 0))
@@ -771,7 +770,7 @@ void CGridCellUI::PaintText(UIRender *pRender)
 	if(iFont == -1)
 		iFont = GetFont();
 
-	RECT rcText = {0};
+	CDuiRect rcText;
 	if(IsFixedCol() && !IsFixedRow())
 	{
 		if(pGrid->GetFixedColumnCount() > 0 && pGrid->IsViewListNumber())
@@ -826,7 +825,7 @@ void CGridCellUI::PaintBorder(UIRender *pRender)
 	if(!GetOwner()) return COptionLayoutUI::PaintBorder(pRender);
 	CGridUI *pGrid = (CGridUI *)GetOwner();
 
-	DWORD dwColor = 0;
+	CDuiColor dwColor = 0;
 	if(IsSelected() || IsFocused())
 		dwColor = GetSelectedBorderColor();
 
@@ -840,10 +839,10 @@ void CGridCellUI::PaintBorder(UIRender *pRender)
 	}
 	else
 	{
-		DWORD dwBorderColor = GetOwner()->GetLineColor();
+		CDuiColor dwBorderColor = GetOwner()->GetLineColor();
 		if(pGrid->IsDrawRowLine())
 		{
-			RECT rcBorder = m_rcPaint2;
+			CDuiRect rcBorder = m_rcPaint2;
 			rcBorder.bottom -= 1;
 			rcBorder.top = rcBorder.bottom;
 			pRender->DrawLine(rcBorder, 1, GetAdjustColor(dwBorderColor));
@@ -851,7 +850,7 @@ void CGridCellUI::PaintBorder(UIRender *pRender)
 
 		if(pGrid->IsDrawColumnLine())
 		{
-			RECT rcBorder	= m_rcPaint2;
+			CDuiRect rcBorder	= m_rcPaint2;
 			rcBorder.right -= 1;
 			rcBorder.left	= rcBorder.right;
 			pRender->DrawLine(rcBorder,1,GetAdjustColor(dwBorderColor));
@@ -884,13 +883,7 @@ void CGridCellUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	}
 	else if( _tcsicmp(pstrName, _T("merge")) == 0 )
 	{
-		RECT rcRange;
-		LPTSTR pstr = NULL;
-		rcRange.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-		rcRange.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-		rcRange.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-		rcRange.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
-		m_rcMerge = rcRange;
+		m_rcMerge = pstrValue;
 	}
 	else if( _tcsicmp(pstrName, _T("mergedwithothers")) == 0 )
 	{

@@ -13,8 +13,8 @@ class UILIB_API CWindowSDL : public CWindowWnd
 {
 public:
 	struct WindowInfo {
-		UINT windowID;		 // SDL_WindowID windowID;
-		UINT_PTR sdlWindow;		 // SDL_Window* window;
+		UINT windowID;			 // SDL_WindowID windowID;
+		UIWND sdlWindow;		 // SDL_Window* window;
 		CWindowWnd* pDuiWindow;  // 关联的CWindowSDL*
 		BOOL isMainWindow;       // 是否为主窗口
 	};
@@ -37,9 +37,7 @@ public:
 	static UINT m_EVENT_SEND_MESSAGE;
 	static UINT m_EVENT_POST_MESSAGE;
 
-	virtual UIWND Create(UIWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, const RECT rc);
 	virtual UIWND Create(UIWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, int x = 0, int y = 0, int cx = 0, int cy = 0);
-	UIWND CreateDuiWindow(UIWND hwndParent, LPCTSTR pstrWindowName,DWORD dwStyle =0, DWORD dwExStyle =0);
 
 	virtual void Close(UINT nRet = IDOK) override;
 	virtual void SetCursor(int nCursor) override;
@@ -56,6 +54,7 @@ public:
 	virtual BOOL GetClientRect(LPRECT lpRect) override;
 
 protected:
+	DWORD m_dwStyle;
 	UINT m_id;
 	UInt64 m_uOwnerThread;
 	PVOID m_lastCursor; //SDL_Cursor
@@ -63,7 +62,7 @@ protected:
 
 public:
 	// 注册窗口，必须在窗口创建成功后调用
-	static BOOL RegisterWindow(UINT_PTR pSdlWindow, CWindowWnd *pDuiWindow);
+	static BOOL RegisterWindow(UIWND pSdlWindow, CWindowWnd *pDuiWindow);
 
 	// 注销窗口
 	static void UnRegisterWindow(UINT id);
@@ -72,7 +71,7 @@ public:
 	static BOOL FindWindowInfo(UINT id, WindowInfo *pInfo);
 
 	// 根据窗口指针查找窗口信息, SDL_Window *
-	static BOOL FindWindowInfoByPtr(UINT_PTR window, WindowInfo* pInfo);
+	static BOOL FindWindowInfoByPtr(UIWND window, WindowInfo* pInfo);
 
 	// 根据窗口指针查找窗口信息, CWindowWnd *
 	static BOOL FindWindowInfoByPtr(CWindowWnd* pDuiWindow, WindowInfo* pInfo);

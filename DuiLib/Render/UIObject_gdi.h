@@ -44,7 +44,7 @@ namespace DuiLib {
 
 		virtual HPEN GetHPEN() const override;
 
-		virtual BOOL CreatePen(int nStyle, int nWidth, DWORD dwColor) override;
+		virtual BOOL CreatePen(int nStyle, int nWidth, CDuiColor dwColor) override;
 
 	protected:
 		virtual ~UIPen_gdi();
@@ -67,7 +67,7 @@ namespace DuiLib {
 
 		virtual BOOL CreateCompatibleBitmap(HDC hDC, int width, int height) override;
 
-		virtual BOOL CreateFromData(LPBYTE pImage, int width, int height, DWORD mask) override;
+		virtual BOOL CreateFromData(LPBYTE pImage, int width, int height, CDuiColor mask) override;
 
 		virtual UINT_PTR  GetHandle()	override;
 		virtual HBITMAP GetHBITMAP() override;
@@ -79,7 +79,7 @@ namespace DuiLib {
 		virtual UIBitmap *Clone() override;
 
 		virtual void Clear() override;
-		virtual void ClearAlpha(const RECT &rc, int alpha = 0) override;
+		virtual void ClearAlpha(const CDuiRect &rc, int alpha = 0) override;
 
 		virtual BOOL SaveFile(LPCTSTR pstrFileName) override;
 	protected:
@@ -118,7 +118,7 @@ namespace DuiLib {
 		virtual HBRUSH GetHBrush() const override;
 
 		virtual BOOL CreateFromHBrush(HBRUSH hBrush) override;
-		virtual BOOL CreateSolidBrush(DWORD clr) override;
+		virtual BOOL CreateSolidBrush(CDuiColor clr) override;
 		virtual BOOL CreateBitmapBrush(UIBitmap *bitmap) override;
 
 	protected:
@@ -151,7 +151,7 @@ namespace DuiLib {
 
 	protected:
 		HDC m_hDC;
-		POINT m_curPoint;
+		CDuiPoint m_curPoint;
 	};
 
 } // namespace DuiLib

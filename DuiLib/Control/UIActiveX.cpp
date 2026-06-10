@@ -890,7 +890,7 @@ namespace DuiLib {
 
 	LRESULT CActiveXWnd::OnPrint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		RECT rcClient;
+		CDuiRect rcClient;
 		::GetClientRect(m_hWnd, &rcClient);
 		m_pOwner->m_pViewObject->Draw(DVASPECT_CONTENT, -1, NULL, NULL, NULL, (HDC)wParam, (RECTL*) &rcClient, NULL, NULL, NULL); 
 
@@ -900,14 +900,14 @@ namespace DuiLib {
 			guiThreadInfo.cbSize = sizeof(GUITHREADINFO);
 			::GetGUIThreadInfo(NULL, &guiThreadInfo);
 			if (guiThreadInfo.hwndCaret) {
-				POINT ptCaret;
+				CDuiPoint ptCaret;
 				ptCaret.x = guiThreadInfo.rcCaret.left;
 				ptCaret.y = guiThreadInfo.rcCaret.top;
 				::ClientToScreen(guiThreadInfo.hwndCaret, &ptCaret);
 				::ScreenToClient(m_pOwner->m_pOwner->GetManager()->GetPaintWindow(), &ptCaret);
 				//if( ::PtInRect(&rcPos, ptCaret) ) {
 				if( rcPos.PtInRect(ptCaret) ) {
-					RECT rcCaret;
+					CDuiRect rcCaret;
 					rcCaret = guiThreadInfo.rcCaret;
 					rcCaret.right = rcCaret.left;
 					m_pOwner->m_pOwner->GetManager()->Render()->DrawLine(rcCaret, 1, 0xFF000000);
@@ -978,7 +978,7 @@ namespace DuiLib {
 			::ShowWindow(m_hwndHost, IsVisible() ? SW_SHOW : SW_HIDE);
 	}
 
-	void CActiveXUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void CActiveXUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 	{
 		CControlUI::SetPos(rc, bNeedInvalidate);
 
@@ -1007,7 +1007,7 @@ namespace DuiLib {
 		}
 	}
 
-	void CActiveXUI::Move(SIZE szOffset, bool bNeedInvalidate)
+	void CActiveXUI::Move(CDuiSize szOffset, bool bNeedInvalidate)
 	{
 		CControlUI::Move(szOffset, bNeedInvalidate);
 		if( !m_pControl->m_bWindowless ) {
@@ -1016,7 +1016,7 @@ namespace DuiLib {
 		}
 	}
 
-	bool CActiveXUI::DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl)
+	bool CActiveXUI::DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl)
 	{
 		if( m_pControl != NULL && m_pControl->m_bWindowless && m_pControl->m_pViewObject != NULL )
 		{
@@ -1048,7 +1048,7 @@ namespace DuiLib {
 				IViewObjectEx* pViewEx = NULL;
 				m_pControl->m_pViewObject->QueryInterface(IID_IViewObjectEx, (LPVOID*) &pViewEx);
 				if( pViewEx != NULL ) {
-					POINT ptMouse = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+					CDuiPoint ptMouse(lParam);
 					pViewEx->QueryHitPoint(DVASPECT_CONTENT, &m_rcItem, ptMouse, 0, &dwHitResult);
 					pViewEx->Release();
 				}

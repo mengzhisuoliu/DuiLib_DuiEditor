@@ -65,7 +65,7 @@ namespace DuiLib
 
 
 		virtual void DoInit() override;
-		int GetCxNeeded(SIZE szAvailable);
+		int GetCxNeeded(CDuiSize szAvailable);
 		virtual void DoEvent(TEventUI& event) override;
 	protected:
 		ITreeUI *m_pOwner;

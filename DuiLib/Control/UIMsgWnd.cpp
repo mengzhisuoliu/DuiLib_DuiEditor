@@ -72,7 +72,7 @@ IMPLEMENT_DUICONTROL(CMsgWndUI)
 
 CMsgWndUI::CMsgWndUI(void)
 {
-	SetBkColor(UIARGB(255,255,255,255));
+	SetBkColor(CDuiColor::White);
 
 	m_lTwhStyle |= ES_DISABLENOSCROLL | WS_VSCROLL |  ES_AUTOVSCROLL;
 

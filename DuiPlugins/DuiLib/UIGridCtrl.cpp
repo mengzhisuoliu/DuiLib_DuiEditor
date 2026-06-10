@@ -13,13 +13,14 @@ public:
 	void Init(CGridCtrlUI* pOwner)
 	{
 		m_pOwner = pOwner;
-		Create(m_pOwner->GetManager()->GetPaintWindow(), NULL, WS_CHILD|WS_VISIBLE, 0, m_rcWindow);
+		Create(m_pOwner->GetManager()->GetPaintWindow(), NULL, WS_CHILD|WS_VISIBLE, 0, 
+			m_rcWindow.left, m_rcWindow.top, m_rcWindow.GetWidth(), m_rcWindow.GetHeight());
 		ASSERT(m_hWnd);
 
 		SetWindowLong(m_hWnd, GWL_EXSTYLE, GetWindowLong(m_hWnd, GWL_EXSTYLE) & ~(WS_EX_WINDOWEDGE | WS_EX_DLGMODALFRAME | WS_BORDER));
 	}
 
-	void SetPos(RECT rc, bool bNeedInvalidate  = true)
+	void SetPos(CDuiRect rc, bool bNeedInvalidate  = true)
 	{
 		m_rcWindow = rc;
 		::MoveWindow(GetHWND(), rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top, TRUE);
@@ -75,7 +76,7 @@ public:
 	}
 
 public:
-	RECT m_rcWindow;
+	CDuiRect m_rcWindow;
 	CGridCtrlUI *m_pOwner;
 	CGridCtrl *m_pGrid;
 };
@@ -270,7 +271,7 @@ LRESULT CGridCtrlUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, boo
 	return 0;
 }
 
-void CGridCtrlUI::SetPos(RECT rc, bool bNeedInvalidate /* = true */)
+void CGridCtrlUI::SetPos(CDuiRect rc, bool bNeedInvalidate /* = true */)
 {
 	__super::SetPos(rc, bNeedInvalidate);
 

@@ -50,10 +50,10 @@ namespace DuiLib {
 		virtual UINT GetTextStyle() const;
 
 		//文本外边距
-		virtual RECT GetTextPadding() const;
-		virtual void SetTextPadding(RECT rc);
-		virtual RECT GetPushedTextPadding() const;
-		virtual void SetPushedTextPadding(RECT rc);
+		virtual CDuiRect GetTextPadding() const;
+		virtual void SetTextPadding(CDuiRect rc);
+		virtual CDuiRect GetPushedTextPadding() const;
+		virtual void SetPushedTextPadding(CDuiRect rc);
 
 		//是否使用资源替换文本
 		virtual bool IsResourceText() const;
@@ -104,18 +104,18 @@ namespace DuiLib {
 
 		//////////////////////////////////////////////////////////////////////////
 		//字体颜色
-		virtual DWORD GetTextColor() const;
-		virtual void SetTextColor(DWORD dwColor);
-		DWORD GetHotTextColor() const;
-		void SetHotTextColor(DWORD dwColor);
-		DWORD GetPushedTextColor() const;
-		void SetPushedTextColor(DWORD dwColor);
-		DWORD GetFocusedTextColor() const;
-		void SetFocusedTextColor(DWORD dwColor);
-		DWORD GetDisabledTextColor() const;
-		void SetDisabledTextColor(DWORD dwColor);
-		DWORD GetSelectedTextColor() const;
-		void SetSelectedTextColor(DWORD dwColor);
+		virtual CDuiColor GetTextColor() const;
+		virtual void SetTextColor(CDuiColor dwColor);
+		CDuiColor GetHotTextColor() const;
+		void SetHotTextColor(CDuiColor dwColor);
+		CDuiColor GetPushedTextColor() const;
+		void SetPushedTextColor(CDuiColor dwColor);
+		CDuiColor GetFocusedTextColor() const;
+		void SetFocusedTextColor(CDuiColor dwColor);
+		CDuiColor GetDisabledTextColor() const;
+		void SetDisabledTextColor(CDuiColor dwColor);
+		CDuiColor GetSelectedTextColor() const;
+		void SetSelectedTextColor(CDuiColor dwColor);
 
 		//////////////////////////////////////////////////////////////////////////
 		//背景渐变色
@@ -125,26 +125,26 @@ namespace DuiLib {
 		virtual void SetGradient(bool bVertical);
 
 		//背景色，梯度
-		DWORD GetBkColor2() const;
-		void SetBkColor2(DWORD dwBackColor);
+		CDuiColor GetBkColor2() const;
+		void SetBkColor2(CDuiColor dwBackColor);
 
 		//背景色，梯度
-		DWORD GetBkColor3() const;
-		void SetBkColor3(DWORD dwBackColor);
+		CDuiColor GetBkColor3() const;
+		void SetBkColor3(CDuiColor dwBackColor);
 
 		//背景色
-		DWORD GetBkColor() const;
-		void SetBkColor(DWORD dwBackColor);
-		DWORD GetHotBkColor() const;
-		void SetHotBkColor(DWORD dwColor);
-		DWORD GetFocusBkColor() const;
-		void SetFocusBkColor(DWORD dwColor);
-		DWORD GetPushedBkColor() const;
-		void SetPushedBkColor(DWORD dwColor);
-		DWORD GetDisabledBkColor() const;
-		void SetDisabledBkColor(DWORD dwColor);
-		DWORD GetSelectBkColor();
-		void SetSelectedBkColor(DWORD dwBkColor);
+		CDuiColor GetBkColor() const;
+		void SetBkColor(CDuiColor dwBackColor);
+		CDuiColor GetHotBkColor() const;
+		void SetHotBkColor(CDuiColor dwColor);
+		CDuiColor GetFocusBkColor() const;
+		void SetFocusBkColor(CDuiColor dwColor);
+		CDuiColor GetPushedBkColor() const;
+		void SetPushedBkColor(CDuiColor dwColor);
+		CDuiColor GetDisabledBkColor() const;
+		void SetDisabledBkColor(CDuiColor dwColor);
+		CDuiColor GetSelectBkColor();
+		void SetSelectedBkColor(CDuiColor dwBkColor);
 
 		//////////////////////////////////////////////////////////////////////////
 		//背景图
@@ -153,8 +153,8 @@ namespace DuiLib {
 
 		//////////////////////////////////////////////////////////////////////////
 		//前景色
-		DWORD GetForeColor() const;
-		void SetForeColor(DWORD dwForeColor);
+		CDuiColor GetForeColor() const;
+		void SetForeColor(CDuiColor dwForeColor);
 
 		//////////////////////////////////////////////////////////////////////////
 		//前景图
@@ -203,8 +203,8 @@ namespace DuiLib {
 		void SetBorderSize(int nSize);
 
 		//边框size，按照左上右下设置
-		void SetBorderRectSize(RECT rc);
-		RECT GetBorderRectSize() const;
+		void SetBorderRectSize(CDuiRect rc);
+		CDuiRect GetBorderRectSize() const;
 
 		//左边框
 		int GetLeftBorderSize() const;
@@ -227,32 +227,32 @@ namespace DuiLib {
 		void SetBorderStyle(int nStyle);
 
 		//边框圆角
-		SIZE GetBorderRound() const;
-		void SetBorderRound(SIZE cxyRound);
+		CDuiSize GetBorderRound() const;
+		void SetBorderRound(CDuiSize cxyRound);
 
 		//边框颜色，普通状态
-		DWORD GetBorderColor() const;
-		void SetBorderColor(DWORD dwBorderColor);
+		CDuiColor GetBorderColor() const;
+		void SetBorderColor(CDuiColor dwBorderColor);
 
 		//边框颜色，鼠标悬停
-		DWORD GetHotBorderColor() const;
-		void SetHotBorderColor(DWORD dwBorderColor);
+		CDuiColor GetHotBorderColor() const;
+		void SetHotBorderColor(CDuiColor dwBorderColor);
 
 		//边框颜色，鼠标按下
-		DWORD GetPushedBorderColor() const;
-		void SetPushedBorderColor(DWORD dwBorderColor);
+		CDuiColor GetPushedBorderColor() const;
+		void SetPushedBorderColor(CDuiColor dwBorderColor);
 
 		//边框颜色，焦点状态
-		DWORD GetFocusBorderColor() const;
-		void SetFocusBorderColor(DWORD dwBorderColor);
+		CDuiColor GetFocusBorderColor() const;
+		void SetFocusBorderColor(CDuiColor dwBorderColor);
 
 		//边框颜色，禁用时
-		DWORD GetDisableBorderColor() const;
-		void SetDisableBorderColor(DWORD dwBorderColor);
+		CDuiColor GetDisableBorderColor() const;
+		void SetDisableBorderColor(CDuiColor dwBorderColor);
 
 		//边框颜色，选中时
-		DWORD GetSelectedBorderColor() const;
-		void SetSelectedBorderColor(DWORD dwBorderColor);
+		CDuiColor GetSelectedBorderColor() const;
+		void SetSelectedBorderColor(CDuiColor dwBorderColor);
 
 		//////////////////////////////////////////////////////////////////////////
 
@@ -264,17 +264,17 @@ namespace DuiLib {
 		bool DrawImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify = NULL);
 
 		// 相对(父控件)位置, 已弃用
-		virtual RECT GetRelativePos() const; 
+		virtual CDuiRect GetRelativePos() const;
 
 		// 客户区域（除去scrollbar和inset）
 		virtual CDuiRect GetClientPos(); 
 
 		//控件位置大小
 		virtual const CDuiRect& GetPos() const;
-		virtual void SetPos(RECT rc, bool bNeedInvalidate = true);
+		virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true);
 
 		//移动，仅float有效
-		virtual void Move(SIZE szOffset, bool bNeedInvalidate = true);
+		virtual void Move(CDuiSize szOffset, bool bNeedInvalidate = true);
 
 		//子控件调用, 询问父控件，你将会给我分配多大的rect。
 		virtual bool CalcPos(CControlUI *pChildControl, CDuiRect &rcChild); 
@@ -288,12 +288,12 @@ namespace DuiLib {
 		virtual int GetY() const;
 
 		//外边距，由上层窗口绘制
-		virtual RECT GetPadding() const;
-		virtual void SetPadding(RECT rcPadding); 
+		virtual CDuiRect GetPadding() const;
+		virtual void SetPadding(CDuiRect rcPadding);
 
 		//float控件左上角坐标，仅float为true时有效
-		virtual SIZE GetFixedXY() const;
-		virtual void SetFixedXY(SIZE szXY);
+		virtual CDuiSize GetFixedXY() const;
+		virtual void SetFixedXY(CDuiSize szXY);
 
 		//预设的宽度
 		virtual int GetFixedWidth() const;
@@ -333,8 +333,8 @@ namespace DuiLib {
 		virtual UINT GetFloatAlign() const;
 
 		//float控件，相对左上角百分比位置
-		virtual void SetFloatPosition(POINT ptPosition);
-		virtual POINT GetFloatPosition() const;
+		virtual void SetFloatPosition(CDuiPoint ptPosition);
+		virtual CDuiPoint GetFloatPosition() const;
 
 		//根据子控件或者文本等等自动计算宽度
 		virtual bool IsAutoCalcWidth() const;
@@ -430,7 +430,7 @@ namespace DuiLib {
 		void NeedParentUpdate();
 
 		//调整HSL颜色
-		DWORD GetAdjustColor(DWORD dwColor);
+		CDuiColor GetAdjustColor(CDuiColor dwColor);
 
 		virtual void Init();
 		virtual void DoInit();
@@ -447,9 +447,9 @@ namespace DuiLib {
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 		void ApplyAttributeList(LPCTSTR pstrList);
 
-		virtual SIZE EstimateSize(SIZE szAvailable);
-		virtual bool Paint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl = NULL); // 返回要不要继续绘制
-		virtual bool DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl);
+		virtual CDuiSize EstimateSize(CDuiSize szAvailable);
+		virtual bool Paint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl = NULL); // 返回要不要继续绘制
+		virtual bool DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl);
 		virtual void PaintBkColor(UIRender *pRender);
 		virtual void PaintBkImage(UIRender *pRender);
 		virtual void PaintStatusImage(UIRender *pRender);
@@ -459,7 +459,7 @@ namespace DuiLib {
 		virtual void PaintBorder(UIRender *pRender);
 
 		//绘制时不受控件本身大小的限制
-		virtual void DoPostPaint(UIRender *pRender, const RECT& rcPaint);
+		virtual void DoPostPaint(UIRender *pRender, const CDuiRect& rcPaint);
 
 		//虚拟窗口参数
 		void SetVirtualWnd(LPCTSTR pstrValue);
@@ -483,12 +483,12 @@ namespace DuiLib {
 		bool m_bUpdateNeeded;			//控件是否需要刷新
 		bool m_bMenuUsed;				//是否响应菜单事件，DUI_MSGTYPE_MENU
 		CDuiRect m_rcItem;				//控件的位置和大小，实际显示时。
-		RECT m_rcPadding;				//外边距
-		SIZE m_cXY;						//绝对定位时，控件左上角坐标
-		SIZE m_cxyFixed;				//预设的控件大小
-		SIZE m_cxyFixedPercent;			//预设的控件大小百分比
-		SIZE m_cxyMin;					//宽高最小值
-		SIZE m_cxyMax;					//宽高最大值
+		CDuiRect m_rcPadding;				//外边距
+		CDuiSize m_cXY;						//绝对定位时，控件左上角坐标
+		CDuiSize m_cxyFixed;				//预设的控件大小
+		CDuiSize m_cxyFixedPercent;			//预设的控件大小百分比
+		CDuiSize m_cxyMin;					//宽高最小值
+		CDuiSize m_cxyMax;					//宽高最大值
 		bool m_bVisible;				//是否显示
 		bool m_bInternVisible;			//内部调用， m_bVisible && m_bInternVisible = 实际是否显示。
 		bool m_bPaneVisible;			//是否显示，用于动画
@@ -499,7 +499,7 @@ namespace DuiLib {
 		bool m_bFloat;					//是否绝对定位
 		TPercentInfo m_piFloatPercent;	//绝对定位百分比
 		UINT m_uFloatAlign;				//绝对定位，对齐样式
-		POINT m_ptFloatPosition;		//绝对定位, 父控件左上角的百分比位置
+		CDuiPoint m_ptFloatPosition;		//绝对定位, 父控件左上角的百分比位置
 
 		bool m_bSetPos;					// 防止SetPos循环调用
 
@@ -538,27 +538,27 @@ namespace DuiLib {
 
 		//////////////////////////////////////////////////////////////////////////
 		//文本颜色
-		DWORD m_dwTextColor;
-		DWORD m_dwHotTextColor;
-		DWORD m_dwPushedTextColor;
-		DWORD m_dwFocusedTextColor;
-		DWORD m_dwDisabledTextColor;
-		DWORD m_dwSelectedTextColor;
+		CDuiColor m_dwTextColor;
+		CDuiColor m_dwHotTextColor;
+		CDuiColor m_dwPushedTextColor;
+		CDuiColor m_dwFocusedTextColor;
+		CDuiColor m_dwDisabledTextColor;
+		CDuiColor m_dwSelectedTextColor;
 
 		//////////////////////////////////////////////////////////////////////////
 		bool m_bGradientVertical;		//是否纵向渐变
-		DWORD m_dwBackColor2;			//背景色，梯度
-		DWORD m_dwBackColor3;			//背景色，梯度
+		CDuiColor m_dwBackColor2;			//背景色，梯度
+		CDuiColor m_dwBackColor3;			//背景色，梯度
 
-		DWORD m_dwBackColor;			//背景色
-		DWORD m_dwHotBkColor;			//背景色，悬停
-		DWORD m_dwFocusBkColor;			//背景色，焦点
-		DWORD m_dwPushedBkColor;		//背景色，鼠标按下
-		DWORD m_dwDisabledBkColor;		//背景色，禁用时
-		DWORD m_dwSelectedBkColor;		//背景色，选中时
+		CDuiColor m_dwBackColor;			//背景色
+		CDuiColor m_dwHotBkColor;			//背景色，悬停
+		CDuiColor m_dwFocusBkColor;			//背景色，焦点
+		CDuiColor m_dwPushedBkColor;		//背景色，鼠标按下
+		CDuiColor m_dwDisabledBkColor;		//背景色，禁用时
+		CDuiColor m_dwSelectedBkColor;		//背景色，选中时
 
 		//////////////////////////////////////////////////////////////////////////
-		DWORD m_dwForeColor;			//前景色
+		CDuiColor m_dwForeColor;			//前景色
 
 		//////////////////////////////////////////////////////////////////////////
 		CDuiString m_sBkImage;			//背景图片
@@ -587,16 +587,16 @@ namespace DuiLib {
 
 		//////////////////////////////////////////////////////////////////////////
 		//边框
-		int m_nBorderSize;				//边框大小
+		int m_nBorderSize;					//边框大小
 		CDuiRect m_rcBorderSize;			//边框大小, 分别设置左上右下边框大小
-		SIZE m_cxyBorderRound;			//边框圆角
-		int m_nBorderStyle;				//边框样式
-		DWORD m_dwBorderColor;			//边框颜色, 普通状态
-		DWORD m_dwHotBorderColor;		//边框颜色, 悬停
-		DWORD m_dwPushedBorderColor; 	//边框颜色, 鼠标按下
-		DWORD m_dwFocusBorderColor;		//边框颜色, 焦点
-		DWORD m_dwDisableBorderColor;	//边框颜色, 禁用
-		DWORD m_dwSelectedBorderColor;	//边框颜色，选中时
+		CDuiSize m_cxyBorderRound;			//边框圆角
+		int m_nBorderStyle;					//边框样式
+		CDuiColor m_dwBorderColor;			//边框颜色, 普通状态
+		CDuiColor m_dwHotBorderColor;		//边框颜色, 悬停
+		CDuiColor m_dwPushedBorderColor; 	//边框颜色, 鼠标按下
+		CDuiColor m_dwFocusBorderColor;		//边框颜色, 焦点
+		CDuiColor m_dwDisableBorderColor;	//边框颜色, 禁用
+		CDuiColor m_dwSelectedBorderColor;	//边框颜色，选中时
 
 		bool m_bColorHSL;				//HSL颜色
 

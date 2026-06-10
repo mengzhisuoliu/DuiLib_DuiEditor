@@ -26,7 +26,7 @@ namespace DuiLib
 		CDuiString GetCurForm();
 		
 		virtual void DoInit() override;
-		virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+		virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
 
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
@@ -40,8 +40,8 @@ namespace DuiLib
 		int m_nMoveDirection;
 		CControlUI *m_pCurControl;
 		CControlUI *m_pLastControl;
-		RECT m_rcCur;
-		RECT m_rcLast;
+		CDuiRect m_rcCur;
+		CDuiRect m_rcLast;
 	};
 }
 #endif // __UITABLAYOUT_H__

@@ -70,8 +70,8 @@ public:
 	CDuiString GetUserData(); 
 	void SetUserData(LPCTSTR pstrText);
 
-	void SetTextColor(DWORD dwColor);
-	DWORD GetTextColor() const;
+	void SetTextColor(CDuiColor dwColor);
+	CDuiColor GetTextColor() const;
 protected:
 	CDuiString m_sText;
 	UINT_PTR m_tag;
@@ -83,7 +83,7 @@ protected:
 	//bt3 = 是否需要绘制
 	BYTE m_state;
 
-	DWORD m_dwTextColor;
+	CDuiColor m_dwTextColor;
 };
 
 //表格行数据
@@ -151,8 +151,8 @@ public:
 	void EnableDrawColumnLine(BOOL bEnable)		{ m_bDrawColumnLine = bEnable; }
 	BOOL IsDrawColumnLine()						{ return m_bDrawColumnLine; }
 
-	void SetLineColor(DWORD clr)				{ m_dwLineColor = clr; }
-	DWORD GetLineColor() const					{ return m_dwLineColor; }
+	void SetLineColor(CDuiColor clr)				{ m_dwLineColor = clr; }
+	CDuiColor GetLineColor() const					{ return m_dwLineColor; }
 
 	virtual BOOL SetRowHeight(int row, int height)		= 0;
 	virtual int  GetRowHeight(int row, BOOL bScaleByDPI=FALSE)					= 0;
@@ -196,8 +196,8 @@ public:
 	void SetSortDescendingImage(LPCTSTR lpszImage)	{ m_sSortDescendingImage = lpszImage; }		
 	LPCTSTR GetSortDescendingImage()				{ return m_sSortDescendingImage; }
 
-	void SetSortIconSize(SIZE sz)				{ m_szSortIconSize = sz; }
-	SIZE GetSortIconSize()						{ return m_szSortIconSize; }
+	void SetSortIconSize(CDuiSize sz)				{ m_szSortIconSize = sz; }
+	CDuiSize GetSortIconSize()						{ return m_szSortIconSize; }
 
 	void SetEditable(BOOL bEditable)			{ m_bEditable = bEditable; }
 	BOOL GetEditable() const					{ return m_bEditable; }
@@ -238,7 +238,7 @@ protected:
 
 	BOOL  m_bDrawRowLine;				//enable drawing row's line
 	BOOL  m_bDrawColumnLine;			//enable drawing column's line
-	DWORD m_dwLineColor;				//grid line color
+	CDuiColor m_dwLineColor;				//grid line color
 
 	BOOL  m_bEnableSizeColumn;			//enable drag column size in grid header
 	BOOL  m_bEnableSizeRow;				//enable drag row height in grid header
@@ -256,7 +256,7 @@ protected:
 	BOOL  m_bHeaderSort;				//enable click fixed row to sort column
 	CDuiString m_sSortAscendingImage;	//ascending icon
 	CDuiString m_sSortDescendingImage;	//descending icon
-	SIZE m_szSortIconSize;
+	CDuiSize m_szSortIconSize;
 
 	BOOL m_bEditable;
 

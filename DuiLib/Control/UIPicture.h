@@ -21,7 +21,7 @@ public:
 	virtual void PaintBkImage(UIRender *pRender) override;
 	virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
-	void SetFrameDelay(int nDelay);
+	void SetFrameDelay(int nDelay) override;
 	int  GetFrameDelay();
 
 	void	SetAutoPlay(bool bIsAuto = true );
@@ -31,8 +31,8 @@ public:
 
 	void EnableTrackRect(bool bSelectRect) { m_bTrackRect = bSelectRect; }
 	bool IsEnableTrackRect() const { return m_bTrackRect; }
-	void SetTrackColor(DWORD dwColor) { m_dwTrackColor = dwColor; }
-	DWORD GetTrackColor() const { return m_dwTrackColor; }
+	void SetTrackColor(CDuiColor dwColor) { m_dwTrackColor = dwColor; }
+	CDuiColor GetTrackColor() const { return m_dwTrackColor; }
 	CDuiRect GetTrackRect();
 
 #ifdef DUILIB_WIN32
@@ -58,7 +58,7 @@ protected:
 private:
 	bool m_bTrackRect;
 	CDuiRect m_rcTracker;
-	DWORD m_dwTrackColor;
+	CDuiColor m_dwTrackColor;
 private:
 	bool			m_bIsAutoPlay;			// 是否自动播放
 	bool			m_bIsAutoSize;			// 是否自动根据图片设置大小

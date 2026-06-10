@@ -203,13 +203,13 @@ namespace DuiLib
 // 		}
 	}
 
-	void CTabLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void CTabLayoutUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 	{
 		CControlUI::SetPos(rc, bNeedInvalidate);
 		rc = m_rcItem;
 
 		// Adjust for inset
-		RECT rcInset = GetInset();
+		CDuiRect rcInset = GetInset();
 		rc.left += rcInset.left;
 		rc.top += rcInset.top;
 		rc.right -= rcInset.right;
@@ -236,9 +236,9 @@ namespace DuiLib
 // 					rc.right -= rcPadding.right;
 // 					rc.bottom -= rcPadding.bottom;
 
-					SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
+					CDuiSize szAvailable = rc;
 
-					SIZE sz = pControl->EstimateSize(szAvailable);
+					CDuiSize sz = pControl->EstimateSize(szAvailable);
 					if( sz.cx == 0 ) {
 						sz.cx = MAX(0, szAvailable.cx);
 					}
@@ -251,12 +251,12 @@ namespace DuiLib
 					if( sz.cy < pControl->GetMinHeight() ) sz.cy = pControl->GetMinHeight();
 					if( sz.cy > pControl->GetMaxHeight() ) sz.cy = pControl->GetMaxHeight();
 
-					RECT rcCtrl = { rc.left, rc.top, rc.left + sz.cx, rc.top + sz.cy};
+					CDuiRect rcCtrl(rc.left, rc.top, rc.left + sz.cx, rc.top + sz.cy);
 
 					int nHoriPer = (rcCtrl.right - rcCtrl.left) / GetFrameCount() * GetCurrentFrame(ANIMATION_ID_TAB);
 					int nVertPer = (rcCtrl.bottom - rcCtrl.top) / GetFrameCount() * GetCurrentFrame(ANIMATION_ID_TAB);
 
-					RECT rcItem = rcCtrl;
+					CDuiRect rcItem = rcCtrl;
 					if(m_animation == DuiAnim_horizontal)
 					{
 						if(m_nMoveDirection == 1) //´ÓÓÒÏò×ó±ß¹ö¶¯
@@ -283,7 +283,7 @@ namespace DuiLib
 							rcItem.top = rcItem.top - (rcCtrl.bottom - rcCtrl.top);
 						}
 					}
-					RECT rcPadding = pControl->GetPadding();
+					CDuiRect rcPadding = pControl->GetPadding();
 					rcItem.left += rcPadding.left;
 					rcItem.top += rcPadding.top;
 					rcItem.right -= rcPadding.right;
@@ -293,15 +293,15 @@ namespace DuiLib
 				}
 				else if(it == m_iOldSel)
 				{
-					RECT rcPadding = pControl->GetPadding();
+					CDuiRect rcPadding = pControl->GetPadding();
 					rc.left += rcPadding.left;
 					rc.top += rcPadding.top;
 					rc.right -= rcPadding.right;
 					rc.bottom -= rcPadding.bottom;
 
-					SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
+					CDuiSize szAvailable = rc;
 
-					SIZE sz = pControl->EstimateSize(szAvailable);
+					CDuiSize sz = pControl->EstimateSize(szAvailable);
 					if( sz.cx == 0 ) {
 						sz.cx = MAX(0, szAvailable.cx);
 					}
@@ -314,11 +314,11 @@ namespace DuiLib
 					if( sz.cy < pControl->GetMinHeight() ) sz.cy = pControl->GetMinHeight();
 					if( sz.cy > pControl->GetMaxHeight() ) sz.cy = pControl->GetMaxHeight();
 
-					RECT rcCtrl = { rc.left, rc.top, rc.left + sz.cx, rc.top + sz.cy};
+					CDuiRect rcCtrl(rc.left, rc.top, rc.left + sz.cx, rc.top + sz.cy);
 					int nHoriPer = (rcCtrl.right - rcCtrl.left) / GetFrameCount() * GetCurrentFrame(ANIMATION_ID_TAB);
 					int nVertPer = (rcCtrl.bottom - rcCtrl.top) / GetFrameCount() * GetCurrentFrame(ANIMATION_ID_TAB);
 
-					RECT rcItem = rcCtrl;
+					CDuiRect rcItem = rcCtrl;
 					if(m_animation == DuiAnim_horizontal)
 					{
 						if(m_nMoveDirection == 1)
@@ -363,15 +363,15 @@ namespace DuiLib
 
 			if( it != m_iCurSel ) continue;
 
-			RECT rcPadding = pControl->GetPadding();
+			CDuiRect rcPadding = pControl->GetPadding();
 			rc.left += rcPadding.left;
 			rc.top += rcPadding.top;
 			rc.right -= rcPadding.right;
 			rc.bottom -= rcPadding.bottom;
 
-			SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
+			CDuiSize szAvailable = rc;
 
-			SIZE sz = pControl->EstimateSize(szAvailable);
+			CDuiSize sz = pControl->EstimateSize(szAvailable);
 			if( sz.cx == 0 ) {
 				sz.cx = MAX(0, szAvailable.cx);
 			}
@@ -384,7 +384,7 @@ namespace DuiLib
 			if( sz.cy < pControl->GetMinHeight() ) sz.cy = pControl->GetMinHeight();
 			if( sz.cy > pControl->GetMaxHeight() ) sz.cy = pControl->GetMaxHeight();
 
-			RECT rcCtrl = { rc.left, rc.top, rc.left + sz.cx, rc.top + sz.cy};
+			CDuiRect rcCtrl(rc.left, rc.top, rc.left + sz.cx, rc.top + sz.cy);
 			pControl->SetPos(rcCtrl);
 		}
 	}

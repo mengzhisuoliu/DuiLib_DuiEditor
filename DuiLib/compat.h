@@ -376,6 +376,7 @@ typedef BYTE * LPBYTE;
 #define _tstof      _wtof
 #define _tcstod     wcstod
 #define _stprintf	swprintf
+#define _stscanf    swscanf
 #else
 #define TCHAR char
 #define LPCTSTR const char *
@@ -403,6 +404,7 @@ typedef BYTE * LPBYTE;
 #define _tstof      atof
 #define _tcstod     strtod
 #define _stprintf	sprintf
+#define _stscanf        sscanf
 #endif
 
 

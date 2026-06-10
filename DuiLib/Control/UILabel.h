@@ -15,31 +15,31 @@ namespace DuiLib
 
 		virtual UINT GetControlFlags() const override
 		{
-			return T::IsEnabled() ? UIFLAG_SETCURSOR : 0;
+			return this->IsEnabled() ? UIFLAG_SETCURSOR : 0;
 		}
 
-		virtual SIZE EstimateSize(SIZE szAvailable) override
+		virtual CDuiSize EstimateSize(CDuiSize szAvailable) override
 		{
-			if (T::IsAutoCalcWidth() || T::IsAutoCalcHeight())
+			if (this->IsAutoCalcWidth() || this->IsAutoCalcHeight())
 			{			
-				SIZE szFact = {szAvailable.cx, szAvailable.cy};
+				CDuiSize szFact = szAvailable;
 
-				if(T::IsAutoCalcWidth())
+				if(this->IsAutoCalcWidth())
 				{
-					RECT rcText = {0, 0, szAvailable.cx, szAvailable.cy};
-					RECT rcTextPadding = T::GetTextPadding();
-					T::GetManager()->Render()->DrawText(rcText, rcTextPadding, T::GetText(), T::GetTextColor(), T::GetFont(), DT_CALCRECT | T::GetTextStyle());
+					CDuiRect rcText = szAvailable;
+					CDuiRect rcTextPadding = this->GetTextPadding();
+					this->GetManager()->Render()->DrawText(rcText, rcTextPadding, this->GetText(), this->GetTextColor(), this->GetFont(), DT_CALCRECT | this->GetTextStyle());
 
 					szFact.cx = rcText.right - rcText.left;
 				}
 
-				if(T::IsAutoCalcHeight())
+				if(this->IsAutoCalcHeight())
 				{
-					int h = T::GetManager()->GetFontHeight(T::GetFont());
-					szFact.cy = T::m_rcTextPadding.top + T::m_rcTextPadding.bottom + h + 4;
+					int h = this->GetManager()->GetFontHeight(this->GetFont());
+					szFact.cy = this->m_rcTextPadding.top + this->m_rcTextPadding.bottom + h + 4;
 				}
 
-				return T::GetManager()->GetDPIObj()->ScaleSize(szFact);
+				return this->GetManager()->GetDPIObj()->ScaleSize(szFact);
 			}
 
 			return CControlUI::EstimateSize(szAvailable);
@@ -49,12 +49,12 @@ namespace DuiLib
 		{
 			if( event.Type == UIEVENT_SETFOCUS ) 
 			{
-				T::SetFocusState(true);
+				this->SetFocusState(true);
 				return;
 			}
 			if( event.Type == UIEVENT_KILLFOCUS ) 
 			{
-				T::SetFocusState(false);
+				this->SetFocusState(false);
 				return;
 			}
 			CControlUI::DoEvent(event);
@@ -67,55 +67,55 @@ namespace DuiLib
 
 		virtual void PaintText(UIRender *pRender) override
 		{
-			CDuiString sText = T::GetText();
+			CDuiString sText = this->GetText();
 			if(sText.IsEmpty()) return;
 
-			RECT rcText = T::GetPos();
-			DWORD dwColor = 0;
+			CDuiRect rcText = this->GetPos();
+			CDuiColor dwColor = 0;
 			int iFont = -1;
 
 			//////////////////////////////////////////////////////////////////////////
-			if( !T::IsEnabled() )
-				iFont = T::GetDisabledFont();
+			if( !this->IsEnabled() )
+				iFont = this->GetDisabledFont();
 
-			else if(T::IsSelectedState() )
-				iFont = T::GetSelectedFont();
+			else if(this->IsSelectedState() )
+				iFont = this->GetSelectedFont();
 
-			else if(T::IsPushedState() )
-				iFont = T::GetPushedFont();
+			else if(this->IsPushedState() )
+				iFont = this->GetPushedFont();
 
-			else if(T::IsHotState() )
-				iFont = T::GetHotFont();
+			else if(this->IsHotState() )
+				iFont = this->GetHotFont();
 
-			else if(T::IsFocused() )
-				iFont = T::GetFocusedFont();
+			else if(this->IsFocused() )
+				iFont = this->GetFocusedFont();
 
 			if(iFont == -1)
-				iFont = T::GetFont();
+				iFont = this->GetFont();
 
 			//////////////////////////////////////////////////////////////////////////
-			if( !T::IsEnabled() )
-				dwColor = T::GetDisabledTextColor();
+			if( !this->IsEnabled() )
+				dwColor = this->GetDisabledTextColor();
 
-			else if(T::IsSelectedState() )
-				dwColor = T::GetSelectedTextColor();
+			else if(this->IsSelectedState() )
+				dwColor = this->GetSelectedTextColor();
 
-			else if(T::IsPushedState() )
-				dwColor = T::GetPushedTextColor();
+			else if(this->IsPushedState() )
+				dwColor = this->GetPushedTextColor();
 
-			else if(T::IsHotState() )
-				dwColor = T::GetHotTextColor();
+			else if(this->IsHotState() )
+				dwColor = this->GetHotTextColor();
 
-			else if(T::IsFocused() )
-				dwColor = T::GetFocusedTextColor();
+			else if(this->IsFocused() )
+				dwColor = this->GetFocusedTextColor();
 
 			if(dwColor == 0)
-				dwColor = T::GetTextColor();
+				dwColor = this->GetTextColor();
 
-			if(dwColor == 0 && T::GetManager())
-				dwColor = T::GetManager()->GetDefaultFontColor();
+			if(dwColor == 0 && this->GetManager())
+				dwColor = this->GetManager()->GetDefaultFontColor();
 
-			pRender->DrawText(rcText, this->GetTextPadding(), sText, dwColor, iFont, T::GetTextStyle());
+			pRender->DrawText(rcText, this->GetTextPadding(), sText, dwColor, iFont, this->GetTextStyle());
 			return;
 		}
 	};
@@ -158,13 +158,13 @@ namespace DuiLib
 		CLabelUI();
 		~CLabelUI();
 
-		LPCTSTR GetClass() const;
-		LPVOID GetInterface(LPCTSTR pstrName);
-		UINT GetControlFlags() const;
+		LPCTSTR GetClass() const override;
+		LPVOID GetInterface(LPCTSTR pstrName) override;
+		UINT GetControlFlags() const override;
 
-		SIZE EstimateSize(SIZE szAvailable);
-		void DoEvent(TEventUI& event);
-		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+		CDuiSize EstimateSize(CDuiSize szAvailable) override;
+		void DoEvent(TEventUI& event) override;
+		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
 		virtual void PaintText(UIRender *pRender) override;
 	};

@@ -15,7 +15,7 @@ namespace DuiLib {
 		virtual void Init(HWND hWnd, LPCTSTR pstrName = NULL, CWindowWnd *pWindow=NULL) override;
 		virtual UIRender *Render() override;
 
-		virtual BOOL InvalidateRect(UIWND hWnd, const RECT *lpRect, BOOL bErase) override;
+		virtual BOOL InvalidateRect(UIWND hWnd, const CDuiRect*lpRect, BOOL bErase) override;
 		virtual HDC GetPaintDC() const override;
 
 		virtual void SetLayered(bool bLayered) override;
@@ -43,13 +43,13 @@ namespace DuiLib {
 		virtual BOOL IsAltKeyDown() override;
 		virtual BOOL IsShiftKeyDown() override;
 		virtual BOOL IsCapsLockKeyOn() override;
-		virtual BOOL IsNUmberLockKeyOn() override;
+		virtual BOOL IsNumberLockKeyOn() override;
 		virtual UINT MapKeyState() override;
 		virtual DWORD GetTickCount() override;
 		virtual void GetLocalTime(SYSTEMTIME &st) override;
 
 		int GetNativeWindowCount() const;
-		RECT GetNativeWindowRect(HWND hChildWnd);
+		CDuiRect GetNativeWindowRect(HWND hChildWnd);
 		bool AddNativeWindow(CControlUI* pControl, HWND hChildWnd);
 		bool RemoveNativeWindow(HWND hChildWnd);
 
@@ -72,10 +72,10 @@ namespace DuiLib {
 
 	public:
 		//创建控件的图标，比如拖拽时的图片
-		virtual UIBitmap* CreateControlBitmap(CControlUI* pControl, DWORD dwFilterColor = 0, CControlUI* pStopControl = NULL) override;
+		virtual UIBitmap* CreateControlBitmap(CControlUI* pControl, CDuiColor dwFilterColor = 0, CControlUI* pStopControl = NULL) override;
 
 		//构造内部窗口的背景画刷
-		virtual UIBitmap* CreateControlBackBitmap(CControlUI* pControl, const RECT &rcWnd, DWORD dwFilterColor) override;
+		virtual UIBitmap* CreateControlBackBitmap(CControlUI* pControl, const CDuiRect& rcWnd, CDuiColor dwFilterColor) override;
 
 	protected:
 		HDC m_hDcPaint;

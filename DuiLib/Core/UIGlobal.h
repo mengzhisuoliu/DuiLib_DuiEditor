@@ -29,13 +29,13 @@ namespace DuiLib {
 		static void HSLtoRGB(DWORD* ARGB, float H, float S, float L);
 
 		//HSL颜色转换
-		static DWORD AdjustHslColor(DWORD dwColor, short H, short S, short L);
+		static CDuiColor AdjustHslColor(CDuiColor dwColor, short H, short S, short L);
 
 		//HSL颜色转换
 		static void  AdjustHslImage(bool bUseHSL, UIImage *imageInfo, short H, short S, short L);
 
 		//alpha utilities
-		static void CheckAlphaColor(DWORD& dwColor);
+		static void CheckAlphaColor(CDuiColor& dwColor);
 	private:
 		UIGlobal();
 		UIGlobal(const UIGlobal &src);

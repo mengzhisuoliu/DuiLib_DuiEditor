@@ -14,26 +14,29 @@
 			</HorizontalLayout>
 		</HorizontalLayout>
 		<VerticalLayout>
-			<Edit name="edit_text" width="185" height="33" bkcolor="0xFFC0DCC0" tipvalue="编辑框" text="我是谁" textpadding="10,5,0,0" pos="115,60,300,93" float="true" style="style_edit" />
-			<Edit name="redit_text" width="200" height="50" bkcolor="0xFFC0DCC0" text="我是编辑框" pos="115,112,315,162" float="true" style="style_edit" />
-			<Option name="opt_check" width="30" height="30" pos="118,171,148,201" float="true" style="style_checkbox" />
-			<ComboEx name="cb_recv_type" type="dropdown" width="185" height="32" pos="120,213,305,245" float="true" style="style_comboex">
+			<Edit name="edit_text" width="185" height="33" bkcolor="0xFFC0DCC0" tipvalue="编辑框" text="我是谁" textpadding="10,5,0,0" pos="28,13,213,46" float="true" style="style_edit" />
+			<Edit name="redit_text" width="200" height="50" bkcolor="0xFFC0DCC0" text="我是编辑框" pos="28,65,228,115" float="true" style="style_edit" />
+			<Option name="opt_check" width="30" height="30" pos="31,125,61,155" float="true" style="style_checkbox" />
+			<ComboEx name="cb_recv_type" type="dropdown" width="185" height="32" pos="33,166,218,198" float="true" style="style_comboex">
 				<ListLabelElement text="111111" />
 				<ListLabelElement text="222222" />
 			</ComboEx>
-			<ComboEx name="cb_recv_type" width="185" height="32" pos="119,260,304,292" float="true" style="style_comboex">
+			<ComboEx name="cb_recv_type" width="185" height="32" pos="32,213,217,245" float="true" style="style_comboex">
 				<ListLabelElement text="111111" />
 				<ListLabelElement text="222222" />
 			</ComboEx>
-			<Control pos="355,149,466,234" width="111" height="85" float="true" bordercolor="0xFF000080" bordersize="2" />
+			<Control pos="629,33,740,118" width="111" height="85" float="true" bordercolor="0xFF000080" bordersize="2" />
 			<Tracker width="121" height="94" pos="354,33,475,127" float="true" />
-			<Picture fileimage="images\loading.gif" framedelay="100" width="100" height="100" pos="655,38,755,138" float="true" />
+			<IPAddress width="144" height="36" align="center" pos="29,253,173,289" float="true" bordercolor="0xFFC0C0C0" bordersize="1" />
+			<DateTime width="110" height="30" pos="29,297,139,327" float="true" bordercolor="0xFF333333" bordersize="1" />
+			<DateTime width="110" height="30" formatstyle="time" pos="155,297,265,327" float="true" bordercolor="0xFFC0C0C0" bordersize="1" />
+			<DateTimeEx width="345" height="51" formatstyle="datetime" pos="417,293,762,344" float="true" bordercolor="0xFFA0A0A4" bordersize="1" />
 		</VerticalLayout>
 		<VerticalLayout height="100" sepheight="-8" sepimm="true" inset="0,8,0,0" bkcolor="0xFFFFFFFF">
 			<MsgWnd name="msgwnd_frame" bordercolor="0xFFC0C0C0" bordersize="1" />
 		</VerticalLayout>
-		<Control pos="601,69,701,146" width="100" height="77" float="true" bordercolor="0xFF000080" leftbordersize="2" borderround="10,10" />
-		<Label text="qdqqwd" width="163" height="46" pos="524,229,687,275" float="true" />
-		<Control pos="359,258,435,313" width="76" height="55" float="true" bordercolor="0xFF000080" bordersize="2" borderround="10,10" />
+		<Control pos="507,62,607,139" width="100" height="77" float="true" bordercolor="0xFF000080" leftbordersize="2" borderround="10,10" />
+		<Label text="qdqqwd" width="163" height="46" pos="416,157,579,203" float="true" />
+		<Control pos="637,162,713,217" width="76" height="55" float="true" bordercolor="0xFF000080" bordersize="2" borderround="10,10" />
 	</VerticalLayout>
 </Window>

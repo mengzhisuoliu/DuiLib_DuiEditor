@@ -1,7 +1,7 @@
 
 //#define UILIB_STATIC //静态库使用请在IDE添加预处理 UILIB_STATIC
 
-#if !defined(DUILIB_SDL) && !defined(DUILIB_GTK)
+#ifndef DUILIB_SDL
 #define DUILIB_WIN32 //默认的
 #endif
 
@@ -64,7 +64,7 @@
 #endif //#ifdef WIN32
 
 #ifdef DUILIB_WIN32
-	#define UIWND		HWND // HWND
+	typedef HWND UIWND;
 	#define DuiLibWindowWnd	CWindowWin32
 	#define CShadowUI	CShadowWin32UI
 	#define CDPI		CDpiWin32
@@ -76,21 +76,13 @@
 	#define CComboWnd CComboWndWin32
 	#define CDateTimeWnd CDateTimeWndWin32
 	#define CMenuWnd CMenuWndWin32
-#elif defined DUILIB_GTK
-	#define UIWND		UINT_PTR // GtkWidget*
-	#define DuiLibWindowWnd	CWindowGtk
-	#define CShadowUI	CShadowGtkUI
-	#define CDPI		CDpiGtk
-	#define UIClip		UIClipGtk
-	#define DuiLibPaintManagerUI CPaintManagerGtkUI
-	#define CUIApplication CUIApplicationGtk
-	#define CUIFrameWnd CUIFrameWndGtk
-	#define DuiLibEditWnd CEditWndGtk
-	#define CComboWnd CComboWndGtk
-	#define CDateTimeWnd CDateTimeWndGtk
-	#define CMenuWnd CMenuWndGtk
+	#define CIPAddressWnd CIPAddressWndWin32
 #elif defined DUILIB_SDL
-	#define UIWND UINT_PTR  // SDL_Window*
+	struct SDL_Window;
+	struct SDL_Color; 
+	struct SDL_FRect;
+	struct SDL_Rect;
+	typedef struct SDL_Window* UIWND;
 	#define DuiLibWindowWnd	CWindowSDL
 	#define CShadowUI CShadowSDLUI
 	#define CDPI CDpiSDL
@@ -102,6 +94,7 @@
 	#define CComboWnd CComboWndSDL
 	#define CDateTimeWnd CDateTimeWndSDL
 	#define CMenuWnd CMenuWndSDL
+	#define CIPAddressWnd CIPAddressWndSDL
 #endif //#ifdef DUILIB_WIN32
 
 #include "Utils/DuiString.h"
@@ -120,13 +113,11 @@
 #include "Utils/TrayIcon.h"
 #include "Utils/DPI.h"
 #include "Utils/DpiWin32.h"
-#include "Utils/DpiGtk.h"
 #include "Utils/DpiSdl.h"
 
 #include "Core/UIDefine.h"
 #include "Utils/UIShadowBase.h"
 #include "Utils/UIShadowWin32.h"
-#include "Utils/UIShadowGtk.h"
 #include "Utils/UIShadowSdl.h"
 
 #include "Core/UIResourceManager.h"
@@ -135,12 +126,10 @@
 #include "Core/UIScript.h"
 #include "Core/UIManager.h"
 #include "Core/UIManagerWin32.h"
-#include "Core/UIManagerGtk.h"
 #include "Core/UIManagerSDL.h"
 
 #include "Core/UIBase.h"
 #include "Core/UIWindowWin32.h"
-#include "Core/UIWindowGtk.h"
 #include "Core/UIWindowSDL.h"
 
 #include "Core/ControlFactory.h"
@@ -192,7 +181,6 @@
 
 #include "Control/UIMenu.h"
 #include "Control/UIMenuWndWin32.h"
-#include "Control/UIMenuWndGtk.h"
 #include "Control/UIMenuWndSdl.h"
 
 #include "Control/UIGroupBox.h"
@@ -203,15 +191,11 @@
 #include "Control/UIFadeButton.h"
 #include "Control/UIRing.h"
 
-#define UIARGB(a,r,g,b)  ((COLORREF)((((BYTE)(b)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(r))<<16))  |(((DWORD)(BYTE)(a))<<24))  )
-#define UIARGB_GetAValue(argb)      (LOBYTE((argb)>>24))
-#define UIARGB_GetRValue(argb)      (LOBYTE((argb)>>16))
-#define UIARGB_GetGValue(argb)      (LOBYTE(((WORD)(argb)) >> 8))
-#define UIARGB_GetBValue(argb)      (LOBYTE(argb))
-
-#define UIRGB(r,g,b)	((COLORREF)((((BYTE)(b)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(r))<<16))  |(((DWORD)(BYTE)(255))<<24))  )
-#define UIARGB_2_RGB(argb)	(RGB(UIARGB_GetRValue(argb), UIARGB_GetGValue(argb), UIARGB_GetBValue(argb)))
-#define RGB_2_UIRGB(rgb)	(UIRGB(GetRValue(rgb), GetGValue(rgb), GetBValue(rgb)))
+#define UIMAKEIPADDRESS(b1,b2,b3,b4)  ((LPARAM)(((DWORD)(b1)<<24)+((DWORD)(b2)<<16)+((DWORD)(b3)<<8)+((DWORD)(b4))))
+#define UIGETIP_B1(ip)  ((BYTE)((ip) >> 24))
+#define UIGETIP_B2(ip)  ((BYTE)((ip) >> 16))
+#define UIGETIP_B3(ip)  ((BYTE)((ip) >> 8))
+#define UIGETIP_B4(ip)  ((BYTE)(ip))
 
 #include "Control/UIIconButton.h"
 #include "Control/UIDateTimeEx.h"
@@ -234,14 +218,12 @@
 
 #include "Utils/UIApplication.h"
 #include "Utils/UIApplicationWin32.h"
-#include "Utils/UIApplicationGtk.h"
 #include "Utils/UIApplicationSdl.h"
 
 #include "Utils/UIFrameBase.h"
 #include "Utils/UIFrameWnd.h"
 
 #include "Utils/UIFrameWndWin32.h"
-#include "Utils/UIFrameWndGtk.h"
 #include "Utils/UIFrameWndSdl.h"
 
 #include "Utils/UIForm.h"

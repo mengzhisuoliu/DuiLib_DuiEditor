@@ -5,11 +5,11 @@
 
 namespace DuiLib {
 
-	static void GetChildWndRect(HWND hWnd, HWND hChildWnd, RECT& rcChildWnd)
+	static void GetChildWndRect(HWND hWnd, HWND hChildWnd, CDuiRect& rcChildWnd)
 	{
 		::GetWindowRect(hChildWnd, &rcChildWnd);
 
-		POINT pt;
+		CDuiPoint pt;
 		pt.x = rcChildWnd.left;
 		pt.y = rcChildWnd.top;
 		::ScreenToClient(hWnd, &pt);
@@ -34,7 +34,7 @@ namespace DuiLib {
 	// 		return uState;
 	// 	}
 
-	typedef BOOL (__stdcall *PFUNCUPDATELAYEREDWINDOW)(HWND, HDC, POINT*, SIZE*, HDC, POINT*, COLORREF, BLENDFUNCTION*, DWORD);
+	typedef BOOL (__stdcall *PFUNCUPDATELAYEREDWINDOW)(HWND, HDC, CDuiPoint*, SIZE*, HDC, CDuiPoint*, COLORREF, BLENDFUNCTION*, DWORD);
 	PFUNCUPDATELAYEREDWINDOW g_fUpdateLayeredWindow = NULL;
 
 	HPEN m_hUpdateRectPen = NULL;
@@ -131,7 +131,7 @@ namespace DuiLib {
 	}
 
 
-	BOOL CPaintManagerWin32UI::InvalidateRect(UIWND hWnd, const RECT *lpRect, BOOL bErase)
+	BOOL CPaintManagerWin32UI::InvalidateRect(UIWND hWnd, const CDuiRect*lpRect, BOOL bErase)
 	{
 		return ::InvalidateRect(hWnd, lpRect, bErase);
 	}
@@ -312,7 +312,7 @@ namespace DuiLib {
 	BOOL CPaintManagerWin32UI::IsAltKeyDown()		{ return ::GetKeyState(VK_MENU)		< 0; }
 	BOOL CPaintManagerWin32UI::IsShiftKeyDown()		{ return ::GetKeyState(VK_SHIFT)	< 0; }
 	BOOL CPaintManagerWin32UI::IsCapsLockKeyOn()	{ return ::GetKeyState(VK_CAPITAL)	< 0; }
-	BOOL CPaintManagerWin32UI::IsNUmberLockKeyOn()	{ return ::GetKeyState(VK_NUMLOCK)	< 0; }
+	BOOL CPaintManagerWin32UI::IsNumberLockKeyOn()	{ return ::GetKeyState(VK_NUMLOCK)	< 0; }
 
 	UINT CPaintManagerWin32UI::MapKeyState()
 	{
@@ -344,7 +344,7 @@ namespace DuiLib {
 	{
 		if (pControl == NULL || hChildWnd == NULL) return false;
 
-		RECT rcChildWnd = GetNativeWindowRect(hChildWnd);
+		CDuiRect rcChildWnd = GetNativeWindowRect(hChildWnd);
 		Invalidate(rcChildWnd);
 
 		if (m_aNativeWindow.Find(hChildWnd) >= 0) return false;
@@ -369,9 +369,9 @@ namespace DuiLib {
 		return false;
 	}
 
-	RECT CPaintManagerWin32UI::GetNativeWindowRect(HWND hChildWnd)
+	CDuiRect CPaintManagerWin32UI::GetNativeWindowRect(HWND hChildWnd)
 	{
-		RECT rcChildWnd;
+		CDuiRect rcChildWnd;
 		::GetWindowRect(hChildWnd, &rcChildWnd);
 		::ScreenToClient(m_hWndPaint, (LPPOINT)(&rcChildWnd));
 		::ScreenToClient(m_hWndPaint, (LPPOINT)(&rcChildWnd)+1);
@@ -464,7 +464,7 @@ namespace DuiLib {
 			{
 				if( m_pRoot->IsUpdateNeeded() ) 
 				{
-					RECT rcRoot = rcClient;
+					CDuiRect rcRoot = rcClient;
 					if( m_bLayered ) 
 					{
 						rcRoot.left += m_rcLayeredInset.left;
@@ -508,7 +508,7 @@ namespace DuiLib {
 			}
 		}
 		else if( m_bLayered && m_bLayeredChanged ) {
-			RECT rcRoot = rcClient;
+			CDuiRect rcRoot = rcClient;
 			rcRoot.left += m_rcLayeredInset.left;
 			rcRoot.top += m_rcLayeredInset.top;
 			rcRoot.right -= m_rcLayeredInset.right;
@@ -546,7 +546,7 @@ namespace DuiLib {
 			{
 				DWORD dwWidth = rcClient.right - rcClient.left;
 				DWORD dwHeight = rcClient.bottom - rcClient.top;
-				RECT rcLayeredClient = rcClient;
+				CDuiRect rcLayeredClient = rcClient;
 				rcLayeredClient.left += m_rcLayeredInset.left;
 				rcLayeredClient.top += m_rcLayeredInset.top;
 				rcLayeredClient.right -= m_rcLayeredInset.right;
@@ -568,7 +568,7 @@ namespace DuiLib {
 		//画出需要刷新的区域，可以用于某些测试场景。
 		if( IsShowUpdateRect() && !IsLayered() ) 
 		{
-			Render()->DrawRect(rcPaint, 1, UIRGB(255,0,0));
+			Render()->DrawRect(rcPaint, 1, CDuiColor::Red);
 		}
 
 		//Render()->GetBitmap()->SaveFile(_T("c:\\uiframe.bmp"));
@@ -576,12 +576,12 @@ namespace DuiLib {
 
 		if( IsLayered() ) 
 		{
-			RECT rcWnd = { 0 };
+			CDuiRect rcWnd;
 			::GetWindowRect(m_hWndPaint, &rcWnd);
 			BLENDFUNCTION bf = { AC_SRC_OVER, 0, GetOpacity(), AC_SRC_ALPHA };
-			POINT ptPos   = { rcWnd.left, rcWnd.top };
-			SIZE sizeWnd  = { rcClient.right - rcClient.left, rcClient.bottom - rcClient.top };
-			POINT ptSrc   = { 0, 0 };
+			CDuiPoint ptPos = rcWnd.LeftTop();
+			CDuiSize sizeWnd = rcClient;
+			CDuiPoint ptSrc;
 			::UpdateLayeredWindow(m_hWndPaint, NULL, &ptPos, &sizeWnd, Render()->GetDC(), &ptSrc, 0, &bf, ULW_ALPHA);
 		}
 		else 
@@ -660,7 +660,7 @@ namespace DuiLib {
 	bool CPaintManagerWin32UI::OnMouseOver(WPARAM wParam, LPARAM lParam, LRESULT& lRes)
 	{
 		m_bMouseTracking = false;
-		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		CDuiPoint pt(lParam);
 		CControlUI* pHover = FindControl(pt);
 		if( pHover == NULL ) return false;
 		// Generate mouse hover event
@@ -704,7 +704,7 @@ namespace DuiLib {
 	{
 		if( m_hwndTooltip != NULL ) ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM) &m_ToolTip);
 		if( m_bMouseTracking ) {
-			POINT pt = { 0 };
+			CDuiPoint pt;
 			CDuiRect rcWnd;
 			::GetCursorPos(&pt);
 			::GetWindowRect(m_hWndPaint, &rcWnd);
@@ -739,7 +739,7 @@ namespace DuiLib {
 		}
 
 		// Generate the appropriate mouse messages
-		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		CDuiPoint pt(lParam);
 		m_ptLastMousePos = pt;
 		CControlUI* pNewHover = FindControl(pt);
 		if( pNewHover != NULL && pNewHover->GetManager() != this ) return false;
@@ -792,7 +792,7 @@ namespace DuiLib {
 	bool CPaintManagerWin32UI::OnMouseWheel(WPARAM wParam, LPARAM lParam, LRESULT& lRes)
 	{
 		if( m_pRoot == NULL ) return false;
-		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		CDuiPoint pt(lParam);
 		::ScreenToClient(m_hWndPaint, &pt);
 		m_ptLastMousePos = pt;
 		CControlUI* pControl = FindControl(pt);
@@ -818,7 +818,7 @@ namespace DuiLib {
 	bool CPaintManagerWin32UI::OnContextMenu(WPARAM wParam, LPARAM lParam, LRESULT& lRes)
 	{
 		if( m_pRoot == NULL ) return false;
-		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		CDuiPoint pt(lParam);
 		::ScreenToClient(m_hWndPaint, &pt);
 		m_ptLastMousePos = pt;
 		if( m_pEventClick == NULL ) return false;
@@ -878,13 +878,13 @@ namespace DuiLib {
 	}
 
 
-	UIBitmap* CPaintManagerWin32UI::CreateControlBitmap(CControlUI* pControl, DWORD dwFilterColor, CControlUI* pStopControl)
+	UIBitmap* CPaintManagerWin32UI::CreateControlBitmap(CControlUI* pControl, CDuiColor dwFilterColor, CControlUI* pStopControl)
 	{
 		CPaintManagerUI *pManager = pControl->GetManager();
 		if(pManager == NULL) return FALSE;
 		if(pManager->GetRoot() == NULL) return FALSE;
 
-		RECT rcControl = pControl->GetPos();
+		CDuiRect rcControl = pControl->GetPos();
 		int cx = rcControl.right - rcControl.left;
 		int cy = rcControl.bottom - rcControl.top;
 
@@ -915,14 +915,14 @@ namespace DuiLib {
 
 	//原理是，整个窗口画一遍，除了pControl自己不画，然后rcWnd的位置截图下来，就是内部窗口的背景图了。
 	//这样就可以实现Edit的透明背景了
-	UIBitmap* CPaintManagerWin32UI::CreateControlBackBitmap(CControlUI* pControl, const RECT &rcWnd, DWORD dwFilterColor)
+	UIBitmap* CPaintManagerWin32UI::CreateControlBackBitmap(CControlUI* pControl, const CDuiRect&rcWnd, CDuiColor dwFilterColor)
 	{
 		CPaintManagerUI *pManager = pControl->GetManager();
 		if(pManager == NULL) return FALSE;
 		if(pManager->GetRoot() == NULL) return FALSE;
 
 		CControlUI *pRoot = pManager->GetRoot();
-		RECT rcRoot = pRoot->GetPos();
+		CDuiRect rcRoot = pRoot->GetPos();
 
 		int cx = rcWnd.right - rcWnd.left;
 		int cy = rcWnd.bottom - rcWnd.top;

@@ -147,11 +147,11 @@ namespace DuiLib {
 
 	typedef struct UILIB_API tagTResInfo
 	{
-		DWORD m_dwDefaultDisabledColor;
-		DWORD m_dwDefaultFontColor;
-		DWORD m_dwDefaultLinkFontColor;
-		DWORD m_dwDefaultLinkHoverFontColor;
-		DWORD m_dwDefaultSelectedBkColor;
+		CDuiColor m_dwDefaultDisabledColor;
+		CDuiColor m_dwDefaultFontColor;
+		CDuiColor m_dwDefaultLinkFontColor;
+		CDuiColor m_dwDefaultLinkHoverFontColor;
+		CDuiColor m_dwDefaultSelectedBkColor;
 		CStdRefPtr<UIFont> m_DefaultFontInfo;
 		CStdStringPtrMap m_CustomFonts;		//字体
 		CStdStringPtrMap m_ImageHash;		//图像
@@ -167,7 +167,7 @@ namespace DuiLib {
 		int Type;
 		CControlUI* pSender;
 		DWORD dwTimestamp;
-		POINT ptMouse;
+		CDuiPoint ptMouse;
 		TCHAR chKey;
 		WORD wKeyState;
 		WPARAM wParam;
@@ -203,7 +203,7 @@ namespace DuiLib {
 		WPARAM wParam;
 		LPARAM lParam;
 		DWORD  time;
-		POINT  pt;
+		CDuiPoint  pt;
 		DWORD  lPrivate;
 	} MSG, * PMSG, * NPMSG, * LPMSG;
 #endif
@@ -267,8 +267,8 @@ namespace DuiLib {
 		void LockUpdate(bool bLock);
 		bool IsLockUpdate();
 		void Invalidate();
-		void Invalidate(RECT& rcItem);
-		virtual BOOL InvalidateRect(UIWND hWnd, const RECT *lpRect, BOOL bErase) = 0;
+		void Invalidate(CDuiRect& rcItem);
+		virtual BOOL InvalidateRect(UIWND hWnd, const CDuiRect*lpRect, BOOL bErase) = 0;
 
 		CDuiString GetName() const;
 #ifdef DUILIB_WIN32
@@ -280,19 +280,19 @@ namespace DuiLib {
 		int GetTooltipHoverTime() const;
 		void SetTooltipHoverTime(int iTime);
 
-		POINT GetLastMousePos() const;
+		CDuiPoint GetLastMousePos() const;
 
-		SIZE GetInitSize();
+		CDuiSize GetInitSize();
 		void SetInitSize(int cx, int cy);
-		RECT& GetSizeBox();
-		void SetSizeBox(RECT& rcSizeBox);
-		RECT& GetCaptionRect();
-		void SetCaptionRect(RECT& rcCaption);
-		SIZE GetRoundCorner() const;
+		CDuiRect& GetSizeBox();
+		void SetSizeBox(CDuiRect rcSizeBox);
+		CDuiRect& GetCaptionRect();
+		void SetCaptionRect(CDuiRect rcCaption);
+		CDuiSize GetRoundCorner() const;
 		void SetRoundCorner(int cx, int cy);
-		SIZE GetMinInfo();
+		CDuiSize GetMinInfo();
 		void SetMinInfo(int cx, int cy);
-		SIZE GetMaxInfo();
+		CDuiSize GetMaxInfo();
 		void SetMaxInfo(int cx, int cy);
 		bool IsShowUpdateRect() const;
 		void SetShowUpdateRect(bool show);
@@ -304,8 +304,8 @@ namespace DuiLib {
 
 		bool IsLayered();
 		virtual void SetLayered(bool bLayered) {}
-		RECT& GetLayeredInset();
-		void SetLayeredInset(RECT& rcLayeredInset);
+		CDuiRect& GetLayeredInset();
+		void SetLayeredInset(CDuiRect& rcLayeredInset);
 		BYTE GetLayeredOpacity();
 		void SetLayeredOpacity(BYTE nOpacity);
 		LPCTSTR GetLayeredImage();
@@ -361,16 +361,16 @@ namespace DuiLib {
 		bool IsForceUseSharedRes() const;
 		void SetForceUseSharedRes(bool bForce);
 
-		DWORD GetDefaultDisabledColor() const;
-		void SetDefaultDisabledColor(DWORD dwColor, bool bShared = false);
-		DWORD GetDefaultFontColor() const;
-		void SetDefaultFontColor(DWORD dwColor, bool bShared = false);
-		DWORD GetDefaultLinkFontColor() const;
-		void SetDefaultLinkFontColor(DWORD dwColor, bool bShared = false);
-		DWORD GetDefaultLinkHoverFontColor() const;
-		void SetDefaultLinkHoverFontColor(DWORD dwColor, bool bShared = false);
-		DWORD GetDefaultSelectedBkColor() const;
-		void SetDefaultSelectedBkColor(DWORD dwColor, bool bShared = false);
+		CDuiColor GetDefaultDisabledColor() const;
+		void SetDefaultDisabledColor(CDuiColor dwColor, bool bShared = false);
+		CDuiColor GetDefaultFontColor() const;
+		void SetDefaultFontColor(CDuiColor dwColor, bool bShared = false);
+		CDuiColor GetDefaultLinkFontColor() const;
+		void SetDefaultLinkFontColor(CDuiColor dwColor, bool bShared = false);
+		CDuiColor GetDefaultLinkHoverFontColor() const;
+		void SetDefaultLinkHoverFontColor(CDuiColor dwColor, bool bShared = false);
+		CDuiColor GetDefaultSelectedBkColor() const;
+		void SetDefaultSelectedBkColor(CDuiColor dwColor, bool bShared = false);
 
 		UIFont* GetDefaultFontInfo();
 		void SetDefaultFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic, bool bShared = false);
@@ -416,13 +416,13 @@ namespace DuiLib {
 		const UIImage* GetImage(LPCTSTR bitmap);
 
 		//获取图片, bitmap为文件名或资源id
-		const UIImage* GetImageEx(LPCTSTR bitmap, LPCTSTR type = NULL, DWORD mask = 0, int width=0, int height=0, DWORD fillcolor=0, bool bUseHSL = false, HINSTANCE instance = NULL);
+		const UIImage* GetImageEx(LPCTSTR bitmap, LPCTSTR type = NULL, CDuiColor mask = 0, int width=0, int height=0, CDuiColor fillcolor=0, bool bUseHSL = false, HINSTANCE instance = NULL);
 		
 		//获取图片, bitmap为文件名或资源id,上一函数的参数简化版.
 		const UIImage* GetImageExX(const TDrawInfo *pDrawInfo, HINSTANCE instance = NULL);
 		
 		//增加图片, bitmap为文件名或资源id 
-		const UIImage* AddImage(LPCTSTR bitmap, LPCTSTR type = NULL, DWORD mask = 0, int width=0, int height=0, DWORD fillcolor=0, bool bUseHSL = false, bool bShared = false, HINSTANCE instance = NULL);
+		const UIImage* AddImage(LPCTSTR bitmap, LPCTSTR type = NULL, CDuiColor mask = 0, int width=0, int height=0, CDuiColor fillcolor=0, bool bUseHSL = false, bool bShared = false, HINSTANCE instance = NULL);
 		
 		//增加图片, bitmap为文件名或资源id, 上一函数的参数简化版.
 		const UIImage* AddImageX(const TDrawInfo *pDrawInfo, bool bShared = false, HINSTANCE instance = NULL);
@@ -521,10 +521,10 @@ namespace DuiLib {
 		bool RemoveMouseLeaveNeeded(CControlUI* pControl);
 
 		CControlUI* GetRoot() const;
-		CControlUI* FindControl(POINT pt) const;
+		CControlUI* FindControl(CDuiPoint pt) const;
 		CControlUI* FindControl(LPCTSTR pstrName) const;
 		//CControlUI* FindControl(const CDuiString &strName) const;
-		CControlUI* FindSubControlByPoint(CControlUI* pParent, POINT pt) const;
+		CControlUI* FindSubControlByPoint(CControlUI* pParent, CDuiPoint pt) const;
 		CControlUI* FindSubControlByName(CControlUI* pParent, LPCTSTR pstrName) const;
 		CControlUI* FindSubControlByClass(CControlUI* pParent, LPCTSTR pstrClass, int iIndex = 0);
 		CStdPtrArray* FindSubControlsByClass(CControlUI* pParent, LPCTSTR pstrClass);
@@ -597,10 +597,10 @@ namespace DuiLib {
 
 	public:
 		//创建控件的图标，比如拖拽时的图片
-		virtual UIBitmap* CreateControlBitmap(CControlUI* pControl, DWORD dwFilterColor = 0, CControlUI* pStopControl = NULL) { return NULL; }
+		virtual UIBitmap* CreateControlBitmap(CControlUI* pControl, CDuiColor dwFilterColor = 0, CControlUI* pStopControl = NULL) { return NULL; }
 
 		//构造内部窗口的背景画刷
-		virtual UIBitmap* CreateControlBackBitmap(CControlUI* pControl, const RECT &rcWnd, DWORD dwFilterColor) { return NULL; }
+		virtual UIBitmap* CreateControlBackBitmap(CControlUI* pControl, const CDuiRect&rcWnd, CDuiColor dwFilterColor) { return NULL; }
 
 		virtual LRESULT SendMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0);
 		virtual BOOL PostMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0);
@@ -620,7 +620,7 @@ namespace DuiLib {
 		virtual BOOL IsAltKeyDown() = 0;
 		virtual BOOL IsShiftKeyDown() = 0;
 		virtual BOOL IsCapsLockKeyOn() = 0;
-		virtual BOOL IsNUmberLockKeyOn() = 0;
+		virtual BOOL IsNumberLockKeyOn() = 0;
 		virtual UINT MapKeyState() = 0;
 		virtual DWORD GetTickCount() = 0;
 		virtual void GetLocalTime(SYSTEMTIME &st) = 0;
@@ -647,13 +647,13 @@ namespace DuiLib {
 		CControlUI* m_pEventKey;
 		CControlUI* m_pLastToolTip;
 		//
-		POINT m_ptLastMousePos;
-		SIZE m_szMinWindow;
-		SIZE m_szMaxWindow;
-		SIZE m_szInitWindowSize;
-		RECT m_rcSizeBox;
-		SIZE m_szRoundCorner;
-		RECT m_rcCaption;
+		CDuiPoint m_ptLastMousePos;
+		CDuiSize m_szMinWindow;
+		CDuiSize m_szMaxWindow;
+		CDuiSize m_szInitWindowSize;
+		CDuiRect m_rcSizeBox;
+		CDuiSize m_szRoundCorner;
+		CDuiRect m_rcCaption;
 		bool m_bFirstLayout;
 		bool m_bUpdateNeeded;
 		bool m_bLockUpdate;
@@ -662,7 +662,7 @@ namespace DuiLib {
 		
 		BYTE m_nOpacity;
 		bool m_bLayered;
-		RECT m_rcLayeredInset;
+		CDuiRect m_rcLayeredInset;
 		bool m_bLayeredChanged;
 		//RECT m_rcLayeredUpdate;
 		CDuiRect m_rcLayeredUpdate;
@@ -745,7 +745,7 @@ namespace DuiLib {
 		static bool ExecuteScript(LPCTSTR lpszFunName, CControlUI *pControl);
 		static bool ExecuteScript(LPCTSTR lpszFunName, CControlUI *pControl, TEventUI *ev);
 		static bool ExecuteScript(LPCTSTR lpszFunName, CControlUI *pControl, TNotifyUI *pMsg);
-		static bool ExecuteScript(LPCTSTR lpszFunName, CControlUI *pControl, UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl);
+		static bool ExecuteScript(LPCTSTR lpszFunName, CControlUI *pControl, UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl);
 	private:
 		static IScriptManager *m_pSharedScriptEngine;
 		static CREATE_SCRIPT_ENGINE_INSTANCE m_funCreateScriptEngine;

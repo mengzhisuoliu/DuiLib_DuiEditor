@@ -17,7 +17,7 @@ namespace DuiLib {
 
 		void ClearImageTexture(UIRender *pRender);
 
-		virtual BOOL InvalidateRect(UIWND hWnd, const RECT *lpRect, BOOL bErase) override;
+		virtual BOOL InvalidateRect(UIWND hWnd, const CDuiRect*lpRect, BOOL bErase) override;
 		virtual void SetCursor(int nCursor) override;
 
 		virtual void SetCapture() override;
@@ -41,7 +41,7 @@ namespace DuiLib {
 		virtual BOOL IsAltKeyDown() override;
 		virtual BOOL IsShiftKeyDown() override;
 		virtual BOOL IsCapsLockKeyOn() override;
-		virtual BOOL IsNUmberLockKeyOn() override;
+		virtual BOOL IsNumberLockKeyOn() override;
 		virtual UINT MapKeyState() override;
 		virtual DWORD GetTickCount() override;
 		virtual void GetLocalTime(SYSTEMTIME& st) override;
@@ -49,7 +49,7 @@ namespace DuiLib {
 		static void MessageLoop();
 
 		virtual bool OnClose(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
-		virtual bool OnPaint(WPARAM wParam, LPARAM lParam, LRESULT& lRes);
+		virtual bool OnPaint(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 		virtual bool OnGetMaxMinInfo(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 		virtual bool OnMouseOver(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;
 		virtual bool OnMouseLeave(WPARAM wParam, LPARAM lParam, LRESULT& lRes) override;

@@ -91,11 +91,11 @@ namespace DuiLib
 #endif
 			}
 
-			Create(m_pOwner->GetManager()->GetPaintWindow(), NULL, WS_CHILD|WS_VISIBLE, 0, m_rcWindow);
+			Create(m_pOwner->GetManager()->GetPaintWindow(), NULL, WS_CHILD|WS_VISIBLE, 0, m_rcWindow.left, m_rcWindow.top, m_rcWindow.GetWidth(), m_rcWindow.GetHeight());
 			SetWindowLong(m_hWnd, GWL_EXSTYLE, GetWindowLong(m_hWnd, GWL_EXSTYLE) & ~(WS_EX_WINDOWEDGE | WS_EX_DLGMODALFRAME | WS_BORDER));  //È¥±ß¿ò		
 		}
 
-		void SetPos(RECT rc, bool bNeedInvalidate  = true)
+		void SetPos(CDuiRect rc, bool bNeedInvalidate  = true)
 		{
 			m_rcWindow = rc;
 			::MoveWindow(GetHWND(), rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top, TRUE);
@@ -154,7 +154,7 @@ namespace DuiLib
 		}
 
 	public:
-		RECT m_rcWindow;
+		CDuiRect m_rcWindow;
 		CSciEditUI *m_pOwner;
 		HWND m_hwndScintilla;
 	};
@@ -232,14 +232,14 @@ void CSciEditUI::DoInit()
 
 }
 
-void CSciEditUI::SetPos(RECT rc, bool bNeedInvalidate /* = true */)
+void CSciEditUI::SetPos(CDuiRect rc, bool bNeedInvalidate /* = true */)
 {
 	__super::SetPos(rc, bNeedInvalidate);
 
-	RECT rcItem = rc;
+	CDuiRect rcItem = rc;
 
 	// Adjust for inset
-	RECT rcInset = GetInset();
+	CDuiRect rcInset = GetInset();
 	GetManager()->GetDPIObj()->ScaleRect(&rcInset);
 	rcItem.left += rcInset.left;
 	rcItem.top += rcInset.top;

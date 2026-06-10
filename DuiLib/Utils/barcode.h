@@ -159,7 +159,7 @@ public:
 		return str;
     }
 
-    virtual BOOL Encode(const char*pszCodeIn) {
+    virtual BOOL Encode(const char*pszCodeIn) override {
         int iLen = strlen(pszCodeIn);
 
         char*pszCode = new char[iLen + 3];
@@ -262,7 +262,7 @@ public:
     ~BarcodeI2of5() {
     }
 
-    virtual BOOL Encode(const char*pszCode) {
+    virtual BOOL Encode(const char*pszCode) override {
         Clear();
         BYTE*pFst = ia_Buf;
         BYTE*pb = pFst;
@@ -429,7 +429,7 @@ public:
     ~Barcode93() {
     }
 
-    virtual BOOL Encode(const char* pszCode) {
+    virtual BOOL Encode(const char* pszCode) override {
         Clear();
         const int iNum = strlen(pszCode);
 

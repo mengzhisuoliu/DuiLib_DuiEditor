@@ -20,7 +20,7 @@ namespace DuiLib
 		virtual LPCTSTR GetClass() const override;
 		virtual LPVOID	GetInterface(LPCTSTR pstrName) override;
 		virtual void	DoInit() override;
-		virtual bool	DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl) override;
+		virtual bool	DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl) override;
 		virtual void	DoEvent(TEventUI& event) override;
 		virtual void	SetVisible(bool bVisible = true ) override;
 		virtual void	SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;

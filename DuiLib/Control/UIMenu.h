@@ -92,7 +92,7 @@ public:
 		
 	}
 
-	virtual void AddReceiver(MenuMenuReceiverImplBase* receiver)
+	virtual void AddReceiver(MenuMenuReceiverImplBase* receiver) override
 	{
 		if (receiver == NULL)
 			return;
@@ -101,7 +101,7 @@ public:
 		receiver->AddObserver(this);
 	}
 
-	virtual void RemoveReceiver(MenuMenuReceiverImplBase* receiver)
+	virtual void RemoveReceiver(MenuMenuReceiverImplBase* receiver) override
 	{
 		if (receiver == NULL)
 			return;
@@ -117,7 +117,7 @@ public:
 		}
 	}
 
-	virtual BOOL RBroadcast(ContextMenuParam param)
+	virtual BOOL RBroadcast(ContextMenuParam param) override
 	{
 		ReceiversVector::reverse_iterator it = pReceivers_->rbegin();
 		for (; it != pReceivers_->rend(); ++it)
@@ -207,12 +207,12 @@ public:
 		}
 	}
 
-	virtual void AddObserver(MenuMenuObserverImplBase* observer)
+	virtual void AddObserver(MenuMenuObserverImplBase* observer) override
 	{
 		pObservers_->push_back(observer);
 	}
 
-	virtual void RemoveObserver()
+	virtual void RemoveObserver() override
 	{
 		ObserversVector::iterator it = pObservers_->begin();
 		for (; it != pObservers_->end(); ++it)
@@ -221,7 +221,7 @@ public:
 		}
 	}
 
-	virtual BOOL Receive(ContextMenuParam param)
+	virtual BOOL Receive(ContextMenuParam param) override
 	{
 		return BOOL();
 	}
@@ -257,7 +257,7 @@ public:
     virtual bool SetItemIndex(CControlUI* pControl, int iIndex) override;
     virtual bool Remove(CControlUI* pControl, bool bDoNotDestroy=false) override;
 
-	virtual SIZE EstimateSize(SIZE szAvailable) override;
+	virtual CDuiSize EstimateSize(CDuiSize szAvailable) override;
 
 	virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
@@ -268,13 +268,13 @@ public:
 
 	void SetIconWidth(int nWidth);
 	int GetIconWidth();
-	void SetIconBkColor(DWORD dwColor);
-	DWORD GetIconBkColor();
+	void SetIconBkColor(CDuiColor dwColor);
+	CDuiColor GetIconBkColor();
 private:
 	CDuiString m_strExpandIcon;
 	CDuiString m_strCheckIcon;
 	int m_nIconWidth;
-	DWORD m_dwIconBkColor;
+	CDuiColor m_dwIconBkColor;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -290,35 +290,35 @@ public:
 
     virtual LPCTSTR GetClass() const override;
     virtual LPVOID GetInterface(LPCTSTR pstrName) override;
-    virtual bool DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl) override;
-	virtual void DrawItemText(UIRender *pRender, const RECT& rcItem) override;
-	void DrawItemBorder(UIRender *pRender, const RECT& rcItem);
-	virtual SIZE EstimateSize(SIZE szAvailable) override;
+    virtual bool DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl) override;
+	virtual void DrawItemText(UIRender *pRender, const CDuiRect& rcItem) override;
+	void DrawItemBorder(UIRender *pRender, const CDuiRect& rcItem);
+	virtual CDuiSize EstimateSize(CDuiSize szAvailable) override;
 
-	virtual void DoEvent(TEventUI& event);
+	virtual void DoEvent(TEventUI& event) override;
 
 	CMenuWnd* GetMenuWnd();
 	CMenuUI* GetMenuUI();
 	void CreateMenuWnd();
 	
 	void SetLineType();
-	void SetLineColor(DWORD color);
-	DWORD GetLineColor() const;
-	void SetLinePadding(RECT rcInset);
-	RECT GetLinePadding() const;
+	void SetLineColor(CDuiColor color);
+	CDuiColor GetLineColor() const;
+	void SetLinePadding(CDuiRect rcInset);
+	CDuiRect GetLinePadding() const;
 	void SetIcon(LPCTSTR strIcon);
 	void SetUnCheckIcon(LPCTSTR strIcon);
 	void SetIconSize(LONG cx, LONG cy);
-	void DrawItemIcon(UIRender *pRender, const RECT& rcItem);
+	void DrawItemIcon(UIRender *pRender, const CDuiRect& rcItem);
 	void SetChecked(bool bCheck = true);
 	bool GetChecked();
 	void SetCheckItem(bool bCheckItem = false);
 	bool GetCheckItem() const;
 
 	void SetShowExplandIcon(bool bShow);
-	void DrawItemExpland(UIRender *pRender, const RECT& rcItem);
+	void DrawItemExpland(UIRender *pRender, const CDuiRect& rcItem);
 
-	void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+	virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
 	MenuItemInfo* GetItemInfo(LPCTSTR pstrName);
 	MenuItemInfo* SetItemInfo(LPCTSTR pstrName, bool bChecked);
@@ -327,17 +327,17 @@ public:
 
 	void DrawDisableItemIcon(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify);
 protected:
-	bool _DrawImageMenuDisableIcon(UIRender *pRender, CPaintManagerUI* pManager, const RECT& rc, const RECT& rcPaint, const CDuiString& sImageName, \
-		const CDuiString& sImageResType, RECT rcItem, RECT rcBmpPart, RECT rcCorner, DWORD dwMask, BYTE bFade, \
-		bool bHole, bool bTiledX, bool bTiledY, int width, int height, DWORD fillcolor, HINSTANCE instance = NULL);
+	bool _DrawImageMenuDisableIcon(UIRender *pRender, CPaintManagerUI* pManager, const CDuiRect& rc, const CDuiRect& rcPaint, const CDuiString& sImageName, \
+		const CDuiString& sImageResType, CDuiRect rcItem, CDuiRect rcBmpPart, CDuiRect rcCorner, CDuiColor dwMask, BYTE bFade, \
+		bool bHole, bool bTiledX, bool bTiledY, int width, int height, CDuiColor fillcolor, HINSTANCE instance = NULL);
 protected:
 	CMenuWnd*	m_pWindow;
 
 	bool		m_bDrawLine;	//画分隔线
-	DWORD		m_dwLineColor;  //分隔线颜色
-	RECT		m_rcLinePadding;	//分割线的左右边距
+	CDuiColor		m_dwLineColor;  //分隔线颜色
+	CDuiRect		m_rcLinePadding;	//分割线的左右边距
 
-	SIZE		m_szIconSize; 		//画图标
+	CDuiSize		m_szIconSize; 		//画图标
 	CDuiString	m_strIcon;
 	CDuiString  m_strUnCheckIcon;	//未选中时的图标
 	bool		m_bCheckItem;	//菜单是否拥有复选框

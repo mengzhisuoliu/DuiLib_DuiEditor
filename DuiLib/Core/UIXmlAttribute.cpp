@@ -86,7 +86,7 @@ bool CXmlAttributeUI::as_bool(bool def) const
 	return impxmlattr(_attr).as_bool(def);
 }
 
-POINT CXmlAttributeUI::as_point(int def_x, int def_y) const
+CDuiPoint CXmlAttributeUI::as_point(int def_x, int def_y) const
 {
 	CDuiPoint pt;
 	if(!pt.FromString(as_string()))
@@ -97,7 +97,7 @@ POINT CXmlAttributeUI::as_point(int def_x, int def_y) const
 	return pt;
 }
 
-SIZE CXmlAttributeUI::as_size(int def_cx, int def_cy) const
+CDuiSize CXmlAttributeUI::as_size(int def_cx, int def_cy) const
 {
 	CDuiSize sz;
 	if(!sz.FromString(as_string()))
@@ -108,7 +108,7 @@ SIZE CXmlAttributeUI::as_size(int def_cx, int def_cy) const
 	return sz;
 }
 
-RECT CXmlAttributeUI::as_rect(int def_left, int def_top, int def_right, int def_bottom) const
+CDuiRect CXmlAttributeUI::as_rect(int def_left, int def_top, int def_right, int def_bottom) const
 {
 	CDuiRect rc;
 	if(!rc.FromString(as_string()))
@@ -121,15 +121,12 @@ RECT CXmlAttributeUI::as_rect(int def_left, int def_top, int def_right, int def_
 	return rc;
 }
 
-DWORD CXmlAttributeUI::as_uicolor(DWORD def_color) const
+CDuiColor CXmlAttributeUI::as_uicolor(CDuiColor def_color) const
 {
-	LPCTSTR pstrValue = as_string();
-	DWORD clrColor = 0;
-	while( *pstrValue > _T('\0') && *pstrValue <= _T(' ') ) pstrValue = ::CharNext(pstrValue);
-	if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-	LPTSTR pstr = NULL;
-	clrColor = _tcstoul(pstrValue, &pstr, 16);
-	return clrColor;
+	CDuiColor clr;
+	if (!clr.FromString(as_string()))
+		clr = def_color;
+	return clr;
 }
 
 bool CXmlAttributeUI::set_name(LPCSTR rhs)
@@ -192,25 +189,25 @@ bool CXmlAttributeUI::set_value(bool rhs)
 	return impxmlattr(_attr).set_value(rhs);
 }
 
-bool CXmlAttributeUI::set_value(POINT rhs)
+bool CXmlAttributeUI::set_value(CDuiPoint rhs)
 {
 	CDuiPoint pt(rhs);
 	return set_value(pt.ToString().GetData());
 }
 
-bool CXmlAttributeUI::set_value(SIZE rhs)
+bool CXmlAttributeUI::set_value(CDuiSize rhs)
 {
 	CDuiSize sz(rhs);
 	return set_value(sz.ToString().GetData());
 }
 
-bool CXmlAttributeUI::set_value(RECT rhs)
+bool CXmlAttributeUI::set_value(CDuiRect rhs)
 {
 	CDuiRect rc(rhs);
 	return set_value(rc.ToString().GetData());
 }
 
-bool CXmlAttributeUI::set_uicolor(DWORD rhs)
+bool CXmlAttributeUI::set_uicolor(CDuiColor rhs)
 {
 	CDuiString s;
 	s.Format(_T("0x%08X"), rhs);

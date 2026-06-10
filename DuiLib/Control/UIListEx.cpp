@@ -55,7 +55,7 @@ namespace DuiLib {
 		}
 		if (m_pComboBoxUI)
 		{
-			RECT rc = {0,0,0,0};
+			CDuiRect rc;
 			m_pComboBoxUI->SetPos(rc);
 		}
 
@@ -83,7 +83,7 @@ namespace DuiLib {
 		}
 		if (m_pEditUI)
 		{
-			RECT rc = {0,0,0,0};
+			CDuiRect rc;
 			m_pEditUI->SetPos(rc);
 		}
 
@@ -155,7 +155,7 @@ namespace DuiLib {
 				SetEditRowAndColum(-1, -1);
 
 				//Òþ²Ø±à¼­¿ò
-				RECT rc = {0,0,0,0};
+				CDuiRect rc;
 				m_pEditUI->SetPos(rc);
 
 			}
@@ -181,7 +181,7 @@ namespace DuiLib {
 				}
 
 				//Òþ²Ø×éºÏ¿ò
-				RECT rc = {0,0,0,0};
+				CDuiRect rc;
 				m_pComboBoxUI->SetPos(rc);
 			}
 		}
@@ -193,7 +193,7 @@ namespace DuiLib {
 	void CListExUI::HideEditAndComboCtrl()
 	{
 		//Òþ²Ø±à¼­¿ò
-		RECT rc = {0,0,0,0};
+		CDuiRect rc;
 		if(m_pEditUI)
 		{	
 			m_pEditUI->SetPos(rc);
@@ -213,9 +213,9 @@ namespace DuiLib {
 	{
 		m_pXCallback = pCallback;
 	}
-	void CListExUI::OnListItemClicked(int nIndex, int nColum, RECT* lpRCColum, LPCTSTR lpstrText)
+	void CListExUI::OnListItemClicked(int nIndex, int nColum, CDuiRect* lpRCColum, LPCTSTR lpstrText)
 	{
-		RECT rc = {0,0,0,0};
+		CDuiRect rc;
 		if (nColum < 0)
 		{
 			if (m_pEditUI)
@@ -321,18 +321,18 @@ namespace DuiLib {
 
 		CListUI::DoEvent(event);
 	}
-	void CListExUI::SetColumItemColor(int nIndex, int nColum, DWORD iBKColor)
+	void CListExUI::SetColumItemColor(int nIndex, int nColum, CDuiColor iBKColor)
 	{
 		CControlUI* p = GetItemAt(nIndex);
 		CListTextExtElementUI* pLItem = static_cast<CListTextExtElementUI*>(p->GetInterface(_T("ListTextExElement")));
 		if( pLItem != NULL) 
 		{
-			DWORD iTextBkColor = iBKColor;
+			CDuiColor iTextBkColor = iBKColor;
 			pLItem->SetColumItemColor(nColum, iTextBkColor);
 		}
 	}
 
-	BOOL CListExUI::GetColumItemColor(int nIndex, int nColum, DWORD& iBKColor)
+	BOOL CListExUI::GetColumItemColor(int nIndex, int nColum, CDuiColor& iBKColor)
 	{
 		CControlUI* p = GetItemAt(nIndex);
 		CListTextExtElementUI* pLItem = static_cast<CListTextExtElementUI*>(p->GetInterface(_T("ListTextExElement")));
@@ -554,7 +554,7 @@ namespace DuiLib {
 		if( event.Type == UIEVENT_MOUSEMOVE )
 		{
 			if( IsCaptureState() ) {
-				RECT rc = m_rcItem;
+				CDuiRect rc = m_rcItem;
 				if( m_iSepWidth >= 0 ) {
 					rc.right -= m_ptLastMouse.x - event.ptMouse.x;
 				}
@@ -604,13 +604,13 @@ namespace DuiLib {
 		CContainerUI::DoEvent(event);
 	}
 
-	SIZE CListContainerHeaderItemUI::EstimateSize(SIZE szAvailable)
+	CDuiSize CListContainerHeaderItemUI::EstimateSize(CDuiSize szAvailable)
 	{
 		if( m_cxyFixed.cy == 0 ) return CDuiSize(m_cxyFixed.cx, m_pManager->GetFontHeight(-1) + 14);
 		return CContainerUI::EstimateSize(szAvailable);
 	}
 
-	RECT CListContainerHeaderItemUI::GetThumbRect(bool bUseNew) const
+	CDuiRect CListContainerHeaderItemUI::GetThumbRect(bool bUseNew) const
 	{
 		if( m_iSepWidth >= 0 ) return CDuiRect(m_rcItem.right - m_iSepWidth, m_rcItem.top, m_rcItem.right, m_rcItem.bottom);
 		else return CDuiRect(m_rcItem.left, m_rcItem.top, m_rcItem.left - m_iSepWidth, m_rcItem.bottom);
@@ -621,7 +621,7 @@ namespace DuiLib {
 		CControlUI::PaintStatusImage(pRender);
 
 		if( !m_sSepImage.IsEmpty() ) {
-			RECT rcThumb = GetThumbRect();
+			CDuiRect rcThumb = GetThumbRect();
 			rcThumb.left -= m_rcItem.left;
 			rcThumb.top -= m_rcItem.top;
 			rcThumb.right -= m_rcItem.left;
@@ -682,13 +682,13 @@ Label_ForeImage:
 	{
 		if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
 
-		RECT rcText = m_rcItem;
+		CDuiRect rcText = m_rcItem;
 		rcText.left += m_rcTextPadding.left;
 		rcText.top += m_rcTextPadding.top;
 		rcText.right -= m_rcTextPadding.right;
 		rcText.bottom -= m_rcTextPadding.bottom;
 		if (m_bCheckBoxable) {
-			RECT rcCheck;
+			CDuiRect rcCheck;
 			GetCheckBoxRect(rcCheck);
 			rcText.left += (rcCheck.right - rcCheck.left);
 		}
@@ -743,7 +743,7 @@ Label_ForeImage:
 	}
 	BOOL CListContainerHeaderItemUI::DrawCheckBoxImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify)
 	{
-		RECT rcCheckBox;
+		CDuiRect rcCheckBox;
 		GetCheckBoxRect(rcCheckBox);
 		return pRender->DrawImageString(rcCheckBox, m_rcPaint, pStrImage, pStrModify);
 	}
@@ -835,7 +835,7 @@ Label_ForeImage:
 		if( cy < 0 ) return; 
 		m_cxyCheckBox.cy = cy;
 	}
-	void CListContainerHeaderItemUI::GetCheckBoxRect(RECT &rc)
+	void CListContainerHeaderItemUI::GetCheckBoxRect(CDuiRect &rc)
 	{
 		memset(&rc, 0x00, sizeof(rc)); 
 		int nItemHeight = m_rcItem.bottom - m_rcItem.top;
@@ -1063,12 +1063,12 @@ Label_ForeImage:
 		CListLabelElementUI::DoEvent(event);
 	}
 
-	SIZE CListTextExtElementUI::EstimateSize(SIZE szAvailable)
+	CDuiSize CListTextExtElementUI::EstimateSize(CDuiSize szAvailable)
 	{
 		TListInfoUI* pInfo = NULL;
 		if( m_pOwner ) pInfo = m_pOwner->GetListInfo();
 
-		SIZE cXY = m_cxyFixed;
+		CDuiSize cXY = m_cxyFixed;
 		if( cXY.cy == 0 && m_pManager != NULL && pInfo != NULL) {
 			cXY.cy = m_pManager->GetFontHeight(pInfo->nFont) + 8;
 			cXY.cy += pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
@@ -1077,11 +1077,11 @@ Label_ForeImage:
 		return cXY;
 	}
 
-	void CListTextExtElementUI::DrawItemText(UIRender *pRender, const RECT& rcItem)
+	void CListTextExtElementUI::DrawItemText(UIRender *pRender, const CDuiRect& rcItem)
 	{
 		if( m_pOwner == NULL ) return;
 		TListInfoUI* pInfo = m_pOwner->GetListInfo();
-		DWORD iTextColor = pInfo->dwTextColor;
+		CDuiColor iTextColor = pInfo->dwTextColor;
 
 		if( IsHotState() ) {
 			iTextColor = pInfo->dwHotTextColor;
@@ -1101,9 +1101,9 @@ Label_ForeImage:
 		int nLinks = lengthof(m_rcLinks);
 		for( int i = 0; i < pInfo->nColumns; i++ )
 		{
-			RECT rcItem = { pInfo->rcColumn[i].left, m_rcItem.top, pInfo->rcColumn[i].right, m_rcItem.bottom };
+			CDuiRect rcItem(pInfo->rcColumn[i].left, m_rcItem.top, pInfo->rcColumn[i].right, m_rcItem.bottom );
 
-			DWORD iTextBkColor = 0;
+			CDuiColor iTextBkColor = 0;
 			if (GetColumItemColor(i, iTextBkColor))
 			{	
 				pRender->DrawColor(rcItem, CDuiSize(0,0), iTextBkColor);
@@ -1117,7 +1117,7 @@ Label_ForeImage:
 			//¼ì²éÊÇ·ñÐèÒªÏÔÊ¾CheckBox
 			if (pListCtrl->CheckColumCheckBoxable(i))
 			{
-				RECT rcCheckBox;
+				CDuiRect rcCheckBox;
 				GetCheckBoxRect(i, rcCheckBox);
 				rcItem.left += (rcCheckBox.right - rcCheckBox.left);
 			}
@@ -1133,7 +1133,7 @@ Label_ForeImage:
 			nLinks = static_cast<int>(lengthof(m_rcLinks)) - m_nLinks; 
 		}
 		for( int i = m_nLinks; i < lengthof(m_rcLinks); i++ ) {
-			memset(m_rcLinks + i, 0, sizeof(RECT));
+			memset(m_rcLinks + i, 0, sizeof(CDuiRect));
 			((CDuiString*)(m_sLinks + i))->Empty();
 		}
 	}
@@ -1145,7 +1145,7 @@ Label_ForeImage:
 		{
 			if (pListCtrl->CheckColumCheckBoxable(i))
 			{
-				RECT rcCheckBox;
+				CDuiRect rcCheckBox;
 				GetCheckBoxRect(i, rcCheckBox);
 
 				m_uCheckBoxState &= ~UISTATE_PUSHED;
@@ -1199,7 +1199,7 @@ Label_ForeImage:
 			}
 		}
 	}
-	BOOL CListTextExtElementUI::DrawCheckBoxImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify, RECT& rcCheckBox)
+	BOOL CListTextExtElementUI::DrawCheckBoxImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify, CDuiRect& rcCheckBox)
 	{
 		return pRender->DrawImageString(rcCheckBox, m_rcPaint, pStrImage, pStrModify);
 	}
@@ -1284,7 +1284,7 @@ Label_ForeImage:
 		m_sCheckBoxForeImage = pStrImage;
 	}
 
-	bool CListTextExtElementUI::DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl)
+	bool CListTextExtElementUI::DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl)
 	{
 		//if( !::IntersectRect(&m_rcPaint, &rcPaint, &m_rcItem) ) return true;
 		if( !m_rcPaint.Intersect(rcPaint, m_rcItem) ) return true;
@@ -1293,7 +1293,7 @@ Label_ForeImage:
 		DrawItemText(pRender, m_rcItem);
 		return true;
 	}
-	void CListTextExtElementUI::GetCheckBoxRect(int nIndex, RECT &rc)
+	void CListTextExtElementUI::GetCheckBoxRect(int nIndex, CDuiRect &rc)
 	{
 		memset(&rc, 0x00, sizeof(rc));
 		int nItemHeight = m_rcItem.bottom - m_rcItem.top;
@@ -1338,7 +1338,7 @@ Label_ForeImage:
 		return m_bChecked;
 	}
 
-	int CListTextExtElementUI::HitTestColum(POINT ptMouse)
+	int CListTextExtElementUI::HitTestColum(CDuiPoint ptMouse)
 	{
 		TListInfoUI* pInfo = m_pOwner->GetListInfo();
 		for( int i = 0; i < pInfo->nColumns; i++ )
@@ -1362,7 +1362,7 @@ Label_ForeImage:
 	{
 		return m_pOwner->CheckColumEditable(nColum);
 	}
-	void CListTextExtElementUI::GetColumRect(int nColum, RECT &rc)
+	void CListTextExtElementUI::GetColumRect(int nColum, CDuiRect &rc)
 	{
 		TListInfoUI* pInfo = m_pOwner->GetListInfo();
 		rc.left = pInfo->rcColumn[nColum].left;
@@ -1371,13 +1371,13 @@ Label_ForeImage:
 		rc.bottom = m_rcItem.bottom;
 	}
 
-	void CListTextExtElementUI::SetColumItemColor(int nColum, DWORD iBKColor)
+	void CListTextExtElementUI::SetColumItemColor(int nColum, CDuiColor iBKColor)
 	{
 		ColumCorlorArray[nColum].bEnable = TRUE;
 		ColumCorlorArray[nColum].iBKColor = iBKColor;
 		Invalidate();
 	}
-	BOOL CListTextExtElementUI::GetColumItemColor(int nColum, DWORD& iBKColor)
+	BOOL CListTextExtElementUI::GetColumItemColor(int nColum, CDuiColor& iBKColor)
 	{
 		if (!ColumCorlorArray[nColum].bEnable)
 		{

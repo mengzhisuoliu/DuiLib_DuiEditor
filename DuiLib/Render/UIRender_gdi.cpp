@@ -248,7 +248,7 @@ namespace DuiLib {
 		return true;
 	}
 
-	bool UIRender_gdi::Resize(const RECT &rc)
+	bool UIRender_gdi::Resize(const CDuiRect &rc)
 	{
 		return Resize(rc.right - rc.left, rc.bottom - rc.top);
 	}
@@ -272,7 +272,7 @@ namespace DuiLib {
 		m_curBmp->Clear();
 	}
 
-	void UIRender_gdi::ClearAlpha(const RECT &rc, int alpha)
+	void UIRender_gdi::ClearAlpha(const CDuiRect &rc, int alpha)
 	{
 		if(!m_curBmp) 
 			return;
@@ -399,9 +399,12 @@ namespace DuiLib {
 		}
 	}
 
-	DWORD UIRender_gdi::SetPixel(int x, int y, DWORD dwColor)
+	CDuiColor UIRender_gdi::SetPixel(int x, int y, CDuiColor dwColor)
 	{
-		return ::SetPixel(GetDC(), x, y, dwColor);
+		COLORREF clrRef = ::SetPixel(GetDC(), x, y, dwColor.ToCOLORREF());
+		CDuiColor clr;
+		clr.FromCOLORREF(clrRef);
+		return clr;
 	}
 
 	BOOL UIRender_gdi::BitBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, DWORD dwRop)
@@ -446,7 +449,7 @@ namespace DuiLib {
 		pRender->Release();
 	}
 
-	void UIRender_gdi::DrawColor(const RECT& rc, const SIZE &round, DWORD color)
+	void UIRender_gdi::DrawColor(const CDuiRect& rc, const CDuiSize &round, CDuiColor color)
 	{
 		HDC hDC = GetDC();
 		if( color <= 0x00FFFFFF ) return;
@@ -456,7 +459,7 @@ namespace DuiLib {
 		graphics.FillRectangle(&brush, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
 	}
 
-	void UIRender_gdi::DrawGradient(const RECT& rc, DWORD dwFirst, DWORD dwSecond, bool bVertical, int nSteps)
+	void UIRender_gdi::DrawGradient(const CDuiRect& rc, CDuiColor dwFirst, CDuiColor dwSecond, bool bVertical, int nSteps)
 	{
 		CPaintManagerUI *pManager = GetManager();
 		HDC hDC = GetDC();
@@ -471,7 +474,7 @@ namespace DuiLib {
 		if( bAlpha == 0 ) return;
 		int cx = rc.right - rc.left;
 		int cy = rc.bottom - rc.top;
-		RECT rcPaint = rc;
+		CDuiRect rcPaint = rc;
 		HDC hPaintDC = hDC;
 		HBITMAP hPaintBitmap = NULL;
 		HBITMAP hOldPaintBitmap = NULL;
@@ -518,7 +521,7 @@ namespace DuiLib {
 				BYTE bB = (BYTE) ((GetRValue(dwSecond) * (nLines - i) + GetRValue(dwFirst) * i) >> nShift);
 				// ... then paint with the resulting color
 				HBRUSH hBrush = ::CreateSolidBrush(RGB(bR,bG,bB));
-				RECT r2 = rcPaint;
+				CDuiRect r2 = rcPaint;
 				if( bVertical ) {
 					r2.bottom = rc.bottom - ((i * (rc.bottom - rc.top)) >> nShift);
 					r2.top = rc.bottom - (((i + 1) * (rc.bottom - rc.top)) >> nShift);
@@ -541,7 +544,7 @@ namespace DuiLib {
 		}
 	}
 
-	void UIRender_gdi::DrawLine(int x1, int y1, int x2, int y2, int nSize, DWORD dwPenColor,int nStyle)
+	void UIRender_gdi::DrawLine(int x1, int y1, int x2, int y2, int nSize, CDuiColor dwPenColor,int nStyle)
 	{
 		HDC hDC = GetDC();
 		ASSERT(::GetObjectType(hDC)==OBJ_DC || ::GetObjectType(hDC)==OBJ_MEMDC);
@@ -562,14 +565,14 @@ namespace DuiLib {
 		lg.lopnWidth.x = nSize;
 		HPEN hPen = CreatePenIndirect(&lg);
 		HPEN hOldPen = (HPEN)::SelectObject(hDC, hPen);
-		POINT ptTemp = { 0 };
+		CDuiPoint ptTemp;
 		::MoveToEx(hDC, x1, y1, &ptTemp);
 		::LineTo(hDC, x2, y2);
 		::SelectObject(hDC, hOldPen);
 		::DeleteObject(hPen);
 	}
 
-	void UIRender_gdi::DrawRect(const RECT& rc, int nSize, DWORD dwPenColor,int nStyle /*= PS_SOLID*/)
+	void UIRender_gdi::DrawRect(const CDuiRect& rc, int nSize, CDuiColor dwPenColor,int nStyle /*= PS_SOLID*/)
 	{
 		HDC hDC = GetDC();
 #if USE_GDI_RENDER
@@ -590,7 +593,7 @@ namespace DuiLib {
 #endif
 	}
 
-	void UIRender_gdi::DrawRoundRect(const RECT& rc, int nSize, const SIZE &round, DWORD dwPenColor,int nStyle /*= PS_SOLID*/)
+	void UIRender_gdi::DrawRoundRect(const CDuiRect& rc, int nSize, const CDuiSize &round, CDuiColor dwPenColor,int nStyle /*= PS_SOLID*/)
 	{
 		HDC hDC = GetDC();
 		ASSERT(::GetObjectType(hDC)==OBJ_DC || ::GetObjectType(hDC)==OBJ_MEMDC);
@@ -602,7 +605,7 @@ namespace DuiLib {
 		::DeleteObject(hPen);
 	}
 
-	void UIRender_gdi::DrawEllipse(const RECT& rc, int nSize, DWORD dwPenColor, int nStyle)
+	void UIRender_gdi::DrawEllipse(const CDuiRect& rc, int nSize, CDuiColor dwPenColor, int nStyle)
 	{
 		HPEN hPen = ::CreatePen(nStyle, nSize, RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)));
 		HPEN hOldPen = (HPEN)::SelectObject(m_hDC, hPen);
@@ -611,7 +614,7 @@ namespace DuiLib {
 		::DeleteObject(hPen);
 	}
 
-	void UIRender_gdi::FillEllipse(const RECT& rc, DWORD dwColor)
+	void UIRender_gdi::FillEllipse(const CDuiRect& rc, CDuiColor dwColor)
 	{
 		HPEN hPen = ::CreatePen(PS_SOLID, 1, RGB(GetBValue(dwColor), GetGValue(dwColor), GetRValue(dwColor)));
 		HPEN hOldPen = (HPEN)::SelectObject(m_hDC, hPen);
@@ -627,7 +630,7 @@ namespace DuiLib {
 		::DeleteObject(hBrush);
 	}
 
-	void UIRender_gdi::DrawText(RECT& rc, LPCTSTR pstrText, DWORD dwTextColor, int iFont, UINT uStyle)
+	void UIRender_gdi::DrawText(CDuiRect& rc, LPCTSTR pstrText, CDuiColor dwTextColor, int iFont, UINT uStyle)
 	{
 		CPaintManagerUI *pManager = GetManager();
 		HDC hDC = GetDC();
@@ -749,7 +752,7 @@ namespace DuiLib {
 		return new UIPath_gdi(m_hDC);
 	}
 
-	BOOL UIRender_gdi::DrawPath(const UIPath* path, int nSize, DWORD dwColor)
+	BOOL UIRender_gdi::DrawPath(const UIPath* path, int nSize, CDuiColor dwColor)
 	{
 		HPEN hPen = ::CreatePen(PS_SOLID, 1, RGB(GetBValue(dwColor), GetGValue(dwColor), GetRValue(dwColor)));
 		HPEN hOldPen = (HPEN)::SelectObject(m_hDC, hPen);
@@ -759,7 +762,7 @@ namespace DuiLib {
 		return bRet;
 	}
 
-	BOOL UIRender_gdi::FillPath(const UIPath* path, const DWORD dwColor)
+	BOOL UIRender_gdi::FillPath(const UIPath* path, const CDuiColor dwColor)
 	{
 		HBRUSH hBrush = ::CreateSolidBrush(RGB(GetBValue(dwColor), GetGValue(dwColor), GetRValue(dwColor)));
 		HBRUSH hOldBrush = (HBRUSH)::SelectObject(m_hDC, hBrush);
@@ -769,10 +772,10 @@ namespace DuiLib {
 		return bRet;
 	}
 
-	SIZE UIRender_gdi::GetTextSize(LPCTSTR pstrText, int iFont, UINT uStyle )
+	CDuiSize UIRender_gdi::GetTextSize(LPCTSTR pstrText, int iFont, UINT uStyle )
 	{
 		HDC hDC = GetDC();
-		SIZE size = {0,0};
+		CDuiSize size;;
 		ASSERT(::GetObjectType(hDC)==OBJ_DC || ::GetObjectType(hDC)==OBJ_MEMDC);
 		if( pstrText == NULL || m_pManager == NULL ) return size;
 		::SetBkMode(hDC, TRANSPARENT);

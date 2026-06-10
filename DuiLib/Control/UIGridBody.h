@@ -22,9 +22,9 @@ public:
 	virtual bool AddAt(CControlUI* pControl, int iIndex) override;
 
 	virtual void DoInit() override;
-	virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
-	virtual SIZE EstimateSize(SIZE szAvailable) override;
-	virtual bool DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl) override;
+	virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
+	virtual CDuiSize EstimateSize(CDuiSize szAvailable) override;
+	virtual bool DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl) override;
 
 	virtual void LineUp() override;
 	virtual void LineDown() override;

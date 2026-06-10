@@ -24,7 +24,7 @@ namespace DuiLib {
 #if(_WIN32_WINNT >= 0x0501)
 		virtual UINT GetClassStyle() const;
 #endif
-		bool IsHitItem(POINT ptMouse);
+		bool IsHitItem(CDuiPoint ptMouse);
 	public:
 		CComboUI* m_pOwner;
 		CVerticalLayoutUI* m_pLayout;

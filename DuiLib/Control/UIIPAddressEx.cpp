@@ -120,8 +120,8 @@ namespace DuiLib
             }
             m_strNum.Empty();
 
-            POINT p = event.ptMouse;
-            RECT r = GetPos();
+            CDuiPoint p = event.ptMouse;
+            CDuiRect r = GetPos();
             // 判断焦点范围确定哪一段被选中
             int nFocus = (r.right - r.left) / 4;
             if(p.x - r.left <= nFocus)
@@ -273,14 +273,14 @@ namespace DuiLib
 
 		HDC hDC = pRender->GetDC();
 
-        RECT rc = m_rcItem;
-		RECT rcTextPadding = GetTextPadding();
+        CDuiRect rc = m_rcItem;
+		CDuiRect rcTextPadding = GetTextPadding();
         rc.left += rcTextPadding.left;
         rc.right -= rcTextPadding.right;
         rc.top += rcTextPadding.top;
         rc.bottom -= rcTextPadding.bottom;
 
-        DWORD dwTextColor = IsEnabled() ? m_dwTextColor : m_dwDisabledTextColor;
+        CDuiColor dwTextColor = IsEnabled() ? m_dwTextColor : m_dwDisabledTextColor;
         HFONT hOldFont = (HFONT)::SelectObject(hDC, m_pManager->GetFont(m_iFont));
 
         char szFirst[8] = {0};
@@ -294,11 +294,11 @@ namespace DuiLib
         wsprintfA(szThird, "%d", m_nThird);
         wsprintfA(szFourth, "%d", m_nFourth);
 
-        SIZE First;
-        SIZE Second;
-        SIZE Third;
-        SIZE Fourth;
-        SIZE divideSize;
+        CDuiSize First;
+        CDuiSize Second;
+        CDuiSize Third;
+        CDuiSize Fourth;
+        CDuiSize divideSize;
         GetTextExtentPointA(hDC, szFirst, 3, &First);
         GetTextExtentPointA(hDC, szSecond, 3, &Second);
         GetTextExtentPointA(hDC, szThird, 3, &Third);
@@ -309,8 +309,8 @@ namespace DuiLib
         ::SetTextColor(pRender->GetDC(), RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
 
         //Start Test Draw point (".")
-        RECT rcPoint = rc;
-        RECT rcIP = rc;
+        CDuiRect rcPoint = rc;
+        CDuiRect rcIP = rc;
         int nIPAddrWidth = rcPoint.right - rcPoint.left;
         int nPointPos = nIPAddrWidth / 4;
         for (int i = 0; i < 3; i++)

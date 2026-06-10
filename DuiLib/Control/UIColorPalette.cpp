@@ -139,13 +139,13 @@ namespace DuiLib {
 
 	}
 
-	DWORD CColorPaletteUI::GetSelectColor()
+	CDuiColor CColorPaletteUI::GetSelectColor()
 	{
-		DWORD dwColor = _HSLToRGB(m_nCurH, m_nCurS, m_nCurB);
+		CDuiColor dwColor = _HSLToRGB(m_nCurH, m_nCurS, m_nCurB);
 		return 0xFF << 24 | GetRValue(dwColor) << 16 | GetGValue(dwColor) << 8 | GetBValue(dwColor);
 	}
 
-	void CColorPaletteUI::SetSelectColor(DWORD dwColor) 
+	void CColorPaletteUI::SetSelectColor(CDuiColor dwColor)
 	{
 		float H = 0, S = 0, B = 0;
 		COLORREF dwBkClr = RGB(GetBValue(dwColor),GetGValue(dwColor),GetRValue(dwColor));
@@ -222,7 +222,7 @@ namespace DuiLib {
 		::GetBitmapBits(m_hMemBitmap, dwSize, m_pBits);
 	}
 
-	void CColorPaletteUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void CColorPaletteUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 	{
 		CControlUI::SetPos(rc, bNeedInvalidate);
 
@@ -281,7 +281,7 @@ namespace DuiLib {
 		}
 		if (event.Type == UIEVENT_BUTTONUP)
 		{
-			DWORD color=0;
+			CDuiColor color=0;
 			if ( IsPushedState() && (IsEnabled()))
 			{
 				color = GetSelectColor();
@@ -304,7 +304,7 @@ namespace DuiLib {
 			}
 			if (m_bIsInPallet == true)
 			{
-				POINT pt = event.ptMouse;
+				CDuiPoint pt = event.ptMouse;
 				pt.x -= m_rcItem.left;
 				pt.y -= m_rcItem.top;
 
@@ -355,7 +355,7 @@ namespace DuiLib {
 		StretchBlt(hDC, m_rcItem.left, m_rcItem.top, m_rcItem.right - m_rcItem.left, m_nPalletHeight, m_MemDc, 0, 1, 360, 200, SRCCOPY);
 		StretchBlt(hDC, m_rcItem.left, m_rcItem.bottom - m_nBarHeight, m_rcItem.right - m_rcItem.left, m_nBarHeight, m_MemDc, 0, 210, 200, m_nBarHeight, SRCCOPY);
 
-		RECT rcCurSorPaint = { m_ptLastPalletMouse.x - 4, m_ptLastPalletMouse.y - 4, m_ptLastPalletMouse.x + 4, m_ptLastPalletMouse.y + 4 };
+		CDuiRect rcCurSorPaint(m_ptLastPalletMouse.x - 4, m_ptLastPalletMouse.y - 4, m_ptLastPalletMouse.x + 4, m_ptLastPalletMouse.y + 4);
 		pRender->DrawImageString(rcCurSorPaint, m_rcPaint, m_strThumbImage);
 
 		rcCurSorPaint.left = m_rcItem.left + m_nCurS * (m_rcItem.right - m_rcItem.left) / 200 - 4;
@@ -370,7 +370,7 @@ namespace DuiLib {
 	{
 		int x, y;
 		BYTE *pPiexl;
-		DWORD dwColor;
+		CDuiColor dwColor;
 		for (y = 0; y < 200; ++y) {
 			for (x = 0; x < 360; ++x) {
 				pPiexl = LPBYTE(m_pBits) + ((200 - y)*m_bmInfo.bmWidthBytes) + ((x*m_bmInfo.bmBitsPixel) / 8);
@@ -390,7 +390,7 @@ namespace DuiLib {
 	{
 		int x, y;
 		BYTE *pPiexl;
-		DWORD dwColor;
+		CDuiColor dwColor;
 		//ÕâÀï»­³öBar
 		for (y = 0; y < m_nBarHeight; ++y) {
 			for (x = 0; x < 200; ++x) {

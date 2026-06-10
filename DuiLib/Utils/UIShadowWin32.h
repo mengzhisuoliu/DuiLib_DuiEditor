@@ -31,7 +31,7 @@ public:
 
 	// 图片阴影的函数
 	virtual bool SetImage(LPCTSTR szImage) override;
-	virtual bool SetShadowCorner(RECT rcCorner) override;	// 九宫格方式描述阴影
+	virtual bool SetShadowCorner(CDuiRect rcCorner) override;	// 九宫格方式描述阴影
 
 	// 把自己的阴影样式复制到传入参数
 	virtual bool CopyShadow(CShadowBaseUI* pShadow) override;
@@ -54,7 +54,7 @@ public:
 	static LRESULT CALLBACK ParentProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	// 通过算法计算阴影
-	void MakeShadow(UINT32 *pShadBits, HWND hParent, RECT *rcParent);
+	void MakeShadow(UINT32 *pShadBits, HWND hParent, CDuiRect*rcParent);
 
 	// 计算alpha预乘值
 	inline DWORD PreMultiply(COLORREF cl, unsigned char nAlpha)
@@ -103,7 +103,7 @@ protected:
 
 	// 图片阴影成员变量
 	CDuiString	m_sShadowImage;
-	RECT		m_rcShadowCorner;
+	CDuiRect		m_rcShadowCorner;
 };
 
 }

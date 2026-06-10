@@ -1378,7 +1378,7 @@ namespace DuiLib
 				{
 					s.Remove(_T("0x"));
 					s.Remove(_T("0X"));
-					AddByte(s.HexToInt64());
+					AddByte((BYTE)s.HexToInt64());
 					s.Empty();
 				}
 			}
@@ -1388,7 +1388,7 @@ namespace DuiLib
 		{
 			s.Remove(_T("0x"));
 			s.Remove(_T("0X"));
-			AddByte(s.HexToInt64());
+			AddByte((BYTE)s.HexToInt64());
 			s.Empty();
 		}
 	}

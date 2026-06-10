@@ -17,8 +17,8 @@ namespace DuiLib
 
 		int GetChangeStep();
 		void SetChangeStep(int step);
-		void SetThumbSize(SIZE szXY);
-		RECT GetThumbRect() const;
+		void SetThumbSize(CDuiSize szXY);
+		virtual CDuiRect GetThumbRect(bool bUseNew = false) const override;
 		LPCTSTR GetThumbImage() const;
 		void SetThumbImage(LPCTSTR pStrImage);
 		LPCTSTR GetThumbHotImage() const;
@@ -30,11 +30,11 @@ namespace DuiLib
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 		virtual void PaintForeImage(UIRender *pRender) override;
 
-		void SetValue(int nValue);
+		virtual void SetValue(int nValue) override;
 		void SetCanSendMove(bool bCanSend);
 		bool GetCanSendMove() const;
 	protected:
-		SIZE m_szThumb;
+		CDuiSize m_szThumb;
 		int m_nStep;
 
 		CDuiString m_sThumbImage;

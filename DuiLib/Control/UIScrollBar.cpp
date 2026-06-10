@@ -371,10 +371,10 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	void CScrollBarUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void CScrollBarUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 	{
 		CControlUI::SetPos(rc, bNeedInvalidate);
-		SIZE m_cxyFixed = CScrollBarUI::m_cxyFixed;
+		CDuiSize m_cxyFixed = CScrollBarUI::m_cxyFixed;
 		if (m_pManager != NULL) {
 			GetManager()->GetDPIObj()->ScaleSize(&m_cxyFixed);
 		}
@@ -703,7 +703,7 @@ namespace DuiLib
 			}
 			else {
 				if( m_nScrollRepeatDelay <= 5 ) return;
-				POINT pt = { 0 };
+				CDuiPoint pt;
 				GetManager()->GetCursorPos(&pt);
 				GetManager()->ScreenToClient(&pt);
 				if( !m_bHorizontal ) {
@@ -786,7 +786,7 @@ namespace DuiLib
 		else CControlUI::SetAttribute(pstrName, pstrValue);
 	}
 
-	bool CScrollBarUI::DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl)
+	bool CScrollBarUI::DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl)
 	{
 		PaintBkColor(pRender);
 		PaintBkImage(pRender);
@@ -867,7 +867,7 @@ namespace DuiLib
 			else return;
 		}
 
-		DWORD dwBorderColor = 0xFF85E4FF;
+		CDuiColor dwBorderColor = 0xFF85E4FF;
 		int nBorderSize = 2;
 		pRender->DrawRect(m_rcButton1, nBorderSize, dwBorderColor);
 	}
@@ -909,7 +909,7 @@ namespace DuiLib
 			else return;
 		}
 
-		DWORD dwBorderColor = 0xFF85E4FF;
+		CDuiColor dwBorderColor = 0xFF85E4FF;
 		int nBorderSize = 2;
 		pRender->DrawRect(m_rcButton2, nBorderSize, dwBorderColor);
 	}
@@ -950,7 +950,7 @@ namespace DuiLib
 			else return;
 		}
 
-		DWORD dwBorderColor = 0xFF85E4FF;
+		CDuiColor dwBorderColor = 0xFF85E4FF;
 		int nBorderSize = 2;
 		pRender->DrawRect(m_rcThumb, nBorderSize, dwBorderColor);
 	}

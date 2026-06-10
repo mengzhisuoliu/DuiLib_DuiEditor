@@ -17,7 +17,7 @@ namespace DuiLib {
 		SDL_Event ev;
 		SDL_zero(ev);
 		ev.type = SDL_EVENT_USER;
-		ev.window.windowID = SDL_GetWindowID((SDL_Window*)pTimer->hWnd);
+		ev.window.windowID = SDL_GetWindowID(pTimer->hWnd);
 		ev.user.code = WM_TIMER;
 		ev.user.data1 = userdata;
 		ev.user.data2 = NULL;
@@ -137,7 +137,7 @@ namespace DuiLib {
 		}
 	}
 
-	BOOL CPaintManagerSDLUI::InvalidateRect(UIWND hWnd, const RECT *lpRect, BOOL bErase)
+	BOOL CPaintManagerSDLUI::InvalidateRect(UIWND hWnd, const CDuiRect*lpRect, BOOL bErase)
 	{
 		if (m_pWindow)
 		{
@@ -147,13 +147,13 @@ namespace DuiLib {
 			UIRender_Sdl* pRender = (UIRender_Sdl*)Render();
 			pRender->InvalidRect(lpRect);
 
-			Uint64 flags = SDL_GetWindowFlags((SDL_Window*)m_hWndPaint);
+			Uint64 flags = SDL_GetWindowFlags(m_hWndPaint);
 			if (!(flags & SDL_WINDOW_MINIMIZED) && !(flags & SDL_WINDOW_HIDDEN)) 
 			{
 				SDL_Event ev;
 				SDL_zero(ev);
 				ev.type = SDL_EVENT_USER;
-				ev.window.windowID = SDL_GetWindowID((SDL_Window*)GetPaintWindow());
+				ev.window.windowID = SDL_GetWindowID(GetPaintWindow());
 				ev.user.code = WM_PAINT;
 				ev.user.data1 = NULL;
 				ev.user.data2 = NULL;
@@ -197,7 +197,10 @@ namespace DuiLib {
 	BOOL CPaintManagerSDLUI::KillTimer(TIMERINFO* pTimer)
 	{
 		if (pTimer == NULL || pTimer->uWinTimer == 0) return FALSE;
-		SDL_RemoveTimer(pTimer->uWinTimer);
+		if (SDL_RemoveTimer(pTimer->uWinTimer))
+		{
+			return TRUE;
+		}
 		return FALSE;
 	}
 
@@ -214,7 +217,7 @@ namespace DuiLib {
 	BOOL CPaintManagerSDLUI::ScreenToClient(LPPOINT pt)
 	{
 		int wx, wy;
-		SDL_GetWindowPosition((SDL_Window *)m_pWindow, &wx, &wy);
+		SDL_GetWindowPosition(m_hWndPaint, &wx, &wy);
 		pt->x -= wx;
 		pt->y -= wy;
 		return TRUE;
@@ -222,7 +225,7 @@ namespace DuiLib {
 
 	void CPaintManagerSDLUI::SetWndFocus()
 	{
-		SDL_RaiseWindow((SDL_Window *)m_hWndPaint);
+		SDL_RaiseWindow(m_hWndPaint);
 	}
 
 	UIWND CPaintManagerSDLUI::GetWndFocus()
@@ -232,13 +235,13 @@ namespace DuiLib {
 
 	BOOL CPaintManagerSDLUI::IsZoomed()
 	{
-		Uint64 flags = SDL_GetWindowFlags((SDL_Window *)m_hWndPaint);
+		Uint64 flags = SDL_GetWindowFlags(m_hWndPaint);
 		return (flags & SDL_WINDOW_MAXIMIZED) == SDL_WINDOW_MAXIMIZED;
 	}
 
 	BOOL CPaintManagerSDLUI::IsIconic()
 	{
-		Uint64 flags = SDL_GetWindowFlags((SDL_Window*)m_hWndPaint);
+		Uint64 flags = SDL_GetWindowFlags(m_hWndPaint);
 		return (flags & SDL_WINDOW_MINIMIZED) == SDL_WINDOW_MINIMIZED;
 	}
 
@@ -295,14 +298,20 @@ namespace DuiLib {
 
 	BOOL CPaintManagerSDLUI::IsCapsLockKeyOn()		
 	{ 
-		const bool* state = SDL_GetKeyboardState(NULL);
-		return state[SDL_SCANCODE_CAPSLOCK];
+		//const bool* state = SDL_GetKeyboardState(NULL);
+		//return state[SDL_SCANCODE_CAPSLOCK];
+		//上面代码只是获取当前的按下状态,而不是锁状态
+		//跨平台方案暂不实现
+		return FALSE;
 	}
 
-	BOOL CPaintManagerSDLUI::IsNUmberLockKeyOn()	
+	BOOL CPaintManagerSDLUI::IsNumberLockKeyOn()	
 	{ 
-		const bool* state = SDL_GetKeyboardState(NULL);
-		return state[SDL_SCANCODE_NUMLOCKCLEAR];
+		//const bool* state = SDL_GetKeyboardState(NULL);
+		//return state[SDL_SCANCODE_NUMLOCKCLEAR];
+		//上面代码只是获取当前的按下状态,而不是锁状态
+		//跨平台方案暂不实现
+		return FALSE;
 	}
 
 	UINT CPaintManagerSDLUI::MapKeyState()
@@ -380,7 +389,7 @@ namespace DuiLib {
 		SDL_Event ev;
 		SDL_zero(ev);
 		ev.type = SDL_EVENT_USER;
-		ev.window.windowID = SDL_GetWindowID((SDL_Window*)GetPaintWindow());
+		ev.window.windowID = SDL_GetWindowID(GetPaintWindow());
 		ev.user.code = WM_DESTROY;
 		ev.user.data1 = NULL;
 		ev.user.data2 = NULL;
@@ -413,7 +422,7 @@ namespace DuiLib {
 			m_bUpdateNeeded = false;
 			if (m_pRoot->IsUpdateNeeded())
 			{
-				RECT rcRoot = rcClient;
+				CDuiRect rcRoot = rcClient;
 				m_pRoot->SetPos(rcRoot, true);
 				bNeedSizeMsg = true;
 			}
@@ -471,7 +480,7 @@ namespace DuiLib {
 	bool CPaintManagerSDLUI::OnMouseOver(WPARAM wParam, LPARAM lParam, LRESULT& lRes)
 	{
 		m_bMouseTracking = false;
-		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		CDuiPoint pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 		CControlUI* pHover = FindControl(pt);
 		if (pHover == NULL) return false;
 		// Generate mouse hover event
@@ -504,7 +513,7 @@ namespace DuiLib {
 	bool CPaintManagerSDLUI::OnMouseMove(WPARAM wParam, LPARAM lParam, LRESULT& lRes)
 	{
 		// Generate the appropriate mouse messages
-		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		CDuiPoint pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 		m_ptLastMousePos = pt;
 		CControlUI* pNewHover = FindControl(pt);
 		if (pNewHover != NULL && pNewHover->GetManager() != this) return false;

@@ -16,7 +16,7 @@ public:
 		static MenuObserverImpl s_context_menu_observer;
 		return s_context_menu_observer;
 	}
-	static CMenuWndWin32* CreateMenu(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
+	static CMenuWndWin32* CreateMenu(CMenuElementUI* pOwner, STRINGorID xml, CDuiPoint point,
 		CPaintManagerUI* pMainPaintManager, CStdStringPtrMap* pMenuCheckInfo = NULL,
 		DWORD dwAlignment = eMenuAlignment_Left | eMenuAlignment_Top);
 	static void DestroyMenu();
@@ -36,7 +36,7 @@ public:
 	 *	@dwAlignment		菜单的出现位置，默认出现在鼠标的右下侧。
 	 */
 
-    void Init(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
+    void Init(CMenuElementUI* pOwner, STRINGorID xml, CDuiPoint point,
 		CPaintManagerUI* pMainPaintManager, CStdStringPtrMap* pMenuCheckInfo = NULL,
 		DWORD dwAlignment = eMenuAlignment_Left | eMenuAlignment_Top);
     LPCTSTR GetWindowClassName() const;
@@ -64,7 +64,7 @@ public:
 
 public:
 
-	POINT			m_BasedPoint;
+	CDuiPoint			m_BasedPoint;
 	STRINGorID		m_xml;
     CMenuElementUI* m_pOwner;
     CMenuUI*	m_pLayout;

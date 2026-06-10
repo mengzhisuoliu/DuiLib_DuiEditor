@@ -104,14 +104,14 @@ namespace DuiLib {
 		return CListUI::Remove(pControl);
 	}
 
-	SIZE CMenuUI::EstimateSize(SIZE szAvailable)
+	CDuiSize CMenuUI::EstimateSize(CDuiSize szAvailable)
 	{
 		int cxFixed = 0;
 		int cyFixed = 0;
 		for( int it = 0; it < GetCount(); it++ ) {
 			CControlUI* pControl = static_cast<CControlUI*>(GetItemAt(it));
 			if( !pControl->IsVisible() ) continue;
-			SIZE sz = pControl->EstimateSize(szAvailable);
+			CDuiSize sz = pControl->EstimateSize(szAvailable);
 			cyFixed += sz.cy;
 			if( cxFixed < sz.cx )
 				cxFixed = sz.cx;
@@ -138,13 +138,7 @@ namespace DuiLib {
 		else if( _tcsicmp(pstrName, _T("iconwidth")) == 0){
 			SetIconWidth(_ttoi(pstrValue));
 		}
-		else if( _tcsicmp(pstrName, _T("iconbkcolor")) == 0){
-			while( *pstrValue > _T('\0') && *pstrValue <= _T(' ') ) pstrValue = ::CharNext(pstrValue);
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-			SetIconBkColor(clrColor);
-		}
+		else if( _tcsicmp(pstrName, _T("iconbkcolor")) == 0) SetIconBkColor(pstrValue);
 		else
 			CListUI::SetAttribute(pstrName, pstrValue);
 	}
@@ -173,11 +167,11 @@ namespace DuiLib {
 	{
 		return m_nIconWidth;
 	}
-	void CMenuUI::SetIconBkColor(DWORD dwColor)
+	void CMenuUI::SetIconBkColor(CDuiColor dwColor)
 	{
 		m_dwIconBkColor = dwColor;
 	}
-	DWORD CMenuUI::GetIconBkColor()
+	CDuiColor CMenuUI::GetIconBkColor()
 	{
 		return m_dwIconBkColor;
 	}
@@ -217,12 +211,12 @@ namespace DuiLib {
 		return CListContainerElementUI::GetInterface(pstrName);
 	}
 
-	bool CMenuElementUI::DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl)
+	bool CMenuElementUI::DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl)
 	{
-		SIZE m_cxyFixed = CMenuElementUI::m_cxyFixed;
+		CDuiSize m_cxyFixed = CMenuElementUI::m_cxyFixed;
 		m_cxyFixed.cx = GetManager()->GetDPIObj()->ScaleInt(m_cxyFixed.cx);
 		m_cxyFixed.cy = GetManager()->GetDPIObj()->ScaleInt(m_cxyFixed.cy);
-		RECT m_rcLinePadding = CMenuElementUI::m_rcLinePadding;
+		CDuiRect m_rcLinePadding = CMenuElementUI::m_rcLinePadding;
 		GetManager()->GetDPIObj()->ScaleRect(&m_rcLinePadding);
 
 		CDuiRect rcTemp;
@@ -231,7 +225,7 @@ namespace DuiLib {
 
 		if(m_bDrawLine)
 		{
-			RECT rcLine = { m_rcItem.left +  m_rcLinePadding.left, m_rcItem.top + m_cxyFixed.cy/2, m_rcItem.right - m_rcLinePadding.right, m_rcItem.top + m_cxyFixed.cy/2 };
+			CDuiRect rcLine(m_rcItem.left +  m_rcLinePadding.left, m_rcItem.top + m_cxyFixed.cy/2, m_rcItem.right - m_rcLinePadding.right, m_rcItem.top + m_cxyFixed.cy/2 );
 			pRender->DrawLine(rcLine, 1, m_dwLineColor);
 		}
 		else
@@ -256,8 +250,8 @@ namespace DuiLib {
 			DrawItemExpland(pRender, m_rcItem);
 
 			if( m_items.GetSize() > 0 ) {
-				RECT rc = m_rcItem;
-				RECT rcInset = GetInset();
+				CDuiRect rc = m_rcItem;
+				CDuiRect rcInset = GetInset();
 				rc.left += rcInset.left;
 				rc.top += rcInset.top;
 				rc.right -= rcInset.right;
@@ -331,7 +325,7 @@ namespace DuiLib {
 		return true;
 	}
 
-	void CMenuElementUI::DrawItemIcon(UIRender *pRender, const RECT& rcItem)
+	void CMenuElementUI::DrawItemIcon(UIRender *pRender, const CDuiRect& rcItem)
 	{
 		CDuiString strIcon = m_strIcon;
 		if(GetCheckItem())	//如果是复选框
@@ -356,11 +350,11 @@ namespace DuiLib {
 
 		if(strIcon.IsEmpty()) return;
 
-		SIZE m_cxyFixed = CMenuElementUI::m_cxyFixed;
+		CDuiSize m_cxyFixed = CMenuElementUI::m_cxyFixed;
 		m_cxyFixed.cx = GetManager()->GetDPIObj()->ScaleInt(m_cxyFixed.cx);
 		m_cxyFixed.cy = GetManager()->GetDPIObj()->ScaleInt(m_cxyFixed.cy);
 
-		SIZE m_szIconSize = CMenuElementUI::m_szIconSize;
+		CDuiSize m_szIconSize = CMenuElementUI::m_szIconSize;
 		m_szIconSize.cx = GetManager()->GetDPIObj()->ScaleInt(m_szIconSize.cx);
 		m_szIconSize.cy = GetManager()->GetDPIObj()->ScaleInt(m_szIconSize.cy);
 
@@ -368,13 +362,12 @@ namespace DuiLib {
 		if(GetMenuUI())
 			nWidth = GetManager()->GetDPIObj()->ScaleInt(GetMenuUI()->GetIconWidth());
 		int padding = (nWidth - m_szIconSize.cx) / 2;
-		RECT rcDest =
-		{
+		CDuiRect rcDest(
 			padding,
 			(m_cxyFixed.cy - m_szIconSize.cy) / 2,
 			padding + m_szIconSize.cx,
 			(m_cxyFixed.cy - m_szIconSize.cy) / 2 + m_szIconSize.cy
-		};
+		);
 		GetManager()->GetDPIObj()->ScaleRectBack(&rcDest);
 		/*
 		TListInfoUI* pInfo = m_pOwner->GetListInfo();
@@ -400,7 +393,7 @@ namespace DuiLib {
 		//	DrawDisableItemIcon(hDC, strIcon, pStrImage);
 	}
 
-	void CMenuElementUI::DrawItemExpland(UIRender *pRender, const RECT& rcItem)
+	void CMenuElementUI::DrawItemExpland(UIRender *pRender, const CDuiRect& rcItem)
 	{
 		if (m_bShowExplandIcon && IsEnabled())
 		{
@@ -413,7 +406,7 @@ namespace DuiLib {
 				if (strExplandIcon.IsEmpty()) 
 					return;
 			}
-			SIZE m_cxyFixed = CMenuElementUI::m_cxyFixed;
+			CDuiSize m_cxyFixed = CMenuElementUI::m_cxyFixed;
 			m_cxyFixed.cx = GetManager()->GetDPIObj()->ScaleInt(m_cxyFixed.cx);
 			m_cxyFixed.cy = GetManager()->GetDPIObj()->ScaleInt(m_cxyFixed.cy);
 			int padding = GetManager()->GetDPIObj()->ScaleInt(ITEM_DEFAULT_EXPLAND_ICON_WIDTH) / 3;
@@ -422,13 +415,12 @@ namespace DuiLib {
 			if (!pImageInfo) {
 				return;
 			}
-			RECT rcDest =
-			{
+			CDuiRect rcDest(
 				m_cxyFixed.cx - pImageInfo->nWidth - padding,
 				(m_cxyFixed.cy - pImageInfo->nHeight) / 2,
 				m_cxyFixed.cx - pImageInfo->nWidth - padding + pImageInfo->nWidth,
 				(m_cxyFixed.cy - pImageInfo->nHeight) / 2 + pImageInfo->nHeight
-			};
+			);
 			GetManager()->GetDPIObj()->ScaleRectBack(&rcDest);
 			CDuiString pStrImage;
 			pStrImage.Format(_T("dest='%d,%d,%d,%d'"), rcDest.left, rcDest.top, rcDest.right, rcDest.bottom);
@@ -436,14 +428,14 @@ namespace DuiLib {
 		}
 	}
 
-	void CMenuElementUI::DrawItemText(UIRender *pRender, const RECT& rcItem)
+	void CMenuElementUI::DrawItemText(UIRender *pRender, const CDuiRect& rcItem)
 	{
 		CDuiString sText = GetText();
 		if( sText.IsEmpty() ) return;
 
 		if( m_pOwner == NULL ) return;
 		TListInfoUI* pInfo = m_pOwner->GetListInfo();
-		DWORD iTextColor = pInfo->dwTextColor;
+		CDuiColor iTextColor = pInfo->dwTextColor;
 		if( IsHotState() ) {
 			iTextColor = pInfo->dwHotTextColor;
 		}
@@ -454,8 +446,8 @@ namespace DuiLib {
 			iTextColor = pInfo->dwDisabledTextColor;
 		}
 
-		RECT rcText = rcItem;
- 		RECT rcTextPadding = pInfo->rcTextPadding;
+		CDuiRect rcText = rcItem;
+ 		CDuiRect rcTextPadding = pInfo->rcTextPadding;
  		GetManager()->GetDPIObj()->ScaleRect(&rcTextPadding);
 // 		rcText.left += rcTextPadding.left;
 // 		rcText.right -= rcTextPadding.right;
@@ -466,9 +458,9 @@ namespace DuiLib {
 			pInfo->nFont, DT_SINGLELINE | pInfo->uTextStyle);
 	}
 
-	void CMenuElementUI::DrawItemBorder(UIRender *pRender, const RECT& rcItem)
+	void CMenuElementUI::DrawItemBorder(UIRender *pRender, const CDuiRect& rcItem)
 	{
-		DWORD dwColor = 0;
+		CDuiColor dwColor = 0;
 
 		if(dwColor == 0 && !IsEnabled() && GetDisableBorderColor() != 0)
 			dwColor = GetDisableBorderColor();
@@ -558,16 +550,16 @@ namespace DuiLib {
 		}*/
 	}
 
-	SIZE CMenuElementUI::EstimateSize(SIZE szAvailable)
+	CDuiSize CMenuElementUI::EstimateSize(CDuiSize szAvailable)
 	{
-		SIZE m_cxyFixed = CMenuElementUI::m_cxyFixed;
+		CDuiSize m_cxyFixed = CMenuElementUI::m_cxyFixed;
 		m_cxyFixed.cx = GetManager()->GetDPIObj()->ScaleInt(m_cxyFixed.cx);
 		m_cxyFixed.cy = GetManager()->GetDPIObj()->ScaleInt(m_cxyFixed.cy);
-		SIZE cXY = {0};
+		CDuiSize cXY;
 		for( int it = 0; it < GetCount(); it++ ) {
 			CControlUI* pControl = static_cast<CControlUI*>(GetItemAt(it));
 			if( !pControl->IsVisible() ) continue;
-			SIZE sz = pControl->EstimateSize(szAvailable);
+			CDuiSize sz = pControl->EstimateSize(szAvailable);
 			cXY.cy += sz.cy;
 			if( cXY.cx < sz.cx )
 				cXY.cx = sz.cx;
@@ -581,7 +573,7 @@ namespace DuiLib {
 		if(cXY.cy == 0) {
 			TListInfoUI* pInfo = m_pOwner->GetListInfo();
 
-			DWORD iTextColor = pInfo->dwTextColor;
+			CDuiColor iTextColor = pInfo->dwTextColor;
 			if( IsHotState() ) {
 				iTextColor = pInfo->dwHotTextColor;
 			}
@@ -593,8 +585,8 @@ namespace DuiLib {
 			}
 			CDuiString sText = GetText();
 
-			RECT rcText = { 0, 0, MAX(szAvailable.cx, m_cxyFixed.cx), 9999 };
-			RECT rcTextPadding = pInfo->rcTextPadding;
+			CDuiRect rcText(0, 0, MAX(szAvailable.cx, m_cxyFixed.cx), 9999 );
+			CDuiRect rcTextPadding = pInfo->rcTextPadding;
 			GetManager()->GetDPIObj()->ScaleRect(&rcTextPadding);
 			rcText.left += rcTextPadding.left;
 			rcText.right -= rcTextPadding.right;
@@ -791,21 +783,21 @@ namespace DuiLib {
 		SetEnabled(false);
 	}
 
-	void CMenuElementUI::SetLineColor(DWORD color)
+	void CMenuElementUI::SetLineColor(CDuiColor color)
 	{
 		m_dwLineColor = color;
 	}
 
-	DWORD CMenuElementUI::GetLineColor() const
+	CDuiColor CMenuElementUI::GetLineColor() const
 	{
 		return m_dwLineColor;
 	}
-	void CMenuElementUI::SetLinePadding(RECT rcInset)
+	void CMenuElementUI::SetLinePadding(CDuiRect rcInset)
 	{
 		m_rcLinePadding = rcInset;
 	}
 
-	RECT CMenuElementUI::GetLinePadding() const
+	CDuiRect CMenuElementUI::GetLinePadding() const
 	{
 		return m_rcLinePadding;
 	}
@@ -877,55 +869,40 @@ namespace DuiLib {
 		if( _tcsicmp(pstrName, _T("icon")) == 0){
 			SetIcon(pstrValue);
 		}
-		if( _tcsicmp(pstrName, _T("uncheckicon")) == 0){
+		if (_tcsicmp(pstrName, _T("uncheckicon")) == 0) {
 			SetUnCheckIcon(pstrValue);
 		}
-		else if( _tcsicmp(pstrName, _T("iconsize")) == 0 ) {
-			LPTSTR pstr = NULL;
-			LONG cx = 0, cy = 0;
-			cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
-			cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);   
-			SetIconSize(cx, cy);
+		else if (_tcsicmp(pstrName, _T("iconsize")) == 0) {
+			CDuiSize sz(pstrValue);
+			SetIconSize(sz.cx, sz.cy);
 		}
-		else if( _tcsicmp(pstrName, _T("checkitem")) == 0 ) {		
-			SetCheckItem(_tcsicmp(pstrValue, _T("true")) == 0 ? true : false);		
+		else if (_tcsicmp(pstrName, _T("checkitem")) == 0) {
+			SetCheckItem(_tcsicmp(pstrValue, _T("true")) == 0 ? true : false);
 		}
-		else if( _tcsicmp(pstrName, _T("ischeck")) == 0 ) {		
+		else if (_tcsicmp(pstrName, _T("ischeck")) == 0) {
 			CStdStringPtrMap* mCheckInfos = CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo();
 			if (mCheckInfos != NULL)
 			{
 				bool bFind = false;
-				for(int i = 0; i < mCheckInfos->GetSize(); i++) {
+				for (int i = 0; i < mCheckInfos->GetSize(); i++) {
 					MenuItemInfo* itemInfo = (MenuItemInfo*)mCheckInfos->GetAt(i);
-					if(_tcsicmp(itemInfo->szName, GetName()) == 0) {
+					if (_tcsicmp(itemInfo->szName, GetName()) == 0) {
 						bFind = true;
 						break;
 					}
 				}
-				if(!bFind) SetChecked(_tcsicmp(pstrValue, _T("true")) == 0 ? true : false);
+				if (!bFind) SetChecked(_tcsicmp(pstrValue, _T("true")) == 0 ? true : false);
 			}
-		}	
-		else if( _tcsicmp(pstrName, _T("linetype")) == 0){
+		}
+		else if (_tcsicmp(pstrName, _T("linetype")) == 0) {
 			if (_tcsicmp(pstrValue, _T("true")) == 0)
 				SetLineType();
 		}
-		else if( _tcsicmp(pstrName, _T("expland")) == 0 ) {
+		else if (_tcsicmp(pstrName, _T("expland")) == 0) {
 			SetShowExplandIcon(_tcsicmp(pstrValue, _T("true")) == 0 ? true : false);
 		}
-		else if( _tcsicmp(pstrName, _T("linecolor")) == 0){
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			SetLineColor(_tcstoul(pstrValue, &pstr, 16));
-		}
-		else if( _tcsicmp(pstrName, _T("linepadding")) == 0 ) {
-			RECT rcInset = { 0 };
-			LPTSTR pstr = NULL;
-			rcInset.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
-			rcInset.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
-			rcInset.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);    
-			rcInset.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);    
-			SetLinePadding(rcInset);
-		}
+		else if (_tcsicmp(pstrName, _T("linecolor")) == 0) SetLineColor(pstrValue);
+		else if (_tcsicmp(pstrName, _T("linepadding")) == 0) SetLinePadding(pstrValue);
 		else if	( _tcsicmp(pstrName, _T("height")) == 0){
 			SetFixedHeight(_ttoi(pstrValue));
 		}
@@ -996,11 +973,11 @@ namespace DuiLib {
 		const TDrawInfo* pDrawInfo = m_pManager->GetDrawInfo(pStrImage, pStrModify);
 
 		CPaintManagerUI *pManager = m_pManager;
-		RECT rcItem = m_rcItem;
-		RECT rcPaint = m_rcItem;
+		CDuiRect rcItem = m_rcItem;
+		CDuiRect rcPaint = m_rcItem;
 		//return DrawImageInfo(hDC, pManager, rcItem, rcPaint, pDrawInfo, instance);
 
-		RECT rcDest = rcItem;
+		CDuiRect rcDest = rcItem;
 		if( pDrawInfo->rcDest.left != 0 || pDrawInfo->rcDest.top != 0 ||
 			pDrawInfo->rcDest.right != 0 || pDrawInfo->rcDest.bottom != 0 ) {
 				rcDest.left = rcItem.left + pDrawInfo->rcDest.left;
@@ -1014,9 +991,9 @@ namespace DuiLib {
 			pDrawInfo->rcSource, pDrawInfo->rcCorner, pDrawInfo->dwMask, pDrawInfo->uFade, pDrawInfo->bHole, pDrawInfo->bTiledX, pDrawInfo->bTiledY, pDrawInfo->width, pDrawInfo->height, pDrawInfo->fillcolor, m_instance);
 
 	}
-	bool CMenuElementUI::_DrawImageMenuDisableIcon(UIRender *pRender, CPaintManagerUI* pManager, const RECT& rc, const RECT& rcPaint, const CDuiString& sImageName, \
-		const CDuiString& sImageResType, RECT rcItem, RECT rcBmpPart, RECT rcCorner, DWORD dwMask, BYTE bFade, \
-		bool bHole, bool bTiledX, bool bTiledY, int width, int height, DWORD fillcolor, HINSTANCE instance)
+	bool CMenuElementUI::_DrawImageMenuDisableIcon(UIRender *pRender, CPaintManagerUI* pManager, const CDuiRect& rc, const CDuiRect& rcPaint, const CDuiString& sImageName, \
+		const CDuiString& sImageResType, CDuiRect rcItem, CDuiRect rcBmpPart, CDuiRect rcCorner, CDuiColor dwMask, BYTE bFade, \
+		bool bHole, bool bTiledX, bool bTiledY, int width, int height, CDuiColor fillcolor, HINSTANCE instance)
 	{
 		if (sImageName.IsEmpty()) {
 			return false;

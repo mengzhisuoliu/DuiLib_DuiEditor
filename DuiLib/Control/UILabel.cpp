@@ -75,13 +75,13 @@ namespace DuiLib
 		return IsEnabled() ? UIFLAG_SETCURSOR : 0;
 	}
 
-	SIZE CLabelUI::EstimateSize(SIZE szAvailable)
+	CDuiSize CLabelUI::EstimateSize(CDuiSize szAvailable)
 	{
 		if (IsAutoCalcWidth() || IsAutoCalcHeight()) 
 		{		
 			if(IsAutoCalcWidth())
 			{
-				RECT rcText = {0, 0, szAvailable.cx, szAvailable.cy};
+				CDuiRect rcText(0, 0, szAvailable.cx, szAvailable.cy);
 				GetManager()->Render()->DrawText(rcText, GetTextPadding(), GetText(), m_dwTextColor, m_iFont, DT_CALCRECT | m_uTextStyle);
 				m_cxyFixed.cx = rcText.right - rcText.left;
 			}
@@ -89,7 +89,7 @@ namespace DuiLib
 			if(IsAutoCalcHeight())
 			{
 				int h = GetManager()->GetFontHeight(GetFont());
-				RECT rcTextPadding = GetTextPadding();
+				CDuiRect rcTextPadding = GetTextPadding();
 				m_cxyFixed.cy = rcTextPadding.top + rcTextPadding.bottom + h + 4;		
 			}
 			
@@ -128,8 +128,8 @@ namespace DuiLib
 		CDuiString sText = GetText();
 		if(sText.IsEmpty()) return;
 
-		RECT rcText = m_rcItem;
-		DWORD dwColor = 0;
+		CDuiRect rcText = m_rcItem;
+		CDuiColor dwColor = 0;
 		int iFont = -1;
 		CDuiRect rcTextPadding = GetTextPadding();
 

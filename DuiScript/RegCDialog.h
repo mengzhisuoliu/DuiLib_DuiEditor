@@ -22,7 +22,7 @@ public:
 		
 		r = engine->RegisterObjectMethod("CDialog", "void RegisterNotify(string,string)", asMETHODPR(CUIDialog, RegScriptNotify, (LPCTSTR, LPCTSTR), void), asCALL_THISCALL); assert( r >= 0 );
 		
-		REG_METHOD_FUNPR2("CDialog", CUIDialog, UINT, DoModal, (HWND)); assert( r >= 0 );
+		REG_METHOD_FUNPR2("CDialog", CUIDialog, UINT, DoModal, (UIWND)); assert( r >= 0 );
 
 		//暂不支持 弹出非模态窗口
 		//REG_METHOD_FUNPR2("CDialog", CUIDialog, void, ShowDialog, (HWND hWndParent)); assert( r >= 0 );

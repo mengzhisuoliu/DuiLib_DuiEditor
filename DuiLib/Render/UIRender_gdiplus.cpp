@@ -110,7 +110,7 @@ namespace DuiLib {
 // 		}
 // 	}
 
-	void UIRender_gdiplus::DrawColor(const RECT& rc, const SIZE &round, DWORD color)
+	void UIRender_gdiplus::DrawColor(const CDuiRect& rc, const CDuiSize &round, CDuiColor color)
 	{
 		if( color <= 0x00FFFFFF ) return;
 
@@ -161,14 +161,14 @@ namespace DuiLib {
 		}
 	}
 
-// 	void UIRender_gdiplus::DrawGradient(const RECT& rc, DWORD dwFirst, DWORD dwSecond, bool bVertical, int nSteps)
+// 	void UIRender_gdiplus::DrawGradient(const CDuiRect& rc, CDuiColor dwFirst, CDuiColor dwSecond, bool bVertical, int nSteps)
 // 	{
 // 		Gdiplus::Graphics graphics(m_hDC);
 // 		Gdiplus::LinearGradientBrush linGrBrush(Gdiplus::PointF(rc.left,rc.top), Gdiplus::PointF(rc.top,rc.bottom), Gdiplus::Color(255,255,0,0), Gdiplus::Color(255,0,0,255));
 // 		graphics.FillRectangle(&linGrBrush, rc.left, rc.top, rc.right, rc.bottom);
 // 	}
 
-	void UIRender_gdiplus::DrawLine(int x1, int y1, int x2, int y2, int nSize, DWORD dwPenColor,int nStyle)
+	void UIRender_gdiplus::DrawLine(int x1, int y1, int x2, int y2, int nSize, CDuiColor dwPenColor,int nStyle)
 	{
 		Gdiplus::Graphics graphics(m_hDC);
 		graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
@@ -194,7 +194,7 @@ namespace DuiLib {
 		graphics.DrawLine(&pen, x1, y1, x2, y2);
 	}
 
-	void UIRender_gdiplus::DrawRect(const RECT& rc, int nSize, DWORD dwPenColor,int nStyle/* = PS_SOLID*/)
+	void UIRender_gdiplus::DrawRect(const CDuiRect& rc, int nSize, CDuiColor dwPenColor,int nStyle/* = PS_SOLID*/)
 	{
 		Gdiplus::Graphics graphics(m_hDC);
 		Gdiplus::Pen pen(Gdiplus::Color(dwPenColor), (Gdiplus::REAL)nSize);
@@ -202,7 +202,7 @@ namespace DuiLib {
 		graphics.DrawRectangle(&pen, rc.left, rc.top, rc.right - rc.left - 1, rc.bottom - rc.top - 1);
 	}
 
-	void UIRender_gdiplus::DrawRoundRect(const RECT& rc, int nSize, const SIZE &round, DWORD dwPenColor,int nStyle /*= PS_SOLID*/)
+	void UIRender_gdiplus::DrawRoundRect(const CDuiRect& rc, int nSize, const CDuiSize &round, CDuiColor dwPenColor,int nStyle /*= PS_SOLID*/)
 	{
 		Gdiplus::Graphics graphics(m_hDC);
 		graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
@@ -242,23 +242,23 @@ namespace DuiLib {
 		graphics.DrawPath(&pen, &pPath);
 	}
 
-	void UIRender_gdiplus::DrawEllipse(const RECT& rc, int nSize, DWORD dwPenColor, int nStyle)
+	void UIRender_gdiplus::DrawEllipse(const CDuiRect& rc, int nSize, CDuiColor dwPenColor, int nStyle)
 	{
 		Gdiplus::Graphics graphics(m_hDC);
 		graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
-		Gdiplus::Pen pen(dwPenColor, (Gdiplus::REAL)nSize);
+		Gdiplus::Pen pen(dwPenColor.GetColor(), (Gdiplus::REAL)nSize);
 		graphics.DrawEllipse(&pen, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top);
 	}
 
-	void UIRender_gdiplus::FillEllipse(const RECT& rc, DWORD dwColor)
+	void UIRender_gdiplus::FillEllipse(const CDuiRect& rc, CDuiColor dwColor)
 	{
 		Gdiplus::Graphics graphics(m_hDC);
 		graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
-		Gdiplus::SolidBrush brush(dwColor);
+		Gdiplus::SolidBrush brush(dwColor.GetColor());
 		graphics.FillEllipse(&brush, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top);
 	}
 
-	void UIRender_gdiplus::DrawText(RECT& rc, LPCTSTR pstrText, DWORD dwTextColor, int iFont, UINT uStyle)
+	void UIRender_gdiplus::DrawText(CDuiRect& rc, LPCTSTR pstrText, CDuiColor dwTextColor, int iFont, UINT uStyle)
 	{
 		CPaintManagerUI *pManager = GetManager();
 		HDC hDC = GetDC();
@@ -377,19 +377,19 @@ namespace DuiLib {
 		return new UIPath_gdiplus();
 	}
 
-	BOOL UIRender_gdiplus::DrawPath(const UIPath* path, int nSize, DWORD dwColor)
+	BOOL UIRender_gdiplus::DrawPath(const UIPath* path, int nSize, CDuiColor dwColor)
 	{
 		Gdiplus::Graphics graphics(m_hDC);
 		graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
-		Gdiplus::Pen pen(dwColor, (Gdiplus::REAL)nSize);
+		Gdiplus::Pen pen(dwColor.GetColor(), (Gdiplus::REAL)nSize);
 		return graphics.DrawPath(&pen, ((UIPath_gdiplus *)path)->Getpath()) == Gdiplus::Ok;
 	}
 
-	BOOL UIRender_gdiplus::FillPath(const UIPath* path, const DWORD dwColor)
+	BOOL UIRender_gdiplus::FillPath(const UIPath* path, const CDuiColor dwColor)
 	{
 		Gdiplus::Graphics graphics(m_hDC);
 		graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
-		Gdiplus::SolidBrush brush(dwColor);
+		Gdiplus::SolidBrush brush(dwColor.GetColor());
 		return graphics.FillPath(&brush, ((UIPath_gdiplus *)path)->Getpath()) == Gdiplus::Ok;
 	}
 } // namespace DuiLib

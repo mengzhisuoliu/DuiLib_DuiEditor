@@ -20,6 +20,7 @@ std::map<WORD, UINT> CWindowSDL::m_keyWin32ToSdl;
 
 CWindowSDL::CWindowSDL()
 {
+	m_dwStyle = 0;
 	m_id = 0;
 	m_uOwnerThread = 0;
 	m_lastCursor = NULL;
@@ -48,47 +49,39 @@ CWindowSDL::~CWindowSDL()
 	}
 }
 
-UIWND CWindowSDL::CreateDuiWindow(UIWND hwndParent, LPCTSTR pstrWindowName,DWORD dwStyle, DWORD dwExStyle)
-{
-	return Create(hwndParent,pstrWindowName,dwStyle,dwExStyle,0,0,0,0);
-}
-
-UIWND CWindowSDL::Create(UIWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, const RECT rc)
-{
-	return Create(hwndParent, pstrName, dwStyle, dwExStyle, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
-}
-
 UIWND CWindowSDL::Create(UIWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, int x, int y, int cx, int cy)
 {
 	CDuiStringUtf8 strNameUtf8(pstrName);
 
+	m_dwStyle = dwStyle;
+
 	// 创建SDL窗口
-	Uint32 flags = SDL_WINDOW_BORDERLESS;// SDL_WINDOW_HIDDEN | SDL_WINDOW_BORDERLESS;
+	//Uint32 flags = SDL_WINDOW_BORDERLESS | SDL_WINDOW_HIDDEN;
+	Uint32 flags = SDL_WINDOW_BORDERLESS;
 	if(dwStyle & WS_SIZEBOX) flags |= SDL_WINDOW_RESIZABLE;
 
 	SDL_Window *pWindow = SDL_CreateWindow(strNameUtf8.toString(), cx, cy, flags);
 	if (!pWindow) return NULL;
 
+	m_hWnd = (UIWND)pWindow;
+	m_id = SDL_GetWindowID(pWindow);
+	m_uOwnerThread = SDL_GetThreadID(NULL);
+	RegisterWindow(pWindow, this);
+
 	if (hwndParent)
 	{
 		if (dwStyle & WS_POPUP) //弹出窗口
 		{
-			SDL_SetWindowPosition(pWindow, x, y);
-			SDL_SetWindowParent(pWindow, (SDL_Window*)hwndParent);
+			SDL_SetWindowParent(pWindow, hwndParent);
+			SetWindowPos(x, y, cx, cy, 0);
 		}
 		else if (dwStyle & WS_CHILD) //内部窗口
 		{
-			int x1 = 0, y1 = 0;
-			SDL_GetWindowPosition((SDL_Window*)hwndParent, &x1, &y1);
-			SDL_SetWindowPosition(pWindow, x + x1, y + y1); //内部窗口的坐标是相对于父窗口的偏移
-			SDL_SetWindowParent(pWindow, (SDL_Window*)hwndParent);
+			SDL_SetWindowParent(pWindow, hwndParent);
+			SetWindowPos(x, y, cx, cy, 0);
 		}
 	}
 
-	m_hWnd = (UIWND)pWindow;
-	m_id = SDL_GetWindowID(pWindow);
-	m_uOwnerThread = SDL_GetThreadID(NULL);
-	RegisterWindow((UINT_PTR)pWindow, this);
 	HandleMessage(WM_CREATE, 0, 0);
 	return m_hWnd;
 }
@@ -98,7 +91,7 @@ void CWindowSDL::Close(UINT nRet)
 	SDL_Event ev;
 	SDL_zero(ev);
 	ev.type = SDL_EVENT_USER;
-	ev.window.windowID = SDL_GetWindowID((SDL_Window*)GetHWND());
+	ev.window.windowID = SDL_GetWindowID(GetHWND());
 	ev.user.code = WM_CLOSE;
 	ev.user.data1 = (void *)nRet;
 	ev.user.data2 = 0;
@@ -168,19 +161,19 @@ void CWindowSDL::ShowWindow(bool bShow, bool bTakeFocus)
 {
 	if (bShow)
 	{
-		SDL_ShowWindow((SDL_Window*)m_hWnd);
-		SDL_RaiseWindow((SDL_Window*)m_hWnd);
+		SDL_ShowWindow(m_hWnd);
+		SDL_RaiseWindow(m_hWnd);
 	}
 	else
 	{
-		SDL_HideWindow((SDL_Window*)m_hWnd);
+		SDL_HideWindow(m_hWnd);
 	}
 }
 
 UINT CWindowSDL::ShowModal()
 {
 	// 获取父窗口（必须在创建时已设置）
-	SDL_Window* pParent = SDL_GetWindowParent((SDL_Window*)m_hWnd);
+	SDL_Window* pParent = SDL_GetWindowParent(m_hWnd);
 	if (!pParent) {
 		// 没有父窗口，则作为普通窗口显示
 		ShowWindow(true, true);
@@ -189,12 +182,12 @@ UINT CWindowSDL::ShowModal()
 
 	// 保存父窗口 Dui 对象，用于后续恢复焦点
 	WindowInfo parentInfo;
-	if (!FindWindowInfoByPtr((UINT_PTR)pParent, &parentInfo)) {
+	if (!FindWindowInfoByPtr(pParent, &parentInfo)) {
 		parentInfo.pDuiWindow = nullptr;
 	}
 
 	// 设置为模态窗口（SDL3 原生支持）
-	if (!SDL_SetWindowModal((SDL_Window*)m_hWnd, true)) 
+	if (!SDL_SetWindowModal(m_hWnd, true)) 
 	{
 		// 设置失败，可能平台不支持，但继续使用手动事件过滤
 	}
@@ -215,7 +208,7 @@ UINT CWindowSDL::ShowModal()
 
 		// 确定消息目标窗口
 		SDL_Window* targetWin = SDL_GetWindowFromID(ev.window.windowID);
-		if (targetWin != (SDL_Window*)m_hWnd && !IsChildWindow((UIWND)targetWin)) {
+		if (targetWin != m_hWnd && !IsChildWindow((UIWND)targetWin)) {
 			// 消息不属于模态窗口或其子窗口
 			// 对于鼠标/键盘事件，直接忽略（模拟模态行为）
 			if (msg.message == WM_LBUTTONDOWN || msg.message == WM_LBUTTONUP ||
@@ -237,7 +230,7 @@ UINT CWindowSDL::ShowModal()
 			if (m_id == ev.window.windowID)
 			{
 				nRet = (UINT)msg.wParam;
-				SDL_SetWindowModal((SDL_Window*)m_hWnd, false); // 清除模态状态
+				SDL_SetWindowModal(m_hWnd, false); // 清除模态状态
 			}
 		}
 		else if (msg.message == WM_QUIT)
@@ -260,7 +253,7 @@ UINT CWindowSDL::ShowModal()
 
 void CWindowSDL::CenterWindow()	// 居中，支持扩展屏幕
 {
-	SDL_SetWindowPosition((SDL_Window *)m_hWnd, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+	SDL_SetWindowPosition(m_hWnd, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 }
 
 BOOL CWindowSDL::OnSdlEvent(const void* pEvent)
@@ -272,12 +265,12 @@ BOOL CWindowSDL::OnSdlEvent(const void* pEvent)
 std::map<UINT, CWindowSDL::WindowInfo> CWindowSDL::m_smap;
 CDuiLock CWindowSDL::m_smap_lock;
 
-BOOL CWindowSDL::RegisterWindow(UINT_PTR pSdlWindow, CWindowWnd* pDuiWindow)
+BOOL CWindowSDL::RegisterWindow(UIWND pSdlWindow, CWindowWnd* pDuiWindow)
 {
 	CDuiInnerLock lock(&m_smap_lock);
 
 	if (!pSdlWindow) return FALSE;
-	SDL_WindowID id = SDL_GetWindowID((SDL_Window *)pSdlWindow);
+	SDL_WindowID id = SDL_GetWindowID(pSdlWindow);
 	if (id == 0) return FALSE; // 无效ID
 
 	// 如果已经存在，先注销
@@ -330,7 +323,7 @@ BOOL CWindowSDL::FindWindowInfo(UINT id, WindowInfo* pInfo)
 	return FALSE;
 }
 
-BOOL CWindowSDL::FindWindowInfoByPtr(UINT_PTR window, WindowInfo* pInfo)
+BOOL CWindowSDL::FindWindowInfoByPtr(UIWND window, WindowInfo* pInfo)
 {
 	CDuiInnerLock lock(&m_smap_lock);
 
@@ -394,22 +387,22 @@ BOOL CWindowSDL::IsWindow(UIWND hWnd)
 {
 	CDuiInnerLock lock(&m_smap_lock);
 
-	return FindWindowInfoByPtr((UINT_PTR)hWnd, NULL);
+	return FindWindowInfoByPtr(hWnd, NULL);
 }
 
 BOOL CWindowSDL::IsChildWindow(UIWND hWnd)
 {
-	return SDL_GetWindowParent((SDL_Window*)hWnd) != NULL;
+	return SDL_GetWindowParent(hWnd) != NULL;
 }
 
 UIWND CWindowSDL::GetParentWindow(UIWND hWnd)
 {
-	return (UIWND)SDL_GetWindowParent((SDL_Window*)hWnd);
+	return (UIWND)SDL_GetWindowParent(hWnd);
 }
 
 BOOL CWindowSDL::SetForeground(UIWND hWnd)
 {
-	return SDL_RaiseWindow((SDL_Window*)hWnd);
+	return SDL_RaiseWindow(hWnd);
 }
 
 LRESULT CWindowSDL::SendMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -419,7 +412,7 @@ LRESULT CWindowSDL::SendMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	//不加锁的风险是有可能崩溃, 应该避免在SendMessage过程中(发送消息得到返回值是一个过程)销毁窗口.
 
 	WindowInfo info;
-	if (!FindWindowInfoByPtr((UINT_PTR)hWnd, &info))
+	if (!FindWindowInfoByPtr(hWnd, &info))
 	{
 		return -1;
 	}
@@ -472,7 +465,7 @@ LRESULT CWindowSDL::SendMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 BOOL CWindowSDL::PostMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	WindowInfo info;
-	if (!FindWindowInfoByPtr((UINT_PTR)hWnd, &info))
+	if (!FindWindowInfoByPtr(hWnd, &info))
 		return FALSE;
 
 	SDL_Event ev;
@@ -606,7 +599,7 @@ static void PrintSdlMessageInfo(SDL_Event& ev)
 		if (ev.type == CWindowSDL::m_EVENT_SEND_MESSAGE)
 		{
 			CWindowSDL::SdlSendMessage* pMsg = (CWindowSDL::SdlSendMessage*)ev.user.data1;
-			tmp.Format(_T("winowID=%d, SDL_Event: %s, code=%s, wparam=%p, lparam=%p"),
+			tmp.Format(_T("windowID=%d, SDL_Event: %s, code=%s, wparam=%p, lparam=%p"),
 				ev.window.windowID,
 				DuiLibWindowWnd::m_sdlEventString.Lookup(ev.type).toString(),
 				DuiLibWindowWnd::m_wmEventString.Lookup(pMsg->uMsg).toString(),
@@ -617,7 +610,7 @@ static void PrintSdlMessageInfo(SDL_Event& ev)
 		{
 			if (ev.user.code != WM_TIMER)
 			{
-				tmp.Format(_T("winowID=%d, SDL_Event: %s, code=%s, wparam=%p, lparam=%p"),
+				tmp.Format(_T("windowID=%d, SDL_Event: %s, code=%s, wparam=%p, lparam=%p"),
 					ev.window.windowID,
 					DuiLibWindowWnd::m_sdlEventString.Lookup(ev.type).toString(),
 					DuiLibWindowWnd::m_wmEventString.Lookup(ev.user.code).toString(),
@@ -627,7 +620,7 @@ static void PrintSdlMessageInfo(SDL_Event& ev)
 		}
 		else
 		{
-			tmp.Format(_T("winowID=%d, SDL_Event: %s"),
+			tmp.Format(_T("windowID=%d, SDL_Event: %s"),
 				ev.window.windowID,
 				DuiLibWindowWnd::m_sdlEventString.Lookup(ev.type).toString());
 		}
@@ -684,7 +677,7 @@ BOOL CWindowSDL::TranslateMessage(PVOID ev1, MSG* msg)
 		{
 			msg->message = WM_DPICHANGED;
 
-			float scale = SDL_GetWindowDisplayScale((SDL_Window*)info.sdlWindow);
+			float scale = SDL_GetWindowDisplayScale(info.sdlWindow);
 			int dpi = (int)(96.0f * scale + 0.5f);
 			msg->wParam = MAKEWPARAM(dpi, 0);
 		}
@@ -765,7 +758,7 @@ BOOL CWindowSDL::TranslateMessage(PVOID ev1, MSG* msg)
 		if (focusedWin)
 		{
 			CWindowSDL::WindowInfo info;
-			if (CWindowSDL::FindWindowInfoByPtr((UINT_PTR)focusedWin, &info))
+			if (CWindowSDL::FindWindowInfoByPtr(focusedWin, &info))
 				hNewFocus = (UIWND)info.sdlWindow;
 		}
 		msg->wParam = (WPARAM)hNewFocus;   // 等效于Win32, 将要获得焦点的窗口句柄
@@ -786,6 +779,11 @@ BOOL CWindowSDL::TranslateMessage(PVOID ev1, MSG* msg)
 			TIMERINFO* pTimer = (TIMERINFO*)ev.user.data1;
 			msg->message = ev.user.code;
 			msg->wParam = MAKEWPARAM(pTimer->uWinTimer, 0);
+		}
+		else if (ev.user.code == WM_CLOSE)
+		{
+			msg->message = ev.user.code;
+			msg->wParam = (WPARAM)ev.user.data1;
 		}
 		else
 		{
@@ -820,7 +818,7 @@ LRESULT CWindowSDL::DispatchMessage(PVOID ev1, MSG* msg)
 	SDL_Event& ev = *(SDL_Event*)ev1;
 
 	WindowInfo info;
-	if (!FindWindowInfoByPtr((UINT_PTR)msg->hwnd, &info))
+	if (!FindWindowInfoByPtr((UIWND)msg->hwnd, &info))
 	{
 		return -1;
 	}
@@ -846,7 +844,7 @@ LRESULT CWindowSDL::DispatchMessage(PVOID ev1, MSG* msg)
 	if (msg->message == WM_DESTROY)
 	{
 		pWindow->GetManager()->ReleaseRender();
-		SDL_DestroyWindow((SDL_Window*)pWindow->GetHWND());
+		SDL_DestroyWindow(pWindow->GetHWND());
 
 		SDL_Event ev2;
 		SDL_zero(ev2);
@@ -882,7 +880,7 @@ void CWindowSDL::Invalidate()
  	SDL_Event ev;
 	SDL_zero(ev);
 	ev.type = SDL_EVENT_USER;
-	ev.window.windowID = SDL_GetWindowID((SDL_Window*)m_hWnd);
+	ev.window.windowID = SDL_GetWindowID(m_hWnd);
 	ev.user.code = WM_PAINT;
 	ev.user.data1 = NULL;
 	ev.user.data2 = NULL;
@@ -891,19 +889,48 @@ void CWindowSDL::Invalidate()
 
 BOOL CWindowSDL::SetWindowPos(int x, int y, int cx, int cy, UINT uFlags)
 {
-	if (!SDL_SetWindowPosition((SDL_Window*)m_hWnd, x, y))
-		return FALSE;
-	if (!SDL_SetWindowSize((SDL_Window*)m_hWnd, cx, cy))
-		return FALSE;
+	SDL_Window* pWindow = m_hWnd;
+	if (!pWindow) return FALSE;
+
+	bool bMove = (uFlags & SWP_NOMOVE) == 0;
+	bool bSize = (uFlags & SWP_NOSIZE) == 0;
+
+	if (bMove)
+	{
+		SDL_Window* pParent = SDL_GetWindowParent(pWindow);
+		if ((m_dwStyle & WS_CHILD) && pParent)
+		{
+			// 子窗口：将相对于父窗口客户区的偏移转换为屏幕坐标
+			int parentX, parentY;
+			SDL_GetWindowPosition(pParent, &parentX, &parentY);
+			int screenX = parentX + x;
+			int screenY = parentY + y;
+			if (!SDL_SetWindowPosition(pWindow, screenX, screenY))
+				return FALSE;
+		}
+		else
+		{
+			// 独立窗口：直接设置屏幕坐标
+			if (!SDL_SetWindowPosition(pWindow, x, y))
+				return FALSE;
+		}
+	}
+
+	if (bSize)
+	{
+		if (!SDL_SetWindowSize(pWindow, cx, cy))
+			return FALSE;
+	}
+
 	return TRUE;
 }
 
 BOOL CWindowSDL::GetWindowRect(LPRECT lpRect)
 {
 	int x, y, w, h;
-	if (!SDL_GetWindowPosition((SDL_Window*)m_hWnd, &x, &y))
+	if (!SDL_GetWindowPosition(m_hWnd, &x, &y))
 		return FALSE;
-	if (!SDL_GetWindowSize((SDL_Window*)m_hWnd, &w, &h))
+	if (!SDL_GetWindowSize(m_hWnd, &w, &h))
 		return FALSE;
 	lpRect->left = x;
 	lpRect->top = y;
@@ -915,7 +942,7 @@ BOOL CWindowSDL::GetWindowRect(LPRECT lpRect)
 BOOL CWindowSDL::GetClientRect(LPRECT lpRect)
 {
 	int w, h;
-	if (!SDL_GetWindowSize((SDL_Window*)m_hWnd, &w, &h))
+	if (!SDL_GetWindowSize(m_hWnd, &w, &h))
 		return FALSE;
 	lpRect->left = 0;
 	lpRect->top = 0;

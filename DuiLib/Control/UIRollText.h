@@ -30,7 +30,7 @@ namespace DuiLib
 	public:	
 		virtual void PaintText(UIRender *pRender) override;
 		virtual void DoEvent(TEventUI& event) override;
-		virtual void SetPos(RECT rc, bool bNeedInvalidate) override;
+		virtual void SetPos(CDuiRect rc, bool bNeedInvalidate) override;
 		virtual void SetText(LPCTSTR pstrText) override;
 
 	public:

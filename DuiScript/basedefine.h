@@ -35,11 +35,12 @@
 //////////////////////////////////////////////////////////////////////////
 //×¢²áÀàº¯Êý
 #define REG_METHOD_FUNPR(class, ret, n, p)	{	\
-	CDuiStringA sFun = DEFUNC(ret n##p);			\
+	CDuiStringA sFun = DEFUNC(ret n##p);		\
 	sFun.Replace("CDuiString", "string");		\
 	sFun.Replace("CDuiPoint", "CPoint");		\
 	sFun.Replace("CDuiRect", "CRect");			\
 	sFun.Replace("CDuiSize", "CSize");			\
+	sFun.Replace("CDuiColor", "CColor");		\
 	sFun.Replace("*", "@");						\
 	sFun.Replace("LPCTSTR", "string");			\
 	r = engine->RegisterObjectMethod(#class, sFun, asMETHODPR(class, n, p, ret), asCALL_THISCALL);  \
@@ -53,6 +54,7 @@
 	sFun.Replace("CDuiPoint", "CPoint");		\
 	sFun.Replace("CDuiRect", "CRect");			\
 	sFun.Replace("CDuiSize", "CSize");			\
+	sFun.Replace("CDuiColor", "CColor");		\
 	sFun.Replace("*", "@");						\
 	sFun.Replace("LPCTSTR", "string");			\
 	r = engine->RegisterObjectMethod(regclassname, sFun, asMETHODPR(class, n, p, ret), asCALL_THISCALL);  \
@@ -66,6 +68,7 @@
 	sFun.Replace("CDuiPoint", "CPoint");		\
 	sFun.Replace("CDuiRect", "CRect");			\
 	sFun.Replace("CDuiSize", "CSize");			\
+	sFun.Replace("CDuiColor", "CColor");		\
 	sFun.Replace("*", "@");						\
 	sFun.Replace("LPCTSTR", "string");			\
 	r = engine->RegisterObjectProperty(#class, sFun, asOFFSET(class, value)); \
@@ -80,6 +83,7 @@
 	sFun.Replace("CDuiPoint", "CPoint");		\
 	sFun.Replace("CDuiRect", "CRect");			\
 	sFun.Replace("CDuiSize", "CSize");			\
+	sFun.Replace("CDuiColor", "CColor");		\
 	sFun.Replace("*", "@");						\
 	sFun.Replace("LPCTSTR", "string");			\
 	if(sFun.Find("::") >= 0)					\
@@ -105,6 +109,7 @@
 	sFun.Replace("CDuiPoint", "CPoint");		\
 	sFun.Replace("CDuiRect", "CRect");			\
 	sFun.Replace("CDuiSize", "CSize");			\
+	sFun.Replace("CDuiColor", "CColor");		\
 	sFun.Replace("*", "@");	\
 	sFun.Replace("LPCTSTR", "string");			\
 	r = engine->RegisterObjectMethod(classname, sFun, asMETHODPR(T, n, p, ret), asCALL_THISCALL);  \

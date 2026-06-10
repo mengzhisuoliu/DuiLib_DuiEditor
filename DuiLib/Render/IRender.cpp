@@ -57,27 +57,19 @@ namespace DuiLib {
 						sResType = sValue;
 					}
 					else if( sItem == _T("dest") ) {
-						rcDest.left = _tcstol(sValue.GetData(), &pstr, 10);  ASSERT(pstr);    
-						rcDest.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
-						rcDest.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);    
-						rcDest.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);  
+						rcDest = sValue;
 						paintManager->GetDPIObj()->ScaleRect(&rcDest);
 					}
-					else if( sItem == _T("source") ) {
-						rcSource.left = _tcstol(sValue.GetData(), &pstr, 10);  ASSERT(pstr);    
-						rcSource.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
-						rcSource.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);    
-						rcSource.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
+					else if( sItem == _T("source") ) 
+					{
+						rcSource = sValue;
 					}
-					else if( sItem == _T("corner") ) {
-						rcCorner.left = _tcstol(sValue.GetData(), &pstr, 10);  ASSERT(pstr);    
-						rcCorner.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
-						rcCorner.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);    
-						rcCorner.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
+					else if( sItem == _T("corner") ) 
+					{
+						rcCorner = sValue;
 					}
 					else if( sItem == _T("mask") ) {
-						if( sValue[0] == _T('#')) dwMask = _tcstoul(sValue.GetData() + 1, &pstr, 16);
-						else dwMask = _tcstoul(sValue.GetData(), &pstr, 16);
+						dwMask =  sValue;
 					}
 					else if( sItem == _T("fade") ) {
 						uFade = (BYTE)_tcstoul(sValue.GetData(), &pstr, 10);
@@ -94,11 +86,9 @@ namespace DuiLib {
 					else if( sItem == _T("hsl") ) {
 						bHSL = (_tcsicmp(sValue.GetData(), _T("true")) == 0);
 					}
-					else if( sItem == _T("padding") ) {
-						rcPadding.left = _tcstol(sValue.GetData(), &pstr, 10);  ASSERT(pstr);    
-						rcPadding.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
-						rcPadding.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);    
-						rcPadding.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);  
+					else if( sItem == _T("padding") ) 
+					{
+						rcPadding = sValue; 
 						if(paintManager != NULL) paintManager->GetDPIObj()->ScaleRect(&rcPadding);
 					}
 					else if( sItem == _T("align")){
@@ -138,8 +128,7 @@ namespace DuiLib {
 						height = paintManager->GetDPIObj()->ScaleInt(height);
 					}
 					else if( sItem == _T("fillcolor") ) {
-						if( sValue[0] == _T('#')) fillcolor = _tcstoul(sValue.GetData() + 1, &pstr, 16);
-						else fillcolor = _tcstoul(sValue.GetData(), &pstr, 16);
+						fillcolor = sValue;
 					}
 				}
 				if( *pStrImage++ != _T(' ') ) break;
@@ -172,20 +161,14 @@ namespace DuiLib {
 		sDrawModify.Empty();
 		sImageName.Empty();
 
-		memset(&rcDest, 0, sizeof(RECT));
-		memset(&rcSource, 0, sizeof(RECT));
-		memset(&rcCorner, 0, sizeof(RECT));
-		dwMask = 0;
 		uFade = 255;
 		bHole = false;
 		bTiledX = false;
 		bTiledY = false;
 		bHSL = false;
-		memset(&rcPadding, 0, sizeof(RECT));
 		uAlign = DT_LEFT;
 		width = 0;
 		height = 0;
-		fillcolor = 0;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -261,7 +244,6 @@ namespace DuiLib {
 	{
 		m_nStyle = 0;
 		m_nWidth = 0;
-		m_dwColor = 0;
 	}
 
 	bool UIPen::operator == (UIPen &obj) const
@@ -290,7 +272,7 @@ namespace DuiLib {
 #include "../Utils/nanosvg.h"
 #define NANOSVGRAST_IMPLEMENTATION
 #include "../Utils/nanosvgrast.h"
-	static LPBYTE svg_load_from_memory(const LPBYTE buffer, int &out_width, int &out_height, int hope_width, int hope_height, DWORD fillcolor, CPaintManagerUI* pManager)
+	static LPBYTE svg_load_from_memory(const LPBYTE buffer, int &out_width, int &out_height, int hope_width, int hope_height, CDuiColor fillcolor, CPaintManagerUI* pManager)
 	{
 		LPBYTE pImage = NULL;
 		float dpi = 96.0f;
@@ -313,7 +295,7 @@ namespace DuiLib {
 			{
 				if(shapes->fill.type == NSVG_PAINT_COLOR)
 					if(shapes->fill.color != 0)
-						shapes->fill.color = UIRGB(GetRValue(fillcolor), GetGValue(fillcolor), GetBValue(fillcolor));
+						shapes->fill.color = fillcolor.ToCOLORREF();
 				shapes = shapes->next;
 			}
 		}
@@ -395,7 +377,7 @@ namespace DuiLib {
 		return FALSE;
 	}
 
-	BOOL UIImage::LoadImage(STRINGorID bitmap, LPCTSTR type, DWORD mask, int width, int height, DWORD fillcolor, CPaintManagerUI* pManager, HINSTANCE instance)
+	BOOL UIImage::LoadImage(STRINGorID bitmap, LPCTSTR type, CDuiColor mask, int width, int height, CDuiColor fillcolor, CPaintManagerUI* pManager, HINSTANCE instance)
 	{
 		CUIFile f;
 		if(!f.LoadFile(bitmap, type, instance)) 
@@ -404,7 +386,7 @@ namespace DuiLib {
 		return LoadImageFromMemory(f.GetData(), f.GetSize(), mask, width, height, fillcolor, pManager);
 	}
 
-	BOOL UIImage::LoadImage(LPCTSTR pStrImage, LPCTSTR type, DWORD mask, int width, int height, DWORD fillcolor, CPaintManagerUI* pManager, HINSTANCE instance)
+	BOOL UIImage::LoadImage(LPCTSTR pStrImage, LPCTSTR type, CDuiColor mask, int width, int height, CDuiColor fillcolor, CPaintManagerUI* pManager, HINSTANCE instance)
 	{
 		if(pStrImage == NULL) return FALSE;
 
@@ -418,7 +400,7 @@ namespace DuiLib {
 		return LoadImage(STRINGorID(sStrPath.GetData()), type, mask, width, height, fillcolor, pManager, instance);
 	}
 
-	BOOL UIImage::LoadImage(UINT nID, LPCTSTR type, DWORD mask, int width, int height, DWORD fillcolor, CPaintManagerUI* pManager, HINSTANCE instance)
+	BOOL UIImage::LoadImage(UINT nID, LPCTSTR type, CDuiColor mask, int width, int height, CDuiColor fillcolor, CPaintManagerUI* pManager, HINSTANCE instance)
 	{
 		return LoadImage(STRINGorID(nID), type, mask, width, height, fillcolor, pManager, instance);
 	}
@@ -453,7 +435,7 @@ namespace DuiLib {
 	}
 
 
-	BOOL UIImage::LoadImageFromMemory(const LPBYTE pData, DWORD dwSize, DWORD mask, int width, int height, DWORD fillcolor, CPaintManagerUI* pManager)
+	BOOL UIImage::LoadImageFromMemory(const LPBYTE pData, DWORD dwSize, CDuiColor mask, int width, int height, CDuiColor fillcolor, CPaintManagerUI* pManager)
 	{
 		DeleteObject();
 
@@ -492,7 +474,7 @@ namespace DuiLib {
 		{
 			LPBYTE pFrame = pImage + x * y * f * 4;
 			UIImage* data = UIGlobal::CreateImage();
-			data->bitmap->CreateFromData(pFrame, x, y, 0);
+			data->bitmap->CreateFromData(pFrame, x, y, CDuiColor());
 			data->pBits = data->bitmap->GetBits();
 			data->pSrcBits = NULL;
 			data->nWidth = x;
@@ -515,7 +497,7 @@ namespace DuiLib {
 	//
 	//
 
-	void UIRender::DrawBitmap(UIBitmap *pUiBitmap, const RECT& rc, const RECT& rcPaint, const RECT& rcBmpPart, const RECT& rcCorners, bool bAlpha, BYTE uFade, bool hole, bool xtiled, bool ytiled)
+	void UIRender::DrawBitmap(UIBitmap *pUiBitmap, const CDuiRect& rc, const CDuiRect& rcPaint, const CDuiRect& rcBmpPart, const CDuiRect& rcCorners, bool bAlpha, BYTE uFade, bool hole, bool xtiled, bool ytiled)
 	{
 // 		CStdRefPtr<UIRender> pRender = MakeRefPtr<UIRender>(UIGlobal::CreateRenderTarget());
 // 		pRender->CloneFrom(this);
@@ -1023,7 +1005,7 @@ namespace DuiLib {
 		}
 	}
 
-	void UIRender::DrawBackColor(const RECT& rcItem, const SIZE &round, DWORD dwBackColor, DWORD dwBackColor2, DWORD dwBackColor3, bool bVertical)
+	void UIRender::DrawBackColor(const CDuiRect& rcItem, const CDuiSize &round, CDuiColor dwBackColor, CDuiColor dwBackColor2, CDuiColor dwBackColor3, bool bVertical)
 	{
 		if( dwBackColor != 0 )
 		{
@@ -1031,7 +1013,7 @@ namespace DuiLib {
 			{
 				if( dwBackColor3 != 0 ) 
 				{
-					RECT rc = rcItem;
+					CDuiRect rc = rcItem;
 					rc.bottom = (rc.bottom + rc.top) / 2;
 					DrawGradient(rc, dwBackColor, dwBackColor2, bVertical, 8);
 
@@ -1055,12 +1037,12 @@ namespace DuiLib {
 		}
 	}
 
-	void UIRender::DrawLine(const RECT& rc, int nSize, DWORD dwPenColor, int nStyle)
+	void UIRender::DrawLine(const CDuiRect& rc, int nSize, CDuiColor dwPenColor, int nStyle)
 	{
 		DrawLine(rc.left, rc.top, rc.right, rc.bottom, nSize, dwPenColor, nStyle);
 	}
 
-	void UIRender::DrawBorder(const RECT &rcItem, int nBorderSize, SIZE cxyBorderRound, RECT rcBorderSize, DWORD dwColor, int nBorderStyle)
+	void UIRender::DrawBorder(const CDuiRect &rcItem, int nBorderSize, CDuiSize cxyBorderRound, CDuiRect rcBorderSize, CDuiColor dwColor, int nBorderStyle)
 	{
 		if(nBorderSize > 0)
 		{
@@ -1075,7 +1057,7 @@ namespace DuiLib {
 		}
 		else
 		{
-			RECT rcBorder;
+			CDuiRect rcBorder;
 
 			if(rcBorderSize.left > 0){
 				rcBorder		= rcItem;
@@ -1102,7 +1084,7 @@ namespace DuiLib {
 		}
 	}
 
-	void UIRender::DrawText(RECT& rc, const RECT &rcTextPadding, LPCTSTR pstrText, DWORD dwTextColor, int iFont, UINT uStyle)
+	void UIRender::DrawText(CDuiRect& rc, const CDuiRect &rcTextPadding, LPCTSTR pstrText, CDuiColor dwTextColor, int iFont, UINT uStyle)
 	{
 		if((uStyle & DT_CALCRECT) == DT_CALCRECT)
 		{
@@ -1122,13 +1104,13 @@ namespace DuiLib {
 		}
 	}
 
-	void UIRender::DrawText(RECT& rc, const RECT &rcTextPadding, LPCTSTR pstrText,DWORD dwTextColor, int iFont, UINT uStyle, DWORD dwTextBKColor)
+	void UIRender::DrawText(CDuiRect& rc, const CDuiRect &rcTextPadding, LPCTSTR pstrText, CDuiColor dwTextColor, int iFont, UINT uStyle, CDuiColor dwTextBKColor)
 	{
 		DrawColor(rc, CDuiSize(0,0), dwTextBKColor);
 		DrawText(rc, rcTextPadding, pstrText, dwTextColor, iFont, uStyle);
 	}
 	
-	bool UIRender::DrawImageInfo(const RECT& rcItem, const RECT& rcPaint, const TDrawInfo* pDrawInfo, HINSTANCE instance)
+	bool UIRender::DrawImageInfo(const CDuiRect& rcItem, const CDuiRect& rcPaint, const TDrawInfo* pDrawInfo, HINSTANCE instance)
 	{
 		CPaintManagerUI *pManager = GetManager();
 		if( pManager == NULL || pDrawInfo == NULL ) return false;
@@ -1186,7 +1168,7 @@ namespace DuiLib {
 		const UIImage* data = pManager->GetImageExX(pDrawInfo, instance);
 		if( !data ) return false;    
 
-		RECT rcSource = pDrawInfo->rcSource;
+		CDuiRect rcSource = pDrawInfo->rcSource;
 		if( rcSource.left == 0 && rcSource.right == 0 && rcSource.top == 0 && rcSource.bottom == 0 ) 
 		{
 			rcSource.right = data->nWidth;
@@ -1203,7 +1185,7 @@ namespace DuiLib {
 	}
 
 	//根据xml中设置的图像属性绘制
-	bool UIRender::DrawImageString(const RECT& rcItem, const RECT& rcPaint, LPCTSTR pStrImage, LPCTSTR pStrModify, HINSTANCE instance)
+	bool UIRender::DrawImageString(const CDuiRect& rcItem, const CDuiRect& rcPaint, LPCTSTR pStrImage, LPCTSTR pStrModify, HINSTANCE instance)
 	{
 		if ( !GetManager() ) return false;
 

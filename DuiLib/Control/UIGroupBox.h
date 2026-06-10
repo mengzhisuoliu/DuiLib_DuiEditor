@@ -15,12 +15,12 @@ namespace DuiLib
 		virtual LPCTSTR GetClass() const override;
 		virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
-		virtual void PaintText(UIRender *pRender);
-		virtual void PaintBorder(UIRender *pRender);
-		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+		virtual void PaintText(UIRender *pRender) override;
+		virtual void PaintBorder(UIRender *pRender) override;
+		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
 	private:
-		SIZE CalcrectSize(SIZE szAvailable);
+		CDuiSize CalcrectSize(CDuiSize szAvailable);
 	};
 }
 #endif // __UIGROUPBOX_H__

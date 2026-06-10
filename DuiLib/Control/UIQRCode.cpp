@@ -108,7 +108,7 @@ void CQRCodeUI::SetQrCodeEncoding(LPCTSTR sEncoding)
 	m_sEncoding = sEncoding;
 }
 
-void CQRCodeUI::SetPos(RECT rc, bool bNeedInvalidate)
+void CQRCodeUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 {
 	CDynamicLayoutUI::SetPos(rc, bNeedInvalidate);
 }
@@ -199,14 +199,14 @@ void CQRCodeUI::MakeQrImage()
 		int size = qr.m_nSymbleSize + (m_qrMargin * 2);
 
 		m_qrRender->Resize(size,size);
-		m_qrRender->DrawBackColor(CDuiRect(0,0,size,size), CDuiSize(0,0), UIRGB(255,255,255));
+		m_qrRender->DrawBackColor(CDuiRect(0,0,size,size), CDuiSize(0,0), CDuiColor::White);
 		for (int i = 0; i < size; ++i)
 		{
 			for (int j = 0; j < size; ++j)
 			{
 				if (qr.m_byModuleData[i][j])
 				{
-					m_qrRender->SetPixel(i + m_qrMargin, j + m_qrMargin, UIRGB(0, 0, 0));
+					m_qrRender->SetPixel(i + m_qrMargin, j + m_qrMargin, CDuiColor::Black);
 				}
 			}
 		}

@@ -17,8 +17,8 @@ public:
 	virtual LPCTSTR GetWindowClassName() const override;
 	virtual CDuiString GetSkinFile() override;
 
-	virtual void OnFinalMessage( UIWND hWnd );
-	virtual LRESULT ResponseDefaultKeyEvent(WPARAM wParam);
+	virtual void OnFinalMessage( UIWND hWnd ) override;
+	virtual LRESULT ResponseDefaultKeyEvent(WPARAM wParam) override;
 
 	//设置响应回车键和ESC的默认处理方式
 	virtual void SetDefaultKeyEvent(BOOL bEnterCloseOK=TRUE, BOOL bEscCloseCancel=TRUE);
@@ -26,20 +26,16 @@ public:
 	virtual BOOL IsEscCloseCancel() const;
 
 	//显示模态对话窗口
-	#ifdef DUILIB_WIN32
-	virtual UINT DoModal(HWND hWndParent);
-	#endif
+	virtual UINT DoModal(UIWND hWndParent);
 	virtual UINT DoModal(CUIFrmBase *pParentWnd = NULL);
 
 	//显示非模态对话窗口, 注意非模态窗口必须是new出来的。
-	#ifdef DUILIB_WIN32
-	virtual void ShowDialog(HWND hWndParent);
-	#endif
+	virtual void ShowDialog(UIWND hWndParent);
 	virtual void ShowDialog(CUIFrmBase *pParentWnd = NULL);
 
-	virtual void Notify(TNotifyUI& msg);
+	virtual void Notify(TNotifyUI& msg) override;
 
-	virtual void InitWindow();
+	virtual void InitWindow() override;
 
 	virtual void OnClickOK();
 	virtual void OnClickCancel();

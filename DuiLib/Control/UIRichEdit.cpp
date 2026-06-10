@@ -54,7 +54,6 @@ namespace DuiLib {
 #else
 		m_fAccumulateDBC= false;
 #endif
-		::ZeroMemory(&m_rcTextPadding, sizeof(m_rcTextPadding));
 		 m_uTextStyle = DT_TOP;
 	}
 
@@ -224,7 +223,7 @@ namespace DuiLib {
 		m_lTwhStyle = lStyle;
 	}
 
-	void CRichEditUI::SetTextColor(DWORD dwTextColor)
+	void CRichEditUI::SetTextColor(CDuiColor dwTextColor)
 	{
 		CContainerUI::SetTextColor(dwTextColor);
 		if( m_pTwh ) {
@@ -834,7 +833,7 @@ namespace DuiLib {
 
 	// 多行非rich格式的richedit有一个滚动条bug，在最后一行是空行时，LineDown和SetScrollPos无法滚动到最后
 	// 引入iPos就是为了修正这个bug
-	void CRichEditUI::SetScrollPos(SIZE szPos, bool bMsg)
+	void CRichEditUI::SetScrollPos(CDuiSize szPos, bool bMsg)
 	{
 		int cx = 0;
 		int cy = 0;
@@ -972,7 +971,7 @@ namespace DuiLib {
 				if( m_pTwh && m_pManager->IsLayered() && IsFocused() ) {
 					if (::GetFocus() != m_pManager->GetPaintWindow()) return;
 					m_bDrawCaret = !m_bDrawCaret;
-					POINT ptCaret;
+					CDuiPoint ptCaret;
 					::GetCaretPos(&ptCaret);
 					CDuiRect rcCaret(ptCaret.x, ptCaret.y, ptCaret.x + m_pTwh->GetCaretWidth(), 
 						ptCaret.y + m_pTwh->GetCaretHeight() );
@@ -980,7 +979,7 @@ namespace DuiLib {
 					//if( !::IntersectRect(&rcCaret, &rcTemp, &m_rcItem) ) return;
 					if( !rcCaret.Intersect(rcTemp, m_rcItem) ) return;
 					CControlUI* pParent = this;
-					RECT rcParent;
+					CDuiRect rcParent;
 					while( pParent = pParent->GetParent() ) {
 						rcTemp = rcCaret;
 						rcParent = pParent->GetPos();
@@ -1034,25 +1033,25 @@ namespace DuiLib {
 		return CControlUI::GetFixedHeight();
 	}
 
-	SIZE CRichEditUI::EstimateSize(SIZE szAvailable)
+	CDuiSize CRichEditUI::EstimateSize(CDuiSize szAvailable)
 	{
 		if (m_pTwh && (IsAutoCalcWidth() || IsAutoCalcHeight()))
 		{
-			SIZE szNeed = {0,0};
-			RECT rc = {0, 0, szAvailable.cx, szAvailable.cy};
-			RECT rcInset = GetInset();
+			CDuiSize szNeed;
+			CDuiRect rc = szAvailable;
+			CDuiRect rcInset = GetInset();
 			rc.left += rcInset.left;
 			rc.top += rcInset.top;
 			rc.right -= rcInset.right;
 			rc.bottom -= rcInset.bottom;
 
-			RECT rcText = rc;
+			CDuiRect rcText = rc;
 			rcText.left += m_rcTextPadding.left;
 			rcText.right -= m_rcTextPadding.right;
 			rcText.top += m_rcTextPadding.top;
 			rcText.bottom -= m_rcTextPadding.bottom;
 
-			RECT rcScrollView = rcText;
+			CDuiRect rcScrollView = rcText;
 
 			bool bVScrollBarVisiable = false;
 			if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) {
@@ -1071,7 +1070,7 @@ namespace DuiLib {
 				rcScrollView.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
 			}
 
-			RECT rcScrollTextView = rcScrollView;
+			CDuiRect rcScrollTextView = rcScrollView;
 			rcScrollTextView.left += m_rcTextPadding.left;
 			rcScrollTextView.right -= m_rcTextPadding.right;
 			rcScrollTextView.top += m_rcTextPadding.top;
@@ -1127,7 +1126,7 @@ namespace DuiLib {
 		return CContainerUI::EstimateSize(szAvailable);
 	}
 
-	void CRichEditUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void CRichEditUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 	{
 		CControlUI::SetPos(rc, bNeedInvalidate);
 		rc = m_rcItem;
@@ -1138,30 +1137,30 @@ namespace DuiLib {
 		{
 			if((m_uTextStyle & DT_TOP) == DT_TOP)
 			{
-				SIZE sz = GetManager()->Render()->GetTextSize(_T("A"), GetFont(), 0);
+				CDuiSize sz = GetManager()->Render()->GetTextSize(_T("A"), GetFont(), 0);
 				rc.top += (rc.bottom-rc.top-sz.cy) / 2;
 			}
 			else if((m_uTextStyle & DT_VCENTER) == DT_VCENTER)
 			{
-				SIZE sz = GetManager()->Render()->GetTextSize(_T("A"), GetFont(), 0);
+				CDuiSize sz = GetManager()->Render()->GetTextSize(_T("A"), GetFont(), 0);
 				rc.top += (rc.bottom-rc.top-sz.cy) / 2;
 				rc.bottom -= (rc.bottom-rc.top-sz.cy) / 2;
 			}
 			else if((m_uTextStyle & DT_BOTTOM) == DT_BOTTOM)
 			{
-				SIZE sz = GetManager()->Render()->GetTextSize(_T("A"), GetFont(), 0);
+				CDuiSize sz = GetManager()->Render()->GetTextSize(_T("A"), GetFont(), 0);
 				rc.top += rc.bottom-rc.top- sz.cy;
 			}
 		}
 		//////////////////////////////////////////////////////////////////////////
 
-		RECT rcInset = GetInset();
+		CDuiRect rcInset = GetInset();
 		rc.left += rcInset.left;
 		rc.top += rcInset.top;
 		rc.right -= rcInset.right;
 		rc.bottom -= rcInset.bottom;
 
-		RECT rcScrollView = rc;
+		CDuiRect rcScrollView = rc;
 
 		bool bVScrollBarVisiable = false;
 		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) {
@@ -1181,12 +1180,12 @@ namespace DuiLib {
 		}
 
 		if( m_pTwh != NULL ) {
-			RECT rcScrollTextView = rcScrollView;
+			CDuiRect rcScrollTextView = rcScrollView;
 			rcScrollTextView.left += m_rcTextPadding.left;
 			rcScrollTextView.right -= m_rcTextPadding.right;
 			rcScrollTextView.top += m_rcTextPadding.top;
 			rcScrollTextView.bottom -= m_rcTextPadding.bottom;
-			RECT rcText = rc;
+			CDuiRect rcText = rc;
 			rcText.left += m_rcTextPadding.left;
 			rcText.right -= m_rcTextPadding.right;
 			rcText.top += m_rcTextPadding.top;
@@ -1220,13 +1219,13 @@ namespace DuiLib {
 		}
 
 		if( m_pVerticalScrollBar != NULL && m_pVerticalScrollBar->IsVisible() ) {
-			RECT rcScrollBarPos = { rcScrollView.right, rcScrollView.top, 
-				rcScrollView.right + m_pVerticalScrollBar->GetFixedWidth(), rcScrollView.bottom};
+			CDuiRect rcScrollBarPos(rcScrollView.right, rcScrollView.top,
+				rcScrollView.right + m_pVerticalScrollBar->GetFixedWidth(), rcScrollView.bottom);
 			m_pVerticalScrollBar->SetPos(rcScrollBarPos, false);
 		}
 		if( m_pHorizontalScrollBar != NULL && m_pHorizontalScrollBar->IsVisible() ) {
-			RECT rcScrollBarPos = { rcScrollView.left, rcScrollView.bottom, rcScrollView.right, 
-				rcScrollView.bottom + m_pHorizontalScrollBar->GetFixedHeight()};
+			CDuiRect rcScrollBarPos(rcScrollView.left, rcScrollView.bottom, rcScrollView.right,
+				rcScrollView.bottom + m_pHorizontalScrollBar->GetFixedHeight());
 			m_pHorizontalScrollBar->SetPos(rcScrollBarPos, false);
 		}
 
@@ -1237,23 +1236,23 @@ namespace DuiLib {
 				SetFloatPos(it);
 			}
 			else {
-				SIZE sz = { rc.right - rc.left, rc.bottom - rc.top };
+				CDuiSize sz = rc;
 				if( sz.cx < pControl->GetMinWidth() ) sz.cx = pControl->GetMinWidth();
 				if( sz.cx > pControl->GetMaxWidth() ) sz.cx = pControl->GetMaxWidth();
 				if( sz.cy < pControl->GetMinHeight() ) sz.cy = pControl->GetMinHeight();
 				if( sz.cy > pControl->GetMaxHeight() ) sz.cy = pControl->GetMaxHeight();
-				RECT rcCtrl = { rc.left, rc.top, rc.left + sz.cx, rc.top + sz.cy };
+				CDuiRect rcCtrl(rc.left, rc.top, rc.left + sz.cx, rc.top + sz.cy);
 				pControl->SetPos(rcCtrl, false);
 			}
 		}
 	}
 
-	void CRichEditUI::Move(SIZE szOffset, bool bNeedInvalidate)
+	void CRichEditUI::Move(CDuiSize szOffset, bool bNeedInvalidate)
 	{
 		CContainerUI::Move(szOffset, bNeedInvalidate);
 		if( m_pTwh != NULL ) {
-			RECT rc = m_rcItem;
-			RECT rcInset = GetInset();
+			CDuiRect rc = m_rcItem;
+			CDuiRect rcInset = GetInset();
 			rc.left += rcInset.left;
 			rc.top += rcInset.top;
 			rc.right -= rcInset.right;
@@ -1265,7 +1264,7 @@ namespace DuiLib {
 		}
 	}
 
-	bool CRichEditUI::DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl)
+	bool CRichEditUI::DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl)
 	{
 		CDuiRect rcTemp;
 		//if( !::IntersectRect(&rcTemp, &rcPaint, &m_rcItem) ) return true;
@@ -1276,7 +1275,7 @@ namespace DuiLib {
 		CControlUI::DoPaint(pRender, rcPaint, pStopControl);
 
 		if( m_pTwh ) {
-			RECT rc;
+			CDuiRect rc;
 			m_pTwh->GetControlRect(&rc);
 			// Remember wparam is actually the hdc and lparam is the update
 			// rect because this message has been preprocessed by the window.
@@ -1289,7 +1288,7 @@ namespace DuiLib {
 				NULL, 				   	// Target device HDC
 				(RECTL*)&rc,			// Bounding client rectangle
 				NULL, 		            // Clipping rectangle for metafiles
-				(RECT*)&rcPaint,		// Update rectangle
+				(CDuiRect*)&rcPaint,		// Update rectangle
 				NULL, 	   				// Call back function
 				NULL,					// Call back parameter
 				0);				        // What view of the object
@@ -1313,8 +1312,8 @@ namespace DuiLib {
 		}
 
 		if( m_items.GetSize() > 0 ) {
-			RECT rc = m_rcItem;
-			RECT rcInset = GetInset();
+			CDuiRect rc = m_rcItem;
+			CDuiRect rcInset = GetInset();
 			rc.left += rcInset.left;
 			rc.top += rcInset.top;
 			rc.right -= rcInset.right;
@@ -1363,11 +1362,11 @@ namespace DuiLib {
 		}
 
 		if( m_pTwh && m_pTwh->IsShowCaret() && m_pManager->IsLayered() && IsFocused() && m_bDrawCaret ) {
-			POINT ptCaret;
+			CDuiPoint ptCaret;
 			::GetCaretPos(&ptCaret);
 			//if( ::PtInRect(&m_rcItem, ptCaret) ) {
 			if( m_rcItem.PtInRect(ptCaret) ) {
-				RECT rcCaret = { ptCaret.x, ptCaret.y, ptCaret.x, ptCaret.y + m_pTwh->GetCaretHeight() };
+				CDuiRect rcCaret(ptCaret.x, ptCaret.y, ptCaret.x, ptCaret.y + m_pTwh->GetCaretHeight() );
 				pRender->DrawLine(rcCaret, m_pTwh->GetCaretWidth(), 0xFF000000);
 			}
 		}
@@ -1394,9 +1393,9 @@ namespace DuiLib {
 		// 绘制提示文字
 		CDuiString sDrawText = GetText();
 		if(sDrawText.IsEmpty() && !IsFocused()) {
-			DWORD dwTextColor = GetTipValueColor();
+			CDuiColor dwTextColor = GetTipValueColor();
 			CDuiString sTipValue = GetTipValue();
-			RECT rc = m_rcItem;
+			CDuiRect rc = m_rcItem;
 			rc.left += m_rcTextPadding.left;
 			rc.right -= m_rcTextPadding.right;
 			rc.top += m_rcTextPadding.top;
@@ -1437,16 +1436,12 @@ namespace DuiLib {
 		return m_sTipValue.GetData();
 	}
 
-	void CRichEditUI::SetTipValueColor( LPCTSTR pStrColor )
+	void CRichEditUI::SetTipValueColor( CDuiColor dwColor )
 	{
-		if( *pStrColor == _T('#')) pStrColor = ::CharNext(pStrColor);
-		LPTSTR pstr = NULL;
-		DWORD clrColor = _tcstoul(pStrColor, &pstr, 16);
-
-		m_dwTipValueColor = clrColor;
+		m_dwTipValueColor = dwColor;
 	}
 
-	DWORD CRichEditUI::GetTipValueColor()
+	CDuiColor CRichEditUI::GetTipValueColor()
 	{
 		return m_dwTipValueColor;
 	}
@@ -1530,7 +1525,7 @@ namespace DuiLib {
 			// 解决微软输入法位置异常的问题
 			HIMC hIMC = ImmGetContext(GetManager()->GetPaintWindow());
 			if (hIMC)  {
-				POINT point;
+				CDuiPoint point;
 				GetCaretPos(&point);
 
 				COMPOSITIONFORM Composition;
@@ -1554,7 +1549,7 @@ namespace DuiLib {
 				case WM_RBUTTONDOWN:
 				case WM_RBUTTONUP:
 					{
-						POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+						CDuiPoint pt(lParam);
 						CControlUI* pHover = GetManager()->FindControl(pt);
 						if(pHover != this) {
 							bWasHandled = false;
@@ -1569,7 +1564,7 @@ namespace DuiLib {
 			if( dwHitResult == HITRESULT_OUTSIDE ) {
 				CDuiRect rc;
 				m_pTwh->GetControlRect(&rc);
-				POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+				CDuiPoint pt(lParam);
 				if( uMsg == WM_SETCURSOR ) {
 					::GetCursorPos(&pt);
 					::ScreenToClient(GetManager()->GetPaintWindow(), &pt);
@@ -1603,7 +1598,7 @@ namespace DuiLib {
 #ifdef _USEIMM
 		else if( uMsg == WM_IME_STARTCOMPOSITION ) {
 			if( IsFocused() ) {
-				POINT ptCaret;
+				CDuiPoint ptCaret;
 				::GetCaretPos(&ptCaret);
 				HIMC hMic = ::ImmGetContext(GetManager()->GetPaintWindow());
 				COMPOSITIONFORM cpf;
@@ -1624,7 +1619,7 @@ namespace DuiLib {
 		}
 #endif
 		else if( uMsg == WM_CONTEXTMENU ) {
-			POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+			CDuiPoint pt(lParam);
 			::ScreenToClient(GetManager()->GetPaintWindow(), &pt);
 			CControlUI* pHover = GetManager()->FindControl(pt);
 			if(pHover != this) {

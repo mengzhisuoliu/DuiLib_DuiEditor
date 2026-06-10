@@ -20,7 +20,7 @@ public:
 	void SetBarCodeSize(int nValue);
 	int GetBarCodeSize() const;
 
-	virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+	virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
 	virtual void PaintText(UIRender *pRender) override;
 
 	virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;

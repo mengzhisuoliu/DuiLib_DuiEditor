@@ -23,7 +23,7 @@ UIClipSDL::~UIClipSDL()
 	}
 }
 
-void UIClipSDL::GenerateClip(UIRender * pRender, RECT rc)
+void UIClipSDL::GenerateClip(UIRender * pRender, CDuiRect rc)
 {
 	if (!pRender) return;
 	m_pRenderer = (SDL_Renderer * )pRender->GetHandle();
@@ -33,11 +33,7 @@ void UIClipSDL::GenerateClip(UIRender * pRender, RECT rc)
 	m_bClipSaved = SDL_GetRenderClipRect(m_pRenderer, &m_oldClipRect);
 
 	// 设置新的裁剪矩形
-	SDL_Rect newRect;
-	newRect.x = rc.left;
-	newRect.y = rc.top;
-	newRect.w = rc.right - rc.left;
-	newRect.h = rc.bottom - rc.top;
+	SDL_Rect newRect = rc.ToSDL_Rect();
 	if (m_bClipSaved)
 	{
 		SDL_Rect intersect;
@@ -57,7 +53,7 @@ void UIClipSDL::GenerateClip(UIRender * pRender, RECT rc)
 	SDL_SetRenderClipRect(m_pRenderer, &m_newClipRect);
 }
 
-void UIClipSDL::GenerateRoundClip(UIRender * pRender, RECT rc, RECT rcItem, int roundX, int roundY)
+void UIClipSDL::GenerateRoundClip(UIRender * pRender, CDuiRect rc, CDuiRect rcItem, int roundX, int roundY)
 {
 	GenerateClip(pRender, rc);
 }

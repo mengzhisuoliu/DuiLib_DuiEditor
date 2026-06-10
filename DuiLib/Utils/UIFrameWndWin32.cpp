@@ -68,15 +68,15 @@ LRESULT CUIFrameWndWin32::OnNcPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 
 LRESULT CUIFrameWndWin32::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	POINT pt; pt.x = GET_X_LPARAM(lParam); pt.y = GET_Y_LPARAM(lParam);
+	CDuiPoint pt; pt.x = GET_X_LPARAM(lParam); pt.y = GET_Y_LPARAM(lParam);
 	::ScreenToClient(*this, &pt);
 
-	RECT rcClient;
+	CDuiRect rcClient;
 	::GetClientRect(*this, &rcClient);
 
 	if (!::IsZoomed(*this))
 	{
-		RECT rcSizeBox = GetManager()->GetSizeBox();
+		CDuiRect rcSizeBox = GetManager()->GetSizeBox();
 		if (pt.y < rcClient.top + rcSizeBox.top)
 		{
 			if (pt.x < rcClient.left + rcSizeBox.left) return HTTOPLEFT;
@@ -94,7 +94,7 @@ LRESULT CUIFrameWndWin32::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 		if (pt.x > rcClient.right - rcSizeBox.right) return HTRIGHT;
 	}
 
-	RECT rcCaption = GetManager()->GetCaptionRect();
+	CDuiRect rcCaption = GetManager()->GetCaptionRect();
 	rcCaption = GetManager()->GetDPIObj()->ScaleRect(rcCaption);
 	if (-1 == rcCaption.bottom)
 	{
@@ -140,7 +140,7 @@ LRESULT CUIFrameWndWin32::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lPara
 
 LRESULT CUIFrameWndWin32::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	SIZE szRoundCorner = GetManager()->GetRoundCorner();
+	CDuiSize szRoundCorner = GetManager()->GetRoundCorner();
 #if defined(WIN32) && !defined(UNDER_CE)
 	if( !::IsIconic(*this) ) {
 		CDuiRect rcWnd;

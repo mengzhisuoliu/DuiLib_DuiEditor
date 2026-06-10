@@ -7,7 +7,6 @@
 #endif
 
 #include "UIDateTimeWndWin32.h"
-#include "UIDateTimeWndGtk.h"
 #include "UIDateTimeWndSdl.h"
 
 namespace DuiLib
@@ -128,7 +127,7 @@ namespace DuiLib
 		return sText;
 	}
 
-	void CDateTimeUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void CDateTimeUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 	{
 		CLabelUI::SetPos(rc, bNeedInvalidate);
 
@@ -136,7 +135,7 @@ namespace DuiLib
 		{
 			if( m_pWindowDate != NULL ) 
 			{
-				RECT rcPos = m_pWindowDate->CalPos(rc);
+				CDuiRect rcPos = m_pWindowDate->CalPos(rc);
 				m_pWindowDate->SetWindowPos(rcPos.left, rcPos.top, rcPos.right - rcPos.left,
 					rcPos.bottom - rcPos.top, SWP_NOZORDER | SWP_NOACTIVATE);
 			}
@@ -145,7 +144,7 @@ namespace DuiLib
 		{
 			if( m_pWindowTime != NULL ) 
 			{
-				RECT rcPos = m_pWindowDate->CalPos(rc);
+				CDuiRect rcPos = m_pWindowDate->CalPos(rc);
 				m_pWindowTime->SetWindowPos(rcPos.left, rcPos.top, rcPos.right - rcPos.left,
 					rcPos.bottom - rcPos.top, SWP_NOZORDER | SWP_NOACTIVATE);
 			}
@@ -154,30 +153,30 @@ namespace DuiLib
 		{		
 			if( m_pWindowDate != NULL ) 
 			{
-				RECT rcBase = {rc.left, rc.top, rc.left + (rc.right-rc.left)/2, rc.bottom};
-				RECT rcPos = m_pWindowDate->CalPos(rcBase);
+				CDuiRect rcBase(rc.left, rc.top, rc.left + (rc.right-rc.left)/2, rc.bottom);
+				CDuiRect rcPos = m_pWindowDate->CalPos(rcBase);
 				m_pWindowDate->SetWindowPos(rcPos.left, rcPos.top, rcPos.right - rcPos.left,
 					rcPos.bottom - rcPos.top, SWP_NOZORDER | SWP_NOACTIVATE);
 			}
 			if( m_pWindowTime != NULL ) 
 			{
-				RECT rcBase = {rc.left + (rc.right-rc.left)/2, rc.top, rc.right, rc.bottom};
-				RECT rcPos = m_pWindowDate->CalPos(rcBase);
+				CDuiRect rcBase(rc.left + (rc.right-rc.left)/2, rc.top, rc.right, rc.bottom);
+				CDuiRect rcPos = m_pWindowDate->CalPos(rcBase);
 				m_pWindowTime->SetWindowPos(rcPos.left, rcPos.top, rcPos.right - rcPos.left,
 					rcPos.bottom - rcPos.top, SWP_NOZORDER | SWP_NOACTIVATE);
 			}
 		}
 	}
 
-	void CDateTimeUI::Move(SIZE szOffset, bool bNeedInvalidate)
+	void CDateTimeUI::Move(CDuiSize szOffset, bool bNeedInvalidate)
 	{
 		CLabelUI::Move(szOffset, bNeedInvalidate);
-		RECT rc = GetPos();
+		CDuiRect rc = GetPos();
 		if(m_uFormatStyle == 0)
 		{
 			if( m_pWindowDate != NULL ) 
 			{
-				RECT rcPos = m_pWindowDate->CalPos(rc);
+				CDuiRect rcPos = m_pWindowDate->CalPos(rc);
 				m_pWindowDate->SetWindowPos(rcPos.left, rcPos.top, rcPos.right - rcPos.left,
 					rcPos.bottom - rcPos.top, SWP_NOZORDER | SWP_NOACTIVATE);
 			}
@@ -186,7 +185,7 @@ namespace DuiLib
 		{
 			if( m_pWindowTime != NULL ) 
 			{
-				RECT rcPos = m_pWindowDate->CalPos(rc);
+				CDuiRect rcPos = m_pWindowDate->CalPos(rc);
 				m_pWindowTime->SetWindowPos(rcPos.left, rcPos.top, rcPos.right - rcPos.left,
 					rcPos.bottom - rcPos.top, SWP_NOZORDER | SWP_NOACTIVATE);
 			}
@@ -195,15 +194,15 @@ namespace DuiLib
 		{
 			if( m_pWindowDate != NULL ) 
 			{
-				RECT rcBase = {rc.left, rc.top, rc.left + (rc.right-rc.left)/2, rc.bottom};
-				RECT rcPos = m_pWindowDate->CalPos(rcBase);
+				CDuiRect rcBase(rc.left, rc.top, rc.left + (rc.right-rc.left)/2, rc.bottom);
+				CDuiRect rcPos = m_pWindowDate->CalPos(rcBase);
 				m_pWindowDate->SetWindowPos(rcPos.left, rcPos.top, rcPos.right - rcPos.left,
 					rcPos.bottom - rcPos.top, SWP_NOZORDER | SWP_NOACTIVATE);
 			}
 			if( m_pWindowTime != NULL ) 
 			{
-				RECT rcBase = {rc.left + (rc.right-rc.left)/2, rc.top, rc.right, rc.bottom};
-				RECT rcPos = m_pWindowDate->CalPos(rcBase);
+				CDuiRect rcBase(rc.left + (rc.right-rc.left)/2, rc.top, rc.right, rc.bottom);
+				CDuiRect rcPos = m_pWindowDate->CalPos(rcBase);
 				m_pWindowTime->SetWindowPos(rcPos.left, rcPos.top, rcPos.right - rcPos.left,
 					rcPos.bottom - rcPos.top, SWP_NOZORDER | SWP_NOACTIVATE);
 			}
@@ -254,7 +253,7 @@ namespace DuiLib
 			}
 			else if(m_uFormatStyle == 1)
 			{
-				if( m_pWindowTime ) return;
+				if (m_pWindowTime) return;
 				m_pWindowTime = new CDateTimeWnd();
 				ASSERT(m_pWindowTime);
 				if( m_pWindowTime)
@@ -364,7 +363,7 @@ namespace DuiLib
 		if(m_uFormatStyle != 2)
 			return CLabelUI::PaintText(pRender);
 
-		DWORD dwColor = 0;
+		CDuiColor dwColor = 0;
 		int iFont = -1;
 		CDuiRect rcTextPadding = GetTextPadding();
 

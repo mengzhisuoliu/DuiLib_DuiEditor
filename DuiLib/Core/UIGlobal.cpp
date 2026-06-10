@@ -3,7 +3,6 @@
 
 #include "../Render/UIRenderFactory_gdi.h"
 #include "../Render/UIRenderFactory_gdiplus.h"
-#include "../Render/UIRenderFactory_Cairo.h"
 #include "../Render/UIRenderFactory_Sdl.h"
 ///////////////////////////////////////////////////////////////////////////////////////
 namespace DuiLib {
@@ -44,11 +43,6 @@ namespace DuiLib {
 				break;
 			case DuiLib_Render_GdiPlus:
 				m_renderEngineFactory = MakeRefPtr<UIRenderFactory>(new UIRenderFactory_gdiplus);
-				break;
-#endif
-#ifdef DUILIB_GTK
-			case DuiLib_Render_Cairo:
-				m_renderEngineFactory = MakeRefPtr<UIRenderFactory>(new UIRenderFactory_Cairo);
 				break;
 #endif
 #ifdef DUILIB_SDL
@@ -139,7 +133,7 @@ namespace DuiLib {
 		*ARGB |= RGB( (BYTE)(R<0?0:(R>255?255:R)), (BYTE)(G<0?0:(G>255?255:G)), (BYTE)(B<0?0:(B>255?255:B)) );
 	}
 
-	DWORD UIGlobal::AdjustHslColor(DWORD dwColor, short H, short S, short L)
+	CDuiColor UIGlobal::AdjustHslColor(CDuiColor dwColor, short H, short S, short L)
 	{
 		if( H == 180 && S == 100 && L == 100 ) return dwColor;
 		float fH, fS, fL;
@@ -150,8 +144,9 @@ namespace DuiLib {
 		fH = fH > 0 ? fH : fH + 360; 
 		fS *= S1;
 		fL *= L1;
-		HSLtoRGB(&dwColor, fH, fS, fL);
-		return dwColor;
+		DWORD dwColor2 = dwColor.GetColor();
+		HSLtoRGB(&dwColor2, fH, fS, fL);
+		return dwColor2;
 	}
 
 	void UIGlobal::AdjustHslImage(bool bUseHSL, UIImage *imageInfo, short H, short S, short L)
@@ -160,14 +155,15 @@ namespace DuiLib {
 		imageInfo->AdjustHslImage(bUseHSL, H, S, L);
 	}
 
-	void UIGlobal::CheckAlphaColor(DWORD& dwColor)
+	void UIGlobal::CheckAlphaColor(CDuiColor& dwColor)
 	{
 		//RestoreAlphaColor认为0x00000000是真正的透明，其它都是GDI绘制导致的
 		//所以在GDI绘制中不能用0xFF000000这个颜色值，现在处理是让它变成RGB(0,0,1)
 		//RGB(0,0,1)与RGB(0,0,0)很难分出来
 		if((0x00FFFFFF & dwColor) == 0)
 		{
-			dwColor += 1;
+			//dwColor += 1;
+			dwColor.SetColor(dwColor.GetColor() + 1);
 		}
 	}
 

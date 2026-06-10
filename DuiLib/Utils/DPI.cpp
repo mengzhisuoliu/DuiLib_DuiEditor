@@ -50,9 +50,9 @@ namespace DuiLib
 		return MulDiv(iValue, 100, m_nScaleFactor);
 	}
 
-	RECT CDpiBase::ScaleRect(RECT rcRect)
+	CDuiRect CDpiBase::ScaleRect(const CDuiRect& rcRect)
 	{
-		RECT rcScale = rcRect;
+		CDuiRect rcScale = rcRect;
 		int sw = ScaleInt(rcRect.right - rcRect.left);
 		int sh = ScaleInt(rcRect.bottom - rcRect.top);
 		rcScale.left = ScaleInt(rcRect.left);
@@ -82,21 +82,21 @@ namespace DuiLib
 		pRect->bottom = pRect->top + sh;
 	}
 
-	void CDpiBase::ScalePoint(POINT *pPoint)
+	void CDpiBase::ScalePoint(CDuiPoint *pPoint)
 	{
 		pPoint->x = ScaleInt(pPoint->x);
 		pPoint->y = ScaleInt(pPoint->y);
 	}
 
-	POINT CDpiBase::ScalePoint(POINT ptPoint)
+	CDuiPoint CDpiBase::ScalePoint(CDuiPoint ptPoint)
 	{
-		POINT ptScale = ptPoint;
+		CDuiPoint ptScale = ptPoint;
 		ptScale.x = ScaleInt(ptPoint.x);
 		ptScale.y = ScaleInt(ptPoint.y);
 		return ptScale;
 	}
 
-	void CDpiBase::ScalePointBack(POINT *pPoint)
+	void CDpiBase::ScalePointBack(CDuiPoint *pPoint)
 	{
 		pPoint->x = ScaleIntBack(pPoint->x);
 		pPoint->y = ScaleIntBack(pPoint->y);
@@ -108,9 +108,9 @@ namespace DuiLib
 		pSize->cy = ScaleInt(pSize->cy);
 	}
 
-	SIZE CDpiBase::ScaleSize(SIZE szSize)
+	CDuiSize CDpiBase::ScaleSize(const CDuiSize& szSize)
 	{
-		SIZE szScale = szSize;
+		CDuiSize szScale;
 		szScale.cx = ScaleInt(szSize.cx);
 		szScale.cy = ScaleInt(szSize.cy);
 		return szScale;

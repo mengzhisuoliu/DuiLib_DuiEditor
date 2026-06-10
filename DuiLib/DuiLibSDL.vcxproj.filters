@@ -312,58 +312,31 @@
     <ClCompile Include="Control\UIBarCode.cpp">
       <Filter>Source Files\Control</Filter>
     </ClCompile>
-    <ClCompile Include="Render\UIObject_Cairo.cpp">
-      <Filter>Source Files\Render</Filter>
-    </ClCompile>
     <ClCompile Include="Render\UIRenderFactory_gdiplus.cpp">
       <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="Render\UIObject_gdiplus.cpp">
       <Filter>Source Files\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Render\UIRender_Cairo.cpp">
-      <Filter>Source Files\Render</Filter>
-    </ClCompile>
     <ClCompile Include="Render\UIRender_gdiplus.cpp">
-      <Filter>Source Files\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="Render\UIRenderFactory_Cairo.cpp">
       <Filter>Source Files\Render</Filter>
     </ClCompile>
     <ClCompile Include="Utils\DpiWin32.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\DpiGtk.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\UIShadowBase.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\UIShadowGtk.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Utils\UIShadowWin32.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Core\UIWindowGtk.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Core\UIWindowWin32.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\UIManagerGtk.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\UIManagerWin32.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\UIApplicationGtk.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\UIApplicationWin32.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\UIFrameWndGtk.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Utils\UIFrameWndWin32.cpp">
@@ -372,25 +345,13 @@
     <ClCompile Include="Utils\QREncode.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Control\UIComboWndGtk.cpp">
-      <Filter>Source Files\Control</Filter>
-    </ClCompile>
     <ClCompile Include="Control\UIComboWndWin32.cpp">
-      <Filter>Source Files\Control</Filter>
-    </ClCompile>
-    <ClCompile Include="Control\UIDateTimeWndGtk.cpp">
       <Filter>Source Files\Control</Filter>
     </ClCompile>
     <ClCompile Include="Control\UIDateTimeWndWin32.cpp">
       <Filter>Source Files\Control</Filter>
     </ClCompile>
     <ClCompile Include="Control\UIEditWndWin32.cpp">
-      <Filter>Source Files\Control</Filter>
-    </ClCompile>
-    <ClCompile Include="Control\UIEditWndGtk.cpp">
-      <Filter>Source Files\Control</Filter>
-    </ClCompile>
-    <ClCompile Include="Control\UIMenuWndGtk.cpp">
       <Filter>Source Files\Control</Filter>
     </ClCompile>
     <ClCompile Include="Control\UIMenuWndWin32.cpp">
@@ -435,9 +396,6 @@
     <ClCompile Include="Render\UIRender_Sdl.cpp">
       <Filter>Source Files\Render</Filter>
     </ClCompile>
-    <ClCompile Include="Render\UIClipGtk.cpp">
-      <Filter>Source Files\Render</Filter>
-    </ClCompile>
     <ClCompile Include="Render\UIClipWin32.cpp">
       <Filter>Source Files\Render</Filter>
     </ClCompile>
@@ -452,6 +410,15 @@
     </ClCompile>
     <ClCompile Include="Control\UISpin.cpp">
       <Filter>Source Files\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIIPAddressWndWin32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIIPAddressWndSdl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\UIDialogCalendar.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -734,31 +701,16 @@
     <ClInclude Include="Control\UIBarCode.h">
       <Filter>Header Files\Control</Filter>
     </ClInclude>
-    <ClInclude Include="Render\UIObject_Cairo.h">
-      <Filter>Header Files\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Render\UIRenderFactory_gdiplus.h">
       <Filter>Header Files\Render</Filter>
     </ClInclude>
     <ClInclude Include="Render\UIObject_gdiplus.h">
       <Filter>Header Files\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Render\UIRender_Cairo.h">
-      <Filter>Header Files\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Render\UIRender_gdiplus.h">
       <Filter>Header Files\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Render\UIRenderFactory_Cairo.h">
-      <Filter>Header Files\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\DpiGtk.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\DpiWin32.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\UIShadowGtk.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\UIShadowBase.h">
@@ -770,46 +722,22 @@
     <ClInclude Include="Core\UIWindowWin32.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\UIWindowGtk.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\UIManagerGtk.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Core\UIManagerWin32.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\UIApplicationGtk.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\UIApplicationWin32.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\UIFrameWndGtk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utils\UIFrameWndWin32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Control\UIComboWndGtk.h">
-      <Filter>Header Files\Control</Filter>
-    </ClInclude>
     <ClInclude Include="Control\UIComboWndWin32.h">
-      <Filter>Header Files\Control</Filter>
-    </ClInclude>
-    <ClInclude Include="Control\UIDateTimeWndGtk.h">
       <Filter>Header Files\Control</Filter>
     </ClInclude>
     <ClInclude Include="Control\UIDateTimeWndWin32.h">
       <Filter>Header Files\Control</Filter>
     </ClInclude>
-    <ClInclude Include="Control\UIEditWndGtk.h">
-      <Filter>Header Files\Control</Filter>
-    </ClInclude>
     <ClInclude Include="Control\UIEditWndWin32.h">
-      <Filter>Header Files\Control</Filter>
-    </ClInclude>
-    <ClInclude Include="Control\UIMenuWndGtk.h">
       <Filter>Header Files\Control</Filter>
     </ClInclude>
     <ClInclude Include="Control\UIMenuWndWin32.h">
@@ -866,9 +794,6 @@
     <ClInclude Include="Render\UIRender_Sdl.h">
       <Filter>Header Files\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Render\UIClipGtk.h">
-      <Filter>Header Files\Render</Filter>
-    </ClInclude>
     <ClInclude Include="Render\UIClipWin32.h">
       <Filter>Header Files\Render</Filter>
     </ClInclude>
@@ -877,6 +802,15 @@
     </ClInclude>
     <ClInclude Include="Control\UISpin.h">
       <Filter>Header Files\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIIPAddressWndWin32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIIPAddressWndSdl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\UIDialogCalendar.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

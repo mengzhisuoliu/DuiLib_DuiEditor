@@ -32,7 +32,7 @@ public:
 	virtual void DoEvent(TEventUI& event);
 	virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled);
 
-	void SetPos(RECT rc, bool bNeedInvalidate  = true);
+	void SetPos(CDuiRect rc, bool bNeedInvalidate  = true);
 	void SetInternVisible(bool bVisible);
 
 	void OnGridNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);

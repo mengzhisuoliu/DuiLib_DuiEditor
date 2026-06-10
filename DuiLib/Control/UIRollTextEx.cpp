@@ -80,7 +80,7 @@ namespace DuiLib
 		}
 	}
 
-	void CRollTextExUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void CRollTextExUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 	{
 		CLabelUI::SetPos(rc, bNeedInvalidate);
 		m_nText_W_H = 0;
@@ -152,7 +152,7 @@ namespace DuiLib
 			return;
 		}
 
-		RECT rcTextPadding = GetTextPadding();
+		CDuiRect rcTextPadding = GetTextPadding();
 		CDuiRect  rcClient;
 		rcClient = m_rcItem;
 		rcClient.left += rcTextPadding.left;
@@ -208,7 +208,7 @@ namespace DuiLib
 	{
 		if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
 		if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
-		DWORD dwTextColor = IsEnabled() ? m_dwTextColor : m_dwDisabledTextColor;
+		CDuiColor dwTextColor = IsEnabled() ? m_dwTextColor : m_dwDisabledTextColor;
 		CDuiString sText = GetText();
 		if( sText.IsEmpty() ) return;
 		
@@ -216,7 +216,7 @@ namespace DuiLib
 
 		if(m_nText_W_H == 0)	//第一次计算文本宽度或高度
 		{
-			RECT rcTextPadding = GetTextPadding();
+			CDuiRect rcTextPadding = GetTextPadding();
 			CDuiRect  rcClient;
 			rcClient = m_rcItem;
 			rcClient.left += rcTextPadding.left;
@@ -224,7 +224,7 @@ namespace DuiLib
 			rcClient.top += rcTextPadding.top;
 			rcClient.bottom -= rcTextPadding.bottom;
 
-			RECT rc = rcClient;
+			CDuiRect rc = rcClient;
 			uTextStyle |= DT_CALCRECT;		//第一次计算文本宽度或高度
 // 			if (m_nRollDirection == ROLLTEXT_LEFT || m_nRollDirection == ROLLTEXT_RIGHT) {	//左面移动
 // 				rc.right += 10000;

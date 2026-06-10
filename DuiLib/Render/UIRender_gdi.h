@@ -28,11 +28,11 @@ namespace DuiLib {
 		virtual UIBitmap *GetBitmap() override;
 
 		virtual bool Resize(int width, int height) override;
-		virtual bool Resize(const RECT &rc) override;
+		virtual bool Resize(const CDuiRect &rc) override;
 		virtual int GetWidth() const override;
 		virtual int GetHeight() const override;
 		virtual void Clear() override;
-		virtual void ClearAlpha(const RECT &rc, int alpha = 0) override;
+		virtual void ClearAlpha(const CDuiRect &rc, int alpha = 0) override;
 
 		virtual void SaveDC() override;
 		virtual void RestoreDC() override;
@@ -41,28 +41,28 @@ namespace DuiLib {
 		virtual void RestoreObject(UIObject *pObject = NULL) override;
 		virtual void RestoreDefaultObject() override;
 
-		virtual DWORD SetPixel(int x, int y, DWORD dwColor) override;
+		virtual CDuiColor SetPixel(int x, int y, CDuiColor dwColor) override;
 
 		virtual BOOL BitBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, DWORD dwRop = SRCCOPY ) override;
 		virtual BOOL StretchBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, DWORD dwRop = SRCCOPY) override;
 		virtual BOOL AlphaBlend(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, int alpha ) override;
 		virtual void DrawBitmapAlpha(int x, int y, int nWidth, int nHeight, UIBitmap *pUiBitmap, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, int alpha) override;
 
-		virtual void DrawColor(const RECT& rc, const SIZE &round, DWORD color) override;
-		virtual void DrawGradient(const RECT& rc, DWORD dwFirst, DWORD dwSecond, bool bVertical, int nSteps) override;
+		virtual void DrawColor(const CDuiRect& rc, const CDuiSize &round, CDuiColor color) override;
+		virtual void DrawGradient(const CDuiRect& rc, CDuiColor dwFirst, CDuiColor dwSecond, bool bVertical, int nSteps) override;
 
-		virtual void DrawLine(int x1, int y1, int x2, int y2, int nSize, DWORD dwPenColor,int nStyle = PS_SOLID) override;
-		virtual void DrawRect(const RECT& rc, int nSize, DWORD dwPenColor,int nStyle = PS_SOLID) override;
-		virtual void DrawRoundRect(const RECT& rc, int nSize, const SIZE &round, DWORD dwPenColor,int nStyle = PS_SOLID) override;
-		virtual void DrawEllipse(const RECT& rc, int nSize, DWORD dwPenColor,int nStyle = PS_SOLID) override;
-		virtual void FillEllipse(const RECT& rc, DWORD dwColor) override;
-		virtual void DrawText(RECT& rc, LPCTSTR pstrText, DWORD dwTextColor, int iFont, UINT uStyle) override;
+		virtual void DrawLine(int x1, int y1, int x2, int y2, int nSize, CDuiColor dwPenColor,int nStyle = PS_SOLID) override;
+		virtual void DrawRect(const CDuiRect& rc, int nSize, CDuiColor dwPenColor,int nStyle = PS_SOLID) override;
+		virtual void DrawRoundRect(const CDuiRect& rc, int nSize, const CDuiSize &round, CDuiColor dwPenColor,int nStyle = PS_SOLID) override;
+		virtual void DrawEllipse(const CDuiRect& rc, int nSize, CDuiColor dwPenColor,int nStyle = PS_SOLID) override;
+		virtual void FillEllipse(const CDuiRect& rc, CDuiColor dwColor) override;
+		virtual void DrawText(CDuiRect& rc, LPCTSTR pstrText, CDuiColor dwTextColor, int iFont, UINT uStyle) override;
 
 		virtual UIPath* CreatePath() override;	
-		virtual BOOL DrawPath(const UIPath* path, int nSize, DWORD dwColor) override;
-		virtual BOOL FillPath(const UIPath* path, const DWORD dwColor) override;
+		virtual BOOL DrawPath(const UIPath* path, int nSize, CDuiColor dwColor) override;
+		virtual BOOL FillPath(const UIPath* path, const CDuiColor dwColor) override;
 
-		virtual SIZE GetTextSize(LPCTSTR pstrText, int iFont, UINT uStyle) override;
+		virtual CDuiSize GetTextSize(LPCTSTR pstrText, int iFont, UINT uStyle) override;
 
 	protected:
 		HDC m_hDC;

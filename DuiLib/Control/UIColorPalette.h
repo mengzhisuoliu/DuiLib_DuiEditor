@@ -14,8 +14,8 @@ namespace DuiLib {
 		virtual ~CColorPaletteUI();
 
 		//获取最终被选择的颜色，可以直接用于设置duilib背景色
-		DWORD GetSelectColor();
-		void SetSelectColor(DWORD dwColor);
+		CDuiColor GetSelectColor();
+		void SetSelectColor(CDuiColor dwColor);
 
 		virtual LPCTSTR GetClass() const override;
 		virtual LPVOID GetInterface(LPCTSTR pstrName) override;
@@ -33,7 +33,7 @@ namespace DuiLib {
 		void SetThumbImage(LPCTSTR pszImage);
 		LPCTSTR GetThumbImage() const;
 
-		virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+		virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
 		virtual void DoInit() override;
 		virtual void DoEvent(TEventUI& event) override;
 		virtual void PaintBkColor(UIRender *pRender) override;

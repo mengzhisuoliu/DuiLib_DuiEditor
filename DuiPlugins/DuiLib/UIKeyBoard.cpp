@@ -102,7 +102,7 @@ CDuiString CKeyButtonUI::GetText() const
 	return m_ch;
 }
 
-bool CKeyButtonUI::DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl)
+bool CKeyButtonUI::DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl)
 {
 	if(m_vkCode == VK_CAPITAL)
 	{
@@ -143,7 +143,7 @@ void CKeyButtonUI::PaintText(UIRender *pRender)
 	if(IsOemKey())
 	{
 		CDuiString sText1 = m_ch;
-		RECT rc1;
+		CDuiRect rc1;
 		rc1.left = rc.left;
 		rc1.right = rc.right;
 		rc1.top = rc.bottom - (rc.bottom - rc.top)/2;
@@ -151,7 +151,7 @@ void CKeyButtonUI::PaintText(UIRender *pRender)
 		pRender->DrawText(rc1, GetTextPadding(), sText1, clrColor, m_pKeyBoard->GetFont(m_vkCode), uTextStyle);
 
 		CDuiString sText2 = m_chShift;
-		RECT rc2;
+		CDuiRect rc2;
 		rc2.left = rc.left;
 		rc2.right = rc.right;
 		rc2.top = rc.top;

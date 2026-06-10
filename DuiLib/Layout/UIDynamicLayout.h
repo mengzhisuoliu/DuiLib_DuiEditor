@@ -39,20 +39,20 @@ namespace DuiLib
 		int GetSepHeight() const;
 		void SetSepImmMode(bool bImmediately);
 		bool IsSepImmMode() const;
-		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
 		virtual void DoEvent(TEventUI& event) override;
 
-		virtual SIZE EstimateSize(SIZE szAvailable) override;
-		virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
-		virtual void DoPostPaint(UIRender *pRender, const RECT& rcPaint) override;
+		virtual CDuiSize EstimateSize(CDuiSize szAvailable) override;
+		virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
+		virtual void DoPostPaint(UIRender *pRender, const CDuiRect& rcPaint) override;
 
-		RECT GetThumbRect(bool bUseNew = false) const;
+		virtual CDuiRect GetThumbRect(bool bUseNew = false) const;
 
 	protected:
 		int m_iSepWidth;
 		int m_iSepHeight;
-		RECT m_rcNewPos;
+		CDuiRect m_rcNewPos;
 		bool m_bImmMode;
 
 		emLayoutType m_eLayout; 

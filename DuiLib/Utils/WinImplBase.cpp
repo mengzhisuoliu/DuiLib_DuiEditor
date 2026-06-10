@@ -150,15 +150,15 @@ namespace DuiLib
 
 	LRESULT WindowImplBase::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		POINT pt; pt.x = GET_X_LPARAM(lParam); pt.y = GET_Y_LPARAM(lParam);
+		CDuiPoint pt; pt.x = GET_X_LPARAM(lParam); pt.y = GET_Y_LPARAM(lParam);
 		::ScreenToClient(*this, &pt);
 
-		RECT rcClient;
+		CDuiRect rcClient;
 		::GetClientRect(*this, &rcClient);
 
 		if (!::IsZoomed(*this))
 		{
-			RECT rcSizeBox = m_pm.GetSizeBox();
+			CDuiRect rcSizeBox = m_pm.GetSizeBox();
 			if (pt.y < rcClient.top + rcSizeBox.top)
 			{
 				if (pt.x < rcClient.left + rcSizeBox.left) return HTTOPLEFT;
@@ -176,7 +176,7 @@ namespace DuiLib
 			if (pt.x > rcClient.right - rcSizeBox.right) return HTRIGHT;
 		}
 
-		RECT rcCaption = m_pm.GetCaptionRect();
+		CDuiRect rcCaption = m_pm.GetCaptionRect();
 		rcCaption = m_pm.GetDPIObj()->ScaleRect(rcCaption);
 		if (-1 == rcCaption.bottom)
 		{
@@ -237,7 +237,7 @@ namespace DuiLib
 
 	LRESULT WindowImplBase::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		SIZE szRoundCorner = m_pm.GetRoundCorner();
+		CDuiSize szRoundCorner = m_pm.GetRoundCorner();
 #if defined(WIN32) && !defined(UNDER_CE)
 		if( !::IsIconic(*this) ) {
 			CDuiRect rcWnd;

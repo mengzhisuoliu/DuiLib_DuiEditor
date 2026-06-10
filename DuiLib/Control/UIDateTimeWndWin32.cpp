@@ -13,13 +13,13 @@ namespace DuiLib
 		m_uFormatStyle = DTS_SHORTDATEFORMAT;
 	}
 
-	void CDateTimeWndWin32::Init(CDateTimeUI* pOwner, RECT rcBase, UINT uFormatStyle)
+	void CDateTimeWndWin32::Init(CDateTimeUI* pOwner, CDuiRect rcBase, UINT uFormatStyle)
 	{
 		m_pOwner = pOwner;
 
 		if (m_hWnd == NULL)
 		{
-			RECT rcPos = CalPos(rcBase);
+			CDuiRect rcPos = CalPos(rcBase);
 			UINT uStyle = WS_CHILD;
 			if(uFormatStyle == DTS_TIMEFORMAT)
 			{
@@ -31,7 +31,7 @@ namespace DuiLib
 			}
 			m_uFormatStyle = uFormatStyle;
 
-			Create(m_pOwner->GetManager()->GetPaintWindow(), NULL, uStyle, 0, rcPos);
+			Create(m_pOwner->GetManager()->GetPaintWindow(), NULL, uStyle, 0, rcPos.left, rcPos.top, rcPos.GetWidth(), rcPos.GetHeight());
 			m_font = MakeRefPtr<UIFont>(m_pOwner->GetManager()->CloneFont(m_pOwner->GetFont()));
 			::SendMessage(m_hWnd, WM_SETFONT, (WPARAM)m_font->GetHFONT(m_pOwner->GetManager()), (LPARAM)TRUE);
 		}
@@ -42,12 +42,12 @@ namespace DuiLib
 		::SetFocus(m_hWnd);
 	}
 
-	RECT CDateTimeWndWin32::CalPos(RECT rcBase)
+	CDuiRect CDateTimeWndWin32::CalPos(CDuiRect rcBase)
 	{
 		CDuiRect rcPos = rcBase;//m_pOwner->GetPos();
 
 		CControlUI* pParent = m_pOwner;
-		RECT rcParent;
+		CDuiRect rcParent;
 		while( pParent = pParent->GetParent() ) {
 			if( !pParent->IsVisible() ) {
 				rcPos.left = rcPos.top = rcPos.right = rcPos.bottom = 0;

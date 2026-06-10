@@ -31,7 +31,7 @@ namespace DuiLib
 	public:
 		virtual int GetMainMonitorDPI() override;
 		int GetDPIOfMonitor(HMONITOR hMonitor);
-		int GetDPIOfMonitorNearestToPoint(POINT pt);
+		int GetDPIOfMonitorNearestToPoint(CDuiPoint pt);
 	public:
 		PROCESS_DPI_AWARENESS GetDPIAwareness();
 		BOOL SetDPIAwareness(PROCESS_DPI_AWARENESS Awareness);

@@ -17,8 +17,8 @@ public:
 	virtual void DoInit() override;
 	virtual void SetVisible(bool bVisible) override;
 	virtual void SetInternVisible(bool bVisible = true) override;
-	virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
-	virtual void Move(SIZE szOffset, bool bNeedInvalidate = true) override;
+	virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
+	virtual void Move(CDuiSize szOffset, bool bNeedInvalidate = true) override;
 	virtual void DoEvent(TEventUI& event) override;	
 	virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 

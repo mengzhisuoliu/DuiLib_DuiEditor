@@ -11,8 +11,8 @@ namespace DuiLib
 	public:
 		CDateTimeWndWin32();
 
-		void Init(CDateTimeUI* pOwner, RECT rcBase, UINT uFormatStyle);
-		RECT CalPos(RECT rcBase);
+		void Init(CDateTimeUI* pOwner, CDuiRect rcBase, UINT uFormatStyle);
+		CDuiRect CalPos(CDuiRect rcBase);
 
 
 		LPCTSTR GetWindowClassName() const;

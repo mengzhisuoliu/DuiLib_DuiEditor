@@ -50,7 +50,7 @@ namespace DuiLib {
 		LOGFONT lf;
 		::GetObject(hfont, sizeof(LOGFONT), &lf);
 
-		DWORD dwColor = m_re->GetTextColor();
+		CDuiColor dwColor = m_re->GetTextColor();
 		if(m_re->GetManager()->IsLayered()) {
 			UIGlobal::CheckAlphaColor(dwColor);
 		}
@@ -348,7 +348,7 @@ err:
 			m_re->GetManager()->Invalidate(rcClient);
 			return;
 		}
-		RECT rc = *prc;
+		CDuiRect rc = *prc;
 		m_re->GetManager()->Invalidate(rc);
 	}
 
@@ -381,9 +381,9 @@ err:
 
 	BOOL CTxtWinHost::TxSetCaretPos(INT x, INT y)
 	{
-		POINT ptCaret = { 0 };
+		CDuiPoint ptCaret;
 		::GetCaretPos(&ptCaret);
-		RECT rcCaret = { ptCaret.x, ptCaret.y, ptCaret.x + iCaretLastWidth, ptCaret.y + iCaretLastHeight };
+		CDuiRect rcCaret( ptCaret.x, ptCaret.y, ptCaret.x + iCaretLastWidth, ptCaret.y + iCaretLastHeight );
 		if( m_re->GetManager()->IsLayered() ) m_re->GetManager()->Invalidate(rcCaret);
 		else if( fNeedFreshCaret == TRUE ) {
 			m_re->GetManager()->Invalidate(rcCaret);
@@ -586,7 +586,7 @@ err:
 	HRESULT CTxtWinHost::TxNotify(DWORD iNotify, void *pv)
 	{
 		if( iNotify == EN_REQUESTRESIZE ) {
-			RECT rc;
+			CDuiRect rc;
 			REQRESIZE *preqsz = (REQRESIZE *)pv;
 			GetControlRect(&rc);
 			rc.bottom = rc.top + preqsz->rc.bottom;
@@ -662,9 +662,9 @@ err:
 			TXTBIT_CHARFORMATCHANGE);
 	}
 
-	void CTxtWinHost::SetColor(DWORD dwColor)
+	void CTxtWinHost::SetColor(CDuiColor dwColor)
 	{
-		cf.crTextColor = RGB(GetBValue(dwColor), GetGValue(dwColor), GetRValue(dwColor));
+		cf.crTextColor = dwColor.ToCOLORREF();
 		pserv->OnTxPropertyBitsChange(TXTBIT_CHARFORMATCHANGE, 
 			TXTBIT_CHARFORMATCHANGE);
 	}
@@ -763,7 +763,7 @@ err:
 		pserv->OnTxPropertyBitsChange(TXTBIT_PARAFORMATCHANGE, 0);
 	}
 
-	void CTxtWinHost::SetClientRect(RECT *prc) 
+	void CTxtWinHost::SetClientRect(CDuiRect *prc) 
 	{
 		rcClient = *prc;
 
@@ -814,7 +814,7 @@ err:
 		return hr;
 	}
 
-	BOOL CTxtWinHost::DoSetCursor(RECT *prc, POINT *pt)
+	BOOL CTxtWinHost::DoSetCursor(CDuiRect *prc, CDuiPoint *pt)
 	{
 		CDuiRect rc = prc ? *prc : rcClient;
 
@@ -822,7 +822,7 @@ err:
 		//if (PtInRect(&rc, *pt))
 		if (rc.PtInRect(*pt))
 		{
-			RECT *prcClient = (!fInplaceActive || prc) ? &rc : NULL;
+			CDuiRect *prcClient = (!fInplaceActive || prc) ? &rc : NULL;
 			HRESULT hRet = pserv->OnTxSetCursor(DVASPECT_CONTENT,	-1, NULL, NULL,  TxGetDC(),
 				NULL, prcClient, pt->x, pt->y);
 

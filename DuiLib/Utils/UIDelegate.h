@@ -31,10 +31,10 @@ class CDelegateStatic: public CDelegateBase
 public:
     CDelegateStatic(Fn pFn) : CDelegateBase(NULL, (void*)pFn) { }
     CDelegateStatic(const CDelegateStatic& rhs) : CDelegateBase(rhs) { } 
-    virtual CDelegateBase* Copy() const { return new CDelegateStatic(*this); }
+    virtual CDelegateBase* Copy() const override { return new CDelegateStatic(*this); }
 
 protected:
-    virtual bool Invoke(void* param)
+    virtual bool Invoke(void* param) override
     {
         Fn pFn = (Fn)GetFn();
         return (*pFn)(param); 
@@ -48,10 +48,10 @@ class CDelegate : public CDelegateBase
 public:
     CDelegate(O* pObj, Fn pFn) : CDelegateBase(pObj, &pFn), m_pFn(pFn) { }
     CDelegate(const CDelegate& rhs) : CDelegateBase(rhs) { m_pFn = rhs.m_pFn; } 
-    virtual CDelegateBase* Copy() const { return new CDelegate(*this); }
+    virtual CDelegateBase* Copy() const override { return new CDelegate(*this); }
 
 protected:
-    virtual bool Invoke(void* param)
+    virtual bool Invoke(void* param) override
     {
         O* pObject = (O*) GetObject();
         return (pObject->*m_pFn)(param); 

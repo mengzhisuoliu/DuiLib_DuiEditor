@@ -19,20 +19,20 @@ namespace DuiLib {
 
 		CDuiString sImageName;	//图片的文件名，这玩意会给UIImageInfo列表做关键字，好处是同一张图片，内存中只保存一份。 (svg除外, 同一张svg渲染不同时，内存中保存多份。)
 		CDuiString sResType;	//资源文件中定义的类型，如："ZIPRES", "PNG"
-		RECT rcDest;			//显示在什么位置
-		RECT rcSource;			//需要用图片的哪部分？
-		RECT rcCorner;			//圆角
-		DWORD dwMask;			//位图的透明色
+		CDuiRect rcDest;			//显示在什么位置
+		CDuiRect rcSource;			//需要用图片的哪部分？
+		CDuiRect rcCorner;			//圆角
+		CDuiColor dwMask;			//位图的透明色
 		BYTE uFade;				//透明度
 		bool bHole;				//洞洞.......rcCorner区域不绘制
 		bool bTiledX;			//横向平铺
 		bool bTiledY;			//纵向平铺
 		bool bHSL;				//HSL色彩模式
-		RECT rcPadding;			//外边距
+		CDuiRect rcPadding;			//外边距
 		UINT uAlign;			//对齐方式
 		int width;				//SVG的宽度
 		int height;				//SVG的高度
-		DWORD fillcolor;		//SVG的填充颜色
+		CDuiColor fillcolor;		//SVG的填充颜色
 	} TDrawInfo;
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -145,17 +145,17 @@ namespace DuiLib {
 		virtual HPEN GetHPEN() const = 0;
 #endif
 
-		virtual BOOL CreatePen(int nStyle, int nWidth, DWORD dwColor) = 0;
+		virtual BOOL CreatePen(int nStyle, int nWidth, CDuiColor dwColor) = 0;
 
 		bool operator == (UIPen &obj) const;
 
 		int GetStyle() const		{ return m_nStyle;	}
 		int GetWidth() const		{ return m_nWidth;	}
-		DWORD GetColor() const		{ return m_dwColor; }
+		CDuiColor GetColor() const		{ return m_dwColor; }
 	protected:
 		int m_nStyle;
 		int m_nWidth;
-		DWORD m_dwColor;
+		CDuiColor m_dwColor;
 	};
 
 	class UILIB_API UIBitmap  : public TObjRefImpl<UIObject>
@@ -175,7 +175,7 @@ namespace DuiLib {
 		virtual BOOL CreateCompatibleBitmap(HDC hDC, int width, int height) = 0;
 #endif
 
-		virtual BOOL CreateFromData(LPBYTE pImage, int width, int height, DWORD mask) = 0;
+		virtual BOOL CreateFromData(LPBYTE pImage, int width, int height, CDuiColor mask) = 0;
 
 		virtual UINT_PTR  GetHandle() = 0;
 #ifdef DUILIB_WIN32
@@ -190,7 +190,7 @@ namespace DuiLib {
 
 		virtual void Clear() = 0;
 
-		virtual void ClearAlpha(const RECT &rc, int alpha = 0) = 0;
+		virtual void ClearAlpha(const CDuiRect &rc, int alpha = 0) = 0;
 
 		virtual BOOL SaveFile(LPCTSTR pstrFileName) = 0;
 	};
@@ -209,15 +209,15 @@ namespace DuiLib {
 
 		//载入图像
 		BOOL LoadImage(const TDrawInfo *pDrawInfo, CPaintManagerUI* pManager=NULL, HINSTANCE instance = NULL);
-		BOOL LoadImage(STRINGorID bitmap, LPCTSTR type = NULL, DWORD mask = 0, int width=0, int height=0, DWORD fillcolor=0, CPaintManagerUI* pManager=NULL, HINSTANCE instance = NULL);
-		BOOL LoadImage(LPCTSTR pStrImage, LPCTSTR type = NULL, DWORD mask = 0, int width=0, int height=0, DWORD fillcolor=0, CPaintManagerUI* pManager=NULL, HINSTANCE instance = NULL);
-		BOOL LoadImage(UINT nID, LPCTSTR type = NULL, DWORD mask = 0, int width=0, int height=0, DWORD fillcolor=0, CPaintManagerUI* pManager=NULL, HINSTANCE instance = NULL);
+		BOOL LoadImage(STRINGorID bitmap, LPCTSTR type = NULL, CDuiColor mask = CDuiColor(), int width=0, int height=0, CDuiColor fillcolor=CDuiColor(), CPaintManagerUI* pManager=NULL, HINSTANCE instance = NULL);
+		BOOL LoadImage(LPCTSTR pStrImage, LPCTSTR type = NULL, CDuiColor mask = CDuiColor(), int width=0, int height=0, CDuiColor fillcolor=CDuiColor(), CPaintManagerUI* pManager=NULL, HINSTANCE instance = NULL);
+		BOOL LoadImage(UINT nID, LPCTSTR type = NULL, CDuiColor mask = CDuiColor(), int width=0, int height=0, CDuiColor fillcolor=CDuiColor(), CPaintManagerUI* pManager=NULL, HINSTANCE instance = NULL);
 
 		//图像HSL转换
 		void AdjustHslImage(bool bUseHSL, short H, short S, short L);
 
 		//从内存中载入图像，支持图像格式：bmp, jpg, png, svg
-		virtual BOOL LoadImageFromMemory(const LPBYTE pData, DWORD dwSize, DWORD mask=0, int width=0, int height=0, DWORD fillcolor=0, CPaintManagerUI* pManager=NULL);
+		virtual BOOL LoadImageFromMemory(const LPBYTE pData, DWORD dwSize, CDuiColor mask=CDuiColor(), int width=0, int height=0, CDuiColor fillcolor=CDuiColor(), CPaintManagerUI* pManager=NULL);
 
 		//从内存中载入gif图像, arrImageInfo返回每帧图像， 使用完记得释放arrImageInfo
 		virtual bool LoadGifImageFromMemory(const LPBYTE pData, DWORD dwSize, CStdPtrArray &arrImageInfo);
@@ -233,7 +233,7 @@ namespace DuiLib {
 		bool bAlpha;			//透明
 		bool bUseHSL;			//HSL模式
 		CDuiString sResType;	//资源文件中定义的类型，如："ZIPRES", "PNG"
-		DWORD dwMask;			//透明色
+		CDuiColor dwMask;			//透明色
 		int delay;				//gif动画每帧延时
 	};
 
@@ -254,7 +254,7 @@ namespace DuiLib {
 #endif
 
 		//用指定的实线初始化画刷
-		virtual BOOL CreateSolidBrush(DWORD clr) = 0;
+		virtual BOOL CreateSolidBrush(CDuiColor clr) = 0;
 
 		//从位图构造画刷
 		virtual BOOL CreateBitmapBrush(UIBitmap *bitmap) = 0;
@@ -316,17 +316,17 @@ namespace DuiLib {
 		virtual UIBitmap *GetBitmap() = 0;
 
 		virtual bool Resize(int width, int height) = 0;
-		virtual bool Resize(const RECT &rc) = 0;
+		virtual bool Resize(const CDuiRect &rc) = 0;
 
 		virtual int GetWidth() const = 0;
 		virtual int GetHeight() const = 0;
 
 		//擦除当前画布。
 		virtual void Clear() = 0;
-		virtual void ClearAlpha(const RECT &rc, int alpha = 0) = 0;
+		virtual void ClearAlpha(const CDuiRect &rc, int alpha = 0) = 0;
 
 
-		virtual DWORD SetPixel(int x, int y, DWORD dwColor) = 0;
+		virtual CDuiColor SetPixel(int x, int y, CDuiColor dwColor) = 0;
 
 		//BitBlt (bit block transfer)
 		virtual BOOL BitBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, DWORD dwRop = SRCCOPY ) = 0;
@@ -341,67 +341,67 @@ namespace DuiLib {
 		virtual void DrawBitmapAlpha(int x, int y, int nWidth, int nHeight, UIBitmap *pUiBitmap, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, int alpha) = 0;
 
 		//画颜色(填充颜色)
-		virtual void DrawColor(const RECT& rc, const SIZE &round, DWORD color) = 0;
+		virtual void DrawColor(const CDuiRect& rc, const CDuiSize &round, CDuiColor color) = 0;
 
 		//画渐变色
-		virtual void DrawGradient(const RECT& rc, DWORD dwFirst, DWORD dwSecond, bool bVertical, int nSteps) = 0;
+		virtual void DrawGradient(const CDuiRect& rc, CDuiColor dwFirst, CDuiColor dwSecond, bool bVertical, int nSteps) = 0;
 
 		//画线  MoveTo(x1, y1)，LineTo(x2, y2)
-		virtual void DrawLine(int x1, int y1, int x2, int y2, int nSize, DWORD dwPenColor,int nStyle = PS_SOLID) = 0;
+		virtual void DrawLine(int x1, int y1, int x2, int y2, int nSize, CDuiColor dwPenColor,int nStyle = PS_SOLID) = 0;
 
 		//画边框
-		virtual void DrawRect(const RECT& rc, int nSize, DWORD dwPenColor,int nStyle = PS_SOLID) = 0;
+		virtual void DrawRect(const CDuiRect& rc, int nSize, CDuiColor dwPenColor,int nStyle = PS_SOLID) = 0;
 
 		//画圆角边框
-		virtual void DrawRoundRect(const RECT& rc, int nSize, const SIZE &round, DWORD dwPenColor,int nStyle = PS_SOLID) = 0;
+		virtual void DrawRoundRect(const CDuiRect& rc, int nSize, const CDuiSize &round, CDuiColor dwPenColor,int nStyle = PS_SOLID) = 0;
 
 		//画圆或椭圆
-		virtual void DrawEllipse(const RECT& rc, int nSize, DWORD dwPenColor, int nStyle = PS_SOLID) = 0;
+		virtual void DrawEllipse(const CDuiRect& rc, int nSize, CDuiColor dwPenColor, int nStyle = PS_SOLID) = 0;
 
 		//填充圆或椭圆
-		virtual void FillEllipse(const RECT& rc, DWORD dwColor) = 0;
+		virtual void FillEllipse(const CDuiRect& rc, CDuiColor dwColor) = 0;
 
 		//绘制文本
-		virtual void DrawText(RECT& rc, LPCTSTR pstrText, DWORD dwTextColor, int iFont, UINT uStyle) = 0;
+		virtual void DrawText(CDuiRect& rc, LPCTSTR pstrText, CDuiColor dwTextColor, int iFont, UINT uStyle) = 0;
 
 		//建立路径
 		virtual UIPath* CreatePath() = 0;	
 
 		//绘制路径
-		virtual BOOL DrawPath(const UIPath* path, int nSize, DWORD dwColor) = 0;
+		virtual BOOL DrawPath(const UIPath* path, int nSize, CDuiColor dwColor) = 0;
 
 		//填充路径
-		virtual BOOL FillPath(const UIPath* path, const DWORD dwColor) = 0;
+		virtual BOOL FillPath(const UIPath* path, const CDuiColor dwColor) = 0;
 
 		//绘制文字的占用的空间大小
-		virtual SIZE GetTextSize(LPCTSTR pstrText, int iFont, UINT uStyle) = 0;
+		virtual CDuiSize GetTextSize(LPCTSTR pstrText, int iFont, UINT uStyle) = 0;
 
 		//////////////////////////////////////////////////////////////////////////
 		CPaintManagerUI *GetManager() { return m_pManager; }
 
 		//绘制位图
-		void DrawBitmap(UIBitmap *pUiBitmap, const RECT& rc, const RECT& rcPaint, const RECT& rcBmpPart, const RECT& rcCorners, bool bAlpha, BYTE uFade = 255, bool hole = false, bool xtiled = false, bool ytiled = false);
+		void DrawBitmap(UIBitmap *pUiBitmap, const CDuiRect& rc, const CDuiRect& rcPaint, const CDuiRect& rcBmpPart, const CDuiRect& rcCorners, bool bAlpha, BYTE uFade = 255, bool hole = false, bool xtiled = false, bool ytiled = false);
 
 		//画背景色
-		void DrawBackColor(const RECT& rc, const SIZE &round, DWORD dwBackColor, DWORD dwBackColor2=0, DWORD dwBackColor3=0, bool bVertical=true);
+		void DrawBackColor(const CDuiRect& rc, const CDuiSize &round, CDuiColor dwBackColor, CDuiColor dwBackColor2=CDuiColor(), CDuiColor dwBackColor3=CDuiColor(), bool bVertical=true);
 
 		//画线  MoveTo(rc.left, rc.top)，LineTo(rc.right, rc.bottom)
-		void DrawLine(const RECT& rc, int nSize, DWORD dwPenColor,int nStyle = PS_SOLID);
+		void DrawLine(const CDuiRect& rc, int nSize, CDuiColor dwPenColor,int nStyle = PS_SOLID);
 
 		//画边框
-		void DrawBorder(const RECT &rcItem, int nBorderSize, SIZE szBorderRound, RECT rcBorderSize, DWORD dwColor, int nBorderStyle);
+		void DrawBorder(const CDuiRect &rcItem, int nBorderSize, CDuiSize szBorderRound, CDuiRect rcBorderSize, CDuiColor dwColor, int nBorderStyle);
 
 		//绘制文本
-		void DrawText(RECT& rc, const RECT &rcTextPadding, LPCTSTR pstrText, DWORD dwTextColor, int iFont, UINT uStyle);
+		void DrawText(CDuiRect& rc, const CDuiRect &rcTextPadding, LPCTSTR pstrText, CDuiColor dwTextColor, int iFont, UINT uStyle);
 
 		//绘制带背景颜色的文本
-		void DrawText(RECT& rc, const RECT &rcTextPadding, LPCTSTR pstrText,DWORD dwTextColor, int iFont, UINT uStyle, DWORD dwTextBKColor);
+		void DrawText(CDuiRect& rc, const CDuiRect &rcTextPadding, LPCTSTR pstrText, CDuiColor dwTextColor, int iFont, UINT uStyle, CDuiColor dwTextBKColor);
 
 		//根据TDrawInfo绘制图像
-		bool DrawImageInfo(const RECT& rcItem, const RECT& rcPaint, const TDrawInfo* pDrawInfo, HINSTANCE instance = NULL);
+		bool DrawImageInfo(const CDuiRect& rcItem, const CDuiRect& rcPaint, const TDrawInfo* pDrawInfo, HINSTANCE instance = NULL);
 
 		//根据字符串属性绘制图像
-		bool DrawImageString(const RECT& rcItem, const RECT& rcPaint, LPCTSTR pStrImage, LPCTSTR pStrModify = NULL, HINSTANCE instance = NULL);
+		bool DrawImageString(const CDuiRect& rcItem, const CDuiRect& rcPaint, LPCTSTR pStrImage, LPCTSTR pStrModify = NULL, HINSTANCE instance = NULL);
 
 	protected:
 		CPaintManagerUI *m_pManager;
@@ -413,8 +413,8 @@ namespace DuiLib {
 	class UILIB_API UIClipBase
 	{
 	public:
-		virtual void GenerateClip(UIRender *pRender, RECT rc) = 0;
-		virtual void GenerateRoundClip(UIRender *pRender, RECT rc, RECT rcItem, int roundX, int roundY) = 0;
+		virtual void GenerateClip(UIRender *pRender, CDuiRect rc) = 0;
+		virtual void GenerateRoundClip(UIRender *pRender, CDuiRect rc, CDuiRect rcItem, int roundX, int roundY) = 0;
 		virtual void UseOldClipBegin(UIRender *pRender) = 0;
 		virtual void UseOldClipEnd(UIRender *pRender) = 0;
 	};

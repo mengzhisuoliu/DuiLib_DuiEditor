@@ -31,7 +31,7 @@ LPVOID CTreeBodyUI::GetInterface(LPCTSTR pstrName)
 	return CVerticalLayoutUI::GetInterface(pstrName);
 }
 
-void CTreeBodyUI::SetPos(RECT rc, bool bNeedInvalidate)
+void CTreeBodyUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 {
 	CControlUI::SetPos(rc, bNeedInvalidate);
 	if(!GetOwner()) return;
@@ -203,14 +203,14 @@ void CTreeUI::DoEvent(TEventUI& event)
 	CContainerUI::DoEvent(event);
 }
 
-void CTreeUI::SetPos(RECT rc, bool bNeedInvalidate)
+void CTreeUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 {
 	//return CContainerUI::SetPos(rc, bNeedInvalidate);
 	CControlUI::SetPos(rc, bNeedInvalidate);
 	rc = m_rcItem;
 
 	// Adjust for inset
-	RECT rcInset = GetInset();
+	CDuiRect rcInset = GetInset();
 	rc.left += rcInset.left;
 	rc.top += rcInset.top;
 	rc.right -= rcInset.right;
@@ -223,7 +223,7 @@ void CTreeUI::SetPos(RECT rc, bool bNeedInvalidate)
 		return;
 	}
 
-	SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
+	CDuiSize szAvailable = rc;
 	int iPosX = rc.left;
 	if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible()) 
 	{
@@ -231,7 +231,7 @@ void CTreeUI::SetPos(RECT rc, bool bNeedInvalidate)
 		iPosX -= m_pHorizontalScrollBar->GetScrollPos();
 	}
 
-	RECT rcBody = {iPosX, rc.top, iPosX + m_pBody->GetCxNeeded(), rc.bottom};
+	CDuiRect rcBody(iPosX, rc.top, iPosX + m_pBody->GetCxNeeded(), rc.bottom);
 	m_pBody->SetPos(rcBody);
 
 	if(m_pBody->GetCxNeeded() < rc.right - rc.left)
@@ -247,7 +247,7 @@ void CTreeUI::SetPos(RECT rc, bool bNeedInvalidate)
 	ProcessScrollBar(rc, cxNeeded, cyNeeded);
 }
 
-void CTreeUI::BuildRows(RECT rc, bool bNeedInvalidate)
+void CTreeUI::BuildRows(CDuiRect rc, bool bNeedInvalidate)
 {
 	int iPosX = rc.left;
 	int iPosY = rc.top;
@@ -331,7 +331,7 @@ void CTreeUI::BuildRows(RECT rc, bool bNeedInvalidate)
 		int nNodeWidth = pRowUI->GetCxNeeded(CDuiSize(rc.right-rc.left, GetNodeHeight()));
 		cxNeeded = MAX(cxNeeded, nNodeWidth);
 
-		RECT rcRow = { rc.left, iPosY, rc.right, iPosY + GetNodeHeight() };
+		CDuiRect rcRow( rc.left, iPosY, rc.right, iPosY + GetNodeHeight() );
 		pRowUI->SetPos(rcRow, bNeedInvalidate);
 
 		iPosY += GetNodeHeight() + GetChildPadding();
@@ -342,7 +342,7 @@ void CTreeUI::BuildRows(RECT rc, bool bNeedInvalidate)
 	m_pBody->SetCyNeeded(cyNeeded);
 }
 
-void CTreeUI::SetScrollPos(SIZE szPos, bool bMsg)
+void CTreeUI::SetScrollPos(CDuiSize szPos, bool bMsg)
 {
 	int cx = 0;
 	int cy = 0;
@@ -360,7 +360,7 @@ void CTreeUI::SetScrollPos(SIZE szPos, bool bMsg)
 
 	if( cx == 0 && cy == 0 ) return;
 
-	RECT rcPos;
+	CDuiRect rcPos;
 	for( int it2 = 0; it2 < m_items.GetSize(); it2++ ) {
 		CControlUI* pControl = static_cast<CControlUI*>(m_items[it2]);
 		if( !pControl->IsVisible() ) continue;
@@ -385,7 +385,7 @@ void CTreeUI::SetScrollPos(SIZE szPos, bool bMsg)
 		}
 	}
 }
-void CTreeUI::ProcessScrollBar(RECT rc, int cxRequired, int cyRequired)
+void CTreeUI::ProcessScrollBar(CDuiRect rc, int cxRequired, int cyRequired)
 {
 	while (m_pHorizontalScrollBar)
 	{
@@ -413,7 +413,7 @@ void CTreeUI::ProcessScrollBar(RECT rc, int cxRequired, int cyRequired)
 		}
 		else
 		{
-			RECT rcScrollBarPos = { rc.left, rc.bottom, rc.right, rc.bottom + m_pHorizontalScrollBar->GetFixedHeight() };
+			CDuiRect rcScrollBarPos(rc.left, rc.bottom, rc.right, rc.bottom + m_pHorizontalScrollBar->GetFixedHeight() );
 			m_pHorizontalScrollBar->SetPos(rcScrollBarPos);
 
 			if (m_pHorizontalScrollBar->GetScrollRange() != cxScroll) 
@@ -429,7 +429,7 @@ void CTreeUI::ProcessScrollBar(RECT rc, int cxRequired, int cyRequired)
 		break;
 	}
 
-	RECT rcBody = m_pBody->GetPos();
+	CDuiRect rcBody = m_pBody->GetPos();
 	int nBodyHeight = rcBody.bottom - rcBody.top;
 	while (m_pVerticalScrollBar)
 	{
@@ -457,9 +457,8 @@ void CTreeUI::ProcessScrollBar(RECT rc, int cxRequired, int cyRequired)
 			break;
 		}
 
-		RECT rcTree = GetPos();
-		RECT rcScrollBarPos = { rcTree.right-m_pVerticalScrollBar->GetFixedWidth(), rcTree.top, rcTree.right, rcTree.bottom };
-//		RECT rcScrollBarPos = { rc.right, rc.top, rc.right + m_pVerticalScrollBar->GetFixedWidth(), rc.bottom };
+		CDuiRect rcTree = GetPos();
+		CDuiRect rcScrollBarPos(rcTree.right-m_pVerticalScrollBar->GetFixedWidth(), rcTree.top, rcTree.right, rcTree.bottom);
 		m_pVerticalScrollBar->SetPos(rcScrollBarPos);
 
 		if (m_pVerticalScrollBar->GetScrollRange() != cyScroll)

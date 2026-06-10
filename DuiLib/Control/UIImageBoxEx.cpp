@@ -90,7 +90,7 @@ void CImageBoxExUI::DoInit()
 	Play();
 }
 
-bool CImageBoxExUI::DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl)
+bool CImageBoxExUI::DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl)
 {
 	::SetStretchBltMode(pRender->GetDC(), COLORONCOLOR);
 	//::SetStretchBltMode(hDC, STRETCH_HALFTONE);
@@ -109,7 +109,7 @@ void CImageBoxExUI::DoEvent(TEventUI& event)
 	CControlUI::DoEvent(event);
 }
 
-void CImageBoxExUI::SetPos(RECT rc, bool bNeedInvalidate)
+void CImageBoxExUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 {
 	CControlUI::SetPos(rc, bNeedInvalidate);
 	if (m_pOffScreenImage->GetWidth() != (rc.right - rc.left) && m_pOffScreenImage->GetHeight() != (rc.bottom - rc.top))//add wenchangwei 2022-02-24
@@ -119,7 +119,7 @@ void CImageBoxExUI::SetPos(RECT rc, bool bNeedInvalidate)
 	}
 }
 
-void CImageBoxExUI::Move(SIZE szOffset, bool bNeedInvalidate)
+void CImageBoxExUI::Move(CDuiSize szOffset, bool bNeedInvalidate)
 {
 	CControlUI::Move(szOffset, bNeedInvalidate);
 }
@@ -375,7 +375,7 @@ void CImageBoxExUI::AnimationRender_Slide(DWORD dwTick)
 	::SetStretchBltMode(hOffScreenDC, COLORONCOLOR);
 	int iMode = ::SaveDC(hOffScreenDC);
 	double delta = (double)(min(dwTick, m_dwAnimStartTick + m_iDuration) - m_dwAnimStartTick) / (double)m_iDuration;
-	POINT ptOldViewportOrg;
+	CDuiPoint ptOldViewportOrg;
 	// Slide left.
 	if(m_iCurAnimType == kAnimationSlideLeft)
 	{

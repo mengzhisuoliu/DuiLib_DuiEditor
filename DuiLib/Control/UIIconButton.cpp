@@ -38,19 +38,19 @@ void CIconButtonUI::DoInit()
 	m_pIconUI->SetFixedHeight(m_szIcon.cy);
 }
 
-SIZE CIconButtonUI::EstimateSize(SIZE szAvailable)
+CDuiSize CIconButtonUI::EstimateSize(CDuiSize szAvailable)
 {
 	if (IsAutoCalcWidth() || IsAutoCalcHeight()) 
 	{
 		CDuiString sText = GetText();
 
-		RECT rcText = {0, 0, szAvailable.cx, szAvailable.cy};
+		CDuiRect rcText(0, 0, szAvailable.cx, szAvailable.cy);
 		int nLinks = 0;
 
 		GetManager()->Render()->DrawText(rcText, GetTextPadding(), sText, m_dwTextColor, m_iFont, DT_CALCRECT | m_uTextStyle);
 
-		RECT rcTextPadding = GetTextPadding();
-		RECT rcInset = GetInset();
+		CDuiRect rcTextPadding = GetTextPadding();
+		CDuiRect rcInset = GetInset();
 
 		if(IsAutoCalcWidth())
 		{	
@@ -75,8 +75,8 @@ void CIconButtonUI::PaintText(UIRender *pRender)
 	CDuiString sText = GetText();
 	if(sText.IsEmpty()) return;
 
-	RECT rcText = m_rcItem;
-	DWORD dwColor = 0;
+	CDuiRect rcText = m_rcItem;
+	CDuiColor dwColor = 0;
 	int iFont = -1;
 
 	//////////////////////////////////////////////////////////////////////////
@@ -121,7 +121,7 @@ void CIconButtonUI::PaintText(UIRender *pRender)
 		dwColor = m_pManager->GetDefaultFontColor();
 
 	//////////////////////////////////////////////////////////////////////////
-	RECT rcInset = GetInset();
+	CDuiRect rcInset = GetInset();
 	rcText.left += rcInset.left;
 	rcText.right -= rcInset.right;
 	rcText.top += rcInset.top;
@@ -137,10 +137,7 @@ void CIconButtonUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
 	if( _tcsicmp(pstrName, _T("iconsize")) == 0 )
 	{
-		SIZE cx = { 0 };
-		LPTSTR pstr = NULL;
-		cx.cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
-		cx.cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
+		CDuiSize cx(pstrValue);
 		m_szIcon = cx;
 		m_pIconUI->SetFixedWidth(m_szIcon.cx);
 		m_pIconUI->SetFixedHeight(m_szIcon.cy);

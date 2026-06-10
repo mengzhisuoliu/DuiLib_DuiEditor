@@ -9,24 +9,24 @@ namespace DuiLib
 	class TemplateButtonUI : public TemplateLabelUI<T>
 	{
 	public:
-		TemplateButtonUI() 
+		TemplateButtonUI()
 		{
 			m_iBindTabIndex = -1;
-			T::SetTextStyle(DT_SINGLELINE | DT_VCENTER | DT_CENTER);
+			this->SetTextStyle(DT_SINGLELINE | DT_VCENTER | DT_CENTER);
 		}
 		virtual ~TemplateButtonUI() {}
 
 		virtual UINT GetControlFlags() const override
 		{
-			return (T::IsKeyboardEnabled() ? UIFLAG_TABSTOP : 0) | (T::IsEnabled() ? UIFLAG_SETCURSOR : 0);
+			return (this->IsKeyboardEnabled() ? UIFLAG_TABSTOP : 0) | (this->IsEnabled() ? UIFLAG_SETCURSOR : 0);
 		}
 
 		virtual bool Activate() override
 		{
 			if( !CControlUI::Activate() ) return false;
-			if(T::GetManager() != NULL )
+			if(this->GetManager() != NULL )
 			{
-				T::GetManager()->SendNotify(this, DUI_MSGTYPE_CLICK);
+				this->GetManager()->SendNotify(this, DUI_MSGTYPE_CLICK);
 				BindTriggerTabSel();
 				SwitchPaneVisible();
 			}
@@ -35,15 +35,15 @@ namespace DuiLib
 
 		virtual void DoEvent(TEventUI& event) override
 		{
-			if( !T::IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND ) {
-				if(T::GetParent() != NULL ) T::GetParent()->DoEvent(event);
-				else T::DoEvent(event);
+			if( !this->IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND ) {
+				if(this->GetParent() != NULL ) this->GetParent()->DoEvent(event);
+				else this->DoEvent(event);
 				return;
 			}
 
 			if( event.Type == UIEVENT_KEYDOWN )
 			{
-				if (T::IsKeyboardEnabled()) {
+				if (this->IsKeyboardEnabled()) {
 					if( event.chKey == VK_SPACE || event.chKey == VK_RETURN ) {
 						Activate();
 						return;
@@ -52,62 +52,62 @@ namespace DuiLib
 			}		
 			if( event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_DBLCLICK)
 			{
-				//if( ::PtInRect(&T::GetPos(), event.ptMouse) && T::IsEnabled() )
-				if( T::GetPos().PtInRect(event.ptMouse) && T::IsEnabled() )
+				//if( ::PtInRect(&this->GetPos(), event.ptMouse) && this->IsEnabled() )
+				if( this->GetPos().PtInRect(event.ptMouse) && this->IsEnabled() )
 				{
-					T::SetCaptureState(true);
-					T::SetPushedState(true);
-					T::Invalidate();
+					this->SetCaptureState(true);
+					this->SetPushedState(true);
+					this->Invalidate();
 				}
 				return;
 			}	
 			if( event.Type == UIEVENT_MOUSEMOVE )
 			{
-				if(T::IsCaptureState() )
+				if(this->IsCaptureState() )
 				{
-					//if( ::PtInRect(&T::GetPos(), event.ptMouse) )
-					if( T::GetPos().PtInRect(event.ptMouse) )
-						T::SetPushedState(true);
+					//if( ::PtInRect(&this->GetPos(), event.ptMouse) )
+					if( this->GetPos().PtInRect(event.ptMouse) )
+						this->SetPushedState(true);
 					else 
-						T::SetPushedState(false);
-					T::Invalidate();
+						this->SetPushedState(false);
+					this->Invalidate();
 				}
 				return;
 			}
 			if( event.Type == UIEVENT_BUTTONUP )
 			{
-				if(T::IsCaptureState() )
+				if(this->IsCaptureState() )
 				{
-					T::SetCaptureState(false);
-					T::SetPushedState(false);
-					T::Invalidate();
-					//if( ::PtInRect(&T::GetPos(), event.ptMouse) ) Activate();	
-					if( T::GetPos().PtInRect(event.ptMouse) ) Activate();			
+					this->SetCaptureState(false);
+					this->SetPushedState(false);
+					this->Invalidate();
+					//if( ::PtInRect(&this->GetPos(), event.ptMouse) ) Activate();	
+					if( this->GetPos().PtInRect(event.ptMouse) ) Activate();			
 				}
 				return;
 			}
 			if( event.Type == UIEVENT_CONTEXTMENU )
 			{
-				if(T::IsContextMenuUsed() && T::GetManager() ) {
-					T::GetManager()->SendNotify(this, DUI_MSGTYPE_MENU, event.wParam, event.lParam);
+				if(this->IsContextMenuUsed() && this->GetManager() ) {
+					this->GetManager()->SendNotify(this, DUI_MSGTYPE_MENU, event.wParam, event.lParam);
 				}
 				return;
 			}
 			if( event.Type == UIEVENT_MOUSEENTER )
 			{
-				if(T::IsEnabled() ) {
-					T::SetHotState(true);
-					T::Invalidate();
+				if(this->IsEnabled() ) {
+					this->SetHotState(true);
+					this->Invalidate();
 				}
 			}
 			if( event.Type == UIEVENT_MOUSELEAVE )
 			{
-				if(T::IsEnabled() ) {
-					T::SetHotState(false);
-					T::Invalidate();
+				if(this->IsEnabled() ) {
+					this->SetHotState(false);
+					this->Invalidate();
 				}
 			}
-			T::DoEvent(event);
+			TemplateLabelUI<T>::DoEvent(event);
 		}
 
 		virtual void SwitchPaneVisible()
@@ -115,7 +115,7 @@ namespace DuiLib
 			if(m_sSwitchControlVisible.IsEmpty()) 
 				return;
 
-			CControlUI* pControl = T::GetManager()->FindControl(m_sSwitchControlVisible);
+			CControlUI* pControl = this->GetManager()->FindControl(m_sSwitchControlVisible);
 			if(!pControl) return;
 			pControl->SetPaneVisible(!pControl->IsPaneVisible());
 		}
@@ -148,15 +148,15 @@ namespace DuiLib
 
 			if(GetBindTabLayoutIndex() >= 0 || _SetSelectIndex >= 0 )
 			{
-				CTabLayoutUI* pTabLayout = static_cast<CTabLayoutUI*>(T::GetManager()->FindControl(pstrName));
+				CTabLayoutUI* pTabLayout = static_cast<CTabLayoutUI*>(this->GetManager()->FindControl(pstrName));
 				if(!pTabLayout) return;
 				pTabLayout->SelectItem(_SetSelectIndex >=0?_SetSelectIndex:GetBindTabLayoutIndex());
 			}
 			else if(!m_sBindTabIndexName.IsEmpty())
 			{
-				CTabLayoutUI* pTabLayout = dynamic_cast<CTabLayoutUI*>(T::GetManager()->FindControl(pstrName));
+				CTabLayoutUI* pTabLayout = dynamic_cast<CTabLayoutUI*>(this->GetManager()->FindControl(pstrName));
 				if(!pTabLayout) return;
-				CControlUI *pControl = static_cast<CControlUI*>(T::GetManager()->FindControl(m_sBindTabIndexName));
+				CControlUI *pControl = static_cast<CControlUI*>(this->GetManager()->FindControl(m_sBindTabIndexName));
 				if(pControl)
 					pTabLayout->SelectItem(pControl);
 			}
@@ -189,7 +189,7 @@ namespace DuiLib
 			else if( _tcsicmp(pstrName, _T("bindtabindex")) == 0 ) BindTabIndex(_ttoi(pstrValue));
 			else if( _tcsicmp(pstrName, _T("bindtabindexname")) == 0 ) BindTabIndexName(pstrValue);
 			else if( _tcsicmp(pstrName, _T("bindtablayoutname")) == 0 ) BindTabLayoutName(pstrValue);	
-			else T::SetAttribute(pstrName, pstrValue);
+			else TemplateLabelUI<T>::SetAttribute(pstrName, pstrValue);
 		}
 
 	protected:
@@ -238,12 +238,12 @@ namespace DuiLib
 	public:
 		CButtonUI();
 
-		LPCTSTR GetClass() const;
-		LPVOID GetInterface(LPCTSTR pstrName);
-		UINT GetControlFlags() const;
+		LPCTSTR GetClass() const override;
+		LPVOID GetInterface(LPCTSTR pstrName) override;
+		UINT GetControlFlags() const override;
 
-		bool Activate();
-		void DoEvent(TEventUI& event);
+		bool Activate() override;
+		void DoEvent(TEventUI& event) override;
 
 		virtual void SwitchPaneVisible();
 		virtual void SetSwitchPaneVisible(LPCTSTR ControlName);
@@ -257,7 +257,7 @@ namespace DuiLib
 		virtual CDuiString GetBindTabLayoutIndexName();
 		virtual LPCTSTR GetBindTabLayoutName();
 
-		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
 //		virtual void PaintText(UIRender *pRender) override;
 	protected:

@@ -44,7 +44,7 @@ namespace DuiLib {
 		LONG GetWinStyle();
 		void SetWinStyle(LONG lStyle);
 
-		virtual void SetTextColor(DWORD dwTextColor) override;
+		virtual void SetTextColor(CDuiColor dwTextColor) override;
 
 		int GetLimitText();
 		void SetLimitText(int iChars);
@@ -109,8 +109,8 @@ namespace DuiLib {
 
 		void SetTipValue(LPCTSTR pStrTipValue);
 		CDuiString GetTipValue();
-		void SetTipValueColor(LPCTSTR pStrColor);
-		DWORD GetTipValueColor();
+		void SetTipValueColor(CDuiColor dwColor);
+		CDuiColor GetTipValueColor();
 		void SetTipValueAlign(UINT uAlign);
 		UINT GetTipValueAlign();
 
@@ -123,7 +123,7 @@ namespace DuiLib {
 		virtual bool OnTxViewChanged();
 		virtual void OnTxNotify(DWORD iNotify, void *pv);
 
-		virtual void SetScrollPos(SIZE szPos, bool bMsg = true) override;
+		virtual void SetScrollPos(CDuiSize szPos, bool bMsg = true) override;
 		virtual void LineUp() override;
 		virtual void LineDown() override;
 		virtual void PageUp() override;
@@ -139,11 +139,11 @@ namespace DuiLib {
 
 		virtual int GetFixedWidth() const override;
 		virtual int GetFixedHeight() const override;
-		virtual SIZE EstimateSize(SIZE szAvailable) override;
-		virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
-		virtual void Move(SIZE szOffset, bool bNeedInvalidate = true) override;
+		virtual CDuiSize EstimateSize(CDuiSize szAvailable) override;
+		virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
+		virtual void Move(CDuiSize szOffset, bool bNeedInvalidate = true) override;
 		virtual void DoEvent(TEventUI& event) override;
-		virtual bool DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl) override;
+		virtual bool DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl) override;
 
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
@@ -175,7 +175,7 @@ namespace DuiLib {
 		UINT m_chLeadByte; // use when we are in _fAccumulateDBC mode
 
 		CDuiString m_sTipValue;
-		DWORD m_dwTipValueColor;
+		CDuiColor m_dwTipValueColor;
 		UINT m_uTipValueAlign;
 		bool	m_bReturnFixedWidth;
 		bool	m_bReturnFixedHeight;

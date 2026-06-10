@@ -24,17 +24,6 @@ LPCTSTR CWindowWin32::GetSuperClassName() const
     return NULL;
 }
 
-
-HWND CWindowWin32::CreateDuiWindow( HWND hwndParent, LPCTSTR pstrWindowName,DWORD dwStyle /*=0*/, DWORD dwExStyle /*=0*/ )
-{
-	return Create(hwndParent,pstrWindowName,dwStyle,dwExStyle,0,0,0,0);
-}
-
-HWND CWindowWin32::Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, const RECT rc)
-{
-    return Create(hwndParent, pstrName, dwStyle, dwExStyle, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
-}
-
 HWND CWindowWin32::Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, int x, int y, int cx, int cy)
 {
     if( GetSuperClassName() != NULL && !RegisterSuperclass() ) return NULL;
@@ -174,10 +163,10 @@ void CWindowWin32::CenterWindow()
 */
     ASSERT(::IsWindow(m_hWnd));
     ASSERT((GetWindowStyle(m_hWnd)&WS_CHILD)==0);
-    RECT rcDlg = { 0 };
+    CDuiRect rcDlg;
     ::GetWindowRect(m_hWnd, &rcDlg);
-    RECT rcArea = { 0 };
-    RECT rcCenter = { 0 };
+    CDuiRect rcArea;
+    CDuiRect rcCenter;
 	HWND hWnd=*this;
     HWND hWndParent = ::GetParent(m_hWnd);
     HWND hWndCenter = ::GetWindowOwner(m_hWnd);
@@ -397,7 +386,7 @@ BOOL CWindowWin32::DoTouchInformation(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 void CWindowWin32::ResizeClient(int cx /*= -1*/, int cy /*= -1*/)
 {
     ASSERT(::IsWindow(m_hWnd));
-    RECT rc = { 0 };
+    CDuiRect rc;
     if( !::GetClientRect(m_hWnd, &rc) ) return;
     if( cx != -1 ) rc.right = cx;
     if( cy != -1 ) rc.bottom = cy;
@@ -405,6 +394,9 @@ void CWindowWin32::ResizeClient(int cx /*= -1*/, int cy /*= -1*/)
     ::SetWindowPos(m_hWnd, NULL, 0, 0, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
 }
 
+// 子类重写HandleMessage时，
+// 不可继续调用 CWindowWin32::HandleMessage，
+// 应该调用 ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
 LRESULT CWindowWin32::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LRESULT lRet = CWindowWnd::HandleMessage(uMsg, wParam, lParam);

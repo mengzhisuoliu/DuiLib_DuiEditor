@@ -125,7 +125,7 @@ namespace DuiLib
 				rcPos.left = rcPos.top = rcPos.right = rcPos.bottom = 0;
 				break;
 			}
-			RECT rcParent = pParent->GetClientPos();
+			CDuiRect rcParent = pParent->GetClientPos();
 			if (!rcPos.Intersect(rcPos, rcParent))
 			{
 				rcPos.left = rcPos.top = rcPos.right = rcPos.bottom = 0;
@@ -152,57 +152,6 @@ namespace DuiLib
 		SetOwnerText(m_sText);
 		m_pOwner->Invalidate();
 		delete this;
-	}
-
-	LRESULT CEditWndSDL::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
-	{
-		switch (uMsg)
-		{
-			case WM_CREATE:
-				{
-					m_pm.SetForceUseSharedRes(true);
-					m_pm.Init(m_hWnd, NULL, this);
-
-					// 显示窗口并设置焦点
-					ShowWindow();
-
-					// 强制重绘
-					Invalidate();
-				}
-				break;
-			case WM_PAINT:
-				OnPaint();
-				return 0;
-			case WM_KEYDOWN:
-				OnKeyDown(wParam, lParam);
-				return 0;
-			case WM_CHAR:
-				OnChar(wParam, lParam);
-				return 0;
-			case WM_LBUTTONDOWN:
-				OnLButtonDown(wParam, lParam);
-				return 0;
-			case WM_LBUTTONUP:
-				OnLButtonUp(wParam, lParam);
-				return 0;
-			case WM_MOUSEMOVE:
-				OnMouseMove(wParam, lParam);
-				return 0;
-			case WM_SETFOCUS:
-				OnSetFocus(wParam, lParam);
-				break;
-			case WM_KILLFOCUS:
-				OnKillFocus(wParam, lParam);
-				break;
-			case WM_TIMER:
-				OnTimer(wParam, lParam);
-				break;
-			default:
-				break;
-		}
-		LRESULT lRes = 0;
-		if (m_pm.MessageHandler(uMsg, wParam, lParam, lRes)) return lRes;
-		return CWindowSDL::HandleMessage(uMsg, wParam, lParam);
 	}
 
 	BOOL CEditWndSDL::OnSdlEvent(const void* pEvent)
@@ -248,11 +197,22 @@ namespace DuiLib
 		return FALSE;
 	}
 
-	void CEditWndSDL::OnPaint()
+	LRESULT CEditWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	{
+		m_pm.SetForceUseSharedRes(true);
+		m_pm.Init(m_hWnd, NULL, this);
+		// 显示窗口并设置焦点
+		ShowWindow();
+		// 强制重绘
+		Invalidate();
+		return 0;
+	}
+
+	LRESULT CEditWndSDL::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		CDuiRect rcClient;
 		GetClientRect(&rcClient);
-		if (rcClient.IsEmpty()) return;
+		if (rcClient.IsEmpty()) return 0;
 
 		UIRender* pRender = GetManager()->Render();
 		pRender->BeginPaint();
@@ -274,7 +234,7 @@ namespace DuiLib
 			CDuiRect rcCaret = GetCaretPos(); //用光标的高度来绘制高亮区域
 			rcSel.top = rcCaret.top;
 			rcSel.bottom = rcCaret.bottom;
-			DWORD selColor = UIARGB(255, 0, 120, 215); //0xFF3399FF; // 选择高亮色
+			CDuiColor selColor(255, 0, 120, 215); //0xFF3399FF; // 选择高亮色
 			pRender->DrawColor(rcSel, CDuiSize(0, 0), selColor);
 		}
 
@@ -289,12 +249,12 @@ namespace DuiLib
 		}
 
 		// 文本颜色
-		DWORD textColor = GetNativeEditTextColor();
+		CDuiColor textColor = GetNativeEditTextColor();
 		if (textColor == 0) textColor = m_pOwner->GetTextColor();
 		if (textColor == 0) textColor = GetManager()->GetDefaultFontColor();
 
 		// 文本反白颜色
-		DWORD selectedColor = 0xFFFFFFFF; // 反白显示为白色
+		CDuiColor selectedColor = CDuiColor::White; // 反白显示为白色
 
 		// 绘制文本
 		CDuiRect rcText = rcClient;
@@ -334,7 +294,7 @@ namespace DuiLib
 					selected = true;
 			}
 
-			DWORD color = selected ? selectedColor : textColor;
+			CDuiColor color = selected ? selectedColor : textColor;
 			CDuiRect rcChar = { curX, curY, curX + sz.cx, curY + sz.cy };
 			pRender->DrawText(rcChar, CDuiRect(0, 0, 0, 0), ch, color, m_pOwner->GetFont(), DT_LEFT | DT_TOP);
 
@@ -359,7 +319,7 @@ namespace DuiLib
 			// 绘制组合文本
 			CDuiRect rcCompose = { caretX, rcText.top, caretX + 200, rcText.bottom }; // 临时矩形，实际应测量宽度
 			// 测量组合文本宽度
-			SIZE szCompose = pRender->GetTextSize(m_sComposition, m_pOwner->GetFont(), DT_LEFT | DT_VCENTER);
+			CDuiSize szCompose = pRender->GetTextSize(m_sComposition, m_pOwner->GetFont(), DT_LEFT | DT_VCENTER);
 			rcCompose.right = caretX + szCompose.cx;
 			pRender->DrawText(rcCompose, CDuiRect(0, 0, 0, 0), m_sComposition,
 				textColor, m_pOwner->GetFont(), DT_LEFT | DT_VCENTER);
@@ -390,7 +350,7 @@ namespace DuiLib
 			{
 				// 测量组合文本中光标前的宽度
 				CDuiString leftPart = m_sComposition.Left(m_compositionCursor);
-				SIZE szLeft = pRender->GetTextSize(leftPart, m_pOwner->GetFont(), DT_LEFT | DT_TOP);
+				CDuiSize szLeft = pRender->GetTextSize(leftPart, m_pOwner->GetFont(), DT_LEFT | DT_TOP);
 				caretX = GetCharXPos(m_cursorPos) + szLeft.cx;
 			}
 			else
@@ -404,18 +364,19 @@ namespace DuiLib
 		}
 
 		pRender->EndPaint();
+		return 0;
 	}
 
-	void CEditWndSDL::OnKeyDown(WPARAM wParam, LPARAM lParam)
+	LRESULT CEditWndSDL::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		// 如果有组合文本，按下任意编辑键时清除组合
 		if (!m_sComposition.IsEmpty())
 		{
-			SDL_ClearComposition((SDL_Window*)m_hWnd);
+			SDL_ClearComposition(m_hWnd);
 			m_sComposition.Empty();
 			m_compositionCursor = 0;
 			Invalidate();
-			return;
+			return 0;
 		}
 
 		bool ctrl = GetManager()->IsCtrlKeyDown();
@@ -429,22 +390,22 @@ namespace DuiLib
 			case VK_END:    MoveCursorToEnd(shift); break;
 			case VK_BACK:   DeleteBackward(); break;
 			case VK_DELETE: DeleteForward(); break;
-			case VK_NUMPAD4: 
-				if (!GetManager()->IsNUmberLockKeyOn()) 
-					MoveCursor(-1, shift); 
-				break;
-			case VK_NUMPAD6: 
-				if (!GetManager()->IsNUmberLockKeyOn()) 
-					MoveCursor(1, shift); 
-				break;
-			case VK_NUMPAD7:
-				if (!GetManager()->IsNUmberLockKeyOn())
-					MoveCursorToHome(shift);
-				break;
-			case VK_NUMPAD1:
-				if (!GetManager()->IsNUmberLockKeyOn())
-					MoveCursorToEnd(shift);
-				break;
+// 			case VK_NUMPAD4: 
+// 				if (!GetManager()->IsNumberLockKeyOn()) 
+// 					MoveCursor(-1, shift); 
+// 				break;
+// 			case VK_NUMPAD6: 
+// 				if (!GetManager()->IsNumberLockKeyOn()) 
+// 					MoveCursor(1, shift); 
+// 				break;
+// 			case VK_NUMPAD7:
+// 				if (!GetManager()->IsNumberLockKeyOn())
+// 					MoveCursorToHome(shift);
+// 				break;
+// 			case VK_NUMPAD1:
+// 				if (!GetManager()->IsNumberLockKeyOn())
+// 					MoveCursorToEnd(shift);
+// 				break;
 			case VK_RETURN:
 				if (IsMultiLine() && IsWantReturn())
 					InsertText(_T("\n"));
@@ -467,19 +428,21 @@ namespace DuiLib
 				break;
 		}
 		Invalidate();
+		return 0;
 	}
 
-	void CEditWndSDL::OnChar(WPARAM wParam, LPARAM lParam)
+	LRESULT CEditWndSDL::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 // 		TCHAR ch = (TCHAR)wParam;
 // 		if (ch >= 0x20 || ch == _T('\t') || (IsMultiLine() && ch == _T('\n')))
 // 			InsertText(CDuiString(ch));
 // 		Invalidate();
+		return 0;
 	}
 
-	void CEditWndSDL::OnLButtonDown(WPARAM wParam, LPARAM lParam)
+	LRESULT CEditWndSDL::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		CDuiPoint pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 		int newPos = GetCharPosFromPoint(pt);
 		if (GetManager()->IsShiftKeyDown())
 		{
@@ -497,29 +460,31 @@ namespace DuiLib
 		}
 		m_bDrawCaret = true;
 		Invalidate();
+		return 0;
 	}
 
-	void CEditWndSDL::OnLButtonUp(WPARAM wParam, LPARAM lParam)
+	LRESULT CEditWndSDL::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		if (m_bDragging)
 		{
 			m_bDragging = false;
 			GetManager()->ReleaseCapture();
 			// 最后更新一次光标位置（可选）
-			POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+			CDuiPoint pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 			int newPos = GetCharPosFromPoint(pt);
 			if (m_selStart == m_selEnd)
 				m_selStart = m_cursorPos;
 			m_selEnd = newPos;
 			Invalidate();
 		}
+		return 0;
 	}
 
-	void CEditWndSDL::OnMouseMove(WPARAM wParam, LPARAM lParam)
+	LRESULT CEditWndSDL::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		if (!m_bDragging) return;
+		if (!m_bDragging) return 0;
 
-		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		CDuiPoint pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 		int newPos = GetCharPosFromPoint(pt);
 		if (newPos != m_cursorPos)
 		{
@@ -529,35 +494,38 @@ namespace DuiLib
 			m_selEnd = newPos;
 			Invalidate();
 		}
+		return 0;
 	}
 
-	void CEditWndSDL::OnSetFocus(WPARAM wParam, LPARAM lParam)
+	LRESULT CEditWndSDL::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		// 启动文本输入
-		SDL_StartTextInput((SDL_Window*)m_hWnd);
+		SDL_StartTextInput(m_hWnd);
 
 		// 设置文本输入区域，并将光标偏移位置告知系统
 		CDuiRect rcCaret = GetCaretPos();
 		SDL_Rect rc = { rcCaret.left, rcCaret.right, rcCaret.GetWidth(), rcCaret.GetHeight() };
-		SDL_Rect rcArea = CalculateCandidatePosition((SDL_Window*)m_hWnd, &rc, 0);
-		SDL_SetTextInputArea((SDL_Window*)m_hWnd, &rcArea, 0);
+		SDL_Rect rcArea = CalculateCandidatePosition(m_hWnd, &rc, 0);
+		SDL_SetTextInputArea(m_hWnd, &rcArea, 0);
 
 		// 启动光标闪烁定时器
 		GetManager()->SetTimer(m_pOwner, m_caretTimerID, 800);
 
 		GetManager()->SetCursor(DUI_IBEAM);
+
+		return 0;
 	}
 
-	void CEditWndSDL::OnKillFocus(WPARAM wParam, LPARAM lParam)
+	LRESULT CEditWndSDL::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		// 关闭光标闪烁
 		GetManager()->KillTimer(m_pOwner, m_caretTimerID);
 		// 清除输入
-		SDL_ClearComposition((SDL_Window*)m_hWnd);
+		SDL_ClearComposition(m_hWnd);
 		// 清除文本输入区域设置
-		SDL_SetTextInputArea((SDL_Window*)m_hWnd, NULL, 0);
+		SDL_SetTextInputArea(m_hWnd, NULL, 0);
 		// 停止文本输入事件
-		SDL_StopTextInput((SDL_Window*)m_hWnd);
+		SDL_StopTextInput(m_hWnd);
 
 		// 清空组合文本
 		m_sComposition.Empty();
@@ -566,12 +534,14 @@ namespace DuiLib
 		GetManager()->SetCursor(DUI_ARROW);
 		m_pOwner->GetManager()->SetFocus(NULL);
 		Close();
+		return 0;
 	}
 
-	void CEditWndSDL::OnTimer(WPARAM wParam, LPARAM lParam)
+	LRESULT CEditWndSDL::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		m_bDrawCaret = !m_bDrawCaret;
 		Invalidate();
+		return 0;
 	}
 
 	void CEditWndSDL::InsertText(const CDuiString& text)
@@ -704,7 +674,7 @@ namespace DuiLib
 		}
 	}
 
-	int CEditWndSDL::GetCharPosFromPoint(const POINT& pt)
+	int CEditWndSDL::GetCharPosFromPoint(const CDuiPoint& pt)
 	{
 		// 计算鼠标点击位置对应的字符索引（精确测量）
 		CDuiRect rcClient;

@@ -26,7 +26,7 @@ public:
 	virtual CPaintManagerUI* GetManager() = 0;
 	virtual CControlUI* GetRoot() = 0;
 
-	virtual void Notify(TNotifyUI& msg);
+	virtual void Notify(TNotifyUI& msg) override;
 
 	//消息处理
 	virtual void OnNotifyClick(TNotifyUI& msg){}

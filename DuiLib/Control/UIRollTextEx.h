@@ -17,11 +17,11 @@ namespace DuiLib
 		virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
 	public:	
-		virtual void DoInit();
+		virtual void DoInit() override;
 		void OnTimer(UINT_PTR idEvent);
 		virtual void PaintText(UIRender *pRender) override;
 		virtual void DoEvent(TEventUI& event) override;
-		virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+		virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
 		virtual void SetText(LPCTSTR pstrText) override;
 
 		void SetRollDirection(int nDirect);
@@ -47,7 +47,7 @@ namespace DuiLib
 		int m_nText_W_H;
 
 		bool m_bPauseRoll;
-		RECT m_rcClient;
+		CDuiRect m_rcClient;
 		int m_nRollSpeed;
 	};
 

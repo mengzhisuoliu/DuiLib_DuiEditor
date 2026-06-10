@@ -25,7 +25,7 @@ namespace DuiLib
 		int GetMaxValue() const;
 		void SetMaxValue(int nMax);
 		int GetValue() const;
-		void SetValue(int nValue);
+		virtual void SetValue(int nValue);
 
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 		virtual void PaintForeColor(UIRender *pRender) override;

@@ -305,7 +305,7 @@ namespace DuiLib
 		m_pNodeData = pNodeData; 
 		if(m_pNodeData)
 		{
-			RECT inSet = {m_pNodeData->GetLevel() * GetOwner()->GetIndentWidth(),0,0,0};
+			CDuiRect inSet(m_pNodeData->GetLevel() * GetOwner()->GetIndentWidth(),0,0,0);
 			SetInset(inSet);
 // 			if(m_pNodeData->GetChild(0))
 // 			{
@@ -355,18 +355,18 @@ namespace DuiLib
 		}
 	}
 
-	int CTreeItemUI::GetCxNeeded(SIZE szAvailable)
+	int CTreeItemUI::GetCxNeeded(CDuiSize szAvailable)
 	{
 		if(!GetOwner() | !m_pNodeData) return 30;
 
 		int nWidth = 0;
 		nWidth += m_pFolderButton->GetFixedWidth() + m_pCheckBox->GetFixedWidth() + m_pIcon->GetFixedWidth();
 
-		RECT rcText = {0, 0, szAvailable.cx, szAvailable.cy};
-		GetManager()->Render()->DrawText(rcText, m_pText->GetTextPadding(), m_pNodeData->GetText(), 0, m_pText->GetFont(), DT_CALCRECT | m_pText->GetTextStyle());
+		CDuiRect rcText = szAvailable;
+		GetManager()->Render()->DrawText(rcText, m_pText->GetTextPadding(), m_pNodeData->GetText(), CDuiColor(), m_pText->GetFont(), DT_CALCRECT | m_pText->GetTextStyle());
 		nWidth += rcText.right - rcText.left;
 
-		RECT rcInset = GetInset();
+		CDuiRect rcInset = GetInset();
 		nWidth += rcInset.left;
 		nWidth += rcInset.right;
 		

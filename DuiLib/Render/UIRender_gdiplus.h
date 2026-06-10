@@ -20,19 +20,19 @@ namespace DuiLib {
 // 		virtual void RestoreObject(UIObject *pObject = NULL) override;
 // 		virtual void RestoreDefaultObject() override;
 
-		virtual void DrawColor(const RECT& rc, const SIZE &round, DWORD color) override;
-		//virtual void DrawGradient(const RECT& rc, DWORD dwFirst, DWORD dwSecond, bool bVertical, int nSteps) override;
+		virtual void DrawColor(const CDuiRect& rc, const CDuiSize &round, CDuiColor color) override;
+		//virtual void DrawGradient(const CDuiRect& rc, CDuiColor dwFirst, CDuiColor dwSecond, bool bVertical, int nSteps) override;
 
-		virtual void DrawLine(int x1, int y1, int x2, int y2, int nSize, DWORD dwPenColor,int nStyle = PS_SOLID) override;
-		virtual void DrawRect(const RECT& rc, int nSize, DWORD dwPenColor,int nStyle = PS_SOLID) override;
-		virtual void DrawRoundRect(const RECT& rc, int nSize, const SIZE &round, DWORD dwPenColor,int nStyle = PS_SOLID) override;
-		virtual void DrawEllipse(const RECT& rc, int nSize, DWORD dwPenColor,int nStyle = PS_SOLID) override;
-		virtual void FillEllipse(const RECT& rc, DWORD dwColor) override;
-		virtual void DrawText(RECT& rc, LPCTSTR pstrText, DWORD dwTextColor, int iFont, UINT uStyle) override;
+		virtual void DrawLine(int x1, int y1, int x2, int y2, int nSize, CDuiColor dwPenColor,int nStyle = PS_SOLID) override;
+		virtual void DrawRect(const CDuiRect& rc, int nSize, CDuiColor dwPenColor,int nStyle = PS_SOLID) override;
+		virtual void DrawRoundRect(const CDuiRect& rc, int nSize, const CDuiSize &round, CDuiColor dwPenColor,int nStyle = PS_SOLID) override;
+		virtual void DrawEllipse(const CDuiRect& rc, int nSize, CDuiColor dwPenColor,int nStyle = PS_SOLID) override;
+		virtual void FillEllipse(const CDuiRect& rc, CDuiColor dwColor) override;
+		virtual void DrawText(CDuiRect& rc, LPCTSTR pstrText, CDuiColor dwTextColor, int iFont, UINT uStyle) override;
 
 		virtual UIPath* CreatePath() override;	
-		virtual BOOL DrawPath(const UIPath* path, int nSize, DWORD dwColor) override;
-		virtual BOOL FillPath(const UIPath* path, const DWORD dwColor) override;
+		virtual BOOL DrawPath(const UIPath* path, int nSize, CDuiColor dwColor) override;
+		virtual BOOL FillPath(const UIPath* path, const CDuiColor dwColor) override;
 
 	};
 

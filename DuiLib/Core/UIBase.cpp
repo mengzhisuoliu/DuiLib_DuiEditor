@@ -287,8 +287,14 @@ LRESULT CWindowWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_RBUTTONDOWN:	lRes = OnRButtonDown(uMsg, wParam, lParam, m_bHandleMessage); break;
 	case WM_MOUSEMOVE:		lRes = OnMouseMove(uMsg, wParam, lParam, m_bHandleMessage); break;
 	case WM_MOUSEHOVER:		lRes = OnMouseHover(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_TIMER:			lRes = OnTimer(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_MOUSEACTIVATE:	lRes = OnMouseActivate(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_ERASEBKGND:		lRes = OnEraseBkgnd(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_PAINT:			lRes = OnPaint(uMsg, wParam, lParam, m_bHandleMessage); break;
+	case WM_PRINT:			lRes = OnPrint(uMsg, wParam, lParam, m_bHandleMessage); break;
 	default:				m_bHandleMessage = FALSE; break;
 	}
+
 	if (IsHandleMessage()) return lRes;
 
 	lRes = HandleCustomMessage(uMsg, wParam, lParam, m_bHandleMessage);
@@ -368,12 +374,6 @@ LRESULT CWindowWnd::OnMouseWheel(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPar
 	return 0;
 }
 
-LRESULT CWindowWnd::OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	SetHandleMessage(FALSE);
-	return 0;
-}
-
 LRESULT CWindowWnd::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	SetHandleMessage(FALSE);
@@ -442,6 +442,12 @@ LRESULT CWindowWnd::OnRButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPara
 }
 
 LRESULT CWindowWnd::OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+{
+	SetHandleMessage(FALSE);
+	return 0;
+}
+
+LRESULT CWindowWnd::OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	SetHandleMessage(FALSE);
 	return 0;

@@ -54,9 +54,9 @@ namespace DuiLib {
 
 		virtual void SetVisible(bool bVisible = true) override;
 		virtual void SetInternVisible(bool bVisible = true) override;
-		virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
-		virtual void Move(SIZE szOffset, bool bNeedInvalidate = true) override;
-		virtual bool DoPaint(UIRender *pRender, const RECT& rcPaint, CControlUI* pStopControl) override;
+		virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
+		virtual void Move(CDuiSize szOffset, bool bNeedInvalidate = true) override;
+		virtual bool DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl) override;
 
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 

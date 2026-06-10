@@ -10,22 +10,22 @@ namespace DuiLib
 	class TemplateOptionUI : public TemplateButtonUI<T>
 	{
 	public:
-		TemplateOptionUI() 
+		TemplateOptionUI()
 		{
 			m_bSelected = false;
 		}
 
 		virtual ~TemplateOptionUI() 
 		{
-			if( !m_sGroupName.IsEmpty() && T::GetManager())
-				T::GetManager()->RemoveOptionGroup(m_sGroupName, this);
+			if( !m_sGroupName.IsEmpty() && this->GetManager())
+				this->GetManager()->RemoveOptionGroup(m_sGroupName, this);
 		}
 
 		virtual void DoInit() override
 		{
 			if(!m_sGroupName.IsEmpty() ) 
 			{
-				if (T::GetManager()) T::GetManager()->AddOptionGroup(m_sGroupName, this);
+				if (this->GetManager()) this->GetManager()->AddOptionGroup(m_sGroupName, this);
 			}
 		}
 
@@ -43,9 +43,9 @@ namespace DuiLib
 			if( !m_sGroupName.IsEmpty() ) Selected(true);
 			else Selected(!IsSelected());
 
-			if(T::GetManager() != NULL )
+			if(this->GetManager() != NULL )
 			{
-				T::GetManager()->SendNotify(this, DUI_MSGTYPE_CLICK);
+				this->GetManager()->SendNotify(this, DUI_MSGTYPE_CLICK);
 				this->BindTriggerTabSel();
 				this->SwitchPaneVisible();
 			}
@@ -58,7 +58,7 @@ namespace DuiLib
 			if(this->m_sSwitchControlVisible.IsEmpty()) 
 				return;
 
-			CControlUI* pControl = T::GetManager()->FindControl(this->m_sSwitchControlVisible);
+			CControlUI* pControl = this->GetManager()->FindControl(this->m_sSwitchControlVisible);
 			if(!pControl) return;
 			bool bVisible = pControl->IsPaneVisible();
 			if(m_bSelected && !bVisible)
@@ -86,16 +86,16 @@ namespace DuiLib
 			else 
 			{
 				if( m_sGroupName == pStrGroupName ) return;
-				if (!m_sGroupName.IsEmpty() && T::GetManager()) T::GetManager()->RemoveOptionGroup(m_sGroupName, this);
+				if (!m_sGroupName.IsEmpty() && this->GetManager()) this->GetManager()->RemoveOptionGroup(m_sGroupName, this);
 				m_sGroupName = pStrGroupName;
 			}
 
 			if( !m_sGroupName.IsEmpty() ) 
 			{
-				if (T::GetManager()) T::GetManager()->AddOptionGroup(m_sGroupName, this);
+				if (this->GetManager()) this->GetManager()->AddOptionGroup(m_sGroupName, this);
 			}
 			else {
-				if (T::GetManager()) T::GetManager()->RemoveOptionGroup(m_sGroupName, this);
+				if (this->GetManager()) this->GetManager()->RemoveOptionGroup(m_sGroupName, this);
 			}
 
 			Selected(IsSelected());
@@ -106,7 +106,7 @@ namespace DuiLib
 			if(this->m_sSwitchControlVisible.IsEmpty())
 				return m_bSelected;
 
-			CControlUI* pControl = static_cast<CControlUI*>(T::GetManager()->FindControl(this->m_sSwitchControlVisible.GetData()));
+			CControlUI* pControl = static_cast<CControlUI*>(this->GetManager()->FindControl(this->m_sSwitchControlVisible.GetData()));
 			if(!pControl) return m_bSelected;
 			return pControl->IsVisible();
 		}
@@ -116,15 +116,15 @@ namespace DuiLib
 			if(IsSelected() == bSelected) return;
 
 			m_bSelected = bSelected;
-			T::SetSelectedState(m_bSelected);
+			this->SetSelectedState(m_bSelected);
 
-			if(T::GetManager() != NULL ) 
+			if(this->GetManager() != NULL ) 
 			{
 				if( !m_sGroupName.IsEmpty() ) 
 				{
 					if( m_bSelected ) 
 					{
-						CStdPtrArray* aOptionGroup = T::GetManager()->GetOptionGroup(m_sGroupName);
+						CStdPtrArray* aOptionGroup = this->GetManager()->GetOptionGroup(m_sGroupName);
 						for( int i = 0; i < aOptionGroup->GetSize(); i++ ) 
 						{
 							CControlUI* pControlx = static_cast<CControlUI*>(aOptionGroup->GetAt(i));
@@ -141,17 +141,17 @@ namespace DuiLib
 						}
 					}
 				}	
-				if (bTriggerEvent) T::GetManager()->SendNotify(this, DUI_MSGTYPE_SELECTCHANGED);
+				if (bTriggerEvent) this->GetManager()->SendNotify(this, DUI_MSGTYPE_SELECTCHANGED);
 			}
 
-			T::Invalidate();
+			this->Invalidate();
 		}
 
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override
 		{
 			if( _tcsicmp(pstrName, _T("group")) == 0 ) SetGroup(pstrValue);
 			else if( _tcsicmp(pstrName, _T("selected")) == 0 ) Selected(_tcsicmp(pstrValue, _T("true")) == 0);
-			else T::SetAttribute(pstrName, pstrValue);
+			else TemplateButtonUI<T>::SetAttribute(pstrName, pstrValue);
 		}
 	protected:
 		bool			m_bSelected;

@@ -57,7 +57,7 @@ namespace DuiLib
 		return dpix;
 	}
 
-	int CDpiWin32::GetDPIOfMonitorNearestToPoint(POINT pt)
+	int CDpiWin32::GetDPIOfMonitorNearestToPoint(CDuiPoint pt)
 	{
 		HMONITOR hMonitor;
 		hMonitor = MonitorFromPoint(pt, MONITOR_DEFAULTTONEAREST);
@@ -66,7 +66,7 @@ namespace DuiLib
 
 	int CDpiWin32::GetMainMonitorDPI()
 	{
-		POINT    pt;
+		CDuiPoint    pt;
 		// Get the DPI for the main monitor
 		pt.x = 1;
 		pt.y = 1;

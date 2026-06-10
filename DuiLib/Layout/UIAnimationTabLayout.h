@@ -21,14 +21,14 @@ namespace DuiLib
 		virtual void OnAnimationStep(int nTotalFrame, int nCurFrame, int nAnimationID) override;
 		virtual void OnAnimationStop(int nAnimationID) override;
 
-		virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+		virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
 
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
 	protected:
 		int m_nPositiveDirection;
-		RECT m_rcCurPos;
-		RECT m_rcItemOld;
+		CDuiRect m_rcCurPos;
+		CDuiRect m_rcItemOld;
 		CControlUI* m_pCurrentControl;
 		bool m_bControlVisibleFlag;
 	};

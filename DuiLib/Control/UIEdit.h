@@ -35,35 +35,35 @@ namespace DuiLib
 		void SetWantReturn(bool bWantReturn = true) { m_bWantReturn = bWantReturn; }
 		bool IsWantReturn()							{ return m_bWantReturn; }
 
-		void SetNativeEditBkColor(DWORD dwColor)	{ m_dwEditbkColor = dwColor; }
-		DWORD GetNativeEditBkColor() const			{ return m_dwEditbkColor; }
-		void SetNativeEditTextColor( DWORD dwColor ) { m_dwEditTextColor = dwColor; }
-		DWORD GetNativeEditTextColor() const		{ return m_dwEditTextColor; }
+		void SetNativeEditBkColor(CDuiColor dwColor)	{ m_dwEditbkColor = dwColor; }
+		CDuiColor GetNativeEditBkColor() const			{ return m_dwEditbkColor; }
+		void SetNativeEditTextColor(CDuiColor dwColor ) { m_dwEditTextColor = dwColor; }
+		CDuiColor GetNativeEditTextColor() const		{ return m_dwEditTextColor; }
 
 		bool IsAutoSelAll()							{ return m_bAutoSelAll; }
 		void SetAutoSelAll(bool bAutoSelAll)		{ m_bAutoSelAll = bAutoSelAll; }
 
 		void SetTipValue(LPCTSTR pStrTipValue)		{ m_sTipValue = pStrTipValue; }
 		CDuiString GetTipValue()					{ return m_sTipValue; }
-		void SetTipValueColor(DWORD dwColor)		{ m_dwTipValueColor = dwColor; }
-		DWORD GetTipValueColor()					{ return m_dwTipValueColor; }
+		void SetTipValueColor(CDuiColor dwColor)		{ m_dwTipValueColor = dwColor; }
+		CDuiColor GetTipValueColor()					{ return m_dwTipValueColor; }
 
-		virtual CDuiString GetText() const;
-		void SetText(LPCTSTR pstrText);
+		virtual CDuiString GetText() const override;
+		void SetText(LPCTSTR pstrText) override;
 
 		void SetSel(long nStartChar, long nEndChar);
 		void SetSelAll();
 		void SetReplaceSel(LPCTSTR lpszReplace);
 
-		void SetPos(RECT rc, bool bNeedInvalidate = true);
-		void Move(SIZE szOffset, bool bNeedInvalidate = true);
-		void SetVisible(bool bVisible = true);
-		void SetInternVisible(bool bVisible = true);
-		SIZE EstimateSize(SIZE szAvailable);
-		void DoEvent(TEventUI& event);
-		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+		void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
+		void Move(CDuiSize szOffset, bool bNeedInvalidate = true) override;
+		void SetVisible(bool bVisible = true) override;
+		void SetInternVisible(bool bVisible = true) override;
+		CDuiSize EstimateSize(CDuiSize szAvailable) override;
+		void DoEvent(TEventUI& event) override;
+		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
-		void PaintText(UIRender *pRender);
+		void PaintText(UIRender *pRender) override;
 
 		virtual bool OnEnableResponseDefaultKeyEvent(WPARAM wParam) override;
 	protected:
@@ -80,9 +80,9 @@ namespace DuiLib
 		bool m_bWantReturn;
 
 		CDuiString m_sTipValue;
-		DWORD m_dwTipValueColor;
-		DWORD m_dwEditbkColor;
-		DWORD m_dwEditTextColor;
+		CDuiColor m_dwTipValueColor;
+		CDuiColor m_dwEditbkColor;
+		CDuiColor m_dwEditTextColor;
 	};
 
 	//////////////////////////////////////////////////////////////////////////
@@ -107,8 +107,8 @@ namespace DuiLib
 		bool IsUpperCase() const;
 		bool IsMultiLine() const;
 		bool IsWantReturn();
-		DWORD GetNativeEditBkColor() const;
-		DWORD GetNativeEditTextColor() const;
+		CDuiColor GetNativeEditBkColor() const;
+		CDuiColor GetNativeEditTextColor() const;
 		bool IsAutoSelAll();
 	protected:
 		CControlUI* m_pOwner;

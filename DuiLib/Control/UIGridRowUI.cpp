@@ -92,14 +92,14 @@ void CGridRowUI::DoInit()
 	
 }
 
-void CGridRowUI::SetPos(RECT rc, bool bNeedInvalidate)
+void CGridRowUI::SetPos(CDuiRect rc, bool bNeedInvalidate)
 {
 	COptionLayoutUI::SetPos(rc, bNeedInvalidate);
 }
 
-SIZE CGridRowUI::EstimateSize(SIZE szAvailable)
+CDuiSize CGridRowUI::EstimateSize(CDuiSize szAvailable)
 {
-	SIZE sz = {0};
+	CDuiSize sz;
 	if(GetOwner())
 	{
 		CGridUI *pGrid = (CGridUI *)GetOwner();
@@ -122,7 +122,7 @@ void CGridRowUI::DoEvent(TEventUI& event)
 
 void CGridRowUI::PaintBkColor(UIRender *pRender)
 {
-	DWORD dwBackColor = 0;
+	CDuiColor dwBackColor = 0;
 
 	if(dwBackColor == 0 && !IsEnabled() && GetDisabledBkColor() != 0) 
 		dwBackColor = GetDisabledBkColor();

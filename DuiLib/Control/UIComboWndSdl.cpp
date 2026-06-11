@@ -72,8 +72,8 @@ namespace DuiLib {
 		m_pm.GetShadow()->ShowShadow(m_pOwner->IsShowShadow());
 		m_pm.AttachDialog(m_pLayout);
 		m_pm.AddNotifier(this);
-		ShowWindow(true, true);
-		GetManager()->SetWndFocus();
+
+		ShowAndActivateChildWindow();
 		return 0;
 	}
 

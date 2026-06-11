@@ -174,8 +174,7 @@ LRESULT CIPAddressWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 {
 	m_pm.SetForceUseSharedRes(true);
 	m_pm.Init(m_hWnd, NULL, this);
-	ShowWindow();
-	Invalidate();
+	ShowAndActivateChildWindow();
 	return 0;
 }
 

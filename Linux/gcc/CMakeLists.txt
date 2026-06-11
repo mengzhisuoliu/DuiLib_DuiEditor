@@ -63,7 +63,7 @@ target_link_libraries(TestDuiLib
 
 # 平台特定链接库
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    target_link_libraries(TestDuiLib pthread dl)
+    target_link_libraries(TestDuiLib pthread dl X11)
     # 添加额外的链接标志
     target_link_options(TestDuiLib PRIVATE
         -Wl,--hash-style=sysv

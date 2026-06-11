@@ -29,6 +29,7 @@ public:
 	virtual void Init(CDateTimeUI* pOwner, CDuiRect rcBase, UINT uFormatStyle);
 	virtual void OnFinalMessage(UIWND hWnd) override;
 	CDuiRect CalPos(CDuiRect rcBase);
+	void CloseCalendar();
 
 	void SetDate(int year, int month, int day);
 protected:

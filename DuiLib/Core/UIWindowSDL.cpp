@@ -8,8 +8,43 @@ namespace DuiLib {
 /////////////////////////////////////////////////////////////////////////////////////
 //
 //
+#ifdef __linux__
+#include <X11/Xlib.h>
+void CompleteStartupNotification(SDL_Window* window)
+{
+	// 获取启动通知 ID
+	char* startup_id = getenv("DESKTOP_STARTUP_ID");
+	if (!startup_id || *startup_id == '\0')
+		return;
 
-static SDL_Window* s_lastFocusWindow = nullptr;
+	// 打开 X11 连接
+	Display* display = XOpenDisplay(nullptr);
+	if (!display)
+		return;
+
+	// 构造 ClientMessage 事件
+	XEvent xev;
+	memset(&xev, 0, sizeof(xev));
+	xev.type = ClientMessage;
+	xev.xclient.window = DefaultRootWindow(display);
+	xev.xclient.message_type = XInternAtom(display, "NOTIFICATION", False);
+	xev.xclient.format = 8;
+	// 将启动 ID 复制到 data.b 中（最多 20 字节）
+	strncpy((char*)xev.xclient.data.b, startup_id, 20);
+	xev.xclient.data.b[19] = '\0';
+
+	// 发送事件
+	XSendEvent(display, xev.xclient.window, False, 0, &xev);
+	XFlush(display);
+	XCloseDisplay(display);
+
+	// 清除环境变量，避免影响后续窗口
+	unsetenv("DESKTOP_STARTUP_ID");
+}
+#endif
+
+
+static SDL_Window* s_lastFocusWindow = nullptr; 
 
 UINT CWindowSDL::m_EVENT_SEND_MESSAGE = 0;
 UINT CWindowSDL::m_EVENT_POST_MESSAGE = 0;
@@ -51,38 +86,54 @@ CWindowSDL::~CWindowSDL()
 
 UIWND CWindowSDL::Create(UIWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, int x, int y, int cx, int cy)
 {
+	m_dwStyle = dwStyle;
 	CDuiStringUtf8 strNameUtf8(pstrName);
 
-	m_dwStyle = dwStyle;
-
 	// 创建SDL窗口
-	//Uint32 flags = SDL_WINDOW_BORDERLESS | SDL_WINDOW_HIDDEN;
 	Uint32 flags = SDL_WINDOW_BORDERLESS;
 	if(dwStyle & WS_SIZEBOX) flags |= SDL_WINDOW_RESIZABLE;
 
-	SDL_Window *pWindow = SDL_CreateWindow(strNameUtf8.toString(), cx, cy, flags);
-	if (!pWindow) return NULL;
-
-	m_hWnd = (UIWND)pWindow;
-	m_id = SDL_GetWindowID(pWindow);
-	m_uOwnerThread = SDL_GetThreadID(NULL);
-	RegisterWindow(pWindow, this);
-
 	if (hwndParent)
 	{
-		if (dwStyle & WS_POPUP) //弹出窗口
-		{
-			SDL_SetWindowParent(pWindow, hwndParent);
-			SetWindowPos(x, y, cx, cy, 0);
-		}
-		else if (dwStyle & WS_CHILD) //内部窗口
-		{
-			SDL_SetWindowParent(pWindow, hwndParent);
-			SetWindowPos(x, y, cx, cy, 0);
-		}
+		SDL_PropertiesID props = SDL_CreateProperties();
+		SDL_SetStringProperty(props, SDL_PROP_WINDOW_CREATE_TITLE_STRING, strNameUtf8.toString());
+
+		SDL_SetPointerProperty(props, SDL_PROP_WINDOW_CREATE_PARENT_POINTER, hwndParent);
+
+		int parentX, parentY;
+		SDL_GetWindowPosition(hwndParent, &parentX, &parentY);
+		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_WIDTH_NUMBER, cx);
+		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HEIGHT_NUMBER, cy);
+
+		int screenX = parentX + x;
+		int screenY = parentY + y;
+		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_X_NUMBER, screenX);
+		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_Y_NUMBER, screenY);
+
+		flags |= SDL_WINDOW_HIDDEN;
+		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_FLAGS_NUMBER, flags);
+
+		SDL_SetBooleanProperty(props, SDL_PROP_WINDOW_CREATE_FOCUSABLE_BOOLEAN, false);  //子窗口创建时，不可聚焦
+		
+		m_hWnd = SDL_CreateWindowWithProperties(props);
+		SDL_DestroyProperties(props);
+	}
+	else
+	{
+		m_hWnd = SDL_CreateWindow(strNameUtf8.toString(), cx, cy, flags);
 	}
 
+	if (!m_hWnd) return NULL;
+
+	m_id = SDL_GetWindowID(m_hWnd);
+	m_uOwnerThread = SDL_GetThreadID(NULL);
+	RegisterWindow(m_hWnd, this);
+
 	HandleMessage(WM_CREATE, 0, 0);
+
+	#ifdef __linux__
+	CompleteStartupNotification(m_hWnd);
+	#endif
 	return m_hWnd;
 }
 
@@ -254,6 +305,14 @@ UINT CWindowSDL::ShowModal()
 void CWindowSDL::CenterWindow()	// 居中，支持扩展屏幕
 {
 	SDL_SetWindowPosition(m_hWnd, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+}
+
+void CWindowSDL::ShowAndActivateChildWindow()
+{
+	HandleMessage(WM_PAINT, 0, 0);
+	SDL_SetWindowFocusable(m_hWnd, true);
+	SDL_ShowWindow(m_hWnd);
+	SDL_RaiseWindow(m_hWnd);
 }
 
 BOOL CWindowSDL::OnSdlEvent(const void* pEvent)

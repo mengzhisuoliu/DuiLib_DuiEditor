@@ -1269,7 +1269,7 @@ namespace DuiLib
 		if (it != m_arrString.end())
 			return it->second;
 		CDuiString str;
-		str.Format(_T("[Unknow] = %X", i));
+		str.Format(_T("[Unknow] = %X"), i);
 		return str;
 	}
 

@@ -265,6 +265,7 @@ namespace DuiLib {
 		GetMenuUI()->m_pWindow = this;
 		m_pm.GetShadow()->ShowShadow(bShowShadow);
 		m_pm.GetShadow()->Create(&m_pm);
+		ShowAndActivateChildWindow();
 		return 0;
 	}
 

@@ -201,10 +201,7 @@ namespace DuiLib
 	{
 		m_pm.SetForceUseSharedRes(true);
 		m_pm.Init(m_hWnd, NULL, this);
-		// 显示窗口并设置焦点
-		ShowWindow();
-		// 强制重绘
-		Invalidate();
+		ShowAndActivateChildWindow();
 		return 0;
 	}
 

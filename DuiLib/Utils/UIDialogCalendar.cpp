@@ -39,18 +39,13 @@ CDuiString CDialogCalendar::GetSkinFile()
 
 void CDialogCalendar::OnFinalMessage( UIWND hWnd )
 {
-// 	UIWND hParentWnd = DuiLibWindowWnd::GetParentWindow(hWnd);
-// 	if(DuiLibWindowWnd::IsWindow(hParentWnd))
-// 	{
-// 		DuiLibWindowWnd::SetForeground(hParentWnd);
-// 	}
 	CUIFrameWnd::OnFinalMessage(hWnd);
 
-	// 关闭父编辑窗口（日期时间编辑框）
 	if (m_pParentWindow) 
 	{
 		if(m_bOK)
 			m_pParentWindow->SetDate(m_st.wYear, m_st.wMonth, m_st.wDay);
+		m_pParentWindow->CloseCalendar();
 		m_pParentWindow->Close();
 	}
 

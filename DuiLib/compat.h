@@ -32,6 +32,7 @@
 #include <mach-o/dyld.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <assert.h>
     #ifndef _UNICODE
         #define _UTF8CODE //macos没有定义_UNICODE, 默认为utf8
     #endif

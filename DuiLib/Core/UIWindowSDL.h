@@ -46,6 +46,8 @@ public:
 
 	void CenterWindow();	// 居中，支持扩展屏幕
 
+	void ShowAndActivateChildWindow();
+
 	virtual BOOL OnSdlEvent(const void *pEvent);
 
 	virtual void Invalidate() override;
@@ -94,7 +96,7 @@ public:
 	static LRESULT DispatchMessage(PVOID ev, MSG* msg);
 protected:
 	static std::map<UINT, WindowInfo> m_smap;
-	static CDuiLock m_smap_lock;
+	static CDuiLock m_smap_lock; 
 
 public:
 	static void _init_sdl_defined();

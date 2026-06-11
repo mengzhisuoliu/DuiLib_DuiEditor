@@ -119,6 +119,11 @@ CDuiRect CDateTimeWndSDL::CalPos(CDuiRect rcBase)
 	return rcPos;
 }
 
+void CDateTimeWndSDL::CloseCalendar()
+{
+	m_pWindowDropDown = NULL;
+}
+
 void CDateTimeWndSDL::SetDate(int year, int month, int day)
 {
 	if (m_uFormatStyle != DTS_TIMEFORMAT)
@@ -237,8 +242,7 @@ LRESULT CDateTimeWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 {
 	m_pm.SetForceUseSharedRes(true);
 	m_pm.Init(m_hWnd, NULL, this);
-	ShowWindow();
-	Invalidate();
+	ShowAndActivateChildWindow();
 	return 0;
 }
 
@@ -534,8 +538,16 @@ LRESULT CDateTimeWndSDL::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	SDL_StopTextInput(m_hWnd);
 	GetManager()->SetCursor(DUI_ARROW);
 
+	// 如果日历窗口存在且新焦点正是该日历窗口，则不关闭当前编辑窗口
 	if (m_pWindowDropDown && wParam == (WPARAM)m_pWindowDropDown->GetHWND())
 		return 0;
+
+	// 如果日历窗口存在但新焦点不是它，说明用户点击了其他地方，应先关闭日历窗口
+	if (m_pWindowDropDown)
+	{
+		((CDialogCalendar*)m_pWindowDropDown)->m_pParentWindow = NULL; //不要关闭父窗口了
+		m_pWindowDropDown->Close();   // 关闭日历窗口
+	}
 
 	Close();
 	return 0;
@@ -774,13 +786,12 @@ void CDateTimeWndSDL::OnClickDownButton()
 
 void CDateTimeWndSDL::OnClickDropDown()
 {
-// 	CDialogCalendar dlg;
-// 	dlg.m_st.wYear = m_vSegments[0].sValue.toInt();
-// 	dlg.m_st.wMonth = m_vSegments[1].sValue.toInt();
-// 	dlg.m_st.wDay = m_vSegments[2].sValue.toInt();
-// 	GetDayOfWeek(dlg.m_st);
-// 	dlg.DoModal(m_hWnd);
-
+	if (m_pWindowDropDown)
+	{
+		((CDialogCalendar*)m_pWindowDropDown)->m_pParentWindow = NULL; //不要关闭父窗口了
+		m_pWindowDropDown->Close();
+		m_pWindowDropDown = NULL;
+	}
 
 	CDialogCalendar* dlg = new CDialogCalendar;
 	dlg->m_pParentWindow = this;
@@ -789,7 +800,6 @@ void CDateTimeWndSDL::OnClickDropDown()
 	dlg->m_st.wDay = m_vSegments[2].sValue.toInt();
 	GetDayOfWeek(dlg->m_st);
 	dlg->ShowDialog(m_hWnd);
-
 	m_pWindowDropDown = dlg;
 
 	CDuiRect rcPos = m_pOwner->GetPos();

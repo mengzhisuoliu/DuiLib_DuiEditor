@@ -6,390 +6,74 @@ namespace DuiLib
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
 	//
-
-	CDuiPoint::CDuiPoint()
-	{
-		x = y = 0;
-	}
-
-	CDuiPoint::CDuiPoint(const POINT& src)
-	{
-		x = src.x;
-		y = src.y;
-	}
-
-	CDuiPoint::CDuiPoint(const SIZE& src)
-	{
-		x = src.cx;
-		y = src.cy;
-	}
-
-	CDuiPoint::CDuiPoint(int _x, int _y)
-	{
-		x = _x;
-		y = _y;
-	}
-
-	CDuiPoint::CDuiPoint(LPARAM lParam)
-	{
-		x = GET_X_LPARAM(lParam);
-		y = GET_Y_LPARAM(lParam);
-	}
-
-	CDuiPoint::CDuiPoint(LPCTSTR pstrValue)
-	{
-		FromString(pstrValue);
-	}
-
 	bool CDuiPoint::FromString(LPCTSTR pstrValue) //从"x,y"构造POINT
 	{
 		x = y = 0;
-		if (pstrValue == NULL || *pstrValue == _T('\0')) return false;
-		LPTSTR pstr = NULL;
-		x = _tcstol(pstrValue, &pstr, 10); if(!pstr) return false;
-		y = _tcstol(pstr + 1, &pstr, 10);  if(!pstr) return false;
+		if (!pstrValue || !*pstrValue)
+			return false;
+
+		while (*pstrValue == _T(' ') || *pstrValue == _T('\t')) ++pstrValue;
+
+		TCHAR* pEnd = nullptr;
+		x = _tcstol(pstrValue, &pEnd, 10);
+		if (pEnd == pstrValue)
+			return false;
+
+		pstrValue = pEnd;
+		while (*pstrValue == _T(' ') || *pstrValue == _T('\t')) ++pstrValue;
+		if (*pstrValue != _T(','))
+			return false;
+		++pstrValue;
+		while (*pstrValue == _T(' ') || *pstrValue == _T('\t')) ++pstrValue;
+
+		y = _tcstol(pstrValue, &pEnd, 10);
+		if (pEnd == pstrValue)
+			return false;
 		return true;
 	}
 
-	CDuiString CDuiPoint::ToString()				//输出字符串"x,y"
+	CDuiString CDuiPoint::ToString() const				//输出字符串"x,y"
 	{
 		CDuiString sPoint;
 		sPoint.SmallFormat(_T("%ld,%ld"), x, y);
 		return sPoint;
 	}
 
-	CDuiPoint::operator LPSIZE() const
-	{
-		return (LPSIZE)this;   // POINT 和 SIZE 内存布局相同（两个 int）
-	}
-
-	CDuiPoint::operator SIZE() const
-	{
-		SIZE sz = { x, y };
-		return sz;
-	}
-
-	CDuiPoint::operator PPOINT() throw()
-	{
-		return this;
-	}
-
-	CDuiPoint& CDuiPoint::operator=(const POINT& src)
-	{
-		x = src.x;
-		y = src.y;
-		return *this;
-	}
-
-	CDuiPoint& CDuiPoint::operator=(const SIZE& src)
-	{
-		x = src.cx;
-		y = src.cy;
-		return *this;
-	}
-
-	bool CDuiPoint::operator==(const POINT& src) const
-	{
-		return x == src.x && y == src.y;
-	}
-
-	bool CDuiPoint::operator!=(const POINT& src) const
-	{
-		return !(*this == src);
-	}
-
-	bool CDuiPoint::operator==(const SIZE& src) const
-	{
-		return x == src.cx && y == src.cy;
-	}
-
-	bool CDuiPoint::operator!=(const SIZE& src) const
-	{
-		return !(*this == src);
-	}
-
-	CDuiPoint CDuiPoint::operator+(const POINT& src) const
-	{
-		return CDuiPoint(x + src.x, y + src.y);
-	}
-
-	CDuiPoint CDuiPoint::operator-(const POINT& src) const
-	{
-		return CDuiPoint(x - src.x, y - src.y);
-	}
-
-	CDuiPoint CDuiPoint::operator+(const SIZE& src) const
-	{
-		return CDuiPoint(x + src.cx, y + src.cy);
-	}
-
-	CDuiPoint CDuiPoint::operator-(const SIZE& src) const
-	{
-		return CDuiPoint(x - src.cx, y - src.cy);
-	}
-
-	CDuiPoint& CDuiPoint::operator+=(const POINT& src)
-	{
-		x += src.x;
-		y += src.y;
-		return *this;
-	}
-
-	CDuiPoint& CDuiPoint::operator-=(const POINT& src)
-	{
-		x -= src.x;
-		y -= src.y;
-		return *this;
-	}
-
-	CDuiPoint& CDuiPoint::operator+=(const SIZE& src)
-	{
-		x += src.cx;
-		y += src.cy;
-		return *this;
-	}
-
-	CDuiPoint& CDuiPoint::operator-=(const SIZE& src)
-	{
-		x -= src.cx;
-		y -= src.cy;
-		return *this;
-	}
-
-	void CDuiPoint::SetPoint(int _x, int _y)
-	{
-		x = _x;
-		y = _y;
-	}
-
-	void CDuiPoint::Offset(int dx, int dy)
-	{
-		x += dx;
-		y += dy;
-	}
-
-	void CDuiPoint::Offset(const POINT& delta)
-	{
-		Offset(delta.x, delta.y);
-	}
-
-	void CDuiPoint::Offset(const SIZE& delta)
-	{
-		Offset(delta.cx, delta.cy);
-	}
-
-	bool CDuiPoint::IsEmpty() const
-	{
-		return x == 0 && y == 0;
-	}
-
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
 	//
-
-	CDuiSize::CDuiSize()
-	{
-		cx = cy = 0;
-	}
-
-	CDuiSize::CDuiSize(const SIZE& src)
-	{
-		cx = src.cx;
-		cy = src.cy;
-	}
-
-	CDuiSize::CDuiSize(const RECT& rc)
-	{
-		cx = rc.right - rc.left;
-		cy = rc.bottom - rc.top;
-	}
-
-	CDuiSize::CDuiSize(const POINT& pt)
-	{
-		cx = pt.x;
-		cy = pt.y;
-	}
-
-	CDuiSize::CDuiSize(int _cx, int _cy)
-	{
-		cx = _cx;
-		cy = _cy;
-	}
-
-	CDuiSize::CDuiSize(LPCTSTR pstrValue)
-	{
-		FromString(pstrValue);
-	}
-
 	bool CDuiSize::FromString(LPCTSTR pstrValue) //从"cx,cy"构造SIZE
 	{
 		cx = cy = 0;
-		if (pstrValue == NULL || *pstrValue == _T('\0')) return false;
-		LPTSTR pstr = NULL;
-		cx = _tcstol(pstrValue, &pstr, 10);		if(!pstr) return false;
-		cy = _tcstol(pstr + 1, &pstr, 10);      if(!pstr) return false;
+		if (!pstrValue || !*pstrValue)
+			return false;
+
+		while (*pstrValue == _T(' ') || *pstrValue == _T('\t')) ++pstrValue;
+
+		TCHAR* pEnd = nullptr;
+		cx = _tcstol(pstrValue, &pEnd, 10);
+		if (pEnd == pstrValue)
+			return false;
+
+		pstrValue = pEnd;
+		while (*pstrValue == _T(' ') || *pstrValue == _T('\t')) ++pstrValue;
+		if (*pstrValue != _T(','))
+			return false;
+		++pstrValue;
+		while (*pstrValue == _T(' ') || *pstrValue == _T('\t')) ++pstrValue;
+
+		cy = _tcstol(pstrValue, &pEnd, 10);
+		if (pEnd == pstrValue)
+			return false;
 		return true;
 	}
 
-	CDuiString CDuiSize::ToString()				//输出字符串"cx,cy"
+	CDuiString CDuiSize::ToString() const				//输出字符串"cx,cy"
 	{
 		CDuiString sSize;
 		sSize.SmallFormat(_T("%ld,%ld"), cx, cy);
 		return sSize;
 	}
-
-	void CDuiSize::SetSize(int cx, int cy)
-	{
-		CDuiSize::cx = cx;
-		CDuiSize::cy = cy;
-	}
-
-	void CDuiSize::SetSize(const SIZE& src)
-	{
-		cx = src.cx;
-		cy = src.cy;
-	}
-
-	CDuiSize::operator LPSIZE() throw()
-	{
-		return this;
-	}
-
-	CDuiSize::operator POINT() const
-	{
-		POINT pt = { cx, cy };
-		return pt;
-	}
-
-	CDuiSize::operator RECT() const
-	{
-		RECT rc = { 0, 0, cx, cy };
-		return rc;
-	}
-
-	CDuiSize& CDuiSize::operator=(const SIZE& src)
-	{
-		cx = src.cx;
-		cy = src.cy;
-		return *this;
-	}
-
-	bool CDuiSize::operator==(const SIZE& src) const
-	{
-		return cx == src.cx && cy == src.cy;
-	}
-
-	bool CDuiSize::operator!=(const SIZE& src) const
-	{
-		return !(*this == src);
-	}
-
-	bool CDuiSize::operator==(const POINT& src) const
-	{
-		return cx == src.x && cy == src.y;
-	}
-
-	bool CDuiSize::operator!=(const POINT& src) const
-	{
-		return !(*this == src);
-	}
-
-	bool CDuiSize::operator==(const RECT& src) const
-	{
-		return (cx == src.right - src.left) && (cy == src.bottom - src.top);
-	}
-
-	bool CDuiSize::operator!=(const RECT& src) const
-	{
-		return !(*this == src);
-	}
-
-	CDuiSize CDuiSize::operator+(const SIZE& src) const
-	{
-		return CDuiSize(cx + src.cx, cy + src.cy);
-	}
-
-	CDuiSize CDuiSize::operator-(const SIZE& src) const
-	{
-		return CDuiSize(cx - src.cx, cy - src.cy);
-	}
-
-	CDuiSize CDuiSize::operator+(const POINT& src) const
-	{
-		return CDuiSize(cx + src.x, cy + src.y);
-	}
-
-	CDuiSize CDuiSize::operator-(const POINT& src) const
-	{
-		return CDuiSize(cx - src.x, cy - src.y);
-	}
-
-	CDuiSize CDuiSize::operator+(const RECT& src) const
-	{
-		return CDuiSize(cx + (src.right - src.left), cy + (src.bottom-src.top));
-	}
-
-	CDuiSize CDuiSize::operator-(const RECT& src) const
-	{
-		return CDuiSize(cx - (src.right - src.left), cy - (src.bottom - src.top));
-	}
-
-	CDuiSize& CDuiSize::operator+=(const SIZE& src)
-	{
-		cx += src.cx;
-		cy += src.cy;
-		return *this;
-	}
-
-	CDuiSize& CDuiSize::operator-=(const SIZE& src)
-	{
-		cx -= src.cx;
-		cy -= src.cy;
-		return *this;
-	}
-
-	CDuiSize& CDuiSize::operator+=(const POINT& src)
-	{
-		cx += src.x;
-		cy += src.y;
-		return *this;
-	}
-
-	CDuiSize& CDuiSize::operator-=(const POINT& src)
-	{
-		cx -= src.x;
-		cy -= src.y;
-		return *this;
-	}
-
-	CDuiSize& CDuiSize::operator+=(const RECT& src)
-	{
-		cx += src.right - src.left;
-		cy += src.bottom - src.top;
-		return *this;
-	}
-
-	CDuiSize& CDuiSize::operator-=(const RECT& src)
-	{
-		cx -= src.right - src.left;
-		cy -= src.bottom - src.top;
-		return *this;
-	}
-
-	//放大
-	void CDuiSize::Inflate(int x, int y)
-	{
-		cx += x;
-		cy += y;
-	}
-
-	//缩小
-	void CDuiSize::Deflate(int x, int y)
-	{
-		cx -= x;
-		cy -= y;
-	}
-
 
 	#ifdef DUILIB_SDL
 	CDuiSize::CDuiSize(const SDL_Rect& rc)
@@ -408,56 +92,6 @@ namespace DuiLib
 /////////////////////////////////////////////////////////////////////////////////////
 //
 //
-#ifdef DUILIB_WIN32
-#define WIN32_RECT_API
-#endif
-	CDuiRect::CDuiRect()
-	{
-		left = top = right = bottom = 0;
-	}
-
-	CDuiRect::CDuiRect(const RECT& src)
-	{
-		left = src.left;
-		top = src.top;
-		right = src.right;
-		bottom = src.bottom;
-	}
-
-	CDuiRect::CDuiRect(LPCRECT src)
-	{
-		left = src->left;
-		top = src->top;
-		right = src->right;
-		bottom = src->bottom;
-	}
-
-	CDuiRect::CDuiRect(int iLeft, int iTop, int iRight, int iBottom)
-	{
-		left = iLeft;
-		top = iTop;
-		right = iRight;
-		bottom = iBottom;
-	}
-
-	CDuiRect::CDuiRect(const POINT &ptLeftTop, const SIZE &szWidthHeight)
-	{
-		SetRect(ptLeftTop, szWidthHeight);
-	}
-
-	CDuiRect::CDuiRect(const POINT &ptLeftTop, const POINT &ptRightBottom)
-	{
-		SetRect(ptLeftTop, ptRightBottom);
-	}
-
-	CDuiRect::CDuiRect(const SIZE& src)
-	{
-		left = 0;
-		top = 0;
-		right = src.cx;
-		bottom = src.cy;
-	}
-
 	CDuiRect::CDuiRect(LPCTSTR pstrValue)
 	{
 		FromString(pstrValue);
@@ -465,244 +99,76 @@ namespace DuiLib
 
 	bool CDuiRect::FromString(LPCTSTR pstrValue) //从"left,top,right,bottom"构造RECT
 	{
+		// 初始化所有边为0
 		left = top = right = bottom = 0;
-		if (pstrValue == NULL || *pstrValue == _T('\0')) return false;
-		LPTSTR pstr = NULL;
-		left	= _tcstol(pstrValue, &pstr, 10);	if(!pstr) return false;
-		top		= _tcstol(pstr + 1, &pstr, 10);		if(!pstr) return false;
-		right	= _tcstol(pstr + 1, &pstr, 10);		if(!pstr) return false;
-		bottom	= _tcstol(pstr + 1, &pstr, 10);		if(!pstr) return false;
+
+		// 空字符串或空指针直接失败
+		if (!pstrValue || !*pstrValue)
+			return false;
+
+		// 跳过字符串开头的空白字符
+		while (*pstrValue == _T(' ') || *pstrValue == _T('\t'))
+			++pstrValue;
+
+		TCHAR* pEnd = nullptr;
+
+		// 解析 left
+		left = _tcstol(pstrValue, &pEnd, 10);
+		if (pEnd == pstrValue)  // 没有转换出任何数字
+			return false;
+
+		// 跳过数字后的空白，并期望逗号
+		pstrValue = pEnd;
+		while (*pstrValue == _T(' ') || *pstrValue == _T('\t'))
+			++pstrValue;
+		if (*pstrValue != _T(','))
+			return false;
+		++pstrValue;  // 跳过逗号
+
+		// 跳过逗号后的空白
+		while (*pstrValue == _T(' ') || *pstrValue == _T('\t'))
+			++pstrValue;
+
+		// 解析 top
+		top = _tcstol(pstrValue, &pEnd, 10);
+		if (pEnd == pstrValue)
+			return false;
+		pstrValue = pEnd;
+		while (*pstrValue == _T(' ') || *pstrValue == _T('\t'))
+			++pstrValue;
+		if (*pstrValue != _T(','))
+			return false;
+		++pstrValue;
+		while (*pstrValue == _T(' ') || *pstrValue == _T('\t'))
+			++pstrValue;
+
+		// 解析 right
+		right = _tcstol(pstrValue, &pEnd, 10);
+		if (pEnd == pstrValue)
+			return false;
+		pstrValue = pEnd;
+		while (*pstrValue == _T(' ') || *pstrValue == _T('\t'))
+			++pstrValue;
+		if (*pstrValue != _T(','))
+			return false;
+		++pstrValue;
+		while (*pstrValue == _T(' ') || *pstrValue == _T('\t'))
+			++pstrValue;
+
+		// 解析 bottom
+		bottom = _tcstol(pstrValue, &pEnd, 10);
+		if (pEnd == pstrValue)
+			return false;
+
+		// 可选：允许末尾多余空白，但不再检查
 		return true;
 	}
 
-	CDuiString CDuiRect::ToString()				//输出字符串"left,top,right,bottom"
+	CDuiString CDuiRect::ToString() const				//输出字符串"left,top,right,bottom"
 	{
 		CDuiString sRect;
 		sRect.SmallFormat(_T("%ld,%ld,%ld,%ld"), left, top, right, bottom);
 		return sRect;
-	}
-
-	CDuiRect::operator LPRECT() throw()
-	{
-		return this;
-	}
-
-	CDuiRect::operator LPCRECT() const throw()
-	{
-		return this;
-	}
-
-	CDuiRect::operator SIZE() const throw()
-	{
-		SIZE sz = {GetWidth(), GetHeight()};
-		return sz;
-	}
-
-	CDuiRect& CDuiRect::operator=(const RECT& src)
-	{
-		left = src.left;
-		top = src.top;
-		right = src.right;
-		bottom = src.bottom;
-		return *this;
-	}
-
-	CDuiRect& CDuiRect::operator=(const SIZE& src)
-	{
-		left = 0;
-		top = 0;
-		right = src.cx;
-		bottom = src.cy;
-		return *this;
-	}
-
-	CDuiRect& CDuiRect::operator=(LPCTSTR pstrValue)
-	{
-		FromString(pstrValue);
-		return *this;
-	}
-
-	CDuiPoint CDuiRect::LeftTop()
-	{
-		return CDuiPoint(left,top);
-	}
-
-	CDuiPoint CDuiRect::RightBottom()
-	{
-		return CDuiPoint(right,bottom);
-	}
-
-	void CDuiRect::SetRect(int left, int top, int right, int bottom)
-	{
-		CDuiRect::left = left;
-		CDuiRect::top = top;
-		CDuiRect::right = right;
-		CDuiRect::bottom = bottom;
-	}
-
-	void CDuiRect::SetRect(const POINT &ptLeftTop, const SIZE &szWidthHeight)
-	{
-		CDuiRect::left = ptLeftTop.x;
-		CDuiRect::top = ptLeftTop.y;
-		CDuiRect::right = ptLeftTop.x + szWidthHeight.cx;
-		CDuiRect::bottom = ptLeftTop.y + szWidthHeight.cy;
-	}
-
-	void CDuiRect::SetRect(const POINT &ptLeftTop, const POINT &ptRightBottom)
-	{
-		left = ptLeftTop.x;
-		top = ptLeftTop.y;
-		right = ptRightBottom.x;
-		bottom = ptRightBottom.y;
-	}
-
-	int CDuiRect::GetWidth() const
-	{
-		return right - left;
-	}
-
-	int CDuiRect::GetHeight() const
-	{
-		return bottom - top;
-	}
-
-	void CDuiRect::Empty()
-	{
-		left = top = right = bottom = 0;
-	}
-
-	bool CDuiRect::IsNull() const
-	{
-		return (left == 0 && right == 0 && top == 0 && bottom == 0);
-	}
-
-	bool CDuiRect::IsEmpty() const
-	{
-#ifdef WIN32_RECT_API
-		return ::IsRectEmpty(this) == TRUE;
-#else
-		return (right <= left) || (bottom <= top);
-#endif
-	}
-
-	void CDuiRect::Join(const RECT& rc)
-	{
-		if( rc.left < left ) left = rc.left;
-		if( rc.top < top ) top = rc.top;
-		if( rc.right > right ) right = rc.right;
-		if( rc.bottom > bottom ) bottom = rc.bottom;
-	}
-
-	void CDuiRect::ResetOffset()
-	{
-#ifdef WIN32_RECT_API
-		::OffsetRect(this, -left, -top);
-#else
-		right -= left;
-		bottom -= top;
-		left = 0;
-		top = 0;
-#endif
-	}
-
-	void CDuiRect::Normalize()
-	{
-		if( left > right ) { int iTemp = left; left = right; right = iTemp; }
-		if( top > bottom ) { int iTemp = top; top = bottom; bottom = iTemp; }
-	}
-
-	void CDuiRect::Offset(int cx, int cy)
-	{
-#ifdef WIN32_RECT_API
-		::OffsetRect(this, cx, cy);
-#else
-		left += cx;
-		top += cy;
-		right += cx;
-		bottom += cy;
-#endif
-	}
-
-	void CDuiRect::Inflate(int cx, int cy)
-	{
-#ifdef WIN32_RECT_API
-		::InflateRect(this, cx, cy);
-#else
-		left -= cx;
-		top -= cy;
-		right += cx;
-		bottom += cy;
-#endif
-	}
-
-	void CDuiRect::Inflate(int left, int top, int right, int bottom)
-	{
-		CDuiRect::left -= left;
-		CDuiRect::top -= top;
-		CDuiRect::right += right;
-		CDuiRect::bottom += bottom;
-	}
-
-	void CDuiRect::Inflate(const RECT &rc)
-	{
-		left -= rc.left;
-		top -= rc.top;
-		right += rc.right;
-		bottom += rc.bottom;
-	}
-
-	void CDuiRect::Deflate(int cx, int cy)
-	{
-		Inflate(-cx, -cy);
-	}
-
-	void CDuiRect::Deflate(int left, int top, int right, int bottom)
-	{
-		CDuiRect::left += left;
-		CDuiRect::top += top;
-		CDuiRect::right -= right;
-		CDuiRect::bottom -= bottom;
-	}
-
-	void CDuiRect::Deflate(const RECT &rc)
-	{
-		left += rc.left;
-		top += rc.top;
-		right -= rc.right;
-		bottom -= rc.bottom;
-	}
-
-	void CDuiRect::Union(const RECT& rc1, const RECT& rc2)
-	{
-#ifdef WIN32_RECT_API
-		::UnionRect(this, &rc1, &rc2);
-#else
-		left	= MIN(rc1.left,		rc2.left);
-		top		= MIN(rc1.top,		rc2.top);
-		right	= MAX(rc1.right,	rc2.right);
-		bottom	= MAX(rc1.bottom,	rc2.bottom);
-#endif
-	}
-
-	BOOL CDuiRect::Intersect(const RECT &rect1, const RECT &rect2)
-	{
-#ifdef WIN32_RECT_API
-		return ::IntersectRect(this, (LPRECT)&rect1, (LPRECT)&rect2);
-#else
-		CDuiRect rcUnion = rect1;
-		rcUnion.Join(rect2);
-		left = (rect1.left == rcUnion.left) ? rect2.left : rect1.left;
-		top = (rect1.top == rcUnion.top) ? rect2.top : rect1.top;
-		right = (rect1.right == rcUnion.right) ? rect2.right : rect1.right;
-		bottom = (rect1.bottom == rcUnion.bottom) ? rect2.bottom : rect1.bottom;
-		return !IsEmpty();
-#endif
-	}
-
-	POINT CDuiRect::CenterPoint() const
-	{
-		POINT pt = {(left+right)/2, (top+bottom)/2};
-		return pt;
 	}
 
 	void CDuiRect::AlignRect(const RECT &rc, UINT uAlign)
@@ -741,36 +207,6 @@ namespace DuiLib
 			top = rc.bottom - height;
 			bottom = rc.bottom;
 		}
-	}
-
-	BOOL CDuiRect::EqualRect(const CDuiRect& rc) const
-	{
-		return left == rc.left && right == rc.right && top == rc.top && bottom == rc.bottom;
-	}
-
-	BOOL CDuiRect::PtInRect(POINT pt) const
-	{
-#ifdef WIN32_RECT_API
-		return ::PtInRect(this, pt);
-#else
-		return pt.x >= left && pt.x <= right && pt.y >= top && pt.y <= bottom;
-#endif
-	}
-
-	void CDuiRect::SetPadding(const RECT& rc)
-	{
-		left += rc.left;
-		right -= rc.right;
-		top += rc.top;
-		bottom -= rc.bottom;
-	}
-
-	void CDuiRect::SetInset(const RECT& rc)
-	{
-		left += rc.left;
-		right -= rc.right;
-		top += rc.top;
-		bottom -= rc.bottom;
 	}
 
 #ifdef DUILIB_SDL
@@ -842,32 +278,12 @@ namespace DuiLib
 	//////////////////////////////////////////////////////////////////////////
 	// 
 	// 
-	CDuiColor::CDuiColor() : m_dwColor(0x00000000) {}
-
-	CDuiColor::CDuiColor(DWORD dwColor) : m_dwColor(dwColor) {}
-
-	CDuiColor::CDuiColor(BYTE r, BYTE g, BYTE b)
-		: m_dwColor(0x00000000 | ((DWORD)r << 16) | ((DWORD)g << 8) | b) {}
-
-	CDuiColor::CDuiColor(BYTE a, BYTE r, BYTE g, BYTE b)
-		: m_dwColor(((DWORD)a << 24) | ((DWORD)r << 16) | ((DWORD)g << 8) | b) {}
-
 	CDuiColor::CDuiColor(LPCTSTR pstrValue)
 	{
 		if (!FromString(pstrValue)) 
 		{
 			m_dwColor = 0x00000000;
 		}
-	}
-
-	CDuiColor::CDuiColor(int n)
-	{
-		m_dwColor = (DWORD)n;
-	}
-
-	CDuiColor::CDuiColor(UINT n)
-	{
-		m_dwColor = (DWORD)n;
 	}
 
 	bool CDuiColor::FromString(LPCTSTR pstrValue)
@@ -940,51 +356,11 @@ namespace DuiLib
 		return false;
 	}
 
-	CDuiString CDuiColor::ToString()
+	CDuiString CDuiColor::ToString() const 
 	{
 		CDuiString s;
 		s.Format(_T("0x%02X%02X%02X%02X"), GetA(), GetR(), GetG(), GetB());
 		return s;
-	}
-
-	void CDuiColor::FromCOLORREF(COLORREF cr)
-	{
-		BYTE r = GetRValue(cr);
-		BYTE g = GetGValue(cr);
-		BYTE b = GetBValue(cr);
-		m_dwColor = 0xFF000000 | ((DWORD)r << 16) | ((DWORD)g << 8) | b;
-	}
-
-	COLORREF CDuiColor::ToCOLORREF()
-	{
-		return RGB(GetR(), GetG(), GetB());
-	}
-
-	BYTE CDuiColor::GetA() const { return (BYTE)(m_dwColor >> 24); }
-	BYTE CDuiColor::GetR() const { return (BYTE)(m_dwColor >> 16); }
-	BYTE CDuiColor::GetG() const { return (BYTE)(m_dwColor >> 8); }
-	BYTE CDuiColor::GetB() const { return (BYTE)(m_dwColor); }
-	void CDuiColor::SetA(BYTE a) { m_dwColor = (m_dwColor & 0x00FFFFFF) | ((DWORD)a << 24); }
-	void CDuiColor::SetR(BYTE r) { m_dwColor = (m_dwColor & 0xFF00FFFF) | ((DWORD)r << 16); }
-	void CDuiColor::SetG(BYTE g) { m_dwColor = (m_dwColor & 0xFFFF00FF) | ((DWORD)g << 8); }
-	void CDuiColor::SetB(BYTE b) { m_dwColor = (m_dwColor & 0xFFFFFF00) | (DWORD)b; }
-	DWORD CDuiColor::GetColor() const { return m_dwColor; }
-	void CDuiColor::SetColor(DWORD dwColor) { m_dwColor = dwColor; }
-
-
-	CDuiColor::operator DWORD() const { return m_dwColor; }
-
-	bool CDuiColor::operator==(const CDuiColor& other) const { return m_dwColor == other.m_dwColor; }
-	bool CDuiColor::operator!=(const CDuiColor& other) const { return m_dwColor != other.m_dwColor; }
-	bool CDuiColor::operator==(int other) const { return m_dwColor == (DWORD)other; }
-	bool CDuiColor::operator!=(int other) const { return m_dwColor != (DWORD)other; }
-	bool CDuiColor::operator==(UINT other) const { return m_dwColor == (DWORD)other; }
-	bool CDuiColor::operator!=(UINT other) const { return m_dwColor != (DWORD)other; }
-
-	CDuiColor& CDuiColor::operator=(DWORD dwColor)
-	{
-		m_dwColor = dwColor;
-		return *this;
 	}
 
 	CDuiColor& CDuiColor::operator=(LPCTSTR pstrValue)
@@ -996,28 +372,22 @@ namespace DuiLib
 		return *this;
 	}
 
-	CDuiColor& CDuiColor::operator=(int n)
-	{
-		m_dwColor = (DWORD)n;
-		return *this;
-	}
-
-	CDuiColor& CDuiColor::operator=(unsigned int n)
-	{
-		m_dwColor = n;
-		return *this;
-	}
-
 	#ifdef DUILIB_SDL
 	CDuiColor::CDuiColor(const SDL_Color& color)
 	{
 		m_dwColor = ((DWORD)color.a << 24) | ((DWORD)color.r << 16) | ((DWORD)color.g << 8) | color.b;
 	}
-	SDL_Color CDuiColor::ToSDL_Color()
+
+	SDL_Color CDuiColor::ToSDL_Color() const
 	{
 		return { GetR(), GetG(), GetB(), GetA() };
 	}
-	CDuiColor::operator SDL_Color() const { return SDL_Color{ GetR(), GetG(), GetB(), GetA() }; }
+
+	CDuiColor::operator SDL_Color() const 
+	{ 
+		return SDL_Color{ GetR(), GetG(), GetB(), GetA() }; 
+	}
+
 	CDuiColor& CDuiColor::operator=(const SDL_Color& color)
 	{
 		m_dwColor = ((DWORD)color.a << 24) | ((DWORD)color.r << 16) | ((DWORD)color.g << 8) | color.b;
@@ -1514,7 +884,7 @@ namespace DuiLib
 	#ifdef DUILIB_WIN32
 		InitializeCriticalSectionAndSpinCount(&m_lock, 5000);
 	#elif defined DUILIB_SDL
-		m_lock = (UINT_PTR)SDL_CreateMutex();
+		m_lock = SDL_CreateMutex();
 	#else
 	#endif
 	}
@@ -1523,7 +893,7 @@ namespace DuiLib
 	#ifdef DUILIB_WIN32
 		DeleteCriticalSection(&m_lock);
 	#elif defined DUILIB_SDL
-		SDL_DestroyMutex((SDL_Mutex *)m_lock);
+		SDL_DestroyMutex(m_lock);
 	#else
 	#endif
 	}
@@ -1533,8 +903,9 @@ namespace DuiLib
 	#ifdef DUILIB_WIN32
 		EnterCriticalSection(&m_lock);
 	#elif defined DUILIB_SDL
-		SDL_LockMutex((SDL_Mutex*)m_lock);
+		SDL_LockMutex(m_lock);
 	#else
+		m_lock.lock();
 	#endif
 	}
 
@@ -1543,8 +914,9 @@ namespace DuiLib
 	#ifdef DUILIB_WIN32
 		LeaveCriticalSection(&m_lock);
 	#elif defined DUILIB_SDL
-		SDL_UnlockMutex((SDL_Mutex*)m_lock);
+		SDL_UnlockMutex(m_lock);
 	#else
+		m_lock.unlock();
 	#endif
 	}
 

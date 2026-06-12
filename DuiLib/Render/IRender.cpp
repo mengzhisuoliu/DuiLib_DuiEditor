@@ -293,8 +293,8 @@ namespace DuiLib {
 			NSVGshape *shapes = svg->shapes;
 			while (shapes)
 			{
-				if(shapes->fill.type == NSVG_PAINT_COLOR)
-					if(shapes->fill.color != 0)
+				if (shapes->fill.type == NSVG_PAINT_COLOR)
+					if (shapes->fill.color != 0)
 						shapes->fill.color = fillcolor.ToCOLORREF();
 				shapes = shapes->next;
 			}

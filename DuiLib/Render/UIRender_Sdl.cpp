@@ -321,20 +321,27 @@ namespace DuiLib {
 	{
 		if (dwColor <= 0x00FFFFFF) return;
 
-		bool bDraw = false;
-		Uint8 r = GetRValue(dwColor), g = GetGValue(dwColor), b = GetBValue(dwColor), a = (dwColor >> 24) & 0xFF;
-		SDL_SetRenderDrawColor(m_pRenderer, b, g, r, a);
-		SDL_FRect rect = { (float)rc.left, (float)rc.top, (float)(rc.right - rc.left), (float)(rc.bottom - rc.top) };
-		if (round.cx > 0 || round.cy > 0)
+		//普通矩形
+		if (round.cx == 0 && round.cy == 0) 
 		{
-			// 圆角矩形需要更复杂处理，这里简化为填充
-			bDraw = SDL_RenderFillRect(m_pRenderer, &rect);
+			SDL_FRect rect = rc.ToSDL_FRect();
+			SDL_SetRenderDrawColor(m_pRenderer, dwColor.GetR(), dwColor.GetG(), dwColor.GetB(), dwColor.GetA());
+			SDL_RenderFillRect(m_pRenderer, &rect);
+			return;
 		}
-		else
-		{
-			bDraw = SDL_RenderFillRect(m_pRenderer, &rect);
-		}
-		const char *pErr = SDL_GetError();
+
+		// 圆角矩形
+		int radius = round.cx;
+		if (round.cx != round.cy) 
+			radius = (round.cx + round.cy) / 2;
+		if (radius <= 0) radius = 1;
+
+		// 限制半径不超过矩形宽高的一半
+		int maxRadius = MIN(rc.GetWidth() / 2, rc.GetHeight() / 2);
+		if (radius > maxRadius) radius = maxRadius;
+
+		// 调用 SDL_gfx 函数
+		roundedBoxRGBA(m_pRenderer, rc.left, rc.top, rc.right, rc.bottom, radius, dwColor.GetR(), dwColor.GetG(), dwColor.GetB(), dwColor.GetA());
 	}
 
 	void UIRender_Sdl::DrawGradient(const CDuiRect& rc, CDuiColor dwFirst, CDuiColor dwSecond, bool bVertical, int nSteps)
@@ -383,18 +390,17 @@ namespace DuiLib {
 		SDL_RenderGeometry(m_pRenderer, NULL, vertices, 4, indices, 6);
 	}
 
-	void UIRender_Sdl::DrawLine(int x1, int y1, int x2, int y2, int nSize, CDuiColor dwPenColor,int nStyle)
+	void UIRender_Sdl::DrawLine(int x1, int y1, int x2, int y2, int nSize, CDuiColor clr,int nStyle)
 	{
-		CDuiColor clr(dwPenColor);
 		SDL_SetRenderDrawColor(m_pRenderer, clr.GetR(), clr.GetG(), clr.GetB(), clr.GetA());
 		thickLineRGBA(m_pRenderer, x1, y1, x2, y2, nSize, clr.GetR(), clr.GetG(), clr.GetB(), clr.GetA());
 	}
 
-	void UIRender_Sdl::DrawRect(const CDuiRect& rc, int nSize, CDuiColor dwPenColor,int nStyle /*= PS_SOLID*/)
+	void UIRender_Sdl::DrawRect(const CDuiRect& rc, int nSize, CDuiColor clr,int nStyle /*= PS_SOLID*/)
 	{
 		if (nSize <= 0) return;
-		CDuiColor clr(dwPenColor);
-		int x = rc.left, y = rc.top, w = rc.right - rc.left, h = rc.bottom - rc.top;
+
+		int x = rc.left, y = rc.top, w = rc.GetWidth(), h = rc.GetHeight();
 		// 使用 rectangleRGBA 绘制矩形边框，线宽通过循环 offset 实现
 		for (int i = 0; i < nSize; ++i) 
 		{
@@ -402,22 +408,21 @@ namespace DuiLib {
 		}
 	}
 
-	void UIRender_Sdl::DrawRoundRect(const CDuiRect& rc, int nSize, const CDuiSize& round, CDuiColor dwPenColor, int nStyle /*= PS_SOLID*/)
+	void UIRender_Sdl::DrawRoundRect(const CDuiRect& rc, int nSize, const CDuiSize& round, CDuiColor clr, int nStyle /*= PS_SOLID*/)
 	{
 		if (nSize <= 0) return;
-		CDuiColor clr(dwPenColor);
-		int x = rc.left, y = rc.top, w = rc.right - rc.left, h = rc.bottom - rc.top;
+		int x = rc.left, y = rc.top, w = rc.GetWidth(), h = rc.GetHeight();
 		int rx = round.cx, ry = round.cy;
-		for (int i = 0; i < nSize; ++i) {
+		for (int i = 0; i < nSize; ++i) 
+		{
 			roundedRectangleRGBA(m_pRenderer, x + i, y + i, x + w - i, y + h - i, rx - i, 
 				clr.GetR(), clr.GetG(), clr.GetB(), clr.GetA());
 		}
 	}
 
-	void UIRender_Sdl::DrawEllipse(const CDuiRect& rc, int nSize, CDuiColor dwPenColor, int nStyle)
+	void UIRender_Sdl::DrawEllipse(const CDuiRect& rc, int nSize, CDuiColor clr, int nStyle)
 	{
 		if (nSize <= 0) return;
-		CDuiColor clr(dwPenColor);
 		int cx = (rc.left + rc.right) / 2;
 		int cy = (rc.top + rc.bottom) / 2;
 		int rx = (rc.right - rc.left) / 2;
@@ -428,9 +433,8 @@ namespace DuiLib {
 		}
 	}
 
-	void UIRender_Sdl::FillEllipse(const CDuiRect& rc, CDuiColor dwColor)
+	void UIRender_Sdl::FillEllipse(const CDuiRect& rc, CDuiColor clr)
 	{
-		CDuiColor clr(dwColor);
 		int cx = (rc.left + rc.right) / 2;
 		int cy = (rc.top + rc.bottom) / 2;
 		int rx = (rc.right - rc.left) / 2;
@@ -438,7 +442,7 @@ namespace DuiLib {
 		filledEllipseRGBA(m_pRenderer, cx, cy, rx, ry, clr.GetR(), clr.GetG(), clr.GetB(), clr.GetA());
 	}
 
-	void UIRender_Sdl::DrawText(CDuiRect& rc, LPCTSTR pstrText, CDuiColor dwColor, int iFont, UINT uStyle)
+	void UIRender_Sdl::DrawText(CDuiRect& rc, LPCTSTR pstrText, CDuiColor clr, int iFont, UINT uStyle)
 	{
 		CDuiStringUtf8 utf8Text(pstrText);
 
@@ -483,7 +487,6 @@ namespace DuiLib {
 		TTF_Text* ttfText = TTF_CreateText(m_ttfEngine, ttfFont, utf8Text.toString(), utf8Text.GetLength());
 
 		// 设置颜色
-		CDuiColor clr(dwColor);
 		TTF_SetTextColor(ttfText, clr.GetR(), clr.GetG(), clr.GetB(), clr.GetA());
 
 		// 对齐方式
@@ -493,7 +496,7 @@ namespace DuiLib {
 		TTF_GetTextSize(ttfText, &texW, &texH);
 		if (uStyle & DT_CENTER) 
 		{
-			x = rc.left + (rc.right - rc.left - texW) / 2;
+			x = rc.left + (rc.GetWidth() - texW) / 2;
 		}
 		else if (uStyle & DT_RIGHT) 
 		{
@@ -501,7 +504,7 @@ namespace DuiLib {
 		}
 		if (uStyle & DT_VCENTER) 
 		{
-			y = rc.top + (rc.bottom - rc.top - texH) / 2;
+			y = rc.top + (rc.GetHeight() - texH) / 2;
 		}
 		else if (uStyle & DT_BOTTOM) 
 		{

@@ -82,6 +82,7 @@
 	struct SDL_Color; 
 	struct SDL_FRect;
 	struct SDL_Rect;
+	struct SDL_Mutex;
 	typedef struct SDL_Window* UIWND;
 	#define DuiLibWindowWnd	CWindowSDL
 	#define CShadowUI CShadowSDLUI

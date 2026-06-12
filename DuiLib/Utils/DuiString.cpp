@@ -10,26 +10,26 @@ namespace DuiLib
 	{
 		//friend class duistringmem;
 	protected:
-		int nRefs;				//引用次数
+		REF_NUMBER nRefs;		//引用次数
 		int nDataLength;
 		UINT nAllocLength;		//分配的长度, 可能大于字符串实际长度。
 	public:
-		void AddRef() 
-		{ 
-			if(IsLock()) 
+		void AddRef()
+		{
+			if (IsLock())
 				return;
-			nRefs++; 
+			UIATOMIC_INC(&nRefs);
 		}
-		void ReleaseRef() 
-		{ 
-			if(IsLock()) 
+		void ReleaseRef()
+		{
+			if (IsLock())
 				return;
-			nRefs--; 
+			UIATOMIC_DEC(&nRefs);
 		}
-		BOOL IsNeedFree() { return nRefs == 0; }
-		BOOL IsShared() { return nRefs > 1; }
-		BOOL IsLock() { return nRefs < 0; }
-		void Lock() { nRefs = -1; }
+		BOOL IsNeedFree() { return UIATOMIC_GET(&nRefs) == 0; }
+		BOOL IsShared() { return UIATOMIC_GET(&nRefs) > 1; }
+		BOOL IsLock() { return UIATOMIC_GET(&nRefs) < 0; }
+		void Lock() { UIATOMIC_SET(&nRefs, -1); }
 		void SetAllocLength(int nAlloc) { nAllocLength = nAlloc;}
 		int GetAllocLength() { return nAllocLength; }
 		int GetDataLength() const	{ return nDataLength; }

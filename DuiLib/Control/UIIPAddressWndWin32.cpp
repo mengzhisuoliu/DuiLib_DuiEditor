@@ -42,7 +42,7 @@ void CIPAddressWndWin32::Init(CIPAddressUI* pOwner)
 		//不知何故，窗口关闭时，这个字体会被卸载掉。 有人知道请告诉我哈。
 		//SetWindowFont(m_hWnd, m_pOwner->GetManager()->GetFontInfo(m_pOwner->GetFont())->hFont, TRUE);
 		m_font = MakeRefPtr<UIFont>(m_pOwner->GetManager()->CloneFont(m_pOwner->GetFont()));
-		::SendMessage(m_hWnd, WM_SETFONT, (WPARAM)m_font->GetHFONT(m_pOwner->GetManager()), (LPARAM)TRUE);
+		::SendMessage(m_hWnd, WM_SETFONT, (WPARAM)m_font->GetHFONT(m_pOwner->GetManager()), (LPARAM)uiTrue);
 	}
 
 	if (m_pOwner->GetText().IsEmpty())
@@ -82,10 +82,10 @@ void CIPAddressWndWin32::OnFinalMessage(HWND /*hWnd*/)
 LRESULT CIPAddressWndWin32::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LRESULT lRes = 0;
-	BOOL bHandled = TRUE;
+	uiBool bHandled = uiTrue;
 	if (uMsg == WM_KILLFOCUS)
 	{
-		bHandled = TRUE;
+		bHandled = uiTrue;
 		return 0;
 		lRes = OnKillFocus(uMsg, wParam, lParam, bHandled);
 	}
@@ -110,19 +110,19 @@ LRESULT CIPAddressWndWin32::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lPara
 			lRes = OnKillFocus(uMsg, wParam, lParam, bHandled);
 		}
 	}
-	else bHandled = FALSE;
+	else bHandled = uiFalse;
 	if (!bHandled) return DefaultWndProc(uMsg, wParam, lParam);
 	return lRes;
 }
 
-LRESULT CIPAddressWndWin32::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CIPAddressWndWin32::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	HWND hWndFocus = GetFocus();
 	while (hWndFocus)
 	{
 		if (GetFocus() == m_hWnd)
 		{
-			bHandled = TRUE;
+			bHandled = uiTrue;
 			return 0;
 		}
 		hWndFocus = GetParent(hWndFocus);

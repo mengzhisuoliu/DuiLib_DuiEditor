@@ -35,7 +35,7 @@ public:
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		LRESULT lRes = 0;
-		BOOL bHandled = FALSE;
+		uiBool bHandled = uiFalse;
 
 		if( uMsg == WM_CREATE )
 		{
@@ -66,7 +66,7 @@ public:
 		else if( uMsg == WM_CLOSE)
 		{
 			::DestroyWindow(m_hWnd);
-			bHandled = TRUE;
+			bHandled = uiTrue;
 		}
 
 		if( !bHandled ) 
@@ -231,7 +231,7 @@ CWindowWnd *CChildWindowUI::GetWnd()
 void CChildWindowUI::RefreshWindow()
 {
 	if(m_pWindow)
-		::InvalidateRect(m_pWindow->GetHWND(), NULL, TRUE);
+		::InvalidateRect(m_pWindow->GetHWND(), NULL, uiTrue);
 }
 
 }

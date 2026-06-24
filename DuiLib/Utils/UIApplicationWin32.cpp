@@ -40,7 +40,7 @@ bool CUIApplicationWin32::InitInstance(HINSTANCE hInstance)
 	if(m_bSingleApplication && (!m_GuidAppName.IsEmpty()) )
 	{
 		m_UIAPP_SINGLEAPPLICATION_MSG = ::RegisterWindowMessage(m_GuidAppName);
-		m_hMutexApplication = CreateMutex(NULL, FALSE, m_GuidAppName);
+		m_hMutexApplication = CreateMutex(NULL, uiFalse, m_GuidAppName);
 		if ( GetLastError() == ERROR_ALREADY_EXISTS )
 		{
 			DWORD dwRecipients = BSM_APPLICATIONS;
@@ -106,7 +106,7 @@ UINT CUIApplicationWin32::GetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, 
 	return RegistryKey.ReadInt(lpszSection, lpszEntry, nDefault);
 }
 
-BOOL CUIApplicationWin32::WriteProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nValue)
+uiBool CUIApplicationWin32::WriteProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nValue)
 {
 	return RegistryKey.WriteInt(lpszSection, lpszEntry, nValue);
 }
@@ -116,17 +116,17 @@ CDuiString CUIApplicationWin32::GetProfileString(LPCTSTR lpszSection, LPCTSTR lp
 	return RegistryKey.ReadString(lpszSection, lpszEntry, lpszDefault);
 }
 
-BOOL CUIApplicationWin32::WriteProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR lpszValue)
+uiBool CUIApplicationWin32::WriteProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR lpszValue)
 {
 	return RegistryKey.WriteString(lpszSection, lpszEntry, lpszValue);
 }
 
-BOOL CUIApplicationWin32::GetProfileBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYTE* ppData, UINT* pBytes)
+uiBool CUIApplicationWin32::GetProfileBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYTE* ppData, UINT* pBytes)
 {
 	return RegistryKey.ReadBinary(lpszSection, lpszEntry, ppData, pBytes);
 }
 
-BOOL CUIApplicationWin32::WriteProfileBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYTE pData, UINT nBytes)
+uiBool CUIApplicationWin32::WriteProfileBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYTE pData, UINT nBytes)
 {
 	return RegistryKey.WriteBinary(lpszSection, lpszEntry, pData, nBytes);
 }
@@ -229,7 +229,7 @@ UINT CUIAppRegistryKey::ReadInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDef
 	}
 }
 
-BOOL CUIAppRegistryKey::WriteInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nValue)
+uiBool CUIAppRegistryKey::WriteInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nValue)
 {
 	ASSERT(lpszSection != NULL);
 	ASSERT(lpszEntry != NULL);
@@ -237,7 +237,7 @@ BOOL CUIAppRegistryKey::WriteInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nVa
 	{
 		HKEY hSecKey = GetSectionKey(lpszSection);
 		if (hSecKey == NULL)
-			return FALSE;
+			return uiFalse;
 		LONG lResult = RegSetValueEx(hSecKey, lpszEntry, NULL, REG_DWORD,
 			(LPBYTE)&nValue, sizeof(nValue));
 		RegCloseKey(hSecKey);
@@ -297,7 +297,7 @@ CDuiString CUIAppRegistryKey::ReadString(LPCTSTR lpszSection, LPCTSTR lpszEntry,
 	}
 }
 
-BOOL CUIAppRegistryKey::WriteString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR lpszValue)
+uiBool CUIAppRegistryKey::WriteString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR lpszValue)
 {
 	ASSERT(lpszSection != NULL);
 	if (m_pszRegistryKey != NULL)
@@ -307,7 +307,7 @@ BOOL CUIAppRegistryKey::WriteString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCT
 		{
 			HKEY hAppKey = GetAppRegistryKey();
 			if (hAppKey == NULL)
-				return FALSE;
+				return uiFalse;
 			lResult = ::RegDeleteKey(hAppKey, lpszSection);
 			RegCloseKey(hAppKey);
 		}
@@ -315,7 +315,7 @@ BOOL CUIAppRegistryKey::WriteString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCT
 		{
 			HKEY hSecKey = GetSectionKey(lpszSection);
 			if (hSecKey == NULL)
-				return FALSE;
+				return uiFalse;
 			// necessary to cast away const below
 			lResult = ::RegDeleteValue(hSecKey, (LPTSTR)lpszEntry);
 			RegCloseKey(hSecKey);
@@ -324,7 +324,7 @@ BOOL CUIAppRegistryKey::WriteString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCT
 		{
 			HKEY hSecKey = GetSectionKey(lpszSection);
 			if (hSecKey == NULL)
-				return FALSE;
+				return uiFalse;
 			lResult = RegSetValueEx(hSecKey, lpszEntry, NULL, REG_SZ,
 				(LPBYTE)lpszValue, (lstrlen(lpszValue)+1)*sizeof(TCHAR));
 			RegCloseKey(hSecKey);
@@ -340,7 +340,7 @@ BOOL CUIAppRegistryKey::WriteString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCT
 	}
 }
 
-BOOL CUIAppRegistryKey::ReadBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYTE* ppData, UINT* pBytes)
+uiBool CUIAppRegistryKey::ReadBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYTE* ppData, UINT* pBytes)
 {
 	ASSERT(lpszSection != NULL);
 	ASSERT(lpszEntry != NULL);
@@ -353,7 +353,7 @@ BOOL CUIAppRegistryKey::ReadBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYT
 		HKEY hSecKey = GetSectionKey(lpszSection);
 		if (hSecKey == NULL)
 		{
-			return FALSE;
+			return uiFalse;
 		}
 
 		// ensure destruction
@@ -373,14 +373,14 @@ BOOL CUIAppRegistryKey::ReadBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYT
 		if (lResult == ERROR_SUCCESS)
 		{
 			ASSERT(dwType == REG_BINARY);
-			return TRUE;
+			return uiTrue;
 		}
 		else
 		{
 			delete [] *ppData;
 			*ppData = NULL;
 		}
-		return FALSE;
+		return uiFalse;
 	}
 	else
 	{
@@ -388,7 +388,7 @@ BOOL CUIAppRegistryKey::ReadBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYT
 
 		CString str = ReadString(lpszSection, lpszEntry, NULL);
 		if (str.IsEmpty())
-			return FALSE;
+			return uiFalse;
 		ASSERT(str.GetLength()%2 == 0);
 		INT_PTR nLen = str.GetLength();
 		*pBytes = UINT(nLen)/2;
@@ -398,11 +398,11 @@ BOOL CUIAppRegistryKey::ReadBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYT
 			(*ppData)[i/2] = (BYTE)
 				(((str[i+1] - 'A') << 4) + (str[i] - 'A'));
 		}
-		return TRUE;
+		return uiTrue;
 	}
 }
 
-BOOL CUIAppRegistryKey::WriteBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYTE pData, UINT nBytes)
+uiBool CUIAppRegistryKey::WriteBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYTE pData, UINT nBytes)
 {
 	ASSERT(lpszSection != NULL);
 	if (m_pszRegistryKey != NULL)
@@ -410,7 +410,7 @@ BOOL CUIAppRegistryKey::WriteBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBY
 		LONG lResult;
 		HKEY hSecKey = GetSectionKey(lpszSection);
 		if (hSecKey == NULL)
-			return FALSE;
+			return uiFalse;
 		lResult = RegSetValueEx(hSecKey, lpszEntry, NULL, REG_BINARY,
 			pData, nBytes);
 		RegCloseKey(hSecKey);
@@ -429,12 +429,12 @@ BOOL CUIAppRegistryKey::WriteBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBY
 
 	ASSERT(m_pszProfileName != NULL);
 
-	BOOL bResult = WriteString(lpszSection, lpszEntry, lpsz);
+	uiBool bResult = WriteString(lpszSection, lpszEntry, lpsz);
 	delete[] lpsz;
 	return bResult;
 }
 
-BOOL CUIAppRegistryKey::GetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, int &nRet, int nDefault)
+uiBool CUIAppRegistryKey::GetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, int &nRet, int nDefault)
 {
 	ASSERT(lpszSection != NULL);
 	ASSERT(lpszEntry != NULL);
@@ -444,7 +444,7 @@ BOOL CUIAppRegistryKey::GetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, int &nR
 		if (hSecKey == NULL)
 		{
 			nRet = nDefault;
-			return FALSE;
+			return uiFalse;
 		}
 		DWORD dwValue;
 		DWORD dwType;
@@ -457,27 +457,27 @@ BOOL CUIAppRegistryKey::GetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, int &nR
 			ASSERT(dwType == REG_DWORD);
 			ASSERT(dwCount == sizeof(dwValue));
 			nRet = (int)dwValue;
-			return TRUE;
+			return uiTrue;
 		}
 		nRet = nDefault;
-		return FALSE;
+		return uiFalse;
 	}
 	else
 	{
 		ASSERT(m_pszProfileName != NULL);
 		nRet = ::GetPrivateProfileInt(lpszSection, lpszEntry, nDefault, m_pszProfileName);
-		return TRUE;
+		return uiTrue;
 	}
 
-	return FALSE;
+	return uiFalse;
 }
 
-BOOL CUIAppRegistryKey::SetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nValue)
+uiBool CUIAppRegistryKey::SetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nValue)
 {
 	return WriteInt(lpszSection, lpszEntry, nValue);
 }
 
-BOOL CUIAppRegistryKey::GetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, CDuiString &strRet, LPCTSTR lpszDefault)
+uiBool CUIAppRegistryKey::GetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, CDuiString &strRet, LPCTSTR lpszDefault)
 {
 	ASSERT(lpszSection != NULL);
 	ASSERT(lpszEntry != NULL);
@@ -487,7 +487,7 @@ BOOL CUIAppRegistryKey::GetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, CDuiStr
 		if (hSecKey == NULL)
 		{
 			strRet = lpszDefault;
-			return FALSE;
+			return uiFalse;
 		}
 		CString strValue;
 		DWORD dwType=REG_NONE;
@@ -506,10 +506,10 @@ BOOL CUIAppRegistryKey::GetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, CDuiStr
 		{
 			ASSERT(dwType == REG_SZ);
 			strRet = (LPCTSTR)strValue;
-			return TRUE;
+			return uiTrue;
 		}
 		strRet = lpszDefault;
-		return FALSE;
+		return uiFalse;
 	}
 	else
 	{
@@ -522,13 +522,13 @@ BOOL CUIAppRegistryKey::GetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, CDuiStr
 			lpszDefault, szT, _countof(szT), m_pszProfileName);
 		ASSERT(dw < 4095);
 		strRet = szT;
-		return TRUE;
+		return uiTrue;
 	}
 
-	return FALSE;
+	return uiFalse;
 }
 
-BOOL CUIAppRegistryKey::SetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR strValue)
+uiBool CUIAppRegistryKey::SetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR strValue)
 {
 	return WriteString(lpszSection, lpszEntry, strValue);
 }
@@ -562,46 +562,46 @@ void CUIAppConfig::SaveConfig()
 	m_xml.save_to_default_file();
 }
 
-BOOL CUIAppConfig::SaveControl(CXmlNodeUI nodeParent, CEditUI *pControl)
+uiBool CUIAppConfig::SaveControl(CXmlNodeUI nodeParent, CEditUI *pControl)
 {
 	if(pControl->GetName().IsEmpty())
-		return FALSE;
+		return uiFalse;
 	CXmlNodeUI node = nodeParent.child_auto(pControl->GetName());
 	node.attribute_auto(_T("text")).set_value(pControl->GetText());
-	return TRUE;
+	return uiTrue;
 }
 
-BOOL CUIAppConfig::LoadControl(CXmlNodeUI nodeParent, CEditUI *pControl, LPCTSTR szDefault)
+uiBool CUIAppConfig::LoadControl(CXmlNodeUI nodeParent, CEditUI *pControl, LPCTSTR szDefault)
 {
 	if(pControl->GetName().IsEmpty())
-		return FALSE;
+		return uiFalse;
 	CXmlNodeUI node = nodeParent.child(pControl->GetName());
 	pControl->SetText(node.attribute(_T("text")).as_string(szDefault));
-	return TRUE;
+	return uiTrue;
 }
 
-BOOL CUIAppConfig::SaveControl(CXmlNodeUI nodeParent, CRichEditUI *pControl)
+uiBool CUIAppConfig::SaveControl(CXmlNodeUI nodeParent, CRichEditUI *pControl)
 {
 	if(pControl->GetName().IsEmpty())
-		return FALSE;
+		return uiFalse;
 	CXmlNodeUI node = nodeParent.child_auto(pControl->GetName());
 	node.attribute_auto(_T("text")).set_value(pControl->GetText());
-	return TRUE;
+	return uiTrue;
 }
 
-BOOL CUIAppConfig::LoadControl(CXmlNodeUI nodeParent, CRichEditUI *pControl, LPCTSTR szDefault)
+uiBool CUIAppConfig::LoadControl(CXmlNodeUI nodeParent, CRichEditUI *pControl, LPCTSTR szDefault)
 {
 	if(pControl->GetName().IsEmpty())
-		return FALSE;
+		return uiFalse;
 	CXmlNodeUI node = nodeParent.child(pControl->GetName());
 	pControl->SetText(node.attribute(_T("text")).as_string(szDefault));
-	return TRUE;
+	return uiTrue;
 }
 
-BOOL CUIAppConfig::SaveControl(CXmlNodeUI nodeParent, CComboUI *pControl, BOOL bSaveItems)
+uiBool CUIAppConfig::SaveControl(CXmlNodeUI nodeParent, CComboUI *pControl, uiBool bSaveItems)
 {
 	if(pControl->GetName().IsEmpty())
-		return FALSE;
+		return uiFalse;
 	CXmlNodeUI nodeCombo = nodeParent.child_auto(pControl->GetName());
 	nodeCombo.attribute_auto(_T("text")).set_value(pControl->GetText());
 
@@ -614,13 +614,13 @@ BOOL CUIAppConfig::SaveControl(CXmlNodeUI nodeParent, CComboUI *pControl, BOOL b
 		CXmlNodeUI node = nodeItem.append_child(_T("Item"));
 		node.attribute_auto(_T("text")).set_value(pItem->GetText());
 	}
-	return TRUE;
+	return uiTrue;
 }
 
-BOOL CUIAppConfig::LoadControl(CXmlNodeUI nodeParent, CComboUI *pControl, LPCTSTR szDefault, BOOL bLoadItems)
+uiBool CUIAppConfig::LoadControl(CXmlNodeUI nodeParent, CComboUI *pControl, LPCTSTR szDefault, uiBool bLoadItems)
 {
 	if(pControl->GetName().IsEmpty())
-		return FALSE;
+		return uiFalse;
 	CXmlNodeUI nodeCombo = nodeParent.child_auto(pControl->GetName());
 	pControl->SetText(nodeCombo.attribute_auto(_T("text")).as_string(szDefault));
 
@@ -630,13 +630,13 @@ BOOL CUIAppConfig::LoadControl(CXmlNodeUI nodeParent, CComboUI *pControl, LPCTST
 	{
 		pCombo->AddString(node.attribute_auto(_T("text")).as_string());
 	}
-	return TRUE;
+	return uiTrue;
 }
 
-BOOL CUIAppConfig::SaveControl(CXmlNodeUI nodeParent, CComboExUI *pControl, BOOL bSaveItems)
+uiBool CUIAppConfig::SaveControl(CXmlNodeUI nodeParent, CComboExUI *pControl, uiBool bSaveItems)
 {
 	if(pControl->GetName().IsEmpty())
-		return FALSE;
+		return uiFalse;
 	CXmlNodeUI nodeCombo = nodeParent.child_auto(pControl->GetName());
 	nodeCombo.attribute_auto(_T("text")).set_value(pControl->GetText());
 
@@ -652,13 +652,13 @@ BOOL CUIAppConfig::SaveControl(CXmlNodeUI nodeParent, CComboExUI *pControl, BOOL
 			node.attribute_auto(_T("text")).set_value(pItem->GetText());
 		}
 	}
-	return TRUE;
+	return uiTrue;
 }
 
-BOOL CUIAppConfig::LoadControl(CXmlNodeUI nodeParent, CComboExUI *pControl, LPCTSTR szDefault, BOOL bLoadItems)
+uiBool CUIAppConfig::LoadControl(CXmlNodeUI nodeParent, CComboExUI *pControl, LPCTSTR szDefault, uiBool bLoadItems)
 {
 	if(pControl->GetName().IsEmpty())
-		return FALSE;
+		return uiFalse;
 	CXmlNodeUI nodeCombo = nodeParent.child_auto(pControl->GetName());
 	pControl->SetText(nodeCombo.attribute_auto(_T("text")).as_string(szDefault));
 
@@ -671,44 +671,44 @@ BOOL CUIAppConfig::LoadControl(CXmlNodeUI nodeParent, CComboExUI *pControl, LPCT
 			pCombo->AddString(node.attribute_auto(_T("text")).as_string());
 		}
 	}
-	return TRUE;
+	return uiTrue;
 }
 
-BOOL CUIAppConfig::SaveControl(CXmlNodeUI nodeParent, COptionUI *pControl)
+uiBool CUIAppConfig::SaveControl(CXmlNodeUI nodeParent, COptionUI *pControl)
 {
 	if(pControl->GetName().IsEmpty())
-		return FALSE;
+		return uiFalse;
 	CXmlNodeUI node = nodeParent.child_auto(pControl->GetName());
 	node.attribute_auto(_T("select")).set_value(pControl->IsSelected());
-	return TRUE;
+	return uiTrue;
 }
 
-BOOL CUIAppConfig::LoadControl(CXmlNodeUI nodeParent, COptionUI *pControl, BOOL bDefault)
+uiBool CUIAppConfig::LoadControl(CXmlNodeUI nodeParent, COptionUI *pControl, uiBool bDefault)
 {
 	if(pControl->GetName().IsEmpty())
-		return FALSE;
+		return uiFalse;
 	CXmlNodeUI node = nodeParent.child(pControl->GetName());
-	pControl->Selected(node.attribute(_T("select")).as_bool(bDefault == TRUE), false);
-	return TRUE;
+	pControl->Selected(node.attribute(_T("select")).as_bool(bDefault == uiTrue), false);
+	return uiTrue;
 }
 
 
-BOOL CUIAppConfig::SaveControl(CXmlNodeUI nodeParent, CTabLayoutUI *pControl)
+uiBool CUIAppConfig::SaveControl(CXmlNodeUI nodeParent, CTabLayoutUI *pControl)
 {
 	if(pControl->GetName().IsEmpty())
-		return FALSE;
+		return uiFalse;
 	CXmlNodeUI node = nodeParent.child_auto(pControl->GetName());
 	node.attribute_auto(_T("sel")).set_value(pControl->GetCurSel());
-	return TRUE;
+	return uiTrue;
 }
 
-BOOL CUIAppConfig::LoadControl(CXmlNodeUI nodeParent, CTabLayoutUI *pControl, int nDefault)
+uiBool CUIAppConfig::LoadControl(CXmlNodeUI nodeParent, CTabLayoutUI *pControl, int nDefault)
 {
 	if(pControl->GetName().IsEmpty())
-		return FALSE;
+		return uiFalse;
 	CXmlNodeUI node = nodeParent.child(pControl->GetName());
 	pControl->SelectItem(node.attribute(_T("sel")).as_int(nDefault));
-	return TRUE;
+	return uiTrue;
 }
 
 } //namespace DuiLib{

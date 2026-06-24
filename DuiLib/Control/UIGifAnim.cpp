@@ -235,7 +235,7 @@ namespace DuiLib
 		BYTE* pMem = (BYTE*)::GlobalLock(hMem);
 		memcpy(pMem, f.GetData(), f.GetSize());
 		IStream* pStm = NULL;
-		::CreateStreamOnHGlobal(hMem, TRUE, &pStm);
+		::CreateStreamOnHGlobal(hMem, uiTrue, &pStm);
 		Gdiplus::Image *pImg = Gdiplus::Image::FromStream(pStm);
 		if(!pImg || pImg->GetLastStatus() != Gdiplus::Ok)
 		{

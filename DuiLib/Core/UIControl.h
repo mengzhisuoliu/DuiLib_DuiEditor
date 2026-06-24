@@ -616,7 +616,7 @@ namespace DuiLib {
 		virtual int GetFrameCount() const;
 		virtual void SetFrameDelay(int nDelay);
 		virtual int GetFrameDelay() const;
-		virtual void OnAnimationStart(int nAnimationID, BOOL bFirstLoop) override;
+		virtual void OnAnimationStart(int nAnimationID, uiBool bFirstLoop) override;
 		virtual void OnAnimationStep(int nTotalFrame, int nCurFrame, int nAnimationID) override;
 		virtual void OnAnimationStop(int nAnimationID) override;
 

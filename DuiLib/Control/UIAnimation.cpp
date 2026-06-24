@@ -28,7 +28,7 @@ namespace DuiLib {
 		m_pControl = pOwner;
 	}
 
-	BOOL CUIAnimation::StartAnimation(int nElapse, int nTotalFrame, int nAnimationID /*= 0*/, BOOL bLoop/* = FALSE*/)
+	uiBool CUIAnimation::StartAnimation(int nElapse, int nTotalFrame, int nAnimationID /*= 0*/, uiBool bLoop/* = FALSE*/)
 	{
 		CAnimationData* pData = GetAnimationDataByID(nAnimationID);
 		if( NULL != pData 
@@ -36,19 +36,19 @@ namespace DuiLib {
 			|| nTotalFrame <= 0
 			|| NULL == m_pControl )
 		{
-			ASSERT(FALSE);
-			return FALSE;
+			ASSERT(uiFalse);
+			return uiFalse;
 		}
 
 		CAnimationData* pAnimation = new CAnimationData(nElapse, nTotalFrame, nAnimationID, bLoop);
-		if( NULL == pAnimation ) return FALSE;
+		if( NULL == pAnimation ) return uiFalse;
 		
 		if(m_pControl->GetManager()->SetTimer( m_pControl, nAnimationID, nElapse ))
 		{
 			m_pImp->m_arAnimations.push_back(pAnimation);
-			return TRUE;
+			return uiTrue;
 		}
-		return FALSE;
+		return uiFalse;
 	}
 
 	void CUIAnimation::StopAnimation(int nAnimationID /*= 0*/)
@@ -87,7 +87,7 @@ namespace DuiLib {
 		}
 	}
 
-	BOOL CUIAnimation::IsAnimationRunning(int nAnimationID)
+	uiBool CUIAnimation::IsAnimationRunning(int nAnimationID)
 	{
 		CAnimationData* pData = GetAnimationDataByID(nAnimationID);
 		return NULL != pData;
@@ -98,31 +98,31 @@ namespace DuiLib {
 		CAnimationData* pData = GetAnimationDataByID(nAnimationID);
 		if( NULL == pData )
 		{
-			ASSERT(FALSE);
+			ASSERT(uiFalse);
 			return -1;
 		}
 		return pData->m_nCurFrame;
 	}
 
-	BOOL CUIAnimation::SetCurrentFrame(int nFrame, int nAnimationID/* = 0*/)
+	uiBool CUIAnimation::SetCurrentFrame(int nFrame, int nAnimationID/* = 0*/)
 	{
 		CAnimationData* pData = GetAnimationDataByID(nAnimationID);
 		if( NULL == pData)
 		{
-			ASSERT(FALSE);
-			return FALSE;
+			ASSERT(uiFalse);
+			return uiFalse;
 		}
 
 		if(nFrame >= 0 && nFrame <= pData->m_nTotalFrame)
 		{
 			pData->m_nCurFrame = nFrame;
-			return TRUE;
+			return uiTrue;
 		}
 		else
 		{
-			ASSERT(FALSE);
+			ASSERT(uiFalse);
 		}
-		return FALSE;
+		return uiFalse;
 	}
 
 	void CUIAnimation::OnAnimationElapse(int nAnimationID)
@@ -136,7 +136,7 @@ namespace DuiLib {
 		if(nCurFrame == 0)
 		{
 			OnAnimationStart(nAnimationID, pData->m_bFirstLoop);
-			pData->m_bFirstLoop = FALSE;
+			pData->m_bFirstLoop = uiFalse;
 		}
 
 		OnAnimationStep(pData->m_nTotalFrame, nCurFrame, nAnimationID);

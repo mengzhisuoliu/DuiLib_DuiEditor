@@ -29,7 +29,7 @@ namespace DuiLib
 		m_nScrollPos = 0;
 		m_nText_W_H = 0;
 		m_nStep = 5;
-		m_bUseRoll = FALSE;
+		m_bUseRoll = uiFalse;
 		m_nRollDirection = ROLLTEXT_LEFT;
 	}
 

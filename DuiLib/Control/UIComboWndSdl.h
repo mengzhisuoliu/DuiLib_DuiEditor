@@ -16,11 +16,11 @@ namespace DuiLib {
 		bool IsHitItem(CDuiPoint ptMouse);
 
 	protected:
-		virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-		virtual LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-		virtual LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-		virtual LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-		virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+		virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+		virtual LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+		virtual LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+		virtual LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+		virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
 	protected:
 		CComboUI* m_pOwner;
 		CVerticalLayoutUI* m_pLayout;

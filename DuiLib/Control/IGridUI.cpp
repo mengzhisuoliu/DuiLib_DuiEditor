@@ -13,21 +13,21 @@ TCellData::TCellData()
 	m_tag = 0;
 }
 
-void TCellData::Select(BOOL bSelected) 
+void TCellData::Select(uiBool bSelected) 
 {   
 	if(bSelected) m_state |= 0x01;
 	else m_state &= static_cast<BYTE>(~0x01);
 }
 
-BOOL TCellData::IsSelected() const { return (m_state & 0x01) == 0x01; }
+uiBool TCellData::IsSelected() const { return (m_state & 0x01) == 0x01; }
 
-void TCellData::SetCheckBoxCheck(BOOL bSelected) 
+void TCellData::SetCheckBoxCheck(uiBool bSelected) 
 { 
 	if(bSelected) m_state |= 0x02;
 	else m_state &= static_cast<BYTE>(~0x02);
 }
 
-BOOL TCellData::IsCheckBoxCheck() const { return (m_state & 0x02) == 0x02; }
+uiBool TCellData::IsCheckBoxCheck() const { return (m_state & 0x02) == 0x02; }
 
 void TCellData::SetMergedWidthOthers(bool bMerged) 
 {
@@ -73,15 +73,15 @@ CDuiColor TCellData::GetTextColor() const { return m_dwTextColor; }
 TRowData::TRowData()
 {
 	m_nHeight = 0;
-	m_bSelected = FALSE;
+	m_bSelected = uiFalse;
 	m_tag = 0;
 }
 
 void TRowData::SetHeight(int n) { m_nHeight = static_cast<short>(n); }
 int  TRowData::GetHeight() const { return m_nHeight; }
 
-void TRowData::Selected(BOOL bSelected) { m_bSelected = bSelected; }
-BOOL TRowData::IsSelected() const { return m_bSelected; }
+void TRowData::Selected(uiBool bSelected) { m_bSelected = bSelected; }
+uiBool TRowData::IsSelected() const { return m_bSelected; }
 
 void TRowData::SetTag(UINT_PTR tag) { m_tag = tag; }
 UINT_PTR TRowData::GetTag() const { return m_tag; }
@@ -99,34 +99,34 @@ static CStdControlPool<TRowData> poolrow;
 
 IGridUI::IGridUI(void)
 {
-	m_bVirtualGrid = FALSE;
+	m_bVirtualGrid = uiFalse;
 
 	m_nDefRowHeight = 30;
 	m_nDefColWidth = 80;
 	m_nFixedColCount = 1;
-	m_bViewListNo = TRUE;
+	m_bViewListNo = uiTrue;
 
-	m_bDrawRowLine = TRUE;
-	m_bDrawColumnLine = TRUE;
+	m_bDrawRowLine = uiTrue;
+	m_bDrawColumnLine = uiTrue;
 	m_dwLineColor = 0xff808080;
 
-	m_bEnableSizeColumn = TRUE;
-	m_bEnableSizeRow = TRUE;
+	m_bEnableSizeColumn = uiTrue;
+	m_bEnableSizeRow = uiTrue;
 
-	m_bAutoExpandLastColumn = FALSE;
-	m_bAutoExpandColumnByText = FALSE;
-	m_bAutoFitColumns = TRUE;
-	m_bAutoFitRows = FALSE;
+	m_bAutoExpandLastColumn = uiFalse;
+	m_bAutoExpandColumnByText = uiFalse;
+	m_bAutoFitColumns = uiTrue;
+	m_bAutoFitRows = uiFalse;
 
-	m_bListMode = TRUE;
-	m_bSingleRowSelection = TRUE;
-	m_bCheckBoxSelection = FALSE;
+	m_bListMode = uiTrue;
+	m_bSingleRowSelection = uiTrue;
+	m_bCheckBoxSelection = uiFalse;
 
-	m_bHeaderSort = TRUE;
+	m_bHeaderSort = uiTrue;
 	m_szSortIconSize.cx = 16;
 	m_szSortIconSize.cy = 16;
 
-	m_bEditable = TRUE;
+	m_bEditable = uiTrue;
 	//////////////////////////////////////////////////////////////////////////
 	m_FocusCell.row = -1;
 	m_FocusCell.col = -1;
@@ -145,7 +145,7 @@ TRowData *IGridUI::AllocRowData()
 {
 	TRowData *pRowData = poolrow.Alloc();
 	pRowData->m_nHeight = 0;
-	pRowData->m_bSelected = FALSE;
+	pRowData->m_bSelected = uiFalse;
 
 	for (int i=0; i<GetColumnCount(); i++)
 	{
@@ -220,14 +220,14 @@ void IGridUI::ClearSelectedRows()
 	{
 		if(!IsVirtualGrid())
 		{
-			Row(it->second).Selected(FALSE);
+			Row(it->second).Selected(uiFalse);
 		}
 	}
 	m_aSelectedRows.clear();
 	SetFocusCell(-1,-1);
 }
 
-void IGridUI::SelectRow(int row, BOOL bSelected, BOOL bTriggerEvent)
+void IGridUI::SelectRow(int row, uiBool bSelected, uiBool bTriggerEvent)
 {
 	if(IsSingleRowSelection()) //只允许单行选中时
 	{
@@ -263,16 +263,16 @@ void IGridUI::SelectRow(int row, BOOL bSelected, BOOL bTriggerEvent)
 	Refresh();
 }
 
-BOOL IGridUI::IsSelectedRow(int row)
+uiBool IGridUI::IsSelectedRow(int row)
 {
 	if(!IsVirtualGrid())
 		return Row(row).IsSelected();
 
 	std::map<INT, INT>::iterator it = m_aSelectedRows.find(row);
 	if(it != m_aSelectedRows.end()) {
-		return TRUE;
+		return uiTrue;
 	}
-	return FALSE;
+	return uiFalse;
 }
 
 void IGridUI::ClearSelectedCells()
@@ -282,14 +282,14 @@ void IGridUI::ClearSelectedCells()
 	{
 		if(!IsVirtualGrid())
 		{
-			Cell(it->second).Select(FALSE);
+			Cell(it->second).Select(uiFalse);
 		}
 	}
 	m_aSelectedCells.clear();
 	SetFocusCell(-1,-1);
 }
 
-void IGridUI::SelectCell(int row, int col, BOOL bSelected, BOOL bTriggerEvent)
+void IGridUI::SelectCell(int row, int col, uiBool bSelected, uiBool bTriggerEvent)
 {
 	if(IsSelectedCell(row,col) == bSelected)
 		return;
@@ -323,7 +323,7 @@ void IGridUI::SelectCell(int row, int col, BOOL bSelected, BOOL bTriggerEvent)
 	Refresh();
 }
 
-BOOL IGridUI::IsSelectedCell(int row, int col)
+uiBool IGridUI::IsSelectedCell(int row, int col)
 {
 	if(!IsVirtualGrid())
 		return Cell(row, col).IsSelected();
@@ -331,9 +331,9 @@ BOOL IGridUI::IsSelectedCell(int row, int col)
 	INT64 key = (((INT64)row) << 32) + col;
 	std::map<INT64, TCellID>::iterator it = m_aSelectedCells.find(key);
 	if(it != m_aSelectedCells.end()){
-		return TRUE;
+		return uiTrue;
 	}
-	return FALSE;
+	return uiFalse;
 }
 
 

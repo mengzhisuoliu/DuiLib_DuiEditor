@@ -1,91 +1,175 @@
--- 公共的安装文件配置
-function setup_install_files()
-    add_installfiles("compat.h", {prefixdir = "include/DuiLib"})
-    add_installfiles("DuiLib.h", {prefixdir = "include/DuiLib"})
-    add_installfiles("UIlib.h", {prefixdir = "include/DuiLib"})
-    add_installfiles("Control/*.h", {prefixdir = "include/DuiLib/Control"})
-    add_installfiles("Core/*.h", {prefixdir = "include/DuiLib/Core"})
-    add_installfiles("Layout/*.h", {prefixdir = "include/DuiLib/Layout"})
-    add_installfiles("Render/*.h", {prefixdir = "include/DuiLib/Render"})
-    add_installfiles("Utils/*.h", {prefixdir = "include/DuiLib/Utils"})
+-- xmake.lua for DuiLib (SDL3 backend)
 
-    after_uninstall(function (target)
-        os.rm(target:installdir()..  "/include/DuiLib/")
-    end)
-end
+-- set the project information
+set_project("DuiLib")
+set_version("1.0.0")
 
+set_xmakever("2.7.9")
 
+-- C++14 standard
+set_languages("cxx14")
 
------------------------------------------------------------------------------------------------
--- 定义工程目标
+-- configuration option: unicode (Windows only)
+option("unicode")
+    set_default(false)
+    set_showmenu(true)
+    set_description("Enable Unicode character set (Windows)")
+option_end()
+
+-- add global defines for SDL backend
+add_defines("DUILIB_SDL")
+
+--------------------------------------------------------------------------------
+-- Target: DuiLib
 target("DuiLib")
-    -- 设置目标编译类型 phony,binary,static,shared,object,headeronly
-    set_kind("$(kind)")
-	
-    -- 根据编译参数调整输出文件名
-    local target_file_name = get_target_file_name("DuiLib")
-	
-	-- 设置目标文件名
-	set_basename(target_file_name)
-		
-    -- 添加源代码文件
-    add_files("**.cpp")
+    local target_file_name = "DuiLib"
 
-    -- 从前面的源代码文件列表中删除指定文件
-    remove_files("Utils/unzip.cpp")
-        
-    -- 添加头文件搜索目录
-    add_includedirs(".", {public = true})
+    -- Platform-specific settings
+    if is_plat("linux") then
+        add_includedirs("/usr/local/include/SDL3")
+        add_includedirs("/usr/local/include/SDL3_ttf")
 
-    -- 设置 C++ 预编译头文件
-    set_pcxxheader("./StdAfx.h") 
-	
-	--通用配置
-	GeneralConfig()
+        -- Link SDL3, SDL_ttf
+        add_links("SDL3", "SDL3_ttf")
+        -- System libs
+        add_links("pthread", "dl")
 
-	--添加子工程目标依赖
-	--
-	
-	-- 添加规则
-	--
-	
-	--不同平台的特殊操作
-    if is_plat("linux", "macosx") then
-        setup_gtk_includedirs()
-        setup_install_files()
-	set_targetdir("$(buildir)/../DuiLib/Lib")
-    elseif is_plat("windows") then	
+        -- Install headers (same as original)
+        add_installfiles("compat.h", {prefixdir = "include/DuiLib"})
+        add_installfiles("DuiLib.h", {prefixdir = "include/DuiLib"})
+        add_installfiles("UIlib.h", {prefixdir = "include/DuiLib"})
+        add_installfiles("Control/*.h", {prefixdir = "include/DuiLib/Control"})
+        add_installfiles("Core/*.h", {prefixdir = "include/DuiLib/Core"})
+        add_installfiles("Layout/*.h", {prefixdir = "include/DuiLib/Layout"})
+        add_installfiles("Render/*.h", {prefixdir = "include/DuiLib/Render"})
+        add_installfiles("Utils/*.h", {prefixdir = "include/DuiLib/Utils"})
+
+        after_uninstall(function (target)
+            os.rm(target:installdir() .. "/include/DuiLib/")
+        end)
+
+    elseif is_plat("macosx") then
+        add_includedirs("/usr/local/include/SDL3")
+        add_includedirs("/usr/local/include/SDL3_ttf")
+
+        add_links("SDL3", "SDL3_ttf")
+        -- Needed system frameworks
+        add_frameworks("Cocoa", "OpenGL", "IOKit", "CoreVideo", "CoreFoundation")
+        -- CoreText and CoreGraphics for text shaping (harfbuzz/CoreText)
+        add_frameworks("CoreText", "CoreGraphics")
+
+        -- macOS deployment target (set to 11.0)
+        add_cxflags("-mmacosx-version-min=11.0")
+        add_ldflags("-mmacosx-version-min=11.0")
+
+        -- Install headers
+        add_installfiles("compat.h", {prefixdir = "include/DuiLib"})
+        add_installfiles("DuiLib.h", {prefixdir = "include/DuiLib"})
+        add_installfiles("UIlib.h", {prefixdir = "include/DuiLib"})
+        add_installfiles("Control/*.h", {prefixdir = "include/DuiLib/Control"})
+        add_installfiles("Core/*.h", {prefixdir = "include/DuiLib/Core"})
+        add_installfiles("Layout/*.h", {prefixdir = "include/DuiLib/Layout"})
+        add_installfiles("Render/*.h", {prefixdir = "include/DuiLib/Render"})
+        add_installfiles("Utils/*.h", {prefixdir = "include/DuiLib/Utils"})
+
+        after_uninstall(function (target)
+            os.rm(target:installdir() .. "/include/DuiLib/")
+        end)
+
+    elseif is_plat("windows") then
+        -- Windows-specific macros
+        add_defines("WIN32", "_WIN32", "WINDOWS")
+
+        -- Unicode option
+        if has_config("unicode") then
+            add_defines("UNICODE", "_UNICODE")
+        end
+
         if is_kind("static") then
             add_defines("UILIB_EXPORTS", "UILIB_STATIC")
         else
             add_defines("UILIB_EXPORTS")
         end
-		
-        --编译结束时，把.dll拷贝到bin目录, 把.lib拷贝到Lib目录
+
+        -- SDL3 include path (assume 3rd party directory is at ../3rd/SDL/include)
+        add_includedirs("$(projectdir)/../3rd/SDL/include")
+        add_includedirs("$(projectdir)/../3rd/SDL_ttf/include")
+
+        -- Link SDL3 static libs (adjust names/paths as needed)
+        add_linkdirs("$(projectdir)/../3rd/SDL/lib")
+        add_linkdirs("$(projectdir)/../3rd/SDL_ttf/lib")
+        add_links("SDL3", "SDL3_ttf")
+
+        -- DLL/lib filename rule (original logic preserved)
+        if is_arch("x64") then
+            if has_config("unicode") then
+                if is_kind("static") then
+                    target_file_name = target_file_name .. "_64us"
+                else
+                    target_file_name = target_file_name .. "_64u"
+                end
+            else
+                if is_kind("static") then
+                    target_file_name = target_file_name .. "_64s"
+                else
+                    target_file_name = target_file_name .. "_64"
+                end
+            end
+        else
+            if has_config("unicode") then
+                if is_kind("static") then
+                    target_file_name = target_file_name .. "_us"
+                else
+                    target_file_name = target_file_name .. "_u"
+                end
+            else
+                if is_kind("static") then
+                    target_file_name = target_file_name .. "_s"
+                else
+                    target_file_name = target_file_name
+                end
+            end
+        end
+
+        -- Copy output files after build
         if is_kind("shared") then
             after_build(function (target)
-                local destfile = os.projectdir() .. "/bin/" .. target:filename()
+                local destfile = target:scriptdir() .. "/../bin/" .. target:filename()
                 os.cp(target:targetfile(), destfile)
-                
-                local destfile = target:scriptdir() .. "/Lib/" .. target_file_name .. ".lib"
+
+                local destfile_lib = target:scriptdir() .. "/Lib/" .. target_file_name .. ".lib"
                 local srcfile = target:targetdir() .. "/" .. target_file_name .. ".lib"
-                os.cp(srcfile, destfile)
+                os.cp(srcfile, destfile_lib)
             end)
-        elseif is_kind("static") then
-			after_build(function (target)
-				local destfile = target:scriptdir() .. "/Lib/" .. target:filename()
+        else
+            after_build(function (target)
+                local destfile = target:scriptdir() .. "/Lib/" .. target:filename()
                 os.cp(target:targetfile(), destfile)
             end)
-        elseif is_kind("binary") then
-			after_build(function (target)
-				local destfile = os.projectdir() .. "/bin/" .. target:filename()
-                os.cp(target:targetfile(), destfile)
-            end)
-        end        
+        end
     end
-        
 
+    -- Common settings
+    set_kind("$(kind)")
+    if is_mode("debug") then
+        set_optimize("none")
+        add_defines("DEBUG", "_DEBUG")
+        set_symbols("debug")
+    elseif is_mode("release") then
+        set_optimize("fastest")
+        set_strip("all")
+        add_defines("NDEBUG")
+    end
 
+    set_targetdir("$(buildir)/$(plat)/$(arch)/$(mode)")
+    set_basename(target_file_name)
 
+    -- Source files
+    add_files("**.cpp")
+    remove_files("Utils/unzip.cpp", "UIDataExchange.cpp")
 
+    -- Include directories
+    add_includedirs(".")
 
+    -- Precompiled header
+    set_pcxxheader("./StdAfx.h")

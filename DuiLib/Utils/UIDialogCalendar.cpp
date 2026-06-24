@@ -19,7 +19,7 @@ CDialogCalendar::CDialogCalendar(void)
 	m_sWeeks[5] = "Sat";  // 星期六
 	m_sWeeks[6] = "Sun";  // 星期日
 
-	m_bOK = FALSE;
+	m_bOK = uiFalse;
 }
 
 CDialogCalendar::~CDialogCalendar()
@@ -55,7 +55,7 @@ void CDialogCalendar::OnFinalMessage( UIWND hWnd )
 	}
 }
 
-LRESULT CDialogCalendar::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CDialogCalendar::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	// 关联UI管理器
 	GetManager()->Init(GetHWND(), GetManagerName(), this);
@@ -155,7 +155,7 @@ LRESULT CDialogCalendar::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	return 0;
 }
 
-LRESULT CDialogCalendar::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CDialogCalendar::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	Close(IDCANCEL);
 	return 0;
@@ -280,7 +280,7 @@ void CDialogCalendar::Notify(TNotifyUI& msg)
 					m_st.wMonth = m_btnDays[i]->m_st.wMonth;
 					m_st.wDay = m_btnDays[i]->m_st.wDay;
 					CDateTimeWndSDL::GetDayOfWeek(m_st);
-					m_bOK = TRUE;
+					m_bOK = uiTrue;
 					Close(IDOK);
 					return;
 				}
@@ -352,7 +352,7 @@ void CDialogCalendar::UpdateCalendar()
 }
 
 // 判断闰年
-BOOL CDialogCalendar::IsLeapYear(int year)
+uiBool CDialogCalendar::IsLeapYear(int year)
 {
 	return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 }

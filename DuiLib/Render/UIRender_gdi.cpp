@@ -17,12 +17,12 @@ namespace DuiLib {
 			GetBValue (clrSrc) * src_darken + GetBValue (clrDest) * dest_darken);
 	}
 
-	static BOOL WINAPI AlphaBitBlt(HDC hDC, int nDestX, int nDestY, int dwWidth, int dwHeight, HDC hSrcDC, \
+	static uiBool WINAPI AlphaBitBlt(HDC hDC, int nDestX, int nDestY, int dwWidth, int dwHeight, HDC hSrcDC, \
 		int nSrcX, int nSrcY, int wSrc, int hSrc, BLENDFUNCTION ftn)
 	{
 		HDC hTempDC = ::CreateCompatibleDC(hDC);
 		if (NULL == hTempDC)
-			return FALSE;
+			return uiFalse;
 
 		//Creates Source DIB
 		LPBITMAPINFO lpbiSrc = NULL;
@@ -31,7 +31,7 @@ namespace DuiLib {
 		if (lpbiSrc == NULL)
 		{
 			::DeleteDC(hTempDC);
-			return FALSE;
+			return uiFalse;
 		}
 		lpbiSrc->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 		lpbiSrc->bmiHeader.biWidth = dwWidth;
@@ -54,7 +54,7 @@ namespace DuiLib {
 		{
 			delete [] lpbiSrc;
 			::DeleteDC(hTempDC);
-			return FALSE;
+			return uiFalse;
 		}
 
 		HBITMAP hOldTempBmp = (HBITMAP)::SelectObject (hTempDC, hSrcDib);
@@ -70,7 +70,7 @@ namespace DuiLib {
 			delete [] lpbiSrc;
 			::DeleteObject(hSrcDib);
 			::DeleteDC(hTempDC);
-			return FALSE;
+			return uiFalse;
 		}
 
 		lpbiDest->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
@@ -95,7 +95,7 @@ namespace DuiLib {
 			delete [] lpbiSrc;
 			::DeleteObject(hSrcDib);
 			::DeleteDC(hTempDC);
-			return FALSE;
+			return uiFalse;
 		}
 
 		::SelectObject (hTempDC, hDestDib);
@@ -124,7 +124,7 @@ namespace DuiLib {
 		::DeleteObject(hSrcDib);
 
 		::DeleteDC(hTempDC);
-		return TRUE;
+		return uiTrue;
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +135,7 @@ namespace DuiLib {
 		m_pManager	= NULL;
 		m_iSaveDC = 0;
 		m_hDC = NULL;
-		m_bAttachHDC = FALSE;
+		m_bAttachHDC = uiFalse;
 	}
 
 	UIRender_gdi::~UIRender_gdi()
@@ -148,7 +148,7 @@ namespace DuiLib {
 	{
 		if(!m_bAttachHDC && m_hDC != NULL) { ::DeleteDC(m_hDC); m_hDC = NULL; }
 		m_pManager = pManager;
-		m_bAttachHDC = FALSE;
+		m_bAttachHDC = uiFalse;
 
 		if(hDC == NULL)
 		{
@@ -164,7 +164,7 @@ namespace DuiLib {
 		::SetBkMode(hDC, TRANSPARENT);
 
 		m_defBmp = MakeRefPtr<UIBitmap>(UIGlobal::CreateBitmap());
-		m_defBmp->CreateARGB32Bitmap(m_hDC, 1, 1, TRUE);
+		m_defBmp->CreateARGB32Bitmap(m_hDC, 1, 1, uiTrue);
 
 		m_defBrush = MakeRefPtr<UIBrush>(UIGlobal::CreateBrush());
 		m_defBrush->CreateFromHBrush((HBRUSH)::GetStockObject(NULL_BRUSH));
@@ -183,7 +183,7 @@ namespace DuiLib {
 
 	void UIRender_gdi::AttachDC(CPaintManagerUI *pManager, HDC hDC)
 	{
-		m_bAttachHDC = TRUE;
+		m_bAttachHDC = uiTrue;
 		m_pManager = pManager;
 		m_hDC = hDC;
 	}
@@ -209,7 +209,7 @@ namespace DuiLib {
 		m_hDC = ::CreateCompatibleDC(pSrcRender->GetDC());
 
 		m_defBmp = MakeRefPtr<UIBitmap>(UIGlobal::CreateBitmap());
-		m_defBmp->CreateARGB32Bitmap(m_hDC, 1, 1, TRUE);
+		m_defBmp->CreateARGB32Bitmap(m_hDC, 1, 1, uiTrue);
 
 		m_defBrush = MakeRefPtr<UIBrush>(UIGlobal::CreateBrush());
 		m_defBrush->CreateFromHBrush((HBRUSH)::GetStockObject(NULL_BRUSH));
@@ -241,7 +241,7 @@ namespace DuiLib {
 			return false;
 
 		m_curBmp->DeleteObject();
-		if(!m_curBmp->CreateARGB32Bitmap(m_hDC, width, height, TRUE))
+		if(!m_curBmp->CreateARGB32Bitmap(m_hDC, width, height, uiTrue))
 			return false;
 
 		SelectObject(m_curBmp);
@@ -407,20 +407,20 @@ namespace DuiLib {
 		return clr;
 	}
 
-	BOOL UIRender_gdi::BitBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, DWORD dwRop)
+	uiBool UIRender_gdi::BitBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, DWORD dwRop)
 	{
 		return ::BitBlt(m_hDC, x, y, nWidth, nHeight, pSrcRender->GetDC(), xSrc, ySrc, dwRop);
 	}
 
-	BOOL UIRender_gdi::StretchBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, DWORD dwRop)
+	uiBool UIRender_gdi::StretchBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, DWORD dwRop)
 	{
 		::SetStretchBltMode(GetDC(), HALFTONE);
 		return ::StretchBlt(m_hDC, x, y, nWidth, nHeight, pSrcRender->GetDC(), xSrc, ySrc, nWidthSrc, nHeightSrc, dwRop);
 	}
 
-	BOOL UIRender_gdi::AlphaBlend(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, int alpha )
+	uiBool UIRender_gdi::AlphaBlend(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, int alpha )
 	{
-		typedef BOOL (WINAPI *LPALPHABLEND)(HDC, int, int, int, int,HDC, int, int, int, int, BLENDFUNCTION);
+		typedef uiBool (WINAPI *LPALPHABLEND)(HDC, int, int, int, int,HDC, int, int, int, int, BLENDFUNCTION);
 		static LPALPHABLEND lpAlphaBlend = (LPALPHABLEND) ::GetProcAddress(::GetModuleHandle(_T("msimg32.dll")), "AlphaBlend");
 		if( lpAlphaBlend == NULL ) lpAlphaBlend = AlphaBitBlt;
 
@@ -464,10 +464,10 @@ namespace DuiLib {
 		CPaintManagerUI *pManager = GetManager();
 		HDC hDC = GetDC();
 
-		typedef BOOL (WINAPI *LPALPHABLEND)(HDC, int, int, int, int,HDC, int, int, int, int, BLENDFUNCTION);
+		typedef uiBool (WINAPI *LPALPHABLEND)(HDC, int, int, int, int,HDC, int, int, int, int, BLENDFUNCTION);
 		static LPALPHABLEND lpAlphaBlend = (LPALPHABLEND) ::GetProcAddress(::GetModuleHandle(_T("msimg32.dll")), "AlphaBlend");
 		if( lpAlphaBlend == NULL ) lpAlphaBlend = AlphaBitBlt;
-		typedef BOOL (WINAPI *PGradientFill)(HDC, PTRIVERTEX, ULONG, PVOID, ULONG, ULONG);
+		typedef uiBool (WINAPI *PGradientFill)(HDC, PTRIVERTEX, ULONG, PVOID, ULONG, ULONG);
 		static PGradientFill lpGradientFill = (PGradientFill) ::GetProcAddress(::GetModuleHandle(_T("msimg32.dll")), "GradientFill");
 
 		BYTE bAlpha = (BYTE)(((dwFirst >> 24) + (dwSecond >> 24)) >> 1);
@@ -752,21 +752,21 @@ namespace DuiLib {
 		return new UIPath_gdi(m_hDC);
 	}
 
-	BOOL UIRender_gdi::DrawPath(const UIPath* path, int nSize, CDuiColor dwColor)
+	uiBool UIRender_gdi::DrawPath(const UIPath* path, int nSize, CDuiColor dwColor)
 	{
 		HPEN hPen = ::CreatePen(PS_SOLID, 1, RGB(GetBValue(dwColor), GetGValue(dwColor), GetRValue(dwColor)));
 		HPEN hOldPen = (HPEN)::SelectObject(m_hDC, hPen);
-		BOOL bRet = ::StrokePath(m_hDC);
+		uiBool bRet = ::StrokePath(m_hDC);
 		::SelectObject(m_hDC, hOldPen);
 		::DeleteObject(hPen);
 		return bRet;
 	}
 
-	BOOL UIRender_gdi::FillPath(const UIPath* path, const CDuiColor dwColor)
+	uiBool UIRender_gdi::FillPath(const UIPath* path, const CDuiColor dwColor)
 	{
 		HBRUSH hBrush = ::CreateSolidBrush(RGB(GetBValue(dwColor), GetGValue(dwColor), GetRValue(dwColor)));
 		HBRUSH hOldBrush = (HBRUSH)::SelectObject(m_hDC, hBrush);
-		BOOL bRet = ::FillPath(m_hDC);
+		uiBool bRet = ::FillPath(m_hDC);
 		::SelectObject(m_hDC, hOldBrush);
 		::DeleteObject(hBrush);
 		return bRet;

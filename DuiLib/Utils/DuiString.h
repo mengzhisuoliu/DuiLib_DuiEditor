@@ -36,14 +36,6 @@ namespace DuiLib
 		duistring_encoding_utf8
 	};
 
-#ifdef WIN32
-	typedef __int64 Int64;
-	typedef unsigned __int64 UInt64;
-#else
-	typedef int64_t Int64;
-	typedef uint64_t UInt64;
-#endif
-
 	//////////////////////////////////////////////////////////////////////////
 	class UILIB_API DuiStringTraitsA
 	{
@@ -62,12 +54,12 @@ namespace DuiLib
 		static char *ui_strupr(char *str);
 		static char *ui_strlwr(char *str);
 		static int ui_atoi(const char *str);
-		static DuiLib::Int64 ui_atoi64(const char *str);
+		static uiInt64 ui_atoi64(const char *str);
 		static float ui_atof(const char *str);
 		static double ui_strtod (const char *nptr);
 
 		static BYTE Char2Hex(char ch);
-		static DuiLib::Int64 ui_hextoi64(const char *str);
+		static uiInt64 ui_hextoi64(const char *str);
 		static void ui_tohex(const char *str, char *dst_str);
 
 		static int __cdecl formatV(char *&pstr, const char *pstrFormat, va_list ap);
@@ -75,7 +67,7 @@ namespace DuiLib
 
 		static void bool_to_string(char *string, bool b);
 		static void int_to_string(char *str, int n);
-		static void int64_to_string(char *str, DuiLib::Int64 n);
+		static void int64_to_string(char *str, uiInt64 n);
 		static void double_to_string(char *str, double s, int base=-1);
 		static void float_to_string(char *str, float s, int base=-1);
 
@@ -86,12 +78,12 @@ namespace DuiLib
 		static int GetBufferLength(char *pstr);
 		static void Empty(char *&pstr);
 		static void SetAt(char *&pstr, int nIndex, char ch);
-		static void assign_string(char *&pstr, DuiStringEncoding dst_encoding, const void *src_string, int src_strlength, DuiStringEncoding src_encoding, BOOL bMemString);
+		static void assign_string(char *&pstr, DuiStringEncoding dst_encoding, const void *src_string, int src_strlength, DuiStringEncoding src_encoding, uiBool bMemString);
 		static void append_string(char *&pstr, DuiStringEncoding dst_encoding, const void *src_string, int src_strlength, DuiStringEncoding src_encoding);
 		static void TrimLeft(char *&pstr);
 		static void TrimRight(char *&pstr);
-		static void URLEncode(const char *str, char *&dst_str, DuiStringEncoding encoding, BOOL x_www_form_urlencoded);
-		static void URLDecode(const char *str, char *&dst_str, DuiStringEncoding encoding, BOOL x_www_form_urlencoded);
+		static void URLEncode(const char *str, char *&dst_str, DuiStringEncoding encoding, uiBool x_www_form_urlencoded);
+		static void URLDecode(const char *str, char *&dst_str, DuiStringEncoding encoding, uiBool x_www_form_urlencoded);
 	};
 
 	class UILIB_API DuiStringTraitsW
@@ -111,12 +103,12 @@ namespace DuiLib
 		static wchar_t *ui_strupr(wchar_t *str);
 		static wchar_t *ui_strlwr(wchar_t *str);
 		static int ui_atoi(const wchar_t *str);
-		static DuiLib::Int64 ui_atoi64(const wchar_t *str);
+		static uiInt64 ui_atoi64(const wchar_t *str);
 		static float ui_atof(const wchar_t *str);
 		static double ui_strtod (const wchar_t *nptr);
 
 		static BYTE Char2Hex(wchar_t ch);
-		static DuiLib::Int64 ui_hextoi64(const wchar_t *str);
+		static uiInt64 ui_hextoi64(const wchar_t *str);
 		static void ui_tohex(const wchar_t *str, wchar_t *dst_str);
 
 		static int __cdecl formatV(wchar_t *&pstr, const wchar_t *pstrFormat, va_list ap);
@@ -124,7 +116,7 @@ namespace DuiLib
 
 		static void bool_to_string(wchar_t *string, bool b);
 		static void int_to_string(wchar_t *str, int n);
-		static void int64_to_string(wchar_t *str, DuiLib::Int64 n);
+		static void int64_to_string(wchar_t *str, uiInt64 n);
 		static void double_to_string(wchar_t *str, double s, int base=-1);
 		static void float_to_string(wchar_t *str, float s, int base=-1);
 
@@ -135,12 +127,12 @@ namespace DuiLib
 		static int GetBufferLength(wchar_t *pstr);
 		static void Empty(wchar_t *&pstr);
 		static void SetAt(wchar_t *&pstr, int nIndex, wchar_t ch);
-		static void assign_string(wchar_t *&pstr, DuiStringEncoding dst_encoding, const void *src_string, int src_strlength, DuiStringEncoding src_encoding, BOOL bMemString);
+		static void assign_string(wchar_t *&pstr, DuiStringEncoding dst_encoding, const void *src_string, int src_strlength, DuiStringEncoding src_encoding, uiBool bMemString);
 		static void append_string(wchar_t *&pstr, DuiStringEncoding dst_encoding, const void *src_string, int src_strlength, DuiStringEncoding src_encoding);
 		static void TrimLeft(wchar_t *&pstr);
 		static void TrimRight(wchar_t *&pstr);
-		static void URLEncode(const wchar_t *str, wchar_t *&dst_str, DuiStringEncoding encoding, BOOL x_www_form_urlencoded);
-		static void URLDecode(const wchar_t *str, wchar_t *&dst_str, DuiStringEncoding encoding, BOOL x_www_form_urlencoded);
+		static void URLEncode(const wchar_t *str, wchar_t *&dst_str, DuiStringEncoding encoding, uiBool x_www_form_urlencoded);
+		static void URLDecode(const wchar_t *str, wchar_t *&dst_str, DuiStringEncoding encoding, uiBool x_www_form_urlencoded);
 	};
 
 	template< typename uichar, class DuiTraits, DuiStringEncoding StringEncoding > class DuiStringT;
@@ -171,19 +163,19 @@ namespace DuiLib
 		DuiStringT(const CDuiStringA &str)
 		{
 			m_pstr = DuiTraits::GetNullString();
-			DuiTraits::assign_string(m_pstr, StringEncoding, str.toString(), str.GetLength(), str.GetEncoding(), TRUE);
+			DuiTraits::assign_string(m_pstr, StringEncoding, str.toString(), str.GetLength(), str.GetEncoding(), uiTrue);
 		}
 
 		DuiStringT(const CDuiStringUtf8 &str)
 		{
 			m_pstr = DuiTraits::GetNullString();
-			DuiTraits::assign_string(m_pstr, StringEncoding, str.toString(), str.GetLength(), str.GetEncoding(), TRUE);
+			DuiTraits::assign_string(m_pstr, StringEncoding, str.toString(), str.GetLength(), str.GetEncoding(), uiTrue);
 		}
 
 		DuiStringT(const CDuiStringW &str)
 		{
 			m_pstr = DuiTraits::GetNullString();
-			DuiTraits::assign_string(m_pstr, StringEncoding, str.toString(), str.GetLength(), str.GetEncoding(), TRUE);
+			DuiTraits::assign_string(m_pstr, StringEncoding, str.toString(), str.GetLength(), str.GetEncoding(), uiTrue);
 		}
 
 		DuiStringT(bool val)
@@ -198,7 +190,7 @@ namespace DuiLib
 			Assign(val);
 		}
 
-		DuiStringT(DuiLib::Int64 val)
+		DuiStringT(uiInt64 val)
 		{
 			m_pstr = DuiTraits::GetNullString();
 			Assign(val);
@@ -288,7 +280,7 @@ namespace DuiLib
 		void CopyFrom(const DuiStringT &str)
 		{
 			DuiTraits::AllocString(m_pstr, str.GetLength(), sizeof(uichar));
-			DuiTraits::assign_string(m_pstr, StringEncoding, str.toString(), str.GetLength(), StringEncoding, FALSE);
+			DuiTraits::assign_string(m_pstr, StringEncoding, str.toString(), str.GetLength(), StringEncoding, uiFalse);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -338,14 +330,14 @@ namespace DuiLib
 			if (StringEncoding == duistring_encoding_unicode)
 			{
 #ifdef _UTF8CODE
-				DuiTraits::assign_string(m_pstr, StringEncoding, pstr, cchMax, duistring_encoding_utf8, FALSE);
+				DuiTraits::assign_string(m_pstr, StringEncoding, pstr, cchMax, duistring_encoding_utf8, uiFalse);
 #else
-				DuiTraits::assign_string(m_pstr, StringEncoding, pstr, cchMax, duistring_encoding_ansi, FALSE);
+				DuiTraits::assign_string(m_pstr, StringEncoding, pstr, cchMax, duistring_encoding_ansi, uiFalse);
 #endif
 			}
 			else
 			{
-				DuiTraits::assign_string(m_pstr, StringEncoding, pstr, cchMax, StringEncoding, FALSE);
+				DuiTraits::assign_string(m_pstr, StringEncoding, pstr, cchMax, StringEncoding, uiFalse);
 			}
 			return *this;
 		}
@@ -379,7 +371,7 @@ namespace DuiLib
 		DuiStringT& Assign(const wchar_t *pstr, int cchMax = -1)
 		{
 			cchMax = (cchMax < 0 ? (int)DuiStringTraitsW::ui_strlen(pstr) : cchMax);
-			DuiTraits::assign_string(m_pstr, StringEncoding, pstr, cchMax, duistring_encoding_unicode, FALSE);
+			DuiTraits::assign_string(m_pstr, StringEncoding, pstr, cchMax, duistring_encoding_unicode, uiFalse);
 			return *this;
 		}
 		DuiStringT& Append(const wchar_t *pstr, int cchMax=-1) 
@@ -400,7 +392,7 @@ namespace DuiLib
 		//////////////////////////////////////////////////////////////////////////
 		DuiStringT& Assign(const CDuiStringA &str)
 		{
-			DuiTraits::assign_string(m_pstr, StringEncoding, str.toString(), str.GetLength(), str.GetEncoding(), TRUE); return *this;
+			DuiTraits::assign_string(m_pstr, StringEncoding, str.toString(), str.GetLength(), str.GetEncoding(), uiTrue); return *this;
 		}
 		DuiStringT& Append(const CDuiStringA &str)
 		{
@@ -413,7 +405,7 @@ namespace DuiLib
 		//////////////////////////////////////////////////////////////////////////
 		DuiStringT& Assign(const CDuiStringUtf8 &str)
 		{
-			DuiTraits::assign_string(m_pstr, StringEncoding, str.toString(), str.GetLength(), str.GetEncoding(), TRUE); return *this;
+			DuiTraits::assign_string(m_pstr, StringEncoding, str.toString(), str.GetLength(), str.GetEncoding(), uiTrue); return *this;
 		}
 		DuiStringT& Append(const CDuiStringUtf8 &str)
 		{
@@ -426,7 +418,7 @@ namespace DuiLib
 		//////////////////////////////////////////////////////////////////////////
 		DuiStringT& Assign(const CDuiStringW &str)
 		{
-			DuiTraits::assign_string(m_pstr, StringEncoding, str.toString(), str.GetLength(), str.GetEncoding(), TRUE); return *this;
+			DuiTraits::assign_string(m_pstr, StringEncoding, str.toString(), str.GetLength(), str.GetEncoding(), uiTrue); return *this;
 		}
 		DuiStringT& Append(const CDuiStringW &str)
 		{
@@ -453,12 +445,12 @@ namespace DuiLib
 		friend CDuiString UILIB_API operator+(int lpStr, const CDuiString& string2);
 
 		//////////////////////////////////////////////////////////////////////////
-		DuiStringT& Assign(DuiLib::Int64 val)			{ DuiTraits::AllocString(m_pstr, 64, sizeof(uichar)); DuiTraits::int64_to_string(m_pstr, val);		return *this;	}
-		DuiStringT& Append(DuiLib::Int64 val)			{ DuiStringT sTemp; sTemp.Assign(val); Append(sTemp); return *this; }
-		DuiStringT& operator=(DuiLib::Int64 src)		{ Assign(src);		return *this; }
-		DuiStringT& operator+=(DuiLib::Int64 src)		{ Append(src);		return *this; }
-		DuiStringT operator+(DuiLib::Int64 src) const	{ DuiStringT sTemp = *this; sTemp.Append(src);	return sTemp; }
-		friend CDuiString UILIB_API operator+(DuiLib::Int64 lpStr, const CDuiString& string2);
+		DuiStringT& Assign(uiInt64 val)			{ DuiTraits::AllocString(m_pstr, 64, sizeof(uichar)); DuiTraits::int64_to_string(m_pstr, val);		return *this;	}
+		DuiStringT& Append(uiInt64 val)			{ DuiStringT sTemp; sTemp.Assign(val); Append(sTemp); return *this; }
+		DuiStringT& operator=(uiInt64 src)		{ Assign(src);		return *this; }
+		DuiStringT& operator+=(uiInt64 src)		{ Append(src);		return *this; }
+		DuiStringT operator+(uiInt64 src) const	{ DuiStringT sTemp = *this; sTemp.Append(src);	return sTemp; }
+		friend CDuiString UILIB_API operator+(uiInt64 lpStr, const CDuiString& string2);
 
 		//////////////////////////////////////////////////////////////////////////	
 		DuiStringT& Assign(double val, int base=DUISTRING_DEFAULT_BASE_RADIX)		
@@ -503,12 +495,12 @@ namespace DuiLib
 		const uichar *toString() const						{ return (const uichar *)m_pstr; }
 		bool toBool(bool def = false) const					{ return m_pstr[0]=='1' || m_pstr[0]=='t' || m_pstr[0]=='T' || m_pstr[0]=='Y' || m_pstr[0]=='y'; }
 		int toInt(int def = 0) const						{ return DuiTraits::ui_atoi(m_pstr); }
-		DuiLib::Int64 toInt64(DuiLib::Int64 def = 0) const	{ return DuiTraits::ui_atoi64(m_pstr); }
+		uiInt64 toInt64(uiInt64 def = 0) const		{ return DuiTraits::ui_atoi64(m_pstr); }
 		double toDouble(double def = 0) const				{ return DuiTraits::ui_strtod(m_pstr); }
 		float toFloat(float def = 0) const					{ return DuiTraits::ui_atof(m_pstr); }
 
 		//把整个字符串 当成 16进制格式 转为 Int64
-		DuiLib::Int64 HexToInt64() const					{ return DuiTraits::ui_hextoi64(m_pstr); }
+		uiInt64 HexToInt64() const							{ return DuiTraits::ui_hextoi64(m_pstr); }
 
 		//把整个字符串 当成 10进制格式 转为 Hex
 		DuiStringT toHex() const							{ DuiStringT sTemp; sTemp.SetBufferLength(64); DuiTraits::ui_tohex(m_pstr, sTemp.m_pstr); return sTemp; }
@@ -842,10 +834,10 @@ namespace DuiLib
 		}
 
 		//URL编码, CDuiStringA使用GBK编码，其他使用UTF-8编码
-		DuiStringT URLEncode(BOOL x_www_form_urlencoded = FALSE)	{ DuiStringT sTemp; DuiTraits::URLEncode(m_pstr, sTemp.m_pstr, StringEncoding, x_www_form_urlencoded); return sTemp; }
+		DuiStringT URLEncode(uiBool x_www_form_urlencoded = uiFalse)	{ DuiStringT sTemp; DuiTraits::URLEncode(m_pstr, sTemp.m_pstr, StringEncoding, x_www_form_urlencoded); return sTemp; }
 		
 		//URL解码, CDuiStringA使用GBK编码，其他使用UTF-8编码
-		DuiStringT URLDecode(BOOL x_www_form_urlencoded = FALSE)	{ DuiStringT sTemp; DuiTraits::URLDecode(m_pstr, sTemp.m_pstr, StringEncoding, x_www_form_urlencoded); return sTemp; }
+		DuiStringT URLDecode(uiBool x_www_form_urlencoded = uiFalse)	{ DuiStringT sTemp; DuiTraits::URLDecode(m_pstr, sTemp.m_pstr, StringEncoding, x_www_form_urlencoded); return sTemp; }
 
 		//
 		DuiStringEncoding GetEncoding() const { return StringEncoding; }
@@ -1106,14 +1098,17 @@ namespace DuiLib
 	protected:
 		void Alloc(UINT size);
 		void Release();
+
+		#ifndef WIN32
+		bool iconv_convert(const char* tocode, const char* fromcode, const void* input, int input_len, size_t& out_len);
+		#endif
 	private:
 		BYTE *_block;
-#ifdef WIN32
+		#ifdef WIN32
 		UINT m_cp;
-#else
+		#else
 		std::string m_from;
-		std::string m_to;
-#endif // #ifdef WIN32
+		#endif
 	};
 
 

@@ -42,7 +42,7 @@ namespace DuiLib
 		UINT_PTR m_idEventTimer;
 		int m_nStep;
 		int m_nScrollPos;
-		BOOL m_bUseRoll;
+		uiBool m_bUseRoll;
 		int m_nRollDirection;   
 		int m_nText_W_H;
 

@@ -8,7 +8,7 @@ namespace DuiLib
 {
 
 const TCHAR *strWndClassName = _T("PerryShadowWnd");
-bool CShadowWin32UI::s_bHasInit = FALSE;
+bool CShadowWin32UI::s_bHasInit = uiFalse;
 
 CShadowWin32UI::CShadowWin32UI(void)
 		: m_hWnd((HWND)NULL)
@@ -337,8 +337,8 @@ void CShadowWin32UI::Update(HWND hParent)
 	CDuiPoint ptSrc;
 	CDuiSize WndSize(nShadWndWid, nShadWndHei);
 	BLENDFUNCTION blendPixelFunction= { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
-	MoveWindow(m_hWnd, ptDst.x, ptDst.y, nShadWndWid, nShadWndHei, FALSE);
-	BOOL bRet= ::UpdateLayeredWindow(m_hWnd, NULL, &ptDst, &WndSize, hMemDC, &ptSrc, 0, &blendPixelFunction, ULW_ALPHA);
+	MoveWindow(m_hWnd, ptDst.x, ptDst.y, nShadWndWid, nShadWndHei, uiFalse);
+	uiBool bRet= ::UpdateLayeredWindow(m_hWnd, NULL, &ptDst, &WndSize, hMemDC, &ptSrc, 0, &blendPixelFunction, ULW_ALPHA);
 	_ASSERT(bRet); // something was wrong....
 	// Delete used resources
 	SelectObject(hMemDC, hOriBmp);

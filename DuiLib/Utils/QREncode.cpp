@@ -600,7 +600,7 @@ CQR_Encode::~CQR_Encode()
 /////////////////////////////////////////////////////////////////////////////
 // CQR_Encode::EncodeData
 
-BOOL CQR_Encode::EncodeData(int nLevel, int nVersion, BOOL bAutoExtent, int nMaskingNo, LPBYTE lpsSource, int ncSource)
+uiBool CQR_Encode::EncodeData(int nLevel, int nVersion, uiBool bAutoExtent, int nMaskingNo, LPBYTE lpsSource, int ncSource)
 {
 	int i, j;
 
@@ -608,12 +608,12 @@ BOOL CQR_Encode::EncodeData(int nLevel, int nVersion, BOOL bAutoExtent, int nMas
 	m_nMaskingNo = nMaskingNo;
 
 	if (ncSource == 0)
-		return FALSE; 
+		return uiFalse; 
 
 	int nEncodeVersion = GetEncodeVersion(nVersion, lpsSource, ncSource);
 
 	if (nEncodeVersion == 0)
-		return FALSE; 
+		return uiFalse; 
 
 	if (nVersion == 0)
 	{
@@ -630,7 +630,7 @@ BOOL CQR_Encode::EncodeData(int nLevel, int nVersion, BOOL bAutoExtent, int nMas
 			if (bAutoExtent)
 				m_nVersion = nEncodeVersion; 
 			else
-				return FALSE; 
+				return uiFalse; 
 		}
 	}
 	int ncDataCodeWord = QR_VersonInfo[m_nVersion].ncDataCodeWord[nLevel];
@@ -731,7 +731,7 @@ BOOL CQR_Encode::EncodeData(int nLevel, int nVersion, BOOL bAutoExtent, int nMas
 
 	FormatModule();
 
-	return TRUE;
+	return uiTrue;
 }
 
 
@@ -780,7 +780,7 @@ int CQR_Encode::GetEncodeVersion(int nVersion, LPBYTE lpsSource, int ncLength)
 /////////////////////////////////////////////////////////////////////////////
 // CQR_Encode::EncodeSourceData
 
-BOOL CQR_Encode::EncodeSourceData(LPBYTE lpsSource, int ncLength, int nVerGroup)
+uiBool CQR_Encode::EncodeSourceData(LPBYTE lpsSource, int ncLength, int nVerGroup)
 {
 	memset(m_nBlockLength, 0, sizeof(m_nBlockLength));
 
@@ -1177,12 +1177,12 @@ int CQR_Encode::SetBitStream(int nIndex, WORD wData, int ncData)
 /////////////////////////////////////////////////////////////////////////////
 // CQR_Encode::IsNumeralData
 
-BOOL CQR_Encode::IsNumeralData(unsigned char c)
+uiBool CQR_Encode::IsNumeralData(unsigned char c)
 {
 	if (c >= '0' && c <= '9')
-		return TRUE;
+		return uiTrue;
 
-	return FALSE;
+	return uiFalse;
 }
 
 
@@ -1190,35 +1190,35 @@ BOOL CQR_Encode::IsNumeralData(unsigned char c)
 // CQR_Encode::IsAlphabetData
 
 
-BOOL CQR_Encode::IsAlphabetData(unsigned char c)
+uiBool CQR_Encode::IsAlphabetData(unsigned char c)
 {
 	if (c >= '0' && c <= '9')
-		return TRUE;
+		return uiTrue;
 
 	if (c >= 'A' && c <= 'Z')
-		return TRUE;
+		return uiTrue;
 
 	if (c == ' ' || c == '$' || c == '%' || c == '*' || c == '+' || c == '-' || c == '.' || c == '/' || c == ':')
-		return TRUE;
+		return uiTrue;
 
-	return FALSE;
+	return uiFalse;
 }
 
 
 /////////////////////////////////////////////////////////////////////////////
 // CQR_Encode::IsKanjiData
 
-BOOL CQR_Encode::IsKanjiData(unsigned char c1, unsigned char c2)
+uiBool CQR_Encode::IsKanjiData(unsigned char c1, unsigned char c2)
 {
 	if (((c1 >= 0x81 && c1 <= 0x9f) || (c1 >= 0xe0 && c1 <= 0xeb)) && (c2 >= 0x40))
 	{
 		if ((c1 == 0x9f && c2 > 0xfc) || (c1 == 0xeb && c2 > 0xbf))
-			return FALSE;
+			return uiFalse;
 
-		return TRUE;
+		return uiTrue;
 	}
 
-	return FALSE;
+	return uiFalse;
 }
 
 
@@ -1527,7 +1527,7 @@ void CQR_Encode::SetMaskingPattern(int nPatternNo)
 		{
 			if (! (m_byModuleData[j][i] & 0x20)) 
 			{
-				BOOL bMask;
+				uiBool bMask;
 
 				switch (nPatternNo)
 				{

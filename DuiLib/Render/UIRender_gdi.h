@@ -43,9 +43,9 @@ namespace DuiLib {
 
 		virtual CDuiColor SetPixel(int x, int y, CDuiColor dwColor) override;
 
-		virtual BOOL BitBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, DWORD dwRop = SRCCOPY ) override;
-		virtual BOOL StretchBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, DWORD dwRop = SRCCOPY) override;
-		virtual BOOL AlphaBlend(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, int alpha ) override;
+		virtual uiBool BitBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, DWORD dwRop = SRCCOPY ) override;
+		virtual uiBool StretchBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, DWORD dwRop = SRCCOPY) override;
+		virtual uiBool AlphaBlend(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, int alpha ) override;
 		virtual void DrawBitmapAlpha(int x, int y, int nWidth, int nHeight, UIBitmap *pUiBitmap, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, int alpha) override;
 
 		virtual void DrawColor(const CDuiRect& rc, const CDuiSize &round, CDuiColor color) override;
@@ -59,14 +59,14 @@ namespace DuiLib {
 		virtual void DrawText(CDuiRect& rc, LPCTSTR pstrText, CDuiColor dwTextColor, int iFont, UINT uStyle) override;
 
 		virtual UIPath* CreatePath() override;	
-		virtual BOOL DrawPath(const UIPath* path, int nSize, CDuiColor dwColor) override;
-		virtual BOOL FillPath(const UIPath* path, const CDuiColor dwColor) override;
+		virtual uiBool DrawPath(const UIPath* path, int nSize, CDuiColor dwColor) override;
+		virtual uiBool FillPath(const UIPath* path, const CDuiColor dwColor) override;
 
 		virtual CDuiSize GetTextSize(LPCTSTR pstrText, int iFont, UINT uStyle) override;
 
 	protected:
 		HDC m_hDC;
-		BOOL m_bAttachHDC;
+		uiBool m_bAttachHDC;
 		int m_iSaveDC;
 
 		CStdRefPtr<UIBitmap>	m_curBmp;

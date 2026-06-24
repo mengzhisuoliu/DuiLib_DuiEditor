@@ -268,7 +268,7 @@ namespace DuiLib {
 		bool IsLockUpdate();
 		void Invalidate();
 		void Invalidate(CDuiRect& rcItem);
-		virtual BOOL InvalidateRect(UIWND hWnd, const CDuiRect*lpRect, BOOL bErase) = 0;
+		virtual uiBool InvalidateRect(UIWND hWnd, const CDuiRect*lpRect, uiBool bErase) = 0;
 
 		CDuiString GetName() const;
 #ifdef DUILIB_WIN32
@@ -325,6 +325,7 @@ namespace DuiLib {
 		static void SetRenderEngineType(emRenderEngine render);
 		static emRenderEngine GetRenderEngineType();
 		static HINSTANCE GetInstance();
+		static void SetInstancePath(LPCTSTR pStrPath);
 		static CDuiString GetInstancePath();
 		static CDuiString GetCurrentPath();
 		static HINSTANCE GetResourceDll();
@@ -354,7 +355,7 @@ namespace DuiLib {
 		static CPaintManagerUI* GetPaintManager(LPCTSTR pstrName);
 		static CStdPtrArray* GetPaintManagers();
 		static LRESULT UIAction(UIWND hWnd, LPCTSTR sControlName, UINT action, WPARAM wparam, LPARAM lparam);
-		BOOL UIActionAsync(UIWND hWnd, LPCTSTR sControlName, UINT action, WPARAM wparam, LPARAM lparam);
+		uiBool UIActionAsync(UIWND hWnd, LPCTSTR sControlName, UINT action, WPARAM wparam, LPARAM lparam);
 		static bool LoadPlugin(LPCTSTR pstrModuleName);
 		static CStdPtrArray* GetPlugins();
 
@@ -462,7 +463,7 @@ namespace DuiLib {
 		// 样式管理
 		void AddStyle(LPCTSTR pName, LPCTSTR pStyle, bool bShared = false);
 		LPCTSTR GetStyle(LPCTSTR pName) const;
-		BOOL RemoveStyle(LPCTSTR pName, bool bShared = false);
+		uiBool RemoveStyle(LPCTSTR pName, bool bShared = false);
 		const CStdStringPtrMap& GetStyles(bool bShared = false) const;
 		void RemoveAllStyle(bool bShared = false);
 
@@ -486,8 +487,8 @@ namespace DuiLib {
 
 		bool SetNextTabControl(bool bForward = true);
 
-		virtual BOOL SetTimer(UINT uElapse, TIMERINFO* pTimer) = 0;
-		virtual BOOL KillTimer(TIMERINFO* pTimer) = 0;
+		virtual uiBool SetTimer(UINT uElapse, TIMERINFO* pTimer) = 0;
+		virtual uiBool KillTimer(TIMERINFO* pTimer) = 0;
 		bool SetTimer(CControlUI* pControl, UINT nTimerID, UINT uElapse);
 		bool KillTimer(CControlUI* pControl, UINT nTimerID); //uTimeID < 0 时，删除pControl所有定时器
 		void RemoveAllTimers();
@@ -603,24 +604,24 @@ namespace DuiLib {
 		virtual UIBitmap* CreateControlBackBitmap(CControlUI* pControl, const CDuiRect&rcWnd, CDuiColor dwFilterColor) { return NULL; }
 
 		virtual LRESULT SendMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0);
-		virtual BOOL PostMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0);
-		virtual BOOL GetCursorPos(LPPOINT pt) = 0;
-		virtual BOOL ScreenToClient(LPPOINT pt) = 0;
+		virtual uiBool PostMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0);
+		virtual uiBool GetCursorPos(LPPOINT pt) = 0;
+		virtual uiBool ScreenToClient(LPPOINT pt) = 0;
 		virtual void SetWndFocus() = 0;
 		virtual UIWND GetWndFocus() = 0;
-		virtual BOOL IsZoomed() = 0;
-		virtual BOOL IsIconic() = 0;
-		virtual BOOL IsWindow(); 
-		virtual BOOL SetWindowPos(int x, int y, int cx, int cy, UINT uFlags) = 0;
-		virtual BOOL GetWindowRect(LPRECT lpRect) = 0;
-		virtual BOOL GetClientRect(LPRECT lpRect) = 0;
-		virtual BOOL IsKeyDown(UINT uKey) = 0;
-		virtual BOOL IsKeyUp(UINT uKey) = 0;
-		virtual BOOL IsCtrlKeyDown() = 0;
-		virtual BOOL IsAltKeyDown() = 0;
-		virtual BOOL IsShiftKeyDown() = 0;
-		virtual BOOL IsCapsLockKeyOn() = 0;
-		virtual BOOL IsNumberLockKeyOn() = 0;
+		virtual uiBool IsZoomed() = 0;
+		virtual uiBool IsIconic() = 0;
+		virtual uiBool IsWindow(); 
+		virtual uiBool SetWindowPos(int x, int y, int cx, int cy, UINT uFlags) = 0;
+		virtual uiBool GetWindowRect(LPRECT lpRect) = 0;
+		virtual uiBool GetClientRect(LPRECT lpRect) = 0;
+		virtual uiBool IsKeyDown(UINT uKey) = 0;
+		virtual uiBool IsKeyUp(UINT uKey) = 0;
+		virtual uiBool IsCtrlKeyDown() = 0;
+		virtual uiBool IsAltKeyDown() = 0;
+		virtual uiBool IsShiftKeyDown() = 0;
+		virtual uiBool IsCapsLockKeyOn() = 0;
+		virtual uiBool IsNumberLockKeyOn() = 0;
 		virtual UINT MapKeyState() = 0;
 		virtual DWORD GetTickCount() = 0;
 		virtual void GetLocalTime(SYSTEMTIME &st) = 0;
@@ -708,6 +709,7 @@ namespace DuiLib {
 
 		//
 		static HINSTANCE m_hInstance;
+		static CDuiString m_sInstancePath;
 		static HINSTANCE m_hResourceInstance;
 		static CDuiString m_pStrResourcePath;
 		static CDuiString m_pStrResourceZip;
@@ -754,8 +756,8 @@ namespace DuiLib {
 	//////////////////////////////////////////////////////////////////////////
 	//设计器模式
 	public:
-		static BOOL UIDESIGNMODE;
-		static BOOL UIDESIGNPREVIEW;
+		static uiBool UIDESIGNMODE;
+		static uiBool UIDESIGNPREVIEW;
 
 	public:
 		static CStdPtrArray m_aFontFiles;

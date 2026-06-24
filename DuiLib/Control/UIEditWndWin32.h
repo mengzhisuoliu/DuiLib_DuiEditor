@@ -21,8 +21,8 @@ namespace DuiLib
 		virtual void OnFinalMessage(HWND hWnd) override;
 
 		LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-		LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-		LRESULT OnEditChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled);
+		LRESULT OnEditChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled);
 
 	protected:
 		enum { 

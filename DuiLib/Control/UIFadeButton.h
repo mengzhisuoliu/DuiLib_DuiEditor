@@ -21,7 +21,7 @@ namespace DuiLib {
 		void OnTimer( int nTimerID );
 		virtual void PaintStatusImage(UIRender *pRender) override;
 
-		virtual void OnAnimationStart(INT nAnimationID, BOOL bFirstLoop) override {}
+		virtual void OnAnimationStart(INT nAnimationID, uiBool bFirstLoop) override {}
 		virtual void OnAnimationStep(INT nTotalFrame, INT nCurFrame, INT nAnimationID) override;
 		virtual void OnAnimationStop(INT nAnimationID) override {}
 		
@@ -30,8 +30,8 @@ namespace DuiLib {
 		CDuiString m_sNewImage;
 		CDuiString m_sLastImage;
 		BYTE       m_bFadeAlpha;
-		BOOL       m_bMouseHove;
-		BOOL       m_bMouseLeave;
+		uiBool       m_bMouseHove;
+		uiBool       m_bMouseLeave;
 		enum{
 			FADE_IN_ID			= 8,
 			FADE_OUT_ID			= 9,

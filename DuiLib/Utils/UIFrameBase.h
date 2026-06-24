@@ -12,13 +12,13 @@ public:
 	CUIFrmBase(void);
 	virtual ~CUIFrmBase(void);
 
-	BOOL IsControl(TNotifyUI& msg, LPCTSTR name) { return _tcsicmp(msg.pSender->GetName(), name) == 0; }
-	BOOL IsControl(TNotifyUI& msg, CControlUI *pControl) { return msg.pSender == pControl; }
-	BOOL IsClass(TNotifyUI& msg, LPCTSTR classname) { return _tcsicmp(msg.pSender->GetClass(), classname) == 0; }
-	BOOL IsInterface(TNotifyUI &msg, LPCTSTR pstrName) { return msg.pSender->GetInterface(pstrName) != NULL; }
+	uiBool IsControl(TNotifyUI& msg, LPCTSTR name) { return _tcsicmp(msg.pSender->GetName(), name) == 0; }
+	uiBool IsControl(TNotifyUI& msg, CControlUI *pControl) { return msg.pSender == pControl; }
+	uiBool IsClass(TNotifyUI& msg, LPCTSTR classname) { return _tcsicmp(msg.pSender->GetClass(), classname) == 0; }
+	uiBool IsInterface(TNotifyUI &msg, LPCTSTR pstrName) { return msg.pSender->GetInterface(pstrName) != NULL; }
 	CControlUI *FindControl(LPCTSTR pstrName){ return GetManager()->FindControl(pstrName); }
-	BOOL IsMenuCommand(const MenuCmd *cmd, LPCTSTR name) { return _tcsicmp(cmd->szName, name) == 0; }
-	BOOL IsMenuCommand(CMenuCmdUI *cmdUI, LPCTSTR name) { return _tcsicmp(cmdUI->GetName(), name) == 0; }
+	uiBool IsMenuCommand(const MenuCmd *cmd, LPCTSTR name) { return _tcsicmp(cmd->szName, name) == 0; }
+	uiBool IsMenuCommand(CMenuCmdUI *cmdUI, LPCTSTR name) { return _tcsicmp(cmdUI->GetName(), name) == 0; }
 
 	CMenuWnd* CreateMenu(STRINGorID xml);
 
@@ -87,7 +87,7 @@ public:
 	virtual bool OnMenuUpdateCommandUI(CMenuCmdUI *cmdUI) { return false; }
 
 	//自定义消息处理, 返回TRUE, 表示已经处理, 底层不会继续处理此消息, 
-	virtual bool OnCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) { return FALSE; }
+	virtual bool OnCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) { return uiFalse; }
 
 	DUI_DECLARE_MESSAGE_MAP()
 };

@@ -28,7 +28,7 @@ namespace DuiLib
 		void SetHomePage(LPCTSTR lpszUrl);
 		LPCTSTR GetHomePage();
 
-		void SetAutoNavigation(bool bAuto = TRUE);
+		void SetAutoNavigation(bool bAuto = uiTrue);
 		bool IsAutoNavigation();
 
 		void SetWebBrowserEventHandler(CWebBrowserEventHandler* pEventHandler);
@@ -55,7 +55,7 @@ namespace DuiLib
 		LONG m_dwRef;
 		DWORD m_dwCookie;
 		virtual void ReleaseControl();
-		HRESULT RegisterEventHandler(BOOL inAdvise);
+		HRESULT RegisterEventHandler(uiBool inAdvise);
 		CDuiString m_sHomePage;	// 默认页面
 		bool m_bAutoNavi;	// 是否启动时打开默认页面
 		CWebBrowserEventHandler* m_pWebBrowserEventHandler;	//浏览器事件处理
@@ -91,10 +91,10 @@ namespace DuiLib
 		STDMETHOD(ShowUI)(DWORD dwID, IOleInPlaceActiveObject* pActiveObject, IOleCommandTarget* pCommandTarget, IOleInPlaceFrame* pFrame, IOleInPlaceUIWindow* pDoc);
 		STDMETHOD(HideUI)();
 		STDMETHOD(UpdateUI)();
-		STDMETHOD(EnableModeless)(BOOL fEnable);
-		STDMETHOD(OnDocWindowActivate)(BOOL fActivate);
-		STDMETHOD(OnFrameWindowActivate)(BOOL fActivate);
-		STDMETHOD(ResizeBorder)(LPCRECT prcBorder, IOleInPlaceUIWindow* pUIWindow, BOOL fFrameWindow);
+		STDMETHOD(EnableModeless)(uiBool fEnable);
+		STDMETHOD(OnDocWindowActivate)(uiBool fActivate);
+		STDMETHOD(OnFrameWindowActivate)(uiBool fActivate);
+		STDMETHOD(ResizeBorder)(LPCRECT prcBorder, IOleInPlaceUIWindow* pUIWindow, uiBool fFrameWindow);
 		STDMETHOD(TranslateAccelerator)(LPMSG lpMsg, const GUID* pguidCmdGroup, DWORD nCmdID);	//浏览器消息过滤
 		STDMETHOD(GetOptionKeyPath)(LPOLESTR* pchKey, DWORD dwReserved);
 		STDMETHOD(GetDropTarget)(IDropTarget* pDropTarget, IDropTarget** ppDropTarget);

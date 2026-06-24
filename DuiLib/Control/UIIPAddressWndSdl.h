@@ -36,21 +36,21 @@ public:
 	CDuiRect CalPos();
 
 	virtual void OnFinalMessage(UIWND hWnd) override;
-	virtual BOOL OnSdlEvent(const void* pEvent) override;
+	virtual uiBool OnSdlEvent(const void* pEvent) override;
 
 protected:
-	virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+	virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
 
 private:
-	void SetFocusSegment(int index, BOOL bDrawCaret);
+	void SetFocusSegment(int index, uiBool bDrawCaret);
 	void DeleteBackward();
 	void DeleteForward();
 	void DeleteSelection();
@@ -67,7 +67,7 @@ private:
 	DWORD m_dwOldIp;
 
 	int m_nIndex;				// 当前获得焦点的段索引 0..3
-	BOOL m_bShowCaret;			// 是否显示光标. 不显示光标时, 表示在全选状态.
+	uiBool m_bShowCaret;			// 是否显示光标. 不显示光标时, 表示在全选状态.
 	bool m_bDrawCaret;          // 光标闪烁标志, 定时器负责切换
 	UINT m_caretTimerID;
 	bool m_bDragging;

@@ -38,17 +38,17 @@ namespace DuiLib {
 		CComboUI*	m_pComboBoxUI;
 
 	public:
-		virtual BOOL CheckColumEditable(int nColum) override;
+		virtual uiBool CheckColumEditable(int nColum) override;
 		virtual CEditUI* GetEditUI() override;
 
-		virtual BOOL CheckColumComboBoxable(int nColum) override;
+		virtual uiBool CheckColumComboBoxable(int nColum) override;
 		virtual CComboUI* GetComboBoxUI() override;
 
-		virtual BOOL CheckColumCheckBoxable(int nColum);
+		virtual uiBool CheckColumCheckBoxable(int nColum);
 
 	public:
 		virtual void Notify(TNotifyUI& msg) override;
-		BOOL	m_bAddMessageFilter;
+		uiBool	m_bAddMessageFilter;
 		int		m_nRow,m_nColum;
 		void	SetEditRowAndColum(int nRow,int nColum) { m_nRow = nRow; m_nColum = nColum; };
 
@@ -59,11 +59,11 @@ namespace DuiLib {
 
 	public:
 		void OnListItemClicked(int nIndex, int nColum, CDuiRect* lpRCColum, LPCTSTR lpstrText);
-		void OnListItemChecked(int nIndex, int nColum, BOOL bChecked);
+		void OnListItemChecked(int nIndex, int nColum, uiBool bChecked);
 
 	public:
 		void SetColumItemColor(int nIndex, int nColum, CDuiColor iBKColor);
-		BOOL GetColumItemColor(int nIndex, int nColum, CDuiColor& iBKColor);
+		uiBool GetColumItemColor(int nIndex, int nColum, CDuiColor& iBKColor);
 
 	private:
 		void HideEditAndComboCtrl();
@@ -102,31 +102,31 @@ namespace DuiLib {
 		CDuiString m_sSepImageModify;
 
 		//支持编辑
-		BOOL m_bEditable;
+		uiBool m_bEditable;
 
 		//支持组合框
-		BOOL m_bComboable;
+		uiBool m_bComboable;
 
 		//支持复选框
-		BOOL m_bCheckBoxable;
+		uiBool m_bCheckBoxable;
 
 	public:
-		BOOL GetColumeEditable();
-		void SetColumeEditable(BOOL bEnable);
+		uiBool GetColumeEditable();
+		void SetColumeEditable(uiBool bEnable);
 
-		BOOL GetColumeComboable();
-		void SetColumeComboable(BOOL bEnable);
+		uiBool GetColumeComboable();
+		void SetColumeComboable(uiBool bEnable);
 
-		BOOL GetColumeCheckable();
-		void SetColumeCheckable(BOOL bEnable);
+		uiBool GetColumeCheckable();
+		void SetColumeCheckable(uiBool bEnable);
 
 	public:
-		void SetCheck(BOOL bCheck);
-		BOOL GetCheck();
+		void SetCheck(uiBool bCheck);
+		uiBool GetCheck();
 
 	private:
 		TButtonState	m_uCheckBoxState;
-		BOOL			m_bChecked;
+		uiBool			m_bChecked;
 
 		CDuiString m_sCheckBoxNormalImage;
 		CDuiString m_sCheckBoxHotImage;
@@ -140,7 +140,7 @@ namespace DuiLib {
 		CDuiSize m_cxyCheckBox;
 
 	public:
-		BOOL DrawCheckBoxImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify = NULL);
+		uiBool DrawCheckBoxImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify = NULL);
 		LPCTSTR GetCheckBoxNormalImage();
 		void SetCheckBoxNormalImage(LPCTSTR pStrImage);
 		LPCTSTR GetCheckBoxHotImage();
@@ -211,7 +211,7 @@ namespace DuiLib {
 
 	private:
 		UINT	m_uCheckBoxState;
-		BOOL	m_bChecked;
+		uiBool	m_bChecked;
 
 		CDuiString m_sCheckBoxNormalImage;
 		CDuiString m_sCheckBoxHotImage;
@@ -228,7 +228,7 @@ namespace DuiLib {
 		virtual bool DoPaint(UIRender *pRender, const CDuiRect& rcPaint, CControlUI* pStopControl) override;
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 		virtual void PaintStatusImage(UIRender *pRender) override;
-		BOOL DrawCheckBoxImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify, CDuiRect& rcCheckBox);
+		uiBool DrawCheckBoxImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify, CDuiRect& rcCheckBox);
 		LPCTSTR GetCheckBoxNormalImage();
 		void SetCheckBoxNormalImage(LPCTSTR pStrImage);
 		LPCTSTR GetCheckBoxHotImage();
@@ -253,17 +253,17 @@ namespace DuiLib {
 		int GetCheckBoxHeight() const;      // 实际大小位置使用GetPos获取，这里得到的是预设的参考值
 		void SetCheckBoxHeight(int cy);     // 预设的参考值
 
-		void SetCheck(BOOL bCheck);
-		BOOL GetCheck() const;
+		void SetCheck(uiBool bCheck);
+		uiBool GetCheck() const;
 
 	public:
 		int HitTestColum(CDuiPoint ptMouse);
-		BOOL CheckColumEditable(int nColum);
+		uiBool CheckColumEditable(int nColum);
 
 	private:
 		typedef struct tagColumColorNode
 		{
-			BOOL  bEnable;
+			uiBool  bEnable;
 			DWORD iTextColor;
 			DWORD iBKColor;
 		}COLUMCOLORNODE;
@@ -272,7 +272,7 @@ namespace DuiLib {
 
 	public:
 		void SetColumItemColor(int nColum, CDuiColor iBKColor);
-		BOOL GetColumItemColor(int nColum, CDuiColor& iBKColor);
+		uiBool GetColumItemColor(int nColum, CDuiColor& iBKColor);
 
 	};
 } // namespace DuiLib

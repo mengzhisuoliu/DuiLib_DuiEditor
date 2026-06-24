@@ -259,11 +259,11 @@ namespace DuiLib {
 		virtual void EnableScrollBar(bool bEnableVertical = true, bool bEnableHorizontal = false) override;
 		virtual CScrollBarUI* GetVerticalScrollBar() const override;
 		virtual CScrollBarUI* GetHorizontalScrollBar() const override;
-		BOOL SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData);
+		uiBool SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData);
 
-		virtual BOOL CheckColumEditable(int nColum) { return FALSE; };
+		virtual uiBool CheckColumEditable(int nColum) { return uiFalse; };
 		virtual CEditUI* GetEditUI() { return NULL; };
-		virtual BOOL CheckColumComboBoxable(int nColum) { return FALSE; };
+		virtual uiBool CheckColumComboBoxable(int nColum) { return uiFalse; };
 		virtual CComboUI* GetComboBoxUI() { return NULL; };
 
 	protected:
@@ -298,7 +298,7 @@ namespace DuiLib {
 		virtual void SetScrollPos(CDuiSize szPos, bool bMsg = true) override;
 		virtual void SetPos(CDuiRect rc, bool bNeedInvalidate = true) override;
 		virtual void DoEvent(TEventUI& event) override;
-		BOOL SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData);
+		uiBool SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData);
 	protected:
 		static int __cdecl ItemComareFunc(void *pvlocale, const void *item1, const void *item2);
 		int __cdecl ItemComareFunc(const void *item1, const void *item2);

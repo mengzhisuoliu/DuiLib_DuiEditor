@@ -44,13 +44,13 @@ public:
 	void Notify(TNotifyUI& msg) override;
 	CControlUI* CreateControl(LPCTSTR pstrClassName) override;
 
-	virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+	virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
 
-	virtual BOOL Receive(ContextMenuParam param) override;
+	virtual uiBool Receive(ContextMenuParam param) override;
 
 	// 获取根菜单控件，用于动态添加子菜单
 	CMenuUI* GetMenuUI();

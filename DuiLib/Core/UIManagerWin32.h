@@ -15,7 +15,7 @@ namespace DuiLib {
 		virtual void Init(HWND hWnd, LPCTSTR pstrName = NULL, CWindowWnd *pWindow=NULL) override;
 		virtual UIRender *Render() override;
 
-		virtual BOOL InvalidateRect(UIWND hWnd, const CDuiRect*lpRect, BOOL bErase) override;
+		virtual uiBool InvalidateRect(UIWND hWnd, const CDuiRect*lpRect, uiBool bErase) override;
 		virtual HDC GetPaintDC() const override;
 
 		virtual void SetLayered(bool bLayered) override;
@@ -26,24 +26,24 @@ namespace DuiLib {
 		virtual void ReleaseCapture() override;
 		virtual bool IsCaptured() override;
 
-		virtual BOOL SetTimer(UINT uElapse, TIMERINFO* pTimer) override;
-		virtual BOOL KillTimer(TIMERINFO* pTimer) override;
-		virtual BOOL GetCursorPos(LPPOINT pt) override;
-		virtual BOOL ScreenToClient(LPPOINT pt) override;
+		virtual uiBool SetTimer(UINT uElapse, TIMERINFO* pTimer) override;
+		virtual uiBool KillTimer(TIMERINFO* pTimer) override;
+		virtual uiBool GetCursorPos(LPPOINT pt) override;
+		virtual uiBool ScreenToClient(LPPOINT pt) override;
 		virtual void SetWndFocus() override;
 		virtual UIWND GetWndFocus() override;
-		virtual BOOL IsZoomed() override;
-		virtual BOOL IsIconic() override;
-		virtual BOOL SetWindowPos(int x, int y, int cx, int cy, UINT uFlags) override;
-		virtual BOOL GetWindowRect(LPRECT lpRect) override;
-		virtual BOOL GetClientRect(LPRECT lpRect) override;
-		virtual BOOL IsKeyDown(UINT uKey) override;
-		virtual BOOL IsKeyUp(UINT uKey) override;
-		virtual BOOL IsCtrlKeyDown() override;
-		virtual BOOL IsAltKeyDown() override;
-		virtual BOOL IsShiftKeyDown() override;
-		virtual BOOL IsCapsLockKeyOn() override;
-		virtual BOOL IsNumberLockKeyOn() override;
+		virtual uiBool IsZoomed() override;
+		virtual uiBool IsIconic() override;
+		virtual uiBool SetWindowPos(int x, int y, int cx, int cy, UINT uFlags) override;
+		virtual uiBool GetWindowRect(LPRECT lpRect) override;
+		virtual uiBool GetClientRect(LPRECT lpRect) override;
+		virtual uiBool IsKeyDown(UINT uKey) override;
+		virtual uiBool IsKeyUp(UINT uKey) override;
+		virtual uiBool IsCtrlKeyDown() override;
+		virtual uiBool IsAltKeyDown() override;
+		virtual uiBool IsShiftKeyDown() override;
+		virtual uiBool IsCapsLockKeyOn() override;
+		virtual uiBool IsNumberLockKeyOn() override;
 		virtual UINT MapKeyState() override;
 		virtual DWORD GetTickCount() override;
 		virtual void GetLocalTime(SYSTEMTIME &st) override;

@@ -28,7 +28,7 @@ bool CGridCellInnerCheckBoxUI::IsSelected() const
 	if(!pGrid) return false;
 	TCellData *pCellData = pGrid->GetCellData(pCellUI->GetRow(), pCellUI->GetCol());
 	if(!pCellData) return false;
-	return pCellData->IsCheckBoxCheck() == TRUE;
+	return pCellData->IsCheckBoxCheck() == uiTrue;
 }
 
 void CGridCellInnerCheckBoxUI::Selected(bool bSelected, bool bTriggerEvent)
@@ -53,7 +53,7 @@ void CGridCellInnerCheckBoxUI::Selected(bool bSelected, bool bTriggerEvent)
 	if(GetManager())
 		GetManager()->SendNotify(pGrid, DUI_MSGTYPE_SELECTCHANGED, pCellUI->GetRow(), pCellUI->GetCol());
 
-	BOOL bCheck = pCellData->IsCheckBoxCheck();
+	uiBool bCheck = pCellData->IsCheckBoxCheck();
 	if(pCellUI->IsFixedRow())
 	{
 		//如果点击固定行的checkbox, 操作整列的checkbox
@@ -240,14 +240,14 @@ void CGridCellUI::InitCell()
 		pGrid->SetCellType(m_row, m_col, m_celltype);
 }
 
-BOOL CGridCellUI::IsFixedRow() const 
+uiBool CGridCellUI::IsFixedRow() const 
 { 
 	if(!GetOwner()) return false;
 	CGridUI *pGrid = (CGridUI *)GetOwner();
 	return pGrid->IsFixedRow(m_row);
 }
 
-BOOL CGridCellUI::IsFixedCol() const
+uiBool CGridCellUI::IsFixedCol() const
 {
 	if(!GetOwner()) return false;
 	CGridUI *pGrid = (CGridUI *)GetOwner();

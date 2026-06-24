@@ -31,8 +31,8 @@ namespace DuiLib {
 		virtual void DrawText(CDuiRect& rc, LPCTSTR pstrText, CDuiColor dwTextColor, int iFont, UINT uStyle) override;
 
 		virtual UIPath* CreatePath() override;	
-		virtual BOOL DrawPath(const UIPath* path, int nSize, CDuiColor dwColor) override;
-		virtual BOOL FillPath(const UIPath* path, const CDuiColor dwColor) override;
+		virtual uiBool DrawPath(const UIPath* path, int nSize, CDuiColor dwColor) override;
+		virtual uiBool FillPath(const UIPath* path, const CDuiColor dwColor) override;
 
 	};
 

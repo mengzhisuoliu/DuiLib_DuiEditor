@@ -30,7 +30,7 @@ namespace DuiLib
 
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
-		virtual void OnAnimationStart(int nAnimationID, BOOL bFirstLoop) override;
+		virtual void OnAnimationStart(int nAnimationID, uiBool bFirstLoop) override;
 		virtual void OnAnimationStep(int nTotalFrame, int nCurFrame, int nAnimationID) override;
 		virtual void OnAnimationStop(int nAnimationID) override;
 	protected:

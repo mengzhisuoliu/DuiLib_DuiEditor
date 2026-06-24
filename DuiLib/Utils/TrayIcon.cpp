@@ -48,9 +48,9 @@ namespace DuiLib
 	bool CTrayIcon::SetTooltipText( LPCTSTR _ToolTipText )
 	{
 		if(_ToolTipText) _tcscpy(m_trayData.szTip,_ToolTipText);
-		if (!m_bEnabled) return FALSE;
+		if (!m_bEnabled) return uiFalse;
 		m_trayData.uFlags = NIF_TIP;
-		return Shell_NotifyIcon(NIM_MODIFY, &m_trayData) == TRUE;
+		return Shell_NotifyIcon(NIM_MODIFY, &m_trayData) == uiTrue;
 	}
 
 	bool CTrayIcon::SetTooltipText( UINT _IDResource )
@@ -71,8 +71,8 @@ namespace DuiLib
 		m_trayData.uFlags = NIF_ICON;
 		m_trayData.hIcon = _Hicon;
 		
-		if (!m_bEnabled) return FALSE;
-		return Shell_NotifyIcon(NIM_MODIFY, &m_trayData) == TRUE;
+		if (!m_bEnabled) return uiFalse;
+		return Shell_NotifyIcon(NIM_MODIFY, &m_trayData) == uiTrue;
 
 		return false;
 	}
@@ -100,7 +100,7 @@ namespace DuiLib
 	{
 		if (IsVisible()) {
 			SetIcon((HICON)NULL);
-			m_bVisible = TRUE;
+			m_bVisible = uiTrue;
 		}
 	}
 
@@ -108,7 +108,7 @@ namespace DuiLib
 	{
 		if (!IsVisible()) {
 			SetIcon(m_hIcon);
-			m_bVisible = FALSE;
+			m_bVisible = uiFalse;
 		}
 	}
 
@@ -116,7 +116,7 @@ namespace DuiLib
 	{
 		m_trayData.uFlags = 0;
 		Shell_NotifyIcon(NIM_DELETE, &m_trayData);
-		m_bEnabled = FALSE;
+		m_bEnabled = uiFalse;
 	}
 }
 #endif //#ifdef DUILIB_WIN32

@@ -12,6 +12,7 @@ namespace DuiLib {
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	HINSTANCE CPaintManagerUI::m_hResourceInstance = NULL;
+	CDuiString CPaintManagerUI::m_sInstancePath;
 	CDuiString CPaintManagerUI::m_pStrResourcePath;
 	CDuiString CPaintManagerUI::m_pStrResourceZip;
 	CDuiString CPaintManagerUI::m_pStrResourceZipPwd;  //Garfield 20160325 带密码zip包解密
@@ -29,8 +30,8 @@ namespace DuiLib {
 	CStdPtrArray CPaintManagerUI::m_aPlugins;
 	CStdPtrArray CPaintManagerUI::m_aFontFiles;
 
-	BOOL CPaintManagerUI::UIDESIGNMODE = FALSE;
-	BOOL CPaintManagerUI::UIDESIGNPREVIEW = FALSE;
+	uiBool CPaintManagerUI::UIDESIGNMODE = uiFalse;
+	uiBool CPaintManagerUI::UIDESIGNPREVIEW = uiFalse;
 
 	emRenderEngine CPaintManagerUI::m_emRenderEngine = DuiLib_Render_Default;
 
@@ -199,8 +200,20 @@ namespace DuiLib {
 		return m_hInstance;
 	}
 
+	void CPaintManagerUI::SetInstancePath(LPCTSTR pStrPath)
+	{
+		m_sInstancePath = pStrPath;
+		if (m_sInstancePath.IsEmpty()) return;
+		TCHAR cEnd = m_sInstancePath.GetAt(m_sInstancePath.GetLength() - 1);
+		if (cEnd != _T('\\') && cEnd != _T('/')) m_sInstancePath += _T('/');
+	}
+
 	CDuiString CPaintManagerUI::GetInstancePath()
 	{
+		//如果已经获取过 或者 被外部设置过, 只要不是空的, 就返回
+		if (!m_sInstancePath.IsEmpty())
+			return m_sInstancePath;
+
 #ifdef WIN32
 		if (m_hInstance == NULL) return _T("");
 		TCHAR tszModule[MAX_PATH + 1] = { 0 };
@@ -208,7 +221,7 @@ namespace DuiLib {
 		CDuiString sInstancePath = tszModule;
 		int pos = sInstancePath.ReverseFind(_T('\\'));
 		if (pos >= 0) sInstancePath = sInstancePath.Left(pos + 1);
-		return sInstancePath;
+		m_sInstancePath = sInstancePath;
 #elif defined __linux__
 		char  path[4096];
 		//获取当前程序绝对路径
@@ -217,7 +230,7 @@ namespace DuiLib {
 		CDuiString sInstancePath = path;
 		int pos = sInstancePath.ReverseFind(_T('/'));
 		if (pos >= 0) sInstancePath = sInstancePath.Left(pos + 1);
-		return sInstancePath;
+		m_sInstancePath = sInstancePath;
 #elif defined __APPLE__
 		char path[1025];
         memset(path, 0, 1025*sizeof(char));
@@ -226,8 +239,9 @@ namespace DuiLib {
 		CDuiString sInstancePath = path;
 		int pos = sInstancePath.ReverseFind(_T('/'));
 		if (pos >= 0) sInstancePath = sInstancePath.Left(pos + 1);
-		return sInstancePath;
+		m_sInstancePath = sInstancePath;
 #endif
+		return m_sInstancePath;
 	}
 
 	CDuiString CPaintManagerUI::GetCurrentPath()
@@ -422,7 +436,7 @@ namespace DuiLib {
 		return DuiLibWindowWnd::SendMessage(hWnd, UIMSG_CONTROL_ACTION, (WPARAM)&act, 0);
 	}
 
-	BOOL CPaintManagerUI::UIActionAsync(UIWND hWnd, LPCTSTR sControlName, UINT action, WPARAM wparam, LPARAM lparam)
+	uiBool CPaintManagerUI::UIActionAsync(UIWND hWnd, LPCTSTR sControlName, UINT action, WPARAM wparam, LPARAM lparam)
 	{
 		TUIAction *act = new TUIAction;
 		act->sControlName = sControlName;
@@ -432,9 +446,9 @@ namespace DuiLib {
 		if (!DuiLibWindowWnd::PostMessage(hWnd, UIMSG_CONTROL_ACTION_ASYNC, (WPARAM)act, 0))
 		{
 			delete act;
-			return FALSE;
+			return uiFalse;
 		}
-		return TRUE;
+		return uiTrue;
 	}
 
 	bool CPaintManagerUI::LoadPlugin(LPCTSTR pstrModuleName)
@@ -601,7 +615,7 @@ namespace DuiLib {
 		m_nOpacity = nOpacity;
 #ifdef DUILIB_WIN32
 		if( m_hWndPaint != NULL ) {
-			typedef BOOL (__stdcall *PFUNCSETLAYEREDWINDOWATTR)(HWND, COLORREF, BYTE, DWORD);
+			typedef uiBool (__stdcall *PFUNCSETLAYEREDWINDOWATTR)(HWND, COLORREF, BYTE, DWORD);
 			PFUNCSETLAYEREDWINDOWATTR fSetLayeredWindowAttributes = NULL;
 
 			HMODULE hUser32 = ::GetModuleHandle(_T("User32.dll"));
@@ -724,7 +738,7 @@ namespace DuiLib {
 		GetClientRect(&rcClient);
 		//::UnionRect(&m_rcLayeredUpdate, &m_rcLayeredUpdate, &rcClient);
 		m_rcLayeredUpdate.Union(m_rcLayeredUpdate, rcClient);
-		InvalidateRect(m_hWndPaint, NULL, FALSE);
+		InvalidateRect(m_hWndPaint, NULL, uiFalse);
 	}
 
 	void CPaintManagerUI::Invalidate(CDuiRect& rcItem)
@@ -735,7 +749,7 @@ namespace DuiLib {
 		if( rcItem.bottom < rcItem.top ) rcItem.bottom = rcItem.top;
 		//::UnionRect(&m_rcLayeredUpdate, &m_rcLayeredUpdate, &rcItem);
 		m_rcLayeredUpdate.Union(m_rcLayeredUpdate, rcItem);
-		InvalidateRect(m_hWndPaint, &rcItem, FALSE);
+		InvalidateRect(m_hWndPaint, &rcItem, uiFalse);
 	}
 
 	bool CPaintManagerUI::AttachDialog(CControlUI* pControl)
@@ -1097,7 +1111,7 @@ namespace DuiLib {
 		}
 
 		TIMERINFO* pTimer = new TIMERINFO;
-		if (pTimer == NULL) return FALSE;
+		if (pTimer == NULL) return uiFalse;
 		pTimer->hWnd = m_hWndPaint;
 		pTimer->pSender = pControl;
 		pTimer->nLocalID = nTimerID;
@@ -1106,7 +1120,7 @@ namespace DuiLib {
 		if (!SetTimer(uElapse, pTimer))
 		{
 			delete pTimer;
-			return FALSE;
+			return uiFalse;
 		}
 		return m_aTimers.Add(pTimer);
 	}
@@ -1181,7 +1195,7 @@ namespace DuiLib {
 		// focus calulation until the next repaint.
 		if( m_bUpdateNeeded && bForward ) {
 			m_bFocusNeeded = true;
-			InvalidateRect(m_hWndPaint, NULL, FALSE);
+			InvalidateRect(m_hWndPaint, NULL, uiFalse);
 			return true;
 		}
 		// Find next/previous tabbable control
@@ -2585,7 +2599,7 @@ namespace DuiLib {
 				case WM_NCACTIVATE:
 					if (!IsIconic()) 
 					{
-						lRes = (wParam == 0) ? TRUE : FALSE;
+						lRes = (wParam == 0) ? uiTrue : uiFalse;
 						return true;
 					}
 					break;
@@ -3075,7 +3089,7 @@ namespace DuiLib {
 		else return NULL;
 	}
 
-	BOOL CPaintManagerUI::RemoveStyle(LPCTSTR pName, bool bShared)
+	uiBool CPaintManagerUI::RemoveStyle(LPCTSTR pName, bool bShared)
 	{
 		CDuiString* pStyle = NULL;
 		if (bShared) 
@@ -3320,12 +3334,12 @@ namespace DuiLib {
 		return DuiLibWindowWnd::SendMessage(m_hWndPaint, uMsg, wParam, lParam);
 	}
 
-	BOOL CPaintManagerUI::PostMessage(UINT uMsg, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0*/)
+	uiBool CPaintManagerUI::PostMessage(UINT uMsg, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0*/)
 	{
 		return DuiLibWindowWnd::PostMessage(m_hWndPaint, uMsg, wParam, lParam);
 	}
 
-	BOOL CPaintManagerUI::IsWindow()
+	uiBool CPaintManagerUI::IsWindow()
 	{
 		return DuiLibWindowWnd::IsWindow(m_hWndPaint);
 	}

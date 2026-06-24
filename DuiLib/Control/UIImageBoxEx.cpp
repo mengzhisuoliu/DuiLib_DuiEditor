@@ -22,9 +22,9 @@ CImageBoxExUI::CImageBoxExUI(void)
 	, m_pOffScreenImage(NULL)
 	, m_dwAnimStartTick(0)
 	, m_dwDelayStartTick(0)
-	, m_bIsDelayed(FALSE)
-	, m_bIsAnimating(FALSE)
-	, m_bPlay(FALSE)
+	, m_bIsDelayed(uiFalse)
+	, m_bIsAnimating(uiFalse)
+	, m_bPlay(uiFalse)
 	, m_nTimerEscape(200)
 	, m_idEventTimer(0)
 {
@@ -70,7 +70,7 @@ LPVOID CImageBoxExUI::GetInterface(LPCTSTR pstrName)
 
 void CImageBoxExUI::DoInit()
 {
-	BOOL bCreate = FALSE;
+	uiBool bCreate = uiFalse;
 	if(m_pOffScreenImage == NULL)
 	{
 		m_pOffScreenImage = new CImage;
@@ -245,7 +245,7 @@ static void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT_PTR idEvent, DWORD dwT
 
 void CImageBoxExUI::Play()
 {
-	m_bPlay = TRUE;
+	m_bPlay = uiTrue;
 	//m_pManager->SetTimer(this, DEFAULT_TIMERID, m_nTimerEscape);
 	m_idEventTimer = ::SetTimer(NULL, NULL, m_nTimerEscape, TimerProc);
 	g_MapTimerID_TO_CImageBoxExUI[m_idEventTimer] = this;
@@ -253,7 +253,7 @@ void CImageBoxExUI::Play()
 
 void CImageBoxExUI::Stop()
 {
-	m_bPlay = FALSE;
+	m_bPlay = uiFalse;
 	//m_pManager->KillTimer(this, DEFAULT_TIMERID);
 	::KillTimer(NULL, m_idEventTimer);
 	std::map<UINT_PTR, CControlUI *>::iterator it = g_MapTimerID_TO_CImageBoxExUI.find(m_idEventTimer);
@@ -277,7 +277,7 @@ void CImageBoxExUI::OnTimer(UINT_PTR idEvent)
 	if(m_bIsDelayed)
 	{
 		if(timeGetTime() - m_dwDelayStartTick > (DWORD)m_iRetention)
-			m_bIsDelayed = FALSE;
+			m_bIsDelayed = uiFalse;
 		return;
 	}
 
@@ -309,7 +309,7 @@ void CImageBoxExUI::OnTimer(UINT_PTR idEvent)
 	if(!m_bIsAnimating)
 	{
 		srand(GetTickCount());
-		while (TRUE)
+		while (uiTrue)
 		{
 			int type = rand()%13;
 			if(type > 0)
@@ -328,7 +328,7 @@ void CImageBoxExUI::AnimationRender_Alpha(DWORD dwTick)
 
 	if (!m_bIsAnimating)
 	{
-		m_bIsAnimating = TRUE;
+		m_bIsAnimating = uiTrue;
 		m_dwAnimStartTick = dwTick;
 	}
 	CImage* pCurImage = GetImageAt(m_iIndex);
@@ -350,8 +350,8 @@ void CImageBoxExUI::AnimationRender_Alpha(DWORD dwTick)
 		if(++m_iIndex >= GetSize())
 			m_iIndex = 0;
 		m_dwDelayStartTick = dwTick;
-		m_bIsAnimating = FALSE;
-		m_bIsDelayed = TRUE;
+		m_bIsAnimating = uiFalse;
+		m_bIsDelayed = uiTrue;
 	}
 	m_pOffScreenImage->ReleaseDC();
 	Invalidate();
@@ -364,7 +364,7 @@ void CImageBoxExUI::AnimationRender_Slide(DWORD dwTick)
 
 	if (!m_bIsAnimating)
 	{
-		m_bIsAnimating = TRUE;
+		m_bIsAnimating = uiTrue;
 		m_dwAnimStartTick = timeGetTime();
 	}
 	CImage* pCurImage = GetImageAt(m_iIndex);
@@ -388,8 +388,8 @@ void CImageBoxExUI::AnimationRender_Slide(DWORD dwTick)
 			if(++m_iIndex >= GetSize())
 				m_iIndex = 0;
 			m_dwDelayStartTick = dwTick;
-			m_bIsAnimating = FALSE;
-			m_bIsDelayed = TRUE;
+			m_bIsAnimating = uiFalse;
+			m_bIsDelayed = uiTrue;
 		}
 	}
 	else if(m_iCurAnimType == kAnimationSlideRight)
@@ -403,8 +403,8 @@ void CImageBoxExUI::AnimationRender_Slide(DWORD dwTick)
 			if(++m_iIndex >= GetSize())
 				m_iIndex = 0;
 			m_dwDelayStartTick = dwTick;
-			m_bIsAnimating = FALSE;
-			m_bIsDelayed = TRUE;
+			m_bIsAnimating = uiFalse;
+			m_bIsDelayed = uiTrue;
 		}
 	}
 	else if(m_iCurAnimType == kAnimationSlideTop)
@@ -418,8 +418,8 @@ void CImageBoxExUI::AnimationRender_Slide(DWORD dwTick)
 			if(++m_iIndex >= GetSize())
 				m_iIndex = 0;
 			m_dwDelayStartTick = dwTick;
-			m_bIsAnimating = FALSE;
-			m_bIsDelayed = TRUE;
+			m_bIsAnimating = uiFalse;
+			m_bIsDelayed = uiTrue;
 		}
 	}
 	else if(m_iCurAnimType == kAnimationSlideBottom)
@@ -433,8 +433,8 @@ void CImageBoxExUI::AnimationRender_Slide(DWORD dwTick)
 			if(++m_iIndex >= GetSize())
 				m_iIndex = 0;
 			m_dwDelayStartTick = dwTick;
-			m_bIsAnimating = FALSE;
-			m_bIsDelayed = TRUE;
+			m_bIsAnimating = uiFalse;
+			m_bIsDelayed = uiTrue;
 		}
 	}
 	::RestoreDC(hOffScreenDC, iMode);
@@ -449,7 +449,7 @@ void CImageBoxExUI::AnimationRender_Blind(DWORD dwTick)
 
 	if (!m_bIsAnimating)
 	{
-		m_bIsAnimating = TRUE;
+		m_bIsAnimating = uiTrue;
 		m_dwAnimStartTick = timeGetTime();
 	}
 	CImage* pCurImage = GetImageAt(m_iIndex);
@@ -484,8 +484,8 @@ void CImageBoxExUI::AnimationRender_Blind(DWORD dwTick)
 			if(++m_iIndex >= GetSize())
 				m_iIndex = 0;
 			m_dwDelayStartTick = dwTick;
-			m_bIsAnimating = FALSE;
-			m_bIsDelayed = TRUE;
+			m_bIsAnimating = uiFalse;
+			m_bIsDelayed = uiTrue;
 		}
 	}
 	else if(m_iCurAnimType == kAnimationBlindRight)
@@ -503,8 +503,8 @@ void CImageBoxExUI::AnimationRender_Blind(DWORD dwTick)
 			if(++m_iIndex >= GetSize())
 				m_iIndex = 0;
 			m_dwDelayStartTick = dwTick;
-			m_bIsAnimating = FALSE;
-			m_bIsDelayed = TRUE;
+			m_bIsAnimating = uiFalse;
+			m_bIsDelayed = uiTrue;
 		}
 	}
 	if(m_iCurAnimType == kAnimationBlindTop)
@@ -522,8 +522,8 @@ void CImageBoxExUI::AnimationRender_Blind(DWORD dwTick)
 			if(++m_iIndex >= GetSize())
 				m_iIndex = 0;
 			m_dwDelayStartTick = dwTick;
-			m_bIsAnimating = FALSE;
-			m_bIsDelayed = TRUE;
+			m_bIsAnimating = uiFalse;
+			m_bIsDelayed = uiTrue;
 		}
 	}
 	else if(m_iCurAnimType == kAnimationBlindBottom)
@@ -541,8 +541,8 @@ void CImageBoxExUI::AnimationRender_Blind(DWORD dwTick)
 			if(++m_iIndex >= GetSize())
 				m_iIndex = 0;
 			m_dwDelayStartTick = dwTick;
-			m_bIsAnimating = FALSE;
-			m_bIsDelayed = TRUE;
+			m_bIsAnimating = uiFalse;
+			m_bIsDelayed = uiTrue;
 		}
 	}
 	imageFit.Destroy();
@@ -557,7 +557,7 @@ void CImageBoxExUI::AnimationRender_Cover(DWORD dwTick)
 
 	if (!m_bIsAnimating)
 	{
-		m_bIsAnimating = TRUE;
+		m_bIsAnimating = uiTrue;
 		m_dwAnimStartTick = timeGetTime();
 	}
 	CImage* pCurImage = GetImageAt(m_iIndex);
@@ -578,8 +578,8 @@ void CImageBoxExUI::AnimationRender_Cover(DWORD dwTick)
 			if(++m_iIndex >= GetSize())
 				m_iIndex = 0;
 			m_dwDelayStartTick = dwTick;
-			m_bIsAnimating = FALSE;
-			m_bIsDelayed = TRUE;
+			m_bIsAnimating = uiFalse;
+			m_bIsDelayed = uiTrue;
 		}
 	}
 	else if(m_iCurAnimType == kAnimationCoverRight)
@@ -593,8 +593,8 @@ void CImageBoxExUI::AnimationRender_Cover(DWORD dwTick)
 			if(++m_iIndex >= GetSize())
 				m_iIndex = 0;
 			m_dwDelayStartTick = dwTick;
-			m_bIsAnimating = FALSE;
-			m_bIsDelayed = TRUE;
+			m_bIsAnimating = uiFalse;
+			m_bIsDelayed = uiTrue;
 		}
 	}
 	else if(m_iCurAnimType == kAnimationCoverTop)
@@ -608,8 +608,8 @@ void CImageBoxExUI::AnimationRender_Cover(DWORD dwTick)
 			if(++m_iIndex >= GetSize())
 				m_iIndex = 0;
 			m_dwDelayStartTick = dwTick;
-			m_bIsAnimating = FALSE;
-			m_bIsDelayed = TRUE;
+			m_bIsAnimating = uiFalse;
+			m_bIsDelayed = uiTrue;
 		}
 	}
 	else if(m_iCurAnimType == kAnimationCoverBottom)
@@ -623,8 +623,8 @@ void CImageBoxExUI::AnimationRender_Cover(DWORD dwTick)
 			if(++m_iIndex >= GetSize())
 				m_iIndex = 0;
 			m_dwDelayStartTick = dwTick;
-			m_bIsAnimating = FALSE;
-			m_bIsDelayed = TRUE;
+			m_bIsAnimating = uiFalse;
+			m_bIsDelayed = uiTrue;
 		}
 	}
 	m_pOffScreenImage->ReleaseDC();

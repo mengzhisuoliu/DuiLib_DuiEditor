@@ -45,12 +45,12 @@ public:
 	CControlUI* CreateControl(LPCTSTR pstrClassName);
 
 	//modify by liqs99, 下面4个函数改为虚函数
-	virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-	virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-	virtual LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled);
+	virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled);
+	virtual LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled);
     virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-	BOOL Receive(ContextMenuParam param);
+	uiBool Receive(ContextMenuParam param);
 
 	// 获取根菜单控件，用于动态添加子菜单
 	CMenuUI* GetMenuUI();

@@ -924,10 +924,10 @@ namespace DuiLib {
 		return m_pList->GetHorizontalScrollBar();
 	}
 
-	BOOL CListUI::SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData)
+	uiBool CListUI::SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData)
 	{
 		if (!m_pList)
-			return FALSE;
+			return uiFalse;
 		return m_pList->SortItems(pfnCompare, dwData);	
 	}
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -939,10 +939,10 @@ namespace DuiLib {
 		ASSERT(m_pOwner);
 	}
 
-	BOOL CListBodyUI::SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData)
+	uiBool CListBodyUI::SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData)
 	{
 		if (!pfnCompare)
-			return FALSE;
+			return uiFalse;
 #ifdef WIN32
 		m_pCompareFunc = pfnCompare;
 		m_compareData = dwData;
@@ -965,7 +965,7 @@ namespace DuiLib {
 			Invalidate();
 		}
 #endif
-		return TRUE;
+		return uiTrue;
 	}
 
 	int __cdecl CListBodyUI::ItemComareFunc(void *pvlocale, const void *item1, const void *item2)

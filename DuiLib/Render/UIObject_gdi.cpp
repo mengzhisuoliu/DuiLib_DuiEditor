@@ -25,7 +25,7 @@ namespace DuiLib {
 		memset(&tm, 0, sizeof(tm));
 	}
 
-	BOOL UIFont_gdi::CreateDefaultFont()
+	uiBool UIFont_gdi::CreateDefaultFont()
 	{
 		DeleteObject();
 
@@ -35,8 +35,8 @@ namespace DuiLib {
 		sFontName = lf.lfFaceName;
 		iSize = -lf.lfHeight;
 		bBold = (lf.lfWeight >= FW_BOLD);
-		bUnderline = (lf.lfUnderline == TRUE);
-		bItalic = (lf.lfItalic == TRUE);
+		bUnderline = (lf.lfUnderline == uiTrue);
+		bItalic = (lf.lfItalic == uiTrue);
 
 		return _buildFont(NULL);
 	}
@@ -75,10 +75,10 @@ namespace DuiLib {
 		return tm.tmHeight;
 	}
 
-	BOOL UIFont_gdi::_buildFont(CPaintManagerUI *pManager)
+	uiBool UIFont_gdi::_buildFont(CPaintManagerUI *pManager)
 	{
 		if(sFontName.IsEmpty())
-			return FALSE;
+			return uiFalse;
 
 		LOGFONT lf = { 0 };
 		::GetObject(::GetStockObject(DEFAULT_GUI_FONT), sizeof(LOGFONT), &lf);
@@ -89,12 +89,12 @@ namespace DuiLib {
 		lf.lfCharSet = DEFAULT_CHARSET;
 		lf.lfHeight = pManager ? -pManager->GetDPIObj()->ScaleInt(iSize) : iSize;
 		if( bBold ) lf.lfWeight = FW_BOLD;
-		if( bUnderline ) lf.lfUnderline = TRUE;
-		if( bItalic ) lf.lfItalic = TRUE;
+		if( bUnderline ) lf.lfUnderline = uiTrue;
+		if( bItalic ) lf.lfItalic = uiTrue;
 
 		m_hFont = ::CreateFontIndirect(&lf);
 		if( m_hFont == NULL ) 
-			return FALSE;
+			return uiFalse;
 
 		if(pManager)
 		{
@@ -110,7 +110,7 @@ namespace DuiLib {
 			::SelectObject(hDC, hOldFont);
 			::ReleaseDC(NULL, hDC);
 		}
-		return TRUE;
+		return uiTrue;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -136,7 +136,7 @@ namespace DuiLib {
 		return m_hPen;
 	}
 
-	BOOL UIPen_gdi::CreatePen(int nStyle, int nWidth, CDuiColor dwColor)
+	uiBool UIPen_gdi::CreatePen(int nStyle, int nWidth, CDuiColor dwColor)
 	{
 		DeleteObject();
 
@@ -175,21 +175,21 @@ namespace DuiLib {
 		return m_hBrush;
 	}
 
-	BOOL UIBrush_gdi::CreateFromHBrush(HBRUSH hBrush)
+	uiBool UIBrush_gdi::CreateFromHBrush(HBRUSH hBrush)
 	{
 		DeleteObject();
 		m_hBrush = (HBRUSH)hBrush;
-		return TRUE;
+		return uiTrue;
 	}
 
-	BOOL UIBrush_gdi::CreateSolidBrush(CDuiColor clr)
+	uiBool UIBrush_gdi::CreateSolidBrush(CDuiColor clr)
 	{
 		DeleteObject();
 		m_hBrush = ::CreateSolidBrush(clr.ToCOLORREF());
 		return m_hBrush != NULL;
 	}
 
-	BOOL UIBrush_gdi::CreateBitmapBrush(UIBitmap *bitmap)
+	uiBool UIBrush_gdi::CreateBitmapBrush(UIBitmap *bitmap)
 	{
 		DeleteObject();
 		m_hBrush = ::CreatePatternBrush(bitmap->GetHBITMAP());
@@ -221,27 +221,27 @@ namespace DuiLib {
 		
 	}
 
-	BOOL UIPath_gdi::Beginpath()
+	uiBool UIPath_gdi::Beginpath()
 	{
-		if(m_hDC == NULL) return FALSE;
+		if(m_hDC == NULL) return uiFalse;
 		return ::BeginPath(m_hDC);
 	}
 
-	BOOL UIPath_gdi::EndPath()
+	uiBool UIPath_gdi::EndPath()
 	{
-		if(m_hDC == NULL) return FALSE;
+		if(m_hDC == NULL) return uiFalse;
 		return ::EndPath(m_hDC);
 	}
 
-	BOOL UIPath_gdi::AbortPath()
+	uiBool UIPath_gdi::AbortPath()
 	{
-		if(m_hDC == NULL) return FALSE;
+		if(m_hDC == NULL) return uiFalse;
 		return ::AbortPath(m_hDC);
 	}
 
-	BOOL UIPath_gdi::AddLine(int x1, int y1, int x2, int y2)
+	uiBool UIPath_gdi::AddLine(int x1, int y1, int x2, int y2)
 	{
-		if(m_hDC == NULL) return FALSE;
+		if(m_hDC == NULL) return uiFalse;
 		
 		if(m_curPoint.x != x1 && m_curPoint.y != y1)
 		{
@@ -251,12 +251,12 @@ namespace DuiLib {
 		::LineTo(m_hDC, x2, y2);
 		m_curPoint.x = x2;
 		m_curPoint.y = y2;
-		return TRUE;
+		return uiTrue;
 	}
 
-	BOOL UIPath_gdi::AddLines(CDuiPoint *points, int count)
+	uiBool UIPath_gdi::AddLines(CDuiPoint *points, int count)
 	{
-		if(m_hDC == NULL) return FALSE;
+		if(m_hDC == NULL) return uiFalse;
 		CDuiPoint pt;
 		::MoveToEx(m_hDC, points[0].x, points[0].y, &pt);
 		for (int i=1; i<count; i++)
@@ -264,7 +264,7 @@ namespace DuiLib {
 			::LineTo(m_hDC, points[i].x, points[i].y);
 		}
 		::LineTo(m_hDC, points[0].x, points[0].y);
-		return TRUE;
+		return uiTrue;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -276,7 +276,7 @@ namespace DuiLib {
 		m_pBits = NULL;
 		m_nWidth = 0;
 		m_nHeight = 0;
-		m_bAlphaChannel = FALSE;
+		m_bAlphaChannel = uiFalse;
 	}
 
 	UIBitmap_gdi::~UIBitmap_gdi()
@@ -295,7 +295,7 @@ namespace DuiLib {
 		m_nHeight = 0;
 	}
 
-	BOOL UIBitmap_gdi::CreateFromHBitmap(HBITMAP hBitmap)
+	uiBool UIBitmap_gdi::CreateFromHBitmap(HBITMAP hBitmap)
 	{
 		DeleteObject();
 		m_hBitmap = (HBITMAP)hBitmap;
@@ -305,10 +305,10 @@ namespace DuiLib {
 		m_pBits = (LPBYTE)info.bmBits;
 		m_nWidth = info.bmWidth;
 		m_nHeight = info.bmHeight;
-		return TRUE;
+		return uiTrue;
 	}
 
-	BOOL UIBitmap_gdi::CreateARGB32Bitmap(HDC hDC, int width, int height, BOOL bFlip)
+	uiBool UIBitmap_gdi::CreateARGB32Bitmap(HDC hDC, int width, int height, uiBool bFlip)
 	{
 		DeleteObject();
 		m_nWidth = width;
@@ -328,7 +328,7 @@ namespace DuiLib {
 		return m_hBitmap != NULL;
 	}
 
-	BOOL UIBitmap_gdi::CreateCompatibleBitmap(HDC hDC, int width, int height)
+	uiBool UIBitmap_gdi::CreateCompatibleBitmap(HDC hDC, int width, int height)
 	{
 		DeleteObject();
 		m_nWidth = width;
@@ -344,12 +344,12 @@ namespace DuiLib {
 		return m_hBitmap != NULL;
 	}
 
-	BOOL UIBitmap_gdi::CreateFromData(LPBYTE pImage, int width, int height, CDuiColor mask)
+	uiBool UIBitmap_gdi::CreateFromData(LPBYTE pImage, int width, int height, CDuiColor mask)
 	{
-		if(!CreateARGB32Bitmap(NULL, width, height, TRUE))
-			return FALSE;
+		if(!CreateARGB32Bitmap(NULL, width, height, uiTrue))
+			return uiFalse;
 
-		m_bAlphaChannel = FALSE;
+		m_bAlphaChannel = uiFalse;
 
 		//stbi的图像
 		//pImage[0], R
@@ -367,7 +367,7 @@ namespace DuiLib {
 				pDest[i*4] = (BYTE)(DWORD(pImage[i*4 + 2])*pImage[i*4 + 3]/255);
 				pDest[i*4 + 1] = (BYTE)(DWORD(pImage[i*4 + 1])*pImage[i*4 + 3]/255);
 				pDest[i*4 + 2] = (BYTE)(DWORD(pImage[i*4])*pImage[i*4 + 3]/255); 
-				m_bAlphaChannel = TRUE;
+				m_bAlphaChannel = uiTrue;
 			}
 			else
 			{
@@ -381,10 +381,10 @@ namespace DuiLib {
 				pDest[i*4 + 1] = (BYTE)0;
 				pDest[i*4 + 2] = (BYTE)0; 
 				pDest[i*4 + 3] = (BYTE)0;
-				m_bAlphaChannel = TRUE;
+				m_bAlphaChannel = uiTrue;
 			}
 		}
-		return TRUE;
+		return uiTrue;
 	}
 
 	UINT_PTR UIBitmap_gdi::GetHandle()
@@ -412,7 +412,7 @@ namespace DuiLib {
 		return m_nHeight;
 	}
 
-	BOOL UIBitmap_gdi::IsAlpha()
+	uiBool UIBitmap_gdi::IsAlpha()
 	{
 		return m_bAlphaChannel;
 	}
@@ -448,10 +448,10 @@ namespace DuiLib {
 		}
 	}
 
-	BOOL UIBitmap_gdi::SaveFile(LPCTSTR pstrFileName)
+	uiBool UIBitmap_gdi::SaveFile(LPCTSTR pstrFileName)
 	{
 		if(m_hBitmap == NULL) 
-			return FALSE;
+			return uiFalse;
 
 		HDC     hDC;
 		//当前分辨率下每象素所占字节数
@@ -511,7 +511,7 @@ namespace DuiLib {
 		if (hPal)
 		{
 			hDC  = ::GetDC(NULL);
-			hOldPal = ::SelectPalette(hDC,(HPALETTE)hPal, FALSE);
+			hOldPal = ::SelectPalette(hDC,(HPALETTE)hPal, uiFalse);
 			RealizePalette(hDC);
 		}
 
@@ -523,7 +523,7 @@ namespace DuiLib {
 		//恢复调色板
 		if (hOldPal)
 		{
-			::SelectPalette(hDC,   (HPALETTE)hOldPal,   TRUE);
+			::SelectPalette(hDC,   (HPALETTE)hOldPal,   uiTrue);
 			RealizePalette(hDC);
 			::ReleaseDC(NULL,   hDC);
 		}
@@ -532,7 +532,7 @@ namespace DuiLib {
 		fh  = CreateFile(pstrFileName,   GENERIC_WRITE,0,   NULL,   CREATE_ALWAYS,
 			FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,   NULL);
 
-		if (fh     ==  INVALID_HANDLE_VALUE)         return     FALSE;
+		if (fh     ==  INVALID_HANDLE_VALUE)         return     uiFalse;
 
 		//     设置位图文件头
 		bmfHdr.bfType  = 0x4D42;     //     "BM"
@@ -550,7 +550,7 @@ namespace DuiLib {
 		GlobalFree(hDib);
 		CloseHandle(fh);
 
-		return     TRUE;
+		return     uiTrue;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -582,14 +582,14 @@ namespace DuiLib {
 		if (pSrcBits) { delete[] pSrcBits; pSrcBits = NULL; }
 	}
 
-	BOOL UIImage_gdi::CreateImage(HBITMAP hBitmap, bool bAlpha)
+	uiBool UIImage_gdi::CreateImage(HBITMAP hBitmap, bool bAlpha)
 	{
 		bitmap->CreateFromHBitmap(hBitmap);
 		pBits = bitmap->GetBits();
 		nWidth = bitmap->GetWidth();
 		nHeight = bitmap->GetHeight();
 		UIImage_gdi::bAlpha = bAlpha;
-		return TRUE;
+		return uiTrue;
 	}
 } // namespace DuiLib
 #endif //#ifdef DUILIB_WIN32

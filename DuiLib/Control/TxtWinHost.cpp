@@ -106,7 +106,7 @@ namespace DuiLib {
 
 	////////////////////// Create/Init/Destruct Commands ///////////////////////
 
-	BOOL CTxtWinHost::Init(CRichEditUI *re, const CREATESTRUCT *pcs)
+	uiBool CTxtWinHost::Init(CRichEditUI *re, const CREATESTRUCT *pcs)
 	{
 		IUnknown *pUnk = NULL;
 		HRESULT hr;
@@ -138,7 +138,7 @@ namespace DuiLib {
 
 			if ( !(dwStyle & (ES_AUTOHSCROLL | WS_HSCROLL)) )
 			{
-				fWordWrap = TRUE;
+				fWordWrap = uiTrue;
 			}
 		}
 
@@ -150,7 +150,7 @@ namespace DuiLib {
 				pf.wAlignment = PFA_RIGHT;
 		}
 
-		fInplaceActive = TRUE;
+		fInplaceActive = uiTrue;
 
 		PCreateTextServices TextServicesProc = NULL;
 		
@@ -203,10 +203,10 @@ namespace DuiLib {
 #endif
 		}
 
-		return TRUE;
+		return uiTrue;
 
 err:
-		return FALSE;
+		return uiFalse;
 	}
 
 	/////////////////////////////////  IUnknown ////////////////////////////////
@@ -269,24 +269,24 @@ err:
 		return 1;
 	}
 
-	BOOL CTxtWinHost::TxShowScrollBar(INT fnBar, BOOL fShow)
+	uiBool CTxtWinHost::TxShowScrollBar(INT fnBar, uiBool fShow)
 	{
 		CScrollBarUI* pVerticalScrollBar = m_re->GetVerticalScrollBar();
 		CScrollBarUI* pHorizontalScrollBar = m_re->GetHorizontalScrollBar();
 		if( fnBar == SB_VERT && pVerticalScrollBar ) {
-			pVerticalScrollBar->SetVisible(fShow == TRUE);
+			pVerticalScrollBar->SetVisible(fShow == uiTrue);
 		}
 		else if( fnBar == SB_HORZ && pHorizontalScrollBar ) {
-			pHorizontalScrollBar->SetVisible(fShow == TRUE);
+			pHorizontalScrollBar->SetVisible(fShow == uiTrue);
 		}
 		else if( fnBar == SB_BOTH ) {
-			if( pVerticalScrollBar ) pVerticalScrollBar->SetVisible(fShow == TRUE);
-			if( pHorizontalScrollBar ) pHorizontalScrollBar->SetVisible(fShow == TRUE);
+			if( pVerticalScrollBar ) pVerticalScrollBar->SetVisible(fShow == uiTrue);
+			if( pHorizontalScrollBar ) pHorizontalScrollBar->SetVisible(fShow == uiTrue);
 		}
-		return TRUE;
+		return uiTrue;
 	}
 
-	BOOL CTxtWinHost::TxEnableScrollBar (INT fuSBFlags, INT fuArrowflags)
+	uiBool CTxtWinHost::TxEnableScrollBar (INT fuSBFlags, INT fuArrowflags)
 	{
 		if( fuSBFlags == SB_VERT ) {
 			m_re->EnableScrollBar(true, m_re->GetHorizontalScrollBar() != NULL);
@@ -301,10 +301,10 @@ err:
 			m_re->GetVerticalScrollBar()->SetVisible(fuArrowflags != ESB_DISABLE_BOTH);
 			m_re->GetHorizontalScrollBar()->SetVisible(fuArrowflags != ESB_DISABLE_BOTH);
 		}
-		return TRUE;
+		return uiTrue;
 	}
 
-	BOOL CTxtWinHost::TxSetScrollRange(INT fnBar, LONG nMinPos, INT nMaxPos, BOOL fRedraw)
+	uiBool CTxtWinHost::TxSetScrollRange(INT fnBar, LONG nMinPos, INT nMaxPos, uiBool fRedraw)
 	{
 		CScrollBarUI* pVerticalScrollBar = m_re->GetVerticalScrollBar();
 		CScrollBarUI* pHorizontalScrollBar = m_re->GetHorizontalScrollBar();
@@ -326,10 +326,10 @@ err:
 				pHorizontalScrollBar->SetScrollRange(nMaxPos - nMinPos - rcClient.right + rcClient.left);
 			}   
 		}
-		return TRUE;
+		return uiTrue;
 	}
 
-	BOOL CTxtWinHost::TxSetScrollPos (INT fnBar, INT nPos, BOOL fRedraw)
+	uiBool CTxtWinHost::TxSetScrollPos (INT fnBar, INT nPos, uiBool fRedraw)
 	{
 		CScrollBarUI* pVerticalScrollBar = m_re->GetVerticalScrollBar();
 		CScrollBarUI* pHorizontalScrollBar = m_re->GetHorizontalScrollBar();
@@ -339,10 +339,10 @@ err:
 		else if( fnBar == SB_HORZ && pHorizontalScrollBar ) {
 			pHorizontalScrollBar->SetScrollPos(nPos);
 		}
-		return TRUE;
+		return uiTrue;
 	}
 
-	void CTxtWinHost::TxInvalidateRect(LPCRECT prc, BOOL fMode)
+	void CTxtWinHost::TxInvalidateRect(LPCRECT prc, uiBool fMode)
 	{
 		if( prc == NULL ) {
 			m_re->GetManager()->Invalidate(rcClient);
@@ -352,19 +352,19 @@ err:
 		m_re->GetManager()->Invalidate(rc);
 	}
 
-	void CTxtWinHost::TxViewChange(BOOL fUpdate) 
+	void CTxtWinHost::TxViewChange(uiBool fUpdate) 
 	{
 		if( m_re->OnTxViewChanged() ) m_re->Invalidate();
 	}
 
-	BOOL CTxtWinHost::TxCreateCaret(HBITMAP hbmp, INT xWidth, INT yHeight)
+	uiBool CTxtWinHost::TxCreateCaret(HBITMAP hbmp, INT xWidth, INT yHeight)
 	{
 		iCaretWidth = xWidth;
 		iCaretHeight = yHeight;
 		return ::CreateCaret(m_re->GetManager()->GetPaintWindow(), hbmp, xWidth, yHeight);
 	}
 
-	BOOL CTxtWinHost::TxShowCaret(BOOL fShow)
+	uiBool CTxtWinHost::TxShowCaret(uiBool fShow)
 	{
 		fShowCaret = fShow;
 
@@ -379,15 +379,15 @@ err:
 			return ::HideCaret(m_re->GetManager()->GetPaintWindow());
 	}
 
-	BOOL CTxtWinHost::TxSetCaretPos(INT x, INT y)
+	uiBool CTxtWinHost::TxSetCaretPos(INT x, INT y)
 	{
 		CDuiPoint ptCaret;
 		::GetCaretPos(&ptCaret);
 		CDuiRect rcCaret( ptCaret.x, ptCaret.y, ptCaret.x + iCaretLastWidth, ptCaret.y + iCaretLastHeight );
 		if( m_re->GetManager()->IsLayered() ) m_re->GetManager()->Invalidate(rcCaret);
-		else if( fNeedFreshCaret == TRUE ) {
+		else if( fNeedFreshCaret == uiTrue ) {
 			m_re->GetManager()->Invalidate(rcCaret);
-			fNeedFreshCaret = FALSE;
+			fNeedFreshCaret = uiFalse;
 		}
 		rcCaret.left = x;
 		rcCaret.top = y;
@@ -399,16 +399,16 @@ err:
 		return ::SetCaretPos(x, y);
 	}
 
-	BOOL CTxtWinHost::TxSetTimer(UINT idTimer, UINT uTimeout)
+	uiBool CTxtWinHost::TxSetTimer(UINT idTimer, UINT uTimeout)
 	{
-		fTimer = TRUE;
-		return m_re->GetManager()->SetTimer(m_re, idTimer, uTimeout) == TRUE;
+		fTimer = uiTrue;
+		return m_re->GetManager()->SetTimer(m_re, idTimer, uTimeout) == uiTrue;
 	}
 
 	void CTxtWinHost::TxKillTimer(UINT idTimer)
 	{
 		m_re->GetManager()->KillTimer(m_re, idTimer);
-		fTimer = FALSE;
+		fTimer = uiFalse;
 	}
 
 	void CTxtWinHost::TxScrollWindowEx (INT dx, INT dy, LPCRECT lprcScroll,	LPCRECT lprcClip,	HRGN hrgnUpdate, LPRECT lprcUpdate,	UINT fuScroll)	
@@ -416,7 +416,7 @@ err:
 		return;
 	}
 
-	void CTxtWinHost::TxSetCapture(BOOL fCapture)
+	void CTxtWinHost::TxSetCapture(uiBool fCapture)
 	{
 		if (fCapture) m_re->GetManager()->SetCapture();
 		else m_re->GetManager()->ReleaseCapture();
@@ -428,17 +428,17 @@ err:
 		m_re->SetFocus();
 	}
 
-	void CTxtWinHost::TxSetCursor(HCURSOR hcur,	BOOL fText)
+	void CTxtWinHost::TxSetCursor(HCURSOR hcur,	uiBool fText)
 	{
 		::SetCursor(hcur);
 	}
 
-	BOOL CTxtWinHost::TxScreenToClient(LPPOINT lppt)
+	uiBool CTxtWinHost::TxScreenToClient(LPPOINT lppt)
 	{
 		return ::ScreenToClient(m_re->GetManager()->GetPaintWindow(), lppt);	
 	}
 
-	BOOL CTxtWinHost::TxClientToScreen(LPPOINT lppt)
+	uiBool CTxtWinHost::TxClientToScreen(LPPOINT lppt)
 	{
 		return ::ClientToScreen(m_re->GetManager()->GetPaintWindow(), lppt);
 	}
@@ -610,18 +610,18 @@ err:
 		return S_OK;
 	}
 
-	void CTxtWinHost::SetWordWrap(BOOL fWordWrap)
+	void CTxtWinHost::SetWordWrap(uiBool fWordWrap)
 	{
 		fWordWrap = fWordWrap;
 		pserv->OnTxPropertyBitsChange(TXTBIT_WORDWRAP, fWordWrap ? TXTBIT_WORDWRAP : 0);
 	}
 
-	BOOL CTxtWinHost::IsReadOnly()
+	uiBool CTxtWinHost::IsReadOnly()
 	{
 		return (dwStyle & ES_READONLY) != 0;
 	}
 
-	void CTxtWinHost::SetReadOnly(BOOL fReadOnly)
+	void CTxtWinHost::SetReadOnly(uiBool fReadOnly)
 	{
 		if (fReadOnly)
 		{
@@ -687,19 +687,19 @@ err:
 		pserv->OnTxPropertyBitsChange(TXTBIT_MAXLENGTHCHANGE, TXTBIT_MAXLENGTHCHANGE);
 	}
 
-	BOOL CTxtWinHost::IsCaptured()
+	uiBool CTxtWinHost::IsCaptured()
 	{
 		return fCaptured;
 	}
 
-	BOOL CTxtWinHost::IsShowCaret()
+	uiBool CTxtWinHost::IsShowCaret()
 	{
 		return fShowCaret;
 	}
 
 	void CTxtWinHost::NeedFreshCaret()
 	{
-		fNeedFreshCaret = TRUE;
+		fNeedFreshCaret = uiTrue;
 	}
 
 	INT CTxtWinHost::GetCaretWidth()
@@ -712,12 +712,12 @@ err:
 		return iCaretHeight;
 	}
 
-	BOOL CTxtWinHost::GetAllowBeep()
+	uiBool CTxtWinHost::GetAllowBeep()
 	{
 		return fAllowBeep;
 	}
 
-	void CTxtWinHost::SetAllowBeep(BOOL fAllowBeep)
+	void CTxtWinHost::SetAllowBeep(uiBool fAllowBeep)
 	{
 		fAllowBeep = fAllowBeep;
 
@@ -738,12 +738,12 @@ err:
 		pserv->OnTxPropertyBitsChange(TXTBIT_PARAFORMATCHANGE, 0);
 	}
 
-	BOOL CTxtWinHost::GetRichTextFlag()
+	uiBool CTxtWinHost::GetRichTextFlag()
 	{
 		return fRich;
 	}
 
-	void CTxtWinHost::SetRichTextFlag(BOOL fNew)
+	void CTxtWinHost::SetRichTextFlag(uiBool fNew)
 	{
 		fRich = fNew;
 
@@ -775,9 +775,9 @@ err:
 		pserv->OnTxPropertyBitsChange(TXTBIT_VIEWINSETCHANGE, TXTBIT_VIEWINSETCHANGE);
 	}
 
-	BOOL CTxtWinHost::SetSaveSelection(BOOL f_SaveSelection)
+	uiBool CTxtWinHost::SetSaveSelection(uiBool f_SaveSelection)
 	{
-		BOOL fResult = f_SaveSelection;
+		uiBool fResult = f_SaveSelection;
 
 		fSaveSelection = f_SaveSelection;
 
@@ -794,7 +794,7 @@ err:
 
 		if (SUCCEEDED(hr))
 		{
-			fInplaceActive = FALSE;
+			fInplaceActive = uiFalse;
 		}
 
 		return hr;
@@ -802,19 +802,19 @@ err:
 
 	HRESULT	CTxtWinHost::OnTxInPlaceActivate(LPCRECT prcClient)
 	{
-		fInplaceActive = TRUE;
+		fInplaceActive = uiTrue;
 
 		HRESULT hr = pserv->OnTxInPlaceActivate(prcClient);
 
 		if (FAILED(hr))
 		{
-			fInplaceActive = FALSE;
+			fInplaceActive = uiFalse;
 		}
 
 		return hr;
 	}
 
-	BOOL CTxtWinHost::DoSetCursor(CDuiRect *prc, CDuiPoint *pt)
+	uiBool CTxtWinHost::DoSetCursor(CDuiRect *prc, CDuiPoint *pt)
 	{
 		CDuiRect rc = prc ? *prc : rcClient;
 
@@ -826,10 +826,10 @@ err:
 			HRESULT hRet = pserv->OnTxSetCursor(DVASPECT_CONTENT,	-1, NULL, NULL,  TxGetDC(),
 				NULL, prcClient, pt->x, pt->y);
 
-			return TRUE;
+			return uiTrue;
 		}
 
-		return FALSE;
+		return uiFalse;
 	}
 
 	void CTxtWinHost::GetControlRect(LPRECT prc)
@@ -840,7 +840,7 @@ err:
 		prc->right = rcClient.right;
 	}
 
-	void CTxtWinHost::SetTransparent(BOOL f_Transparent)
+	void CTxtWinHost::SetTransparent(uiBool f_Transparent)
 	{
 		fTransparent = f_Transparent;
 
@@ -873,7 +873,7 @@ err:
 		return chOldPasswordChar;
 	}
 
-	void CTxtWinHost::SetDisabled(BOOL fOn)
+	void CTxtWinHost::SetDisabled(uiBool fOn)
 	{
 		cf.dwMask	 |= CFM_COLOR | CFM_DISABLED;
 		cf.dwEffects |= CFE_AUTOCOLOR | CFE_DISABLED;
@@ -907,7 +907,7 @@ err:
 		return lOldSelBarWidth;
 	}
 
-	BOOL CTxtWinHost::GetTimerState()
+	uiBool CTxtWinHost::GetTimerState()
 	{
 		return fTimer;
 	}

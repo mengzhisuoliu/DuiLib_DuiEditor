@@ -27,16 +27,16 @@ namespace DuiLib {
 		CTxtWinHost();
 		HRESULT InitDefaultCharFormat(CHARFORMAT2W* pcf, HFONT hfont);
 		HRESULT InitDefaultParaFormat(PARAFORMAT2* ppf);
-		BOOL Init(CRichEditUI *re , const CREATESTRUCT *pcs);
+		uiBool Init(CRichEditUI *re , const CREATESTRUCT *pcs);
 		virtual ~CTxtWinHost();
 
 		ITextServices* GetTextServices(void) { return pserv; }
 		void SetClientRect(CDuiRect *prc);
 		CDuiRect* GetClientRect() { return &rcClient; }
-		BOOL IsWordWrap(void) { return fWordWrap; }
-		void SetWordWrap(BOOL fWordWrap);
-		BOOL IsReadOnly();
-		void SetReadOnly(BOOL fReadOnly);
+		uiBool IsWordWrap(void) { return fWordWrap; }
+		void SetWordWrap(uiBool fWordWrap);
+		uiBool IsReadOnly();
+		void SetReadOnly(uiBool fReadOnly);
 
 		void SetFont(HFONT hFont);
 		void SetColor(CDuiColor dwColor);
@@ -46,37 +46,37 @@ namespace DuiLib {
 
 		void LimitText(LONG nChars);
 
-		BOOL IsCaptured();
+		uiBool IsCaptured();
 
-		BOOL IsShowCaret();
+		uiBool IsShowCaret();
 
 		void NeedFreshCaret();
 
 		INT GetCaretWidth();
 		INT GetCaretHeight();
 
-		BOOL GetAllowBeep();
-		void SetAllowBeep(BOOL fAllowBeep);
+		uiBool GetAllowBeep();
+		void SetAllowBeep(uiBool fAllowBeep);
 
 		WORD GetDefaultAlign();
 		void SetDefaultAlign(WORD wNewAlign);
 
-		BOOL GetRichTextFlag();
-		void SetRichTextFlag(BOOL fNew);
+		uiBool GetRichTextFlag();
+		void SetRichTextFlag(uiBool fNew);
 
 		LONG GetDefaultLeftIndent();
 		void SetDefaultLeftIndent(LONG lNewIndent);
 
-		BOOL SetSaveSelection(BOOL fSaveSelection);
+		uiBool SetSaveSelection(uiBool fSaveSelection);
 
 		HRESULT OnTxInPlaceDeactivate();
 		HRESULT OnTxInPlaceActivate(LPCRECT prcClient);
 
-		BOOL GetActiveState(void) { return fInplaceActive; }
+		uiBool GetActiveState(void) { return fInplaceActive; }
 
-		BOOL DoSetCursor(CDuiRect *prc, CDuiPoint *pt);
+		uiBool DoSetCursor(CDuiRect *prc, CDuiPoint *pt);
 
-		void SetTransparent(BOOL fTransparent);
+		void SetTransparent(uiBool fTransparent);
 
 		void GetControlRect(LPRECT prc);
 
@@ -84,11 +84,11 @@ namespace DuiLib {
 
 		WCHAR SetPasswordChar(WCHAR chPasswordChar);
 
-		void SetDisabled(BOOL fOn);
+		void SetDisabled(uiBool fOn);
 
 		LONG SetSelBarWidth(LONG lSelBarWidth);
 
-		BOOL GetTimerState();
+		uiBool GetTimerState();
 
 		void SetParagraphIndent(LONG lIdentSize);
 
@@ -108,23 +108,23 @@ namespace DuiLib {
 		// -----------------------------
 		virtual HDC TxGetDC();
 		virtual INT TxReleaseDC(HDC hdc);
-		virtual BOOL TxShowScrollBar(INT fnBar, BOOL fShow);
-		virtual BOOL TxEnableScrollBar (INT fuSBFlags, INT fuArrowflags);
-		virtual BOOL TxSetScrollRange(INT fnBar, LONG nMinPos, INT nMaxPos, BOOL fRedraw);
-		virtual BOOL TxSetScrollPos (INT fnBar, INT nPos, BOOL fRedraw);
-		virtual void TxInvalidateRect(LPCRECT prc, BOOL fMode);
-		virtual void TxViewChange(BOOL fUpdate);
-		virtual BOOL TxCreateCaret(HBITMAP hbmp, INT xWidth, INT yHeight);
-		virtual BOOL TxShowCaret(BOOL fShow);
-		virtual BOOL TxSetCaretPos(INT x, INT y);
-		virtual BOOL TxSetTimer(UINT idTimer, UINT uTimeout);
+		virtual uiBool TxShowScrollBar(INT fnBar, uiBool fShow);
+		virtual uiBool TxEnableScrollBar (INT fuSBFlags, INT fuArrowflags);
+		virtual uiBool TxSetScrollRange(INT fnBar, LONG nMinPos, INT nMaxPos, uiBool fRedraw);
+		virtual uiBool TxSetScrollPos (INT fnBar, INT nPos, uiBool fRedraw);
+		virtual void TxInvalidateRect(LPCRECT prc, uiBool fMode);
+		virtual void TxViewChange(uiBool fUpdate);
+		virtual uiBool TxCreateCaret(HBITMAP hbmp, INT xWidth, INT yHeight);
+		virtual uiBool TxShowCaret(uiBool fShow);
+		virtual uiBool TxSetCaretPos(INT x, INT y);
+		virtual uiBool TxSetTimer(UINT idTimer, UINT uTimeout);
 		virtual void TxKillTimer(UINT idTimer);
 		virtual void TxScrollWindowEx (INT dx, INT dy, LPCRECT lprcScroll, LPCRECT lprcClip, HRGN hrgnUpdate, LPRECT lprcUpdate, UINT fuScroll);
-		virtual void TxSetCapture(BOOL fCapture);
+		virtual void TxSetCapture(uiBool fCapture);
 		virtual void TxSetFocus();
-		virtual void TxSetCursor(HCURSOR hcur, BOOL fText);
-		virtual BOOL TxScreenToClient (LPPOINT lppt);
-		virtual BOOL TxClientToScreen (LPPOINT lppt);
+		virtual void TxSetCursor(HCURSOR hcur, uiBool fText);
+		virtual uiBool TxScreenToClient (LPPOINT lppt);
+		virtual uiBool TxClientToScreen (LPPOINT lppt);
 		virtual HRESULT TxActivate( LONG * plOldState );
 		virtual HRESULT TxDeactivate( LONG lNewState );
 		virtual HRESULT TxGetClientRect(LPRECT prc);

@@ -182,7 +182,7 @@ LDispatch:
 	switch (nSig)
 	{
 	default:
-		ASSERT(FALSE);
+		ASSERT(uiFalse);
 		break;
 	case DuiSig_lwl:
 		(this->*mmf.pfn_Notify_lwl)(msg.wParam,msg.lParam);
@@ -249,7 +249,7 @@ CPaintManagerUI *CWindowWnd::GetManager()
 LRESULT CWindowWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LRESULT lRes = 0;
-	BOOL bHandled = TRUE;
+	uiBool bHandled = uiTrue;
 	switch (uMsg)
 	{
 	case WM_CREATE:			
@@ -282,7 +282,7 @@ LRESULT CWindowWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_ERASEBKGND:		lRes = OnEraseBkgnd(uMsg, wParam, lParam, bHandled); break;
 	case WM_PAINT:			lRes = OnPaint(uMsg, wParam, lParam, bHandled); break;
 	case WM_PRINT:			lRes = OnPrint(uMsg, wParam, lParam, bHandled); break;
-	default:				bHandled = FALSE; break;
+	default:				bHandled = uiFalse; break;
 	}
 
 	if (bHandled) return lRes;
@@ -303,172 +303,172 @@ LRESULT CWindowWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-LRESULT CWindowWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CWindowWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CWindowWnd::HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+LRESULT CWindowWnd::OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+LRESULT CWindowWnd::OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnNcActivate(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+LRESULT CWindowWnd::OnNcActivate(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnNcCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CWindowWnd::OnNcCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnNcPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CWindowWnd::OnNcPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CWindowWnd::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {	
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CWindowWnd::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnMouseWheel(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+LRESULT CWindowWnd::OnMouseWheel(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CWindowWnd::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CWindowWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CWindowWnd::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CWindowWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnKeyDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+LRESULT CWindowWnd::OnKeyDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnKillFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+LRESULT CWindowWnd::OnKillFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnSetFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+LRESULT CWindowWnd::OnSetFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnLButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+LRESULT CWindowWnd::OnLButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnLButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+LRESULT CWindowWnd::OnLButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
 
-LRESULT CWindowWnd::OnRButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+LRESULT CWindowWnd::OnRButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnRButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+LRESULT CWindowWnd::OnRButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+LRESULT CWindowWnd::OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CWindowWnd::OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CWindowWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CWindowWnd::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CWindowWnd::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CWindowWnd::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CWindowWnd::OnPrint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CWindowWnd::OnPrint(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
@@ -607,7 +607,11 @@ void CWindowWnd::_init_wm_defined()
 	MACROTOSTRINGMAP_ADD(m_wmEventString, WM_MBUTTONUP);
 	MACROTOSTRINGMAP_ADD(m_wmEventString, WM_MBUTTONDBLCLK);
 	MACROTOSTRINGMAP_ADD(m_wmEventString, WM_MOUSEWHEEL);
+#ifdef WM_MOUSEHWHEEL
 	MACROTOSTRINGMAP_ADD(m_wmEventString, WM_MOUSEHWHEEL);
+#else
+	m_wmEventString.Add(0x020E, _T("WM_MOUSEHWHEEL"));
+#endif
 	MACROTOSTRINGMAP_ADD(m_wmEventString, WM_PARENTNOTIFY);
 	MACROTOSTRINGMAP_ADD(m_wmEventString, WM_ENTERMENULOOP);
 	MACROTOSTRINGMAP_ADD(m_wmEventString, WM_EXITMENULOOP);

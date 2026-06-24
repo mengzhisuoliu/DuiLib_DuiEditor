@@ -69,12 +69,12 @@ UINT CWindowWin32::ShowModal()
     UINT nRet = 0;
     HWND hWndParent = GetWindowOwner(m_hWnd);
     ::ShowWindow(m_hWnd, SW_SHOWNORMAL);
-    ::EnableWindow(hWndParent, FALSE);
+    ::EnableWindow(hWndParent, uiFalse);
     MSG msg = { 0 };
     while( ::IsWindow(m_hWnd) && ::GetMessage(&msg, NULL, 0, 0) ) {
         if( msg.message == WM_CLOSE && msg.hwnd == m_hWnd ) {
             nRet = msg.wParam;
-            ::EnableWindow(hWndParent, TRUE);
+            ::EnableWindow(hWndParent, uiTrue);
             ::SetFocus(hWndParent);
         }
         if( !CPaintManagerWin32UI::TranslateMessage(&msg) ) {
@@ -83,18 +83,18 @@ UINT CWindowWin32::ShowModal()
         }
         if( msg.message == WM_QUIT ) break;
     }
-    ::EnableWindow(hWndParent, TRUE);
+    ::EnableWindow(hWndParent, uiTrue);
     ::SetFocus(hWndParent);
     if( msg.message == WM_QUIT ) ::PostQuitMessage(msg.wParam);
     return nRet;
 }
 
-BOOL CWindowWin32::IsWindow(UIWND hWnd)
+uiBool CWindowWin32::IsWindow(UIWND hWnd)
 {
     return ::IsWindow(hWnd);
 }
 
-BOOL CWindowWin32::IsChildWindow(UIWND hWnd)
+uiBool CWindowWin32::IsChildWindow(UIWND hWnd)
 {
 	UINT uStyle = GetWindowStyle(hWnd);
 	return (uStyle & WS_CHILD) == WS_CHILD;
@@ -105,7 +105,7 @@ UIWND CWindowWin32::GetParentWindow(UIWND hWnd)
     return ::GetParent(hWnd);
 }
 
-BOOL CWindowWin32::SetForeground(UIWND hWnd)
+uiBool CWindowWin32::SetForeground(UIWND hWnd)
 {
     return ::SetForegroundWindow(hWnd);
 }
@@ -117,29 +117,29 @@ LRESULT CWindowWin32::SendMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	return 0;
 }
 
-BOOL CWindowWin32::PostMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+uiBool CWindowWin32::PostMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if (IsWindow(hWnd))
         return ::PostMessage(hWnd, uMsg, wParam, lParam);
-    return FALSE;
+    return uiFalse;
 }
 
 void CWindowWin32::Invalidate()
 {
-    ::InvalidateRect(m_hWnd, NULL, FALSE);
+    ::InvalidateRect(m_hWnd, NULL, uiFalse);
 }
 
-BOOL CWindowWin32::SetWindowPos(int x, int y, int cx, int cy, UINT uFlags)
+uiBool CWindowWin32::SetWindowPos(int x, int y, int cx, int cy, UINT uFlags)
 {
     return ::SetWindowPos(m_hWnd, NULL, x, y, cx, cy, uFlags);
 }
 
-BOOL CWindowWin32::GetWindowRect(LPRECT lpRect)
+uiBool CWindowWin32::GetWindowRect(LPRECT lpRect)
 {
    return ::GetWindowRect(m_hWnd, lpRect);
 }
 
-BOOL CWindowWin32::GetClientRect(LPRECT lpRect)
+uiBool CWindowWin32::GetClientRect(LPRECT lpRect)
 {
     return ::GetClientRect(m_hWnd, lpRect);
 }
@@ -205,13 +205,13 @@ void CWindowWin32::SetIcon(UINT nRes)
 		(::GetSystemMetrics(SM_CXICON) + 15) & ~15, (::GetSystemMetrics(SM_CYICON) + 15) & ~15,	// 防止高DPI下图标模糊
 		LR_DEFAULTCOLOR);
 	ASSERT(hIcon);
-	::SendMessage(m_hWnd, WM_SETICON, (WPARAM) TRUE, (LPARAM) hIcon);
+	::SendMessage(m_hWnd, WM_SETICON, (WPARAM) uiTrue, (LPARAM) hIcon);
 
 	hIcon = (HICON)::LoadImage(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(nRes), IMAGE_ICON,
 		(::GetSystemMetrics(SM_CXICON) + 15) & ~15, (::GetSystemMetrics(SM_CYICON) + 15) & ~15,	// 防止高DPI下图标模糊
 		LR_DEFAULTCOLOR);
 	ASSERT(hIcon);
-	::SendMessage(m_hWnd, WM_SETICON, (WPARAM) FALSE, (LPARAM) hIcon);
+	::SendMessage(m_hWnd, WM_SETICON, (WPARAM) uiFalse, (LPARAM) hIcon);
 }
 
 bool CWindowWin32::RegisterWindowClass()
@@ -317,9 +317,9 @@ LRESULT CALLBACK CWindowWin32::__ControlProc(HWND hWnd, UINT uMsg, WPARAM wParam
     }
 }
 
-BOOL CWindowWin32::DoTouchInformation(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+uiBool CWindowWin32::DoTouchInformation(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	return FALSE;
+	return uiFalse;
 	/*
 	if(uMsg == WM_CREATE)
 	{

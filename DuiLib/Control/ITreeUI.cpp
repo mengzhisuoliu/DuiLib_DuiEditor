@@ -10,9 +10,9 @@ static CStdControlPool<TNodeData> poolNode;
 ITreeUI::ITreeUI(void)
 {
 	m_nIndentWidth = 32;
-	m_bViewLine = TRUE;
+	m_bViewLine = uiTrue;
 	m_nNodeHeight = 32;
-	m_bMultiSelect = FALSE;
+	m_bMultiSelect = uiFalse;
 
 	m_pFocusNode = NULL;
 	m_NodeData.SetSaveIndexMap(true);
@@ -157,7 +157,7 @@ TNodeData *ITreeUI::GetRootNode()
 	return (TNodeData *)m_NodeData.GetAt(0);
 }
 
-BOOL ITreeUI::IsRootNode(TNodeData *pNode)
+uiBool ITreeUI::IsRootNode(TNodeData *pNode)
 {
 	return pNode->GetParent() == NULL;
 }
@@ -180,7 +180,7 @@ TNodeData *ITreeUI::GetNextNode(TNodeData *pNode, bool bGetVisibleNode)
 	{
 		//回滚寻找父项的兄弟项
 		TNodeData *pNodeTemp = pNode;
-		while (TRUE)
+		while (uiTrue)
 		{
 			TNodeData *pNodeParent = pNodeTemp->GetParent();
 
@@ -263,7 +263,7 @@ TNodeData *ITreeUI::GetNextPrevNode(TNodeData *pNode)
 	return NULL;
 }
 
-void ITreeUI::Expand(TNodeData *pNode, BOOL bExpand)
+void ITreeUI::Expand(TNodeData *pNode, uiBool bExpand)
 {
 	if(pNode == TNODE_ROOT)
 		return;
@@ -334,15 +334,15 @@ TNodeData *ITreeUI::GetNextSelectNode()
 	return m_iteratorNodes->second;
 }
 
-BOOL ITreeUI::MoveNode(TNodeData *pNode, TNodeData *pNewParent, TNodeData *phInsertAfter)
+uiBool ITreeUI::MoveNode(TNodeData *pNode, TNodeData *pNewParent, TNodeData *phInsertAfter)
 {
-	return FALSE;
+	return uiFalse;
 }
 
 TNodeData *ITreeUI::AllocNodeData()
 {
 	TNodeData *pTreeData = poolNode.Alloc();
-	pTreeData->m_bSelected = FALSE;
+	pTreeData->m_bSelected = uiFalse;
 	return pTreeData;
 }
 

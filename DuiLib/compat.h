@@ -1,43 +1,119 @@
-#ifndef __COMPAT__H__
-#define __COMPAT__H__
+#ifndef COMPAT__H__
+#define COMPAT__H__
+
+#include <stdint.h>   // int64_t, uint64_t
+#include <assert.h>   // assert
+#include <wchar.h>
+#include <cstring>
+#include <string>
 
 #ifndef ASSERT
 #define ASSERT assert
 #endif
 
-#ifndef WIN32
+// ========== 基础类型定义 ==========
+//MACOS objc，BOOL一会是signed char 一会是bool, ....so, UI库重新定义uiBOOL类型
+//window下，uiBool等同于BOOL，可以保持兼容
+typedef int     uiBool; 
+#define uiFalse 0
+#define uiTrue  1
+typedef char    uiCharA;
+typedef wchar_t uiCharW;
+#ifdef _UNICODE
+    typedef uiCharW uiChar;
+#else
+    typedef uiCharA uiChar;
+#endif
+typedef int uiInt;
 
-#ifdef __GNUC__
-#include <wchar.h>
-#include <cstring>
-#include <string>
+// ==================================
+
+#ifdef WIN32
+
+#ifdef UILIB_STATIC
+#define UILIB_API 
+#else
+#if defined(UILIB_EXPORTS)
+#	if defined(_MSC_VER)
+#		define UILIB_API __declspec(dllexport)
+#	else
+#		define UILIB_API 
+#	endif
+#else
+#	if defined(_MSC_VER)
+#		define UILIB_API __declspec(dllimport)
+#	else
+#		define UILIB_API 
+#	endif
+#endif
+#endif
+#define UILIB_COMDAT __declspec(selectany)
+
+#pragma warning(disable:4505)
+#pragma warning(disable:4251)
+#pragma warning(disable:4189)
+#pragma warning(disable:4121)
+#pragma warning(disable:4100)
+
+#if defined _M_IX86
+#pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#elif defined _M_IA64
+#pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='ia64' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#elif defined _M_X64
+#pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#else
+#pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #endif
 
+#include <windows.h>
+#include <windowsx.h>
+#include <commctrl.h>
+#include <stddef.h>
+#include <richedit.h>
+#include <tchar.h>
+#include <crtdbg.h>
+#include <malloc.h>
+#include <comdef.h>
+#include <gdiplus.h>
+#pragma comment( lib, "comctl32.lib" )
+#pragma comment( lib, "GdiPlus.lib" )
+#pragma comment( lib, "Imm32.lib" )
+
+typedef __int64 uiInt64;
+typedef unsigned __int64 uiUInt64;
+
+#else //非WIN32
+#include <iconv.h>
+#include <langinfo.h>
+#include <locale.h>
+
 #ifdef __linux__
-#include <syslog.h>
-#include <stdarg.h>
-#include <assert.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <dirent.h>
+    #include <syslog.h>
+    #include <stdarg.h>
+    #include <assert.h>
+    #include <unistd.h>
+    #include <sys/types.h>
+    #include <sys/stat.h>
+    #include <dirent.h>
 	#ifndef _UNICODE
-		#define _UTF8CODE //linux没有定义_UNICODE, 默认为utf8
+	    #define _UTF8CODE //linux没有定义_UNICODE, 默认为utf8
 	#endif
 #endif
 
 #ifdef __APPLE__
-#include <stdlib.h>
-#include <unistd.h>
-#include <mach-o/dyld.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <assert.h>
+    #include <stdlib.h>
+    #include <unistd.h>
+    #include <mach-o/dyld.h>
+    #include <sys/stat.h>
+    #include <dirent.h>
+    #include <assert.h>
     #ifndef _UNICODE
         #define _UTF8CODE //macos没有定义_UNICODE, 默认为utf8
     #endif
 #endif
 
+#define UILIB_API
+#define UILIB_COMDAT
 #define __cdecl
 #define PASCAL
 #define CALLBACK
@@ -61,20 +137,14 @@
 #define MIN(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
-#ifndef FALSE
-#define FALSE               0
-#endif
-
-#ifndef TRUE
-#define TRUE                1
-#endif
-
 #ifndef NULL
 #define NULL 0
 #endif
 
-#define CS_DBLCLKS          0x0008
+typedef int64_t uiInt64;
+typedef uint64_t uiUInt64;
 
+#define CS_DBLCLKS          0x0008
 
 /*
  * Virtual Keys, Standard Set
@@ -228,7 +298,6 @@ typedef USHORT WORD;
 typedef void* LPVOID, * PVOID;
 typedef const void* LPCVOID, * PCVOID;
 typedef void VOID;
-typedef int BOOL;
 typedef unsigned int UINT;
 typedef int INT;
 typedef unsigned char BYTE;
@@ -549,7 +618,6 @@ typedef BYTE * LPBYTE;
 #define WM_DISPLAYCHANGE                0x007E
 #define WM_GETICON                      0x007F
 #define WM_SETICON                      0x0080
-#endif /* WINVER >= 0x0400 */
 
 #define WM_NCCREATE                     0x0081
 #define WM_NCDESTROY                    0x0082
@@ -812,4 +880,5 @@ typedef BYTE * LPBYTE;
 #define WS_EX_COMPOSITED        0x02000000L
 #define WS_EX_NOACTIVATE        0x08000000L
 
-#endif // __COMPAT__H__
+#endif // WIN32
+#endif // COMPAT__H__

@@ -29,7 +29,7 @@ namespace DuiLib {
 	}
 
 
-	BOOL CMenuWndSDL::Receive(ContextMenuParam param)
+	uiBool CMenuWndSDL::Receive(ContextMenuParam param)
 	{
 		switch (param.wParam)
 		{
@@ -54,7 +54,7 @@ namespace DuiLib {
 			break;
 		}
 
-		return TRUE;
+		return uiTrue;
 	}
 
 	CMenuWndSDL* CMenuWndSDL::CreateMenu(CMenuElementUI* pOwner, STRINGorID xml, CDuiPoint point, CPaintManagerUI* pMainPaintManager, CStdStringPtrMap* pMenuCheckInfo /*= NULL*/, DWORD dwAlignment /*= eMenuAlignment_Left | eMenuAlignment_Top*/)
@@ -195,7 +195,7 @@ namespace DuiLib {
 		}
 	}
 
-	LRESULT CMenuWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CMenuWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		bool bShowShadow = false;
 		if( m_pOwner != NULL) 
@@ -497,13 +497,13 @@ namespace DuiLib {
 		m_pm.SetDPI(DPI);
 	}
 
-	LRESULT CMenuWndSDL::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CMenuWndSDL::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		//SetHandleMessage(FALSE);
 
 		UIWND hFocusWnd = (UIWND)wParam;
 
-		BOOL bInMenuWindowList = FALSE;
+		uiBool bInMenuWindowList = uiFalse;
 		ContextMenuParam param;
 		param.hWnd = GetHWND();
 
@@ -512,7 +512,7 @@ namespace DuiLib {
 		while( pReceiver != NULL ) {
 			CMenuWndSDL* pContextMenu = dynamic_cast<CMenuWndSDL*>(pReceiver);
 			if( pContextMenu != NULL && pContextMenu->GetHWND() ==  hFocusWnd ) {
-				bInMenuWindowList = TRUE;
+				bInMenuWindowList = uiTrue;
 				break;
 			}
 			pReceiver = iterator.next();
@@ -526,7 +526,7 @@ namespace DuiLib {
 		return 0;
 	}
 
-	LRESULT CMenuWndSDL::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CMenuWndSDL::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 // 		SIZE szRoundCorner = m_pm.GetRoundCorner();
 // 		if( !::IsIconic(*this) ) {
@@ -542,17 +542,17 @@ namespace DuiLib {
 		return 0;
 	}
 
-	LRESULT CMenuWndSDL::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CMenuWndSDL::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		if (wParam == VK_ESCAPE || wParam == VK_LEFT)
 		{
 			Close();
 		}
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 
-	LRESULT CMenuWndSDL::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CMenuWndSDL::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		if (m_pOwner != NULL)
 		{
@@ -561,7 +561,7 @@ namespace DuiLib {
 			m_pOwner->SetFocus();
 		}
 
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 

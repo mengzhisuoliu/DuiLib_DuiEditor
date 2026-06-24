@@ -389,7 +389,7 @@ namespace DuiLib
 		}
 	}
 
-	void CTabLayoutUI::OnAnimationStart(int nAnimationID, BOOL bFirstLoop)
+	void CTabLayoutUI::OnAnimationStart(int nAnimationID, uiBool bFirstLoop)
 	{
 		if(m_pCurControl) m_pCurControl->SetVisible(true);		
 	}

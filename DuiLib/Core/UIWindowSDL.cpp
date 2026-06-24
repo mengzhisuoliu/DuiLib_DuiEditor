@@ -315,22 +315,22 @@ void CWindowSDL::ShowAndActivateChildWindow()
 	SDL_RaiseWindow(m_hWnd);
 }
 
-BOOL CWindowSDL::OnSdlEvent(const void* pEvent)
+uiBool CWindowSDL::OnSdlEvent(const void* pEvent)
 {
-	return FALSE;
+	return uiFalse;
 }
 
 //////////////////////////////////////////////////////////////////////////
 std::map<UINT, CWindowSDL::WindowInfo> CWindowSDL::m_smap;
 CDuiLock CWindowSDL::m_smap_lock;
 
-BOOL CWindowSDL::RegisterWindow(UIWND pSdlWindow, CWindowWnd* pDuiWindow)
+uiBool CWindowSDL::RegisterWindow(UIWND pSdlWindow, CWindowWnd* pDuiWindow)
 {
 	CDuiInnerLock lock(&m_smap_lock);
 
-	if (!pSdlWindow) return FALSE;
+	if (!pSdlWindow) return uiFalse;
 	SDL_WindowID id = SDL_GetWindowID(pSdlWindow);
-	if (id == 0) return FALSE; // 无效ID
+	if (id == 0) return uiFalse; // 无效ID
 
 	// 如果已经存在，先注销
 	auto it = m_smap.find(id);
@@ -348,17 +348,17 @@ BOOL CWindowSDL::RegisterWindow(UIWND pSdlWindow, CWindowWnd* pDuiWindow)
 	//认为第一个窗口即为主窗口
 	if (m_smap.size() == 0)
 	{
-		info.isMainWindow = TRUE;
+		info.isMainWindow = uiTrue;
 	}
 	else
 	{
-		info.isMainWindow = FALSE;
+		info.isMainWindow = uiFalse;
 	}
 
 	DUITRACE(_T("SDL: RegisterWindow SDL_Window=%p, SDL_WindowID=%d"), info.sdlWindow, info.windowID);
 
 	m_smap[id] = info;
-	return TRUE;
+	return uiTrue;
 }
 
 void CWindowSDL::UnRegisterWindow(UINT id)
@@ -368,7 +368,7 @@ void CWindowSDL::UnRegisterWindow(UINT id)
 	m_smap.erase(id);
 }
 
-BOOL CWindowSDL::FindWindowInfo(UINT id, WindowInfo* pInfo)
+uiBool CWindowSDL::FindWindowInfo(UINT id, WindowInfo* pInfo)
 {
 	CDuiInnerLock lock(&m_smap_lock);
 
@@ -377,54 +377,54 @@ BOOL CWindowSDL::FindWindowInfo(UINT id, WindowInfo* pInfo)
 	{
 		if (pInfo)
 			memcpy(pInfo, &it->second, sizeof(WindowInfo));
-		return TRUE;
+		return uiTrue;
 	}
-	return FALSE;
+	return uiFalse;
 }
 
-BOOL CWindowSDL::FindWindowInfoByPtr(UIWND window, WindowInfo* pInfo)
+uiBool CWindowSDL::FindWindowInfoByPtr(UIWND window, WindowInfo* pInfo)
 {
 	CDuiInnerLock lock(&m_smap_lock);
 
-	if (!window) return FALSE;
+	if (!window) return uiFalse;
 	for (auto& pair : m_smap) 
 	{
 		if (pair.second.sdlWindow == window) 
 		{
 			if (pInfo)
 				memcpy(pInfo, &pair.second, sizeof(WindowInfo));
-			return TRUE;
+			return uiTrue;
 		}
 	}
-	return FALSE;
+	return uiFalse;
 }
 
-BOOL CWindowSDL::FindWindowInfoByPtr(CWindowWnd* pDuiWindow, WindowInfo* pInfo)
+uiBool CWindowSDL::FindWindowInfoByPtr(CWindowWnd* pDuiWindow, WindowInfo* pInfo)
 {
 	CDuiInnerLock lock(&m_smap_lock);
 
-	if (!pDuiWindow) return FALSE;
+	if (!pDuiWindow) return uiFalse;
 	for (auto& pair : m_smap)
 	{
 		if (pair.second.pDuiWindow == pDuiWindow)
 		{
 			if(pInfo)
 				memcpy(pInfo, &pair.second, sizeof(WindowInfo));
-			return TRUE;
+			return uiTrue;
 		}
 	}
-	return FALSE;
+	return uiFalse;
 }
 
-BOOL CWindowSDL::IsMainWindow(UINT windowID)
+uiBool CWindowSDL::IsMainWindow(UINT windowID)
 {
 	WindowInfo info;
 	if (!FindWindowInfo(windowID, &info))
-		return FALSE;
+		return uiFalse;
 	return info.isMainWindow;
 }
 
-BOOL CWindowSDL::SetMainWindow(UINT windowID)
+uiBool CWindowSDL::SetMainWindow(UINT windowID)
 {
 	CDuiInnerLock lock(&m_smap_lock);
 
@@ -432,24 +432,24 @@ BOOL CWindowSDL::SetMainWindow(UINT windowID)
 	{
 		if (pair.second.windowID == windowID)
 		{
-			pair.second.isMainWindow = TRUE;
+			pair.second.isMainWindow = uiTrue;
 		}
 		else
 		{
-			pair.second.isMainWindow = FALSE;
+			pair.second.isMainWindow = uiFalse;
 		}
 	}
-	return FALSE;
+	return uiFalse;
 }
 
-BOOL CWindowSDL::IsWindow(UIWND hWnd)
+uiBool CWindowSDL::IsWindow(UIWND hWnd)
 {
 	CDuiInnerLock lock(&m_smap_lock);
 
 	return FindWindowInfoByPtr(hWnd, NULL);
 }
 
-BOOL CWindowSDL::IsChildWindow(UIWND hWnd)
+uiBool CWindowSDL::IsChildWindow(UIWND hWnd)
 {
 	return SDL_GetWindowParent(hWnd) != NULL;
 }
@@ -459,7 +459,7 @@ UIWND CWindowSDL::GetParentWindow(UIWND hWnd)
 	return (UIWND)SDL_GetWindowParent(hWnd);
 }
 
-BOOL CWindowSDL::SetForeground(UIWND hWnd)
+uiBool CWindowSDL::SetForeground(UIWND hWnd)
 {
 	return SDL_RaiseWindow(hWnd);
 }
@@ -521,11 +521,11 @@ LRESULT CWindowSDL::SendMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	return payload.result;
 }
 
-BOOL CWindowSDL::PostMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+uiBool CWindowSDL::PostMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	WindowInfo info;
 	if (!FindWindowInfoByPtr(hWnd, &info))
-		return FALSE;
+		return uiFalse;
 
 	SDL_Event ev;
 	ev.type = SDL_EVENT_USER;
@@ -534,9 +534,9 @@ BOOL CWindowSDL::PostMessage(UIWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 	ev.user.data1 = (void*)(uintptr_t)wParam;
 	ev.user.data2 = (void*)(uintptr_t)lParam;
 	if (SDL_PushEvent(&ev))
-		return TRUE;
+		return uiTrue;
 	
-	return FALSE;
+	return uiFalse;
 }
 
 //模拟WM_CHAR消息
@@ -693,12 +693,12 @@ static void PrintSdlMessageInfo(SDL_Event& ev)
 	}
 }
 
-BOOL CWindowSDL::GetMessage(PVOID ev, MSG* msg)
+uiBool CWindowSDL::GetMessage(PVOID ev, MSG* msg)
 {
 	return SDL_WaitEvent((SDL_Event*)ev);
 }
 
-BOOL CWindowSDL::TranslateMessage(PVOID ev1, MSG* msg)
+uiBool CWindowSDL::TranslateMessage(PVOID ev1, MSG* msg)
 {
 	SDL_Event &ev = *(SDL_Event*)ev1;
 
@@ -714,12 +714,12 @@ BOOL CWindowSDL::TranslateMessage(PVOID ev1, MSG* msg)
 		CWindowSDL::WindowInfo info;
 		if (!CWindowSDL::FindWindowInfo(ev.window.windowID, &info))
 		{
-			return FALSE;
+			return uiFalse;
 		}
 		CWindowSDL::UnRegisterWindow(ev.window.windowID);
 		info.pDuiWindow->OnFinalMessage((UIWND)info.sdlWindow);
 		if (info.isMainWindow)
-			return FALSE; //是主窗口，退出消息循环
+			return uiFalse; //是主窗口，退出消息循环
 	}
 
 	if (ev.type == CWindowSDL::m_EVENT_SEND_MESSAGE)
@@ -868,7 +868,7 @@ BOOL CWindowSDL::TranslateMessage(PVOID ev1, MSG* msg)
 // 		}
 	}
 
-	return TRUE;
+	return uiTrue;
 }
 
 LRESULT CWindowSDL::DispatchMessage(PVOID ev1, MSG* msg)
@@ -945,10 +945,10 @@ void CWindowSDL::Invalidate()
 	SDL_PushEvent(&ev);
 }
 
-BOOL CWindowSDL::SetWindowPos(int x, int y, int cx, int cy, UINT uFlags)
+uiBool CWindowSDL::SetWindowPos(int x, int y, int cx, int cy, UINT uFlags)
 {
 	SDL_Window* pWindow = m_hWnd;
-	if (!pWindow) return FALSE;
+	if (!pWindow) return uiFalse;
 
 	bool bMove = (uFlags & SWP_NOMOVE) == 0;
 	bool bSize = (uFlags & SWP_NOSIZE) == 0;
@@ -964,49 +964,49 @@ BOOL CWindowSDL::SetWindowPos(int x, int y, int cx, int cy, UINT uFlags)
 			int screenX = parentX + x;
 			int screenY = parentY + y;
 			if (!SDL_SetWindowPosition(pWindow, screenX, screenY))
-				return FALSE;
+				return uiFalse;
 		}
 		else
 		{
 			// 独立窗口：直接设置屏幕坐标
 			if (!SDL_SetWindowPosition(pWindow, x, y))
-				return FALSE;
+				return uiFalse;
 		}
 	}
 
 	if (bSize)
 	{
 		if (!SDL_SetWindowSize(pWindow, cx, cy))
-			return FALSE;
+			return uiFalse;
 	}
 
-	return TRUE;
+	return uiTrue;
 }
 
-BOOL CWindowSDL::GetWindowRect(LPRECT lpRect)
+uiBool CWindowSDL::GetWindowRect(LPRECT lpRect)
 {
 	int x, y, w, h;
 	if (!SDL_GetWindowPosition(m_hWnd, &x, &y))
-		return FALSE;
+		return uiFalse;
 	if (!SDL_GetWindowSize(m_hWnd, &w, &h))
-		return FALSE;
+		return uiFalse;
 	lpRect->left = x;
 	lpRect->top = y;
 	lpRect->right = x + w;
 	lpRect->bottom = y + h;
-	return TRUE;
+	return uiTrue;
 }
 
-BOOL CWindowSDL::GetClientRect(LPRECT lpRect)
+uiBool CWindowSDL::GetClientRect(LPRECT lpRect)
 {
 	int w, h;
 	if (!SDL_GetWindowSize(m_hWnd, &w, &h))
-		return FALSE;
+		return uiFalse;
 	lpRect->left = 0;
 	lpRect->top = 0;
 	lpRect->right = w;
 	lpRect->bottom = h;
-	return TRUE;
+	return uiTrue;
 }
 
 #define MAPKEY_WIN32_SDL(sdl, win32)	\

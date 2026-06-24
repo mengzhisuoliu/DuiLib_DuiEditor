@@ -34,7 +34,7 @@ namespace DuiLib {
 	// 		return uState;
 	// 	}
 
-	typedef BOOL (__stdcall *PFUNCUPDATELAYEREDWINDOW)(HWND, HDC, CDuiPoint*, SIZE*, HDC, CDuiPoint*, COLORREF, BLENDFUNCTION*, DWORD);
+	typedef uiBool (__stdcall *PFUNCUPDATELAYEREDWINDOW)(HWND, HDC, CDuiPoint*, SIZE*, HDC, CDuiPoint*, COLORREF, BLENDFUNCTION*, DWORD);
 	PFUNCUPDATELAYEREDWINDOW g_fUpdateLayeredWindow = NULL;
 
 	HPEN m_hUpdateRectPen = NULL;
@@ -131,7 +131,7 @@ namespace DuiLib {
 	}
 
 
-	BOOL CPaintManagerWin32UI::InvalidateRect(UIWND hWnd, const CDuiRect*lpRect, BOOL bErase)
+	uiBool CPaintManagerWin32UI::InvalidateRect(UIWND hWnd, const CDuiRect*lpRect, uiBool bErase)
 	{
 		return ::InvalidateRect(hWnd, lpRect, bErase);
 	}
@@ -233,31 +233,31 @@ namespace DuiLib {
 		return m_bMouseCapture;
 	}
 
-	BOOL CPaintManagerWin32UI::SetTimer(UINT uElapse, TIMERINFO* pTimer)
+	uiBool CPaintManagerWin32UI::SetTimer(UINT uElapse, TIMERINFO* pTimer)
 	{
 		m_uTimerID = (++m_uTimerID) % 0xF0; //0xf1-0xfe特殊用途
 		pTimer->uWinTimer = m_uTimerID;
 		return ::SetTimer(pTimer->hWnd, pTimer->uWinTimer, uElapse, NULL) != NULL;
 	}
 
-	BOOL CPaintManagerWin32UI::KillTimer(TIMERINFO* pTimer)
+	uiBool CPaintManagerWin32UI::KillTimer(TIMERINFO* pTimer)
 	{
-		if (pTimer == NULL) return FALSE;
+		if (pTimer == NULL) return uiFalse;
 		if (!::IsWindow(pTimer->hWnd))
-			return FALSE;
+			return uiFalse;
 		return ::KillTimer(pTimer->hWnd, pTimer->uWinTimer);
 	}
 
-	BOOL CPaintManagerWin32UI::GetCursorPos(LPPOINT pt)
+	uiBool CPaintManagerWin32UI::GetCursorPos(LPPOINT pt)
 	{
-		if(!::GetCursorPos(pt)) return FALSE;
-		return TRUE;
+		if(!::GetCursorPos(pt)) return uiFalse;
+		return uiTrue;
 	}
 
-	BOOL CPaintManagerWin32UI::ScreenToClient(LPPOINT pt)
+	uiBool CPaintManagerWin32UI::ScreenToClient(LPPOINT pt)
 	{
-		if(!::ScreenToClient(GetPaintWindow(), pt)) return FALSE;
-		return TRUE;
+		if(!::ScreenToClient(GetPaintWindow(), pt)) return uiFalse;
+		return uiTrue;
 	}
 
 	void CPaintManagerWin32UI::SetWndFocus()
@@ -270,49 +270,49 @@ namespace DuiLib {
 		return ::GetFocus();
 	}
 
-	BOOL CPaintManagerWin32UI::IsZoomed()
+	uiBool CPaintManagerWin32UI::IsZoomed()
 	{
 		return ::IsZoomed(m_hWndPaint);
 	}
 
-	BOOL CPaintManagerWin32UI::IsIconic()
+	uiBool CPaintManagerWin32UI::IsIconic()
 	{
 		return ::IsIconic(m_hWndPaint);
 	}
 
-	BOOL CPaintManagerWin32UI::SetWindowPos(int x, int y, int cx, int cy, UINT uFlags)
+	uiBool CPaintManagerWin32UI::SetWindowPos(int x, int y, int cx, int cy, UINT uFlags)
 	{
-		if (!IsWindow()) return FALSE;
+		if (!IsWindow()) return uiFalse;
 		return ::SetWindowPos(m_hWndPaint, NULL, x, y, cx, cy, uFlags);
 	}
 
-	BOOL CPaintManagerWin32UI::GetWindowRect(LPRECT lpRect)
+	uiBool CPaintManagerWin32UI::GetWindowRect(LPRECT lpRect)
 	{
-		if (!IsWindow()) return FALSE;
+		if (!IsWindow()) return uiFalse;
 		return ::GetWindowRect(m_hWndPaint, lpRect);
 	}
 
-	BOOL CPaintManagerWin32UI::GetClientRect(LPRECT lpRect)
+	uiBool CPaintManagerWin32UI::GetClientRect(LPRECT lpRect)
 	{
-		if (!IsWindow()) return FALSE;
+		if (!IsWindow()) return uiFalse;
 		return ::GetClientRect(m_hWndPaint, lpRect);
 	}
 
-	BOOL CPaintManagerWin32UI::IsKeyDown(UINT uKey)
+	uiBool CPaintManagerWin32UI::IsKeyDown(UINT uKey)
 	{
 		return ::GetKeyState(uKey) < 0;
 	}
 
-	BOOL CPaintManagerWin32UI::IsKeyUp(UINT uKey)
+	uiBool CPaintManagerWin32UI::IsKeyUp(UINT uKey)
 	{
 		return ::GetKeyState(uKey) >= 0;
 	}
 
-	BOOL CPaintManagerWin32UI::IsCtrlKeyDown()		{ return ::GetKeyState(VK_CONTROL)	< 0; }
-	BOOL CPaintManagerWin32UI::IsAltKeyDown()		{ return ::GetKeyState(VK_MENU)		< 0; }
-	BOOL CPaintManagerWin32UI::IsShiftKeyDown()		{ return ::GetKeyState(VK_SHIFT)	< 0; }
-	BOOL CPaintManagerWin32UI::IsCapsLockKeyOn()	{ return ::GetKeyState(VK_CAPITAL)	< 0; }
-	BOOL CPaintManagerWin32UI::IsNumberLockKeyOn()	{ return ::GetKeyState(VK_NUMLOCK)	< 0; }
+	uiBool CPaintManagerWin32UI::IsCtrlKeyDown()		{ return ::GetKeyState(VK_CONTROL)	< 0; }
+	uiBool CPaintManagerWin32UI::IsAltKeyDown()		{ return ::GetKeyState(VK_MENU)		< 0; }
+	uiBool CPaintManagerWin32UI::IsShiftKeyDown()		{ return ::GetKeyState(VK_SHIFT)	< 0; }
+	uiBool CPaintManagerWin32UI::IsCapsLockKeyOn()	{ return ::GetKeyState(VK_CAPITAL)	< 0; }
+	uiBool CPaintManagerWin32UI::IsNumberLockKeyOn()	{ return ::GetKeyState(VK_NUMLOCK)	< 0; }
 
 	UINT CPaintManagerWin32UI::MapKeyState()
 	{
@@ -444,7 +444,7 @@ namespace DuiLib {
 
 		//RECT rcPaint = { 0 };
 		CDuiRect rcPaint;
-		if( !::GetUpdateRect(m_hWndPaint, &rcPaint, FALSE) ) 
+		if( !::GetUpdateRect(m_hWndPaint, &rcPaint, uiFalse) ) 
 			return true;
 
 		// Set focus to first control?
@@ -694,7 +694,7 @@ namespace DuiLib {
 		if(!::IsWindowVisible(m_hwndTooltip))
 		{
 			::SendMessage(m_hwndTooltip, TTM_SETTOOLINFO, 0, (LPARAM)&m_ToolTip);
-			::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, TRUE, (LPARAM)&m_ToolTip);
+			::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, uiTrue, (LPARAM)&m_ToolTip);
 		}
 
 		return true;
@@ -702,7 +702,7 @@ namespace DuiLib {
 
 	bool CPaintManagerWin32UI::OnMouseLeave(WPARAM wParam, LPARAM lParam, LRESULT& lRes)
 	{
-		if( m_hwndTooltip != NULL ) ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM) &m_ToolTip);
+		if( m_hwndTooltip != NULL ) ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, uiFalse, (LPARAM) &m_ToolTip);
 		if( m_bMouseTracking ) {
 			CDuiPoint pt;
 			CDuiRect rcWnd;
@@ -766,7 +766,7 @@ namespace DuiLib {
 
 				m_pEventHover->Event(event);
 				m_pEventHover = NULL;
-				if( m_hwndTooltip != NULL ) ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM) &m_ToolTip);
+				if( m_hwndTooltip != NULL ) ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, uiFalse, (LPARAM) &m_ToolTip);
 			}
 			if( pNewHover != m_pEventHover && pNewHover != NULL ) {
 				event.Type = UIEVENT_MOUSEENTER;
@@ -881,8 +881,8 @@ namespace DuiLib {
 	UIBitmap* CPaintManagerWin32UI::CreateControlBitmap(CControlUI* pControl, CDuiColor dwFilterColor, CControlUI* pStopControl)
 	{
 		CPaintManagerUI *pManager = pControl->GetManager();
-		if(pManager == NULL) return FALSE;
-		if(pManager->GetRoot() == NULL) return FALSE;
+		if(pManager == NULL) return uiFalse;
+		if(pManager->GetRoot() == NULL) return uiFalse;
 
 		CDuiRect rcControl = pControl->GetPos();
 		int cx = rcControl.right - rcControl.left;
@@ -903,7 +903,7 @@ namespace DuiLib {
 		pRenderClone->Init(pManager);
 
 		UIBitmap *pBitmapClone = UIGlobal::CreateBitmap();
-		pBitmapClone->CreateARGB32Bitmap(pManager->GetPaintDC(), cx, cy, TRUE);
+		pBitmapClone->CreateARGB32Bitmap(pManager->GetPaintDC(), cx, cy, uiTrue);
 		pRenderClone->SelectObject(pBitmapClone);
 
 		pRenderClone->BitBlt(0, 0, cx, cy, pRender, rcControl.left, rcControl.top, SRCCOPY);
@@ -918,8 +918,8 @@ namespace DuiLib {
 	UIBitmap* CPaintManagerWin32UI::CreateControlBackBitmap(CControlUI* pControl, const CDuiRect&rcWnd, CDuiColor dwFilterColor)
 	{
 		CPaintManagerUI *pManager = pControl->GetManager();
-		if(pManager == NULL) return FALSE;
-		if(pManager->GetRoot() == NULL) return FALSE;
+		if(pManager == NULL) return uiFalse;
+		if(pManager->GetRoot() == NULL) return uiFalse;
 
 		CControlUI *pRoot = pManager->GetRoot();
 		CDuiRect rcRoot = pRoot->GetPos();
@@ -941,7 +941,7 @@ namespace DuiLib {
 
 		//创建返回的位图，调用方需要释放。
 		UIBitmap *pBitmapClone = UIGlobal::CreateBitmap();
-		pBitmapClone->CreateARGB32Bitmap(pManager->GetPaintDC(), cx, cy, TRUE);
+		pBitmapClone->CreateARGB32Bitmap(pManager->GetPaintDC(), cx, cy, uiTrue);
 		pRenderClone->SelectObject(pBitmapClone);
 		pRenderClone->BitBlt(0, 0, cx, cy, pRender, rcWnd.left, rcWnd.top, SRCCOPY);
 
@@ -957,7 +957,7 @@ namespace DuiLib {
 		if (::IsWindow(m_pManager->GetPaintWindow()))
 		{
 			//::LockWindowUpdate(m_pManager->GetPaintWindow());
-			SetWindowRedraw(pManager->GetPaintWindow(), FALSE);
+			SetWindowRedraw(pManager->GetPaintWindow(), uiFalse);
 		}
 	}
 	CLockWindowUpdateUI::~CLockWindowUpdateUI()
@@ -965,7 +965,7 @@ namespace DuiLib {
 		if (::IsWindow(m_pManager->GetPaintWindow()))
 		{
 			//::LockWindowUpdate(NULL);
-			SetWindowRedraw(m_pManager->GetPaintWindow(), TRUE);
+			SetWindowRedraw(m_pManager->GetPaintWindow(), uiTrue);
 			m_pManager->Invalidate();
 		}
 	}

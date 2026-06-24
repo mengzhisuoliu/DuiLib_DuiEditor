@@ -154,7 +154,7 @@ namespace DuiLib
 		delete this;
 	}
 
-	BOOL CEditWndSDL::OnSdlEvent(const void* pEvent)
+	uiBool CEditWndSDL::OnSdlEvent(const void* pEvent)
 	{
 		SDL_Event* ev = (SDL_Event*)pEvent;
 		// 处理预编辑文本（IME 组合状态）
@@ -165,7 +165,7 @@ namespace DuiLib
 			m_compositionCursor = ev->edit.start;  // 光标在组合字符串中的偏移（字符数）
 			// 注意：ev->edit.length 是选中的长度，可根据需要处理
 			Invalidate();   // 刷新显示
-			return TRUE;
+			return uiTrue;
 		}
 		else if (ev->type == SDL_EVENT_TEXT_INPUT)
 		{
@@ -178,26 +178,26 @@ namespace DuiLib
 			CDuiString s = CDuiStringUtf8(ev->text.text);
 			InsertText(s);
 			Invalidate();
-			return TRUE;
+			return uiTrue;
 		}
 		else if (ev->type == SDL_EVENT_WINDOW_MOUSE_ENTER)
 		{
 			GetManager()->SetCursor(DUI_IBEAM);
-			return TRUE;
+			return uiTrue;
 		}
 		else if (ev->type == SDL_EVENT_WINDOW_MOUSE_LEAVE)
 		{
 			GetManager()->SetCursor(DUI_ARROW);
-			return TRUE;
+			return uiTrue;
 		}
 		else if (ev->type == SDL_EVENT_MOUSE_BUTTON_DOWN)
 		{
-			return FALSE;
+			return uiFalse;
 		}
-		return FALSE;
+		return uiFalse;
 	}
 
-	LRESULT CEditWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CEditWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		m_pm.SetForceUseSharedRes(true);
 		m_pm.Init(m_hWnd, NULL, this);
@@ -205,7 +205,7 @@ namespace DuiLib
 		return 0;
 	}
 
-	LRESULT CEditWndSDL::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CEditWndSDL::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		CDuiRect rcClient;
 		GetClientRect(&rcClient);
@@ -364,7 +364,7 @@ namespace DuiLib
 		return 0;
 	}
 
-	LRESULT CEditWndSDL::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CEditWndSDL::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		// 如果有组合文本，按下任意编辑键时清除组合
 		if (!m_sComposition.IsEmpty())
@@ -428,7 +428,7 @@ namespace DuiLib
 		return 0;
 	}
 
-	LRESULT CEditWndSDL::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CEditWndSDL::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 // 		TCHAR ch = (TCHAR)wParam;
 // 		if (ch >= 0x20 || ch == _T('\t') || (IsMultiLine() && ch == _T('\n')))
@@ -437,7 +437,7 @@ namespace DuiLib
 		return 0;
 	}
 
-	LRESULT CEditWndSDL::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CEditWndSDL::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		CDuiPoint pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 		int newPos = GetCharPosFromPoint(pt);
@@ -460,7 +460,7 @@ namespace DuiLib
 		return 0;
 	}
 
-	LRESULT CEditWndSDL::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CEditWndSDL::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		if (m_bDragging)
 		{
@@ -477,7 +477,7 @@ namespace DuiLib
 		return 0;
 	}
 
-	LRESULT CEditWndSDL::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CEditWndSDL::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		if (!m_bDragging) return 0;
 
@@ -494,7 +494,7 @@ namespace DuiLib
 		return 0;
 	}
 
-	LRESULT CEditWndSDL::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CEditWndSDL::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		// 启动文本输入
 		SDL_StartTextInput(m_hWnd);
@@ -513,7 +513,7 @@ namespace DuiLib
 		return 0;
 	}
 
-	LRESULT CEditWndSDL::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CEditWndSDL::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		// 关闭光标闪烁
 		GetManager()->KillTimer(m_pOwner, m_caretTimerID);
@@ -534,7 +534,7 @@ namespace DuiLib
 		return 0;
 	}
 
-	LRESULT CEditWndSDL::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CEditWndSDL::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		m_bDrawCaret = !m_bDrawCaret;
 		Invalidate();

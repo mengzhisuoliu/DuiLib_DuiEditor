@@ -174,7 +174,7 @@ LRESULT CUIFrameWndBase::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lPara
 	return S_FALSE;
 }
 
-LRESULT CUIFrameWndBase::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CUIFrameWndBase::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	//当你的窗口移动到DPI不同的显示器上时，会收到 WM_DPICHANGED 消息。
 	//直接修改当前显示设置改动dpi，不会收到此消息
@@ -228,20 +228,20 @@ LRESULT CUIFrameWndBase::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lP
 		CUIForm *pForm = (CUIForm *)m_listForm.GetAt(i);
 		if(pForm->OnCustomMessage(uMsg, wParam, lParam))
 		{
-			bHandled = TRUE;
+			bHandled = uiTrue;
 			return 0;
 		}
 	}
 
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CUIFrameWndBase::HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CUIFrameWndBase::HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	if(uMsg == UIMSG_MENUCLICK)
 	{
-		bHandled = TRUE;
+		bHandled = uiTrue;
 
 		MenuCmd* pMenuCmd = (MenuCmd*)wParam;
 		if(pMenuCmd)
@@ -249,7 +249,7 @@ LRESULT CUIFrameWndBase::HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPAR
 			if(OnMenuCommand(pMenuCmd))
 			{
 				delete pMenuCmd;
-				bHandled = TRUE;
+				bHandled = uiTrue;
 				return 0;
 			}
 
@@ -259,7 +259,7 @@ LRESULT CUIFrameWndBase::HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPAR
 				if(pForm->OnMenuCommand(pMenuCmd))
 				{
 					delete pMenuCmd;
-					bHandled = TRUE;
+					bHandled = uiTrue;
 					return 0; 
 				}
 			}
@@ -270,14 +270,14 @@ LRESULT CUIFrameWndBase::HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPAR
 	}
 	else if(uMsg == UIMSG_MENU_UPDATE_COMMAND_UI)
 	{
-		bHandled = TRUE;
+		bHandled = uiTrue;
 
 		CMenuCmdUI* pCmdUI = (CMenuCmdUI *)wParam;
 		if(pCmdUI)
 		{
 			if(OnMenuUpdateCommandUI(pCmdUI))
 			{
-				bHandled = TRUE;
+				bHandled = uiTrue;
 				return 1;
 			}
 
@@ -286,7 +286,7 @@ LRESULT CUIFrameWndBase::HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPAR
 				CUIForm *pForm = (CUIForm *)m_listForm.GetAt(i);
 				if(pForm->OnMenuUpdateCommandUI(pCmdUI))
 				{
-					bHandled = TRUE;
+					bHandled = uiTrue;
 					return 1; 
 				}
 			}
@@ -385,7 +385,7 @@ void CUIFrameWndBase::UIAction(TUIAction *act, bool bAsync)
 		CGridUI *pGrid = dynamic_cast<CGridUI *>(pControl);
 		if(pGrid)
 		{
-			BOOL bNeedUpdate = (BOOL)act->wParam;
+			uiBool bNeedUpdate = (uiBool)act->wParam;
 			pGrid->Refresh(bNeedUpdate);
 		}
 		return;
@@ -393,7 +393,7 @@ void CUIFrameWndBase::UIAction(TUIAction *act, bool bAsync)
 
 	if (act->action == UIACTION_SetVisible)
 	{
-		pControl->SetVisible((BOOL)act->wParam == TRUE);
+		pControl->SetVisible((uiBool)act->wParam == uiTrue);
 		return;
 	}
 
@@ -404,9 +404,9 @@ void CUIFrameWndBase::UIAction(TUIAction *act, bool bAsync)
 	}
 }
 
-BOOL CUIFrameWndBase::IsInStaticControl(CControlUI *pControl)
+uiBool CUIFrameWndBase::IsInStaticControl(CControlUI *pControl)
 {
-	BOOL bRet = FALSE;
+	uiBool bRet = uiFalse;
 	if (!pControl)
 	{
 		return bRet;
@@ -432,7 +432,7 @@ BOOL CUIFrameWndBase::IsInStaticControl(CControlUI *pControl)
 			pParent = pParent->GetParent();
 		}
 
-		bRet = TRUE;
+		bRet = uiTrue;
 	}
 
 	return bRet;

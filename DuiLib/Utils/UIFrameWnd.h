@@ -36,12 +36,12 @@ public:
 	virtual void Notify(TNotifyUI& msg) override;
 
 	virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled) override;
-	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT HandleMenuCommandMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
 public:
 	virtual void InitWindow(){}
 
-	virtual BOOL IsInStaticControl(CControlUI* pControl);
+	virtual uiBool IsInStaticControl(CControlUI* pControl);
 protected:
 	virtual void __InitWindow();
 	virtual void UIAction(TUIAction *act, bool bAsync);

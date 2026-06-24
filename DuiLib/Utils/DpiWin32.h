@@ -34,7 +34,7 @@ namespace DuiLib
 		int GetDPIOfMonitorNearestToPoint(CDuiPoint pt);
 	public:
 		PROCESS_DPI_AWARENESS GetDPIAwareness();
-		BOOL SetDPIAwareness(PROCESS_DPI_AWARENESS Awareness);
+		uiBool SetDPIAwareness(PROCESS_DPI_AWARENESS Awareness);
 		virtual UINT GetDPI() override;
 		virtual UINT GetScale() override;
 		virtual int ScaleInt(int iValue) override;

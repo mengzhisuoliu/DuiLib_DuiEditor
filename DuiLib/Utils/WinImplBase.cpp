@@ -84,39 +84,39 @@ namespace DuiLib
 		return S_FALSE;
 	}
 
-	LRESULT WindowImplBase::OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT WindowImplBase::OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 	{
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 
-	LRESULT WindowImplBase::OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT WindowImplBase::OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 	{
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 
 #if defined(WIN32) && !defined(UNDER_CE)
-	LRESULT WindowImplBase::OnNcActivate(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT WindowImplBase::OnNcActivate(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, uiBool& bHandled)
 	{
-		if( ::IsIconic(*this) ) bHandled = FALSE;
-		return (wParam == 0) ? TRUE : FALSE;
+		if( ::IsIconic(*this) ) bHandled = uiFalse;
+		return (wParam == 0) ? uiTrue : uiFalse;
 	}
 
-	LRESULT WindowImplBase::OnNcCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT WindowImplBase::OnNcCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		return 0;
 	}
 
-	LRESULT WindowImplBase::OnNcPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT WindowImplBase::OnNcPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& /*bHandled*/)
 	{
 		return 0;
 	}
 
 
-	BOOL WindowImplBase::IsInStaticControl(CControlUI *pControl)
+	uiBool WindowImplBase::IsInStaticControl(CControlUI *pControl)
 	{
-		BOOL bRet = FALSE;
+		uiBool bRet = uiFalse;
 		if (!pControl)
 		{
 			return bRet;
@@ -142,13 +142,13 @@ namespace DuiLib
 				pParent = pParent->GetParent();
 			}
 
-			bRet = TRUE;
+			bRet = uiTrue;
 		}
 
 		return bRet;
 	}
 
-	LRESULT WindowImplBase::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT WindowImplBase::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		CDuiPoint pt; pt.x = GET_X_LPARAM(lParam); pt.y = GET_Y_LPARAM(lParam);
 		::ScreenToClient(*this, &pt);
@@ -196,7 +196,7 @@ namespace DuiLib
 		return HTCLIENT;
 	}
 
-	LRESULT WindowImplBase::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT WindowImplBase::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		MONITORINFO Monitor = {};
 		Monitor.cbSize = sizeof(Monitor);
@@ -218,24 +218,24 @@ namespace DuiLib
 		lpMMI->ptMinTrackSize.x = m_pm.GetMinInfo().cx;
 		lpMMI->ptMinTrackSize.y = m_pm.GetMinInfo().cy;
 
-		bHandled = TRUE;
+		bHandled = uiTrue;
 		return 0;
 	}
 
-	LRESULT WindowImplBase::OnMouseWheel(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT WindowImplBase::OnMouseWheel(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 	{
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 
-	LRESULT WindowImplBase::OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT WindowImplBase::OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 #endif
 
-	LRESULT WindowImplBase::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT WindowImplBase::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		CDuiSize szRoundCorner = m_pm.GetRoundCorner();
 #if defined(WIN32) && !defined(UNDER_CE)
@@ -245,30 +245,30 @@ namespace DuiLib
 			rcWnd.Offset(-rcWnd.left, -rcWnd.top);
 			rcWnd.right++; rcWnd.bottom++;
 			HRGN hRgn = ::CreateRoundRectRgn(rcWnd.left, rcWnd.top, rcWnd.right, rcWnd.bottom, szRoundCorner.cx, szRoundCorner.cy);
-			::SetWindowRgn(*this, hRgn, TRUE);
+			::SetWindowRgn(*this, hRgn, uiTrue);
 			::DeleteObject(hRgn);
 		}
 #endif
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 
-	LRESULT WindowImplBase::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT WindowImplBase::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 
-	LRESULT WindowImplBase::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT WindowImplBase::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		if (wParam == SC_CLOSE)
 		{
-			bHandled = TRUE;
+			bHandled = uiTrue;
 			::SendMessage(m_hWnd, WM_CLOSE, 0, 0);
 			return 0;
 		}
 #if defined(WIN32) && !defined(UNDER_CE)
-		BOOL bZoomed = ::IsZoomed(*this);
+		uiBool bZoomed = ::IsZoomed(*this);
 		LRESULT lRes = ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
 		if( ::IsZoomed(*this) != bZoomed ) {
 			if( !bZoomed ) {
@@ -290,7 +290,7 @@ namespace DuiLib
 		return lRes;
 	}
 
-	LRESULT WindowImplBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT WindowImplBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		// 调整窗口样式
 		LONG styleValue = ::GetWindowLong(*this, GWL_STYLE);
@@ -330,46 +330,46 @@ namespace DuiLib
 		return 0;
 	}
 
-	LRESULT WindowImplBase::OnKeyDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT WindowImplBase::OnKeyDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 	{
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 
-	LRESULT WindowImplBase::OnKillFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT WindowImplBase::OnKillFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 	{
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 
-	LRESULT WindowImplBase::OnSetFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT WindowImplBase::OnSetFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 	{
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 
-	LRESULT WindowImplBase::OnLButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT WindowImplBase::OnLButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 	{
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 
-	LRESULT WindowImplBase::OnLButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT WindowImplBase::OnLButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 	{
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 
-	LRESULT WindowImplBase::OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT WindowImplBase::OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& bHandled)
 	{
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 
 	LRESULT WindowImplBase::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		LRESULT lRes = 0;
-		BOOL bHandled = TRUE;
+		uiBool bHandled = uiTrue;
 		switch (uMsg)
 		{
 		case WM_CREATE:			lRes = OnCreate(uMsg, wParam, lParam, bHandled); break;
@@ -395,7 +395,7 @@ namespace DuiLib
 		case WM_LBUTTONDOWN:	lRes = OnLButtonDown(uMsg, wParam, lParam, bHandled); break;
 		case WM_MOUSEMOVE:		lRes = OnMouseMove(uMsg, wParam, lParam, bHandled); break;
 		case WM_MOUSEHOVER:	lRes = OnMouseHover(uMsg, wParam, lParam, bHandled); break;
-		default:				bHandled = FALSE; break;
+		default:				bHandled = uiFalse; break;
 		}
 		if (bHandled) return lRes;
 
@@ -407,9 +407,9 @@ namespace DuiLib
 		return ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
 	}
 
-	LRESULT WindowImplBase::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT WindowImplBase::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 

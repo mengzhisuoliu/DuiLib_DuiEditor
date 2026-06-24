@@ -17,7 +17,7 @@ namespace DuiLib
 		virtual void DoEvent(TEventUI& event) override;
 		void OnTimer( int nTimerID );
 
-		virtual void OnAnimationStart(int nAnimationID, BOOL bFirstLoop) override {}
+		virtual void OnAnimationStart(int nAnimationID, uiBool bFirstLoop) override {}
 		virtual void OnAnimationStep(int nTotalFrame, int nCurFrame, int nAnimationID) override;
 		virtual void OnAnimationStop(int nAnimationID) override;
 

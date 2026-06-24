@@ -1032,25 +1032,25 @@ namespace DuiLib {
 	{
 	}
 
-	void CMenuCmdUI::Enable(BOOL bEnable)
+	void CMenuCmdUI::Enable(uiBool bEnable)
 	{
 		//m_bEnable = bOn;
-		pMenuElement->SetEnabled(bEnable == TRUE);
+		pMenuElement->SetEnabled(bEnable == uiTrue);
 	}
 
-	BOOL CMenuCmdUI::IsEnable()
+	uiBool CMenuCmdUI::IsEnable()
 	{
 		return pMenuElement->IsEnabled();
 	}
 
-	void CMenuCmdUI::SetCheck(BOOL bCheck)
+	void CMenuCmdUI::SetCheck(uiBool bCheck)
 	{
 		//m_bCheck = bCheck;
-		pMenuElement->SetChecked(bCheck == TRUE);
+		pMenuElement->SetChecked(bCheck == uiTrue);
 		
 	}
 
-	BOOL CMenuCmdUI::IsCheck()
+	uiBool CMenuCmdUI::IsCheck()
 	{
 		//return m_bCheck;
 		return pMenuElement->GetChecked();

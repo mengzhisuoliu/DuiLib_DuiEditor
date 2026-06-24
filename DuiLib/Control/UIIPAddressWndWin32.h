@@ -24,7 +24,7 @@ public:
 	void OnFinalMessage(HWND hWnd);
 
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-	LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled);
 
 	static DWORD GetLocalIpAddress();
 protected:

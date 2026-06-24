@@ -137,12 +137,12 @@ namespace DuiLib {
 		}
 	}
 
-	BOOL CPaintManagerSDLUI::InvalidateRect(UIWND hWnd, const CDuiRect*lpRect, BOOL bErase)
+	uiBool CPaintManagerSDLUI::InvalidateRect(UIWND hWnd, const CDuiRect*lpRect, uiBool bErase)
 	{
 		if (m_pWindow)
 		{
 			if (lpRect && lpRect->left == 0 && lpRect->top == 0 && lpRect->right == 0 && lpRect->bottom == 0)
-				return FALSE;
+				return uiFalse;
 
 			UIRender_Sdl* pRender = (UIRender_Sdl*)Render();
 			pRender->InvalidRect(lpRect);
@@ -160,7 +160,7 @@ namespace DuiLib {
 				SDL_PushEvent(&ev);
 			}	
 		}
-		return TRUE;
+		return uiTrue;
 	}
 
 	void CPaintManagerSDLUI::SetCursor(int nCursor)
@@ -188,39 +188,39 @@ namespace DuiLib {
 		return m_bMouseCapture;
 	}
 
-	BOOL CPaintManagerSDLUI::SetTimer(UINT uElapse, TIMERINFO* pTimer)
+	uiBool CPaintManagerSDLUI::SetTimer(UINT uElapse, TIMERINFO* pTimer)
 	{
 		pTimer->uWinTimer = SDL_AddTimer(uElapse, Callback_SDL_Timer, pTimer);
 		return pTimer->uWinTimer != 0;
 	}
 
-	BOOL CPaintManagerSDLUI::KillTimer(TIMERINFO* pTimer)
+	uiBool CPaintManagerSDLUI::KillTimer(TIMERINFO* pTimer)
 	{
-		if (pTimer == NULL || pTimer->uWinTimer == 0) return FALSE;
+		if (pTimer == NULL || pTimer->uWinTimer == 0) return uiFalse;
 		if (SDL_RemoveTimer(pTimer->uWinTimer))
 		{
-			return TRUE;
+			return uiTrue;
 		}
-		return FALSE;
+		return uiFalse;
 	}
 
-	BOOL CPaintManagerSDLUI::GetCursorPos(LPPOINT pt)
+	uiBool CPaintManagerSDLUI::GetCursorPos(LPPOINT pt)
 	{
 		float x, y;
 // 		SDL_GetMouseState(&x, &y);
 		SDL_GetGlobalMouseState(&x, &y);
 		pt->x = (int)x;
 		pt->y = (int)y;
-		return TRUE;
+		return uiTrue;
 	}
 
-	BOOL CPaintManagerSDLUI::ScreenToClient(LPPOINT pt)
+	uiBool CPaintManagerSDLUI::ScreenToClient(LPPOINT pt)
 	{
 		int wx, wy;
 		SDL_GetWindowPosition(m_hWndPaint, &wx, &wy);
 		pt->x -= wx;
 		pt->y -= wy;
-		return TRUE;
+		return uiTrue;
 	}
 
 	void CPaintManagerSDLUI::SetWndFocus()
@@ -233,85 +233,85 @@ namespace DuiLib {
 		return NULL;
 	}
 
-	BOOL CPaintManagerSDLUI::IsZoomed()
+	uiBool CPaintManagerSDLUI::IsZoomed()
 	{
 		Uint64 flags = SDL_GetWindowFlags(m_hWndPaint);
 		return (flags & SDL_WINDOW_MAXIMIZED) == SDL_WINDOW_MAXIMIZED;
 	}
 
-	BOOL CPaintManagerSDLUI::IsIconic()
+	uiBool CPaintManagerSDLUI::IsIconic()
 	{
 		Uint64 flags = SDL_GetWindowFlags(m_hWndPaint);
 		return (flags & SDL_WINDOW_MINIMIZED) == SDL_WINDOW_MINIMIZED;
 	}
 
-	BOOL CPaintManagerSDLUI::SetWindowPos(int x, int y, int cx, int cy, UINT uFlags)
+	uiBool CPaintManagerSDLUI::SetWindowPos(int x, int y, int cx, int cy, UINT uFlags)
 	{
-		if (!IsWindow()) return FALSE;
+		if (!IsWindow()) return uiFalse;
 		return m_pWindow->SetWindowPos(x, y, cx, cy, uFlags);
 	}
 
-	BOOL CPaintManagerSDLUI::GetWindowRect(LPRECT lpRect)
+	uiBool CPaintManagerSDLUI::GetWindowRect(LPRECT lpRect)
 	{
-		if (!IsWindow()) return FALSE;
+		if (!IsWindow()) return uiFalse;
 		return m_pWindow->GetWindowRect(lpRect);
 	}
 
-	BOOL CPaintManagerSDLUI::GetClientRect(LPRECT lpRect)
+	uiBool CPaintManagerSDLUI::GetClientRect(LPRECT lpRect)
 	{
-		if (!IsWindow()) return FALSE;
+		if (!IsWindow()) return uiFalse;
 		return m_pWindow->GetClientRect(lpRect);
 	}
 
-	BOOL CPaintManagerSDLUI::IsKeyDown(UINT uKey)
+	uiBool CPaintManagerSDLUI::IsKeyDown(UINT uKey)
 	{
 		auto it = DuiLibWindowWnd::m_keyWin32ToSdl.find(uKey);
 		if (it == DuiLibWindowWnd::m_keyWin32ToSdl.end())
-			return FALSE;
+			return uiFalse;
 		const bool* state = SDL_GetKeyboardState(NULL);
 		SDL_Scancode scancode = SDL_GetScancodeFromKey((SDL_Keycode)it->second, NULL);
 		return state[scancode];
 	}
 
-	BOOL CPaintManagerSDLUI::IsKeyUp(UINT uKey)
+	uiBool CPaintManagerSDLUI::IsKeyUp(UINT uKey)
 	{
 		return !IsKeyDown(uKey);
 	}
 
-	BOOL CPaintManagerSDLUI::IsCtrlKeyDown()		
+	uiBool CPaintManagerSDLUI::IsCtrlKeyDown()		
 	{ 
 		const bool* state = SDL_GetKeyboardState(NULL);
 		return (state[SDL_SCANCODE_LCTRL] || state[SDL_SCANCODE_RCTRL]);
 	}
 
-	BOOL CPaintManagerSDLUI::IsAltKeyDown()			
+	uiBool CPaintManagerSDLUI::IsAltKeyDown()			
 	{ 
 		const bool* state = SDL_GetKeyboardState(NULL);
 		return (state[SDL_SCANCODE_LALT] || state[SDL_SCANCODE_RALT]);
 	}
 
-	BOOL CPaintManagerSDLUI::IsShiftKeyDown()			
+	uiBool CPaintManagerSDLUI::IsShiftKeyDown()			
 	{ 
 		const bool* state = SDL_GetKeyboardState(NULL);
 		return (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT]);
 	}
 
-	BOOL CPaintManagerSDLUI::IsCapsLockKeyOn()		
+	uiBool CPaintManagerSDLUI::IsCapsLockKeyOn()		
 	{ 
 		//const bool* state = SDL_GetKeyboardState(NULL);
 		//return state[SDL_SCANCODE_CAPSLOCK];
 		//上面代码只是获取当前的按下状态,而不是锁状态
 		//跨平台方案暂不实现
-		return FALSE;
+		return uiFalse;
 	}
 
-	BOOL CPaintManagerSDLUI::IsNumberLockKeyOn()	
+	uiBool CPaintManagerSDLUI::IsNumberLockKeyOn()	
 	{ 
 		//const bool* state = SDL_GetKeyboardState(NULL);
 		//return state[SDL_SCANCODE_NUMLOCKCLEAR];
 		//上面代码只是获取当前的按下状态,而不是锁状态
 		//跨平台方案暂不实现
-		return FALSE;
+		return uiFalse;
 	}
 
 	UINT CPaintManagerSDLUI::MapKeyState()

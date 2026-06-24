@@ -31,7 +31,7 @@ namespace DuiLib {
 		m_vSpareFonts.clear();
 	}
 
-	BOOL UIFont_SDL::CreateDefaultFont()
+	uiBool UIFont_SDL::CreateDefaultFont()
 	{
 		DeleteObject();
 		return _buildFont(NULL);
@@ -69,11 +69,11 @@ namespace DuiLib {
 		return iSize;
 	}
 
-	BOOL UIFont_SDL::_buildFont(CPaintManagerUI *pManager)
+	uiBool UIFont_SDL::_buildFont(CPaintManagerUI *pManager)
 	{
 		int nFontCount = CPaintManagerUI::m_aFontFiles.GetSize();
 		if (nFontCount == 0)
-			return FALSE;
+			return uiFalse;
 
 		// DPI 相关计算
 		int dpi = 96;
@@ -121,10 +121,10 @@ namespace DuiLib {
 		// 创建主字体
 		tagFontFile* mainTtf = static_cast<tagFontFile*>(CPaintManagerUI::m_aFontFiles.GetAt(mainFontIndex));
 		if (!mainTtf)
-			return FALSE;
+			return uiFalse;
 		CDuiStringUtf8 utf8Path(mainTtf->sPathName);
 		m_pTTF = TTF_OpenFont(utf8Path.toString(), ptsize);
-		if (!m_pTTF) return FALSE;   // 主字体创建失败则整体失败
+		if (!m_pTTF) return uiFalse;   // 主字体创建失败则整体失败
 		TTF_SetFontSizeDPI(m_pTTF, ptsize, dpi, dpi);
 
 		// 创建备用字体（遍历所有字体，跳过主字体使用的那个文件）
@@ -147,7 +147,7 @@ namespace DuiLib {
 				}
 			}
 		}
-		return TRUE;
+		return uiTrue;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -167,9 +167,9 @@ namespace DuiLib {
 		
 	}
 
-	BOOL UIPen_SDL::CreatePen(int nStyle, int nWidth, CDuiColor dwColor)
+	uiBool UIPen_SDL::CreatePen(int nStyle, int nWidth, CDuiColor dwColor)
 	{
-		return FALSE;
+		return uiFalse;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -190,14 +190,14 @@ namespace DuiLib {
 		
 	}
 
-	BOOL UIBrush_SDL::CreateSolidBrush(CDuiColor clr)
+	uiBool UIBrush_SDL::CreateSolidBrush(CDuiColor clr)
 	{
-        return FALSE;
+        return uiFalse;
 	}
 
-	BOOL UIBrush_SDL::CreateBitmapBrush(UIBitmap *bitmap)
+	uiBool UIBrush_SDL::CreateBitmapBrush(UIBitmap *bitmap)
 	{
-        return FALSE;
+        return uiFalse;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -218,29 +218,29 @@ namespace DuiLib {
 
 	}
 
-	BOOL UIPath_SDL::Beginpath()
+	uiBool UIPath_SDL::Beginpath()
 	{
-		return TRUE;
+		return uiTrue;
 	}
 
-	BOOL UIPath_SDL::EndPath()
+	uiBool UIPath_SDL::EndPath()
 	{
-		return TRUE;
+		return uiTrue;
 	}
 
-	BOOL UIPath_SDL::AbortPath()
+	uiBool UIPath_SDL::AbortPath()
 	{
-		return TRUE;
+		return uiTrue;
 	}
 
-	BOOL UIPath_SDL::AddLine(int x1, int y1, int x2, int y2)
+	uiBool UIPath_SDL::AddLine(int x1, int y1, int x2, int y2)
 	{
-		return TRUE;
+		return uiTrue;
 	}
 
-	BOOL UIPath_SDL::AddLines(CDuiPoint *points, int count)
+	uiBool UIPath_SDL::AddLines(CDuiPoint *points, int count)
 	{
-		return TRUE;
+		return uiTrue;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -275,7 +275,7 @@ namespace DuiLib {
 	}
 
 
-	BOOL UIBitmap_SDL::CreateFromData(LPBYTE pImage, int width, int height, CDuiColor mask)
+	uiBool UIBitmap_SDL::CreateFromData(LPBYTE pImage, int width, int height, CDuiColor mask)
 	{
 		DeleteObject();
 
@@ -320,7 +320,7 @@ namespace DuiLib {
 		return m_nHeight;
 	}
 
-	BOOL UIBitmap_SDL::IsAlpha()
+	uiBool UIBitmap_SDL::IsAlpha()
 	{
 		return 0;
 	}
@@ -341,9 +341,9 @@ namespace DuiLib {
 		DeleteAllTextures();
 	}
 
-	BOOL UIBitmap_SDL::SaveFile(LPCTSTR pstrFileName)
+	uiBool UIBitmap_SDL::SaveFile(LPCTSTR pstrFileName)
 	{
-		return FALSE;
+		return uiFalse;
 	}
 
 	SDL_Texture* UIBitmap_SDL::GetTexture(SDL_Renderer* pRenderer)

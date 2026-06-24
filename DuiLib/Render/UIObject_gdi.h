@@ -15,7 +15,7 @@ namespace DuiLib {
 
 		virtual void DeleteObject() override;
 
-		virtual BOOL CreateDefaultFont() override;
+		virtual uiBool CreateDefaultFont() override;
 
 		virtual UINT_PTR  GetHandle() override;
 		virtual HFONT GetHFONT(CPaintManagerUI *pManager=NULL) override;
@@ -27,7 +27,7 @@ namespace DuiLib {
 	protected:
 		virtual ~UIFont_gdi();
 
-		virtual BOOL _buildFont(CPaintManagerUI *pManager=NULL) override;
+		virtual uiBool _buildFont(CPaintManagerUI *pManager=NULL) override;
 	protected:
 		HFONT m_hFont;
 		TEXTMETRIC tm;
@@ -44,7 +44,7 @@ namespace DuiLib {
 
 		virtual HPEN GetHPEN() const override;
 
-		virtual BOOL CreatePen(int nStyle, int nWidth, CDuiColor dwColor) override;
+		virtual uiBool CreatePen(int nStyle, int nWidth, CDuiColor dwColor) override;
 
 	protected:
 		virtual ~UIPen_gdi();
@@ -61,27 +61,27 @@ namespace DuiLib {
 
 		virtual void DeleteObject() override;
 
-		virtual BOOL CreateFromHBitmap(HBITMAP hBitmap) override;
+		virtual uiBool CreateFromHBitmap(HBITMAP hBitmap) override;
 
-		virtual BOOL CreateARGB32Bitmap(HDC hDC, int width, int height, BOOL bFlip) override;
+		virtual uiBool CreateARGB32Bitmap(HDC hDC, int width, int height, uiBool bFlip) override;
 
-		virtual BOOL CreateCompatibleBitmap(HDC hDC, int width, int height) override;
+		virtual uiBool CreateCompatibleBitmap(HDC hDC, int width, int height) override;
 
-		virtual BOOL CreateFromData(LPBYTE pImage, int width, int height, CDuiColor mask) override;
+		virtual uiBool CreateFromData(LPBYTE pImage, int width, int height, CDuiColor mask) override;
 
 		virtual UINT_PTR  GetHandle()	override;
 		virtual HBITMAP GetHBITMAP() override;
 		virtual BYTE* GetBits() override;
 		virtual int	GetWidth() override;
 		virtual int GetHeight() override;
-		virtual BOOL IsAlpha() override;
+		virtual uiBool IsAlpha() override;
 
 		virtual UIBitmap *Clone() override;
 
 		virtual void Clear() override;
 		virtual void ClearAlpha(const CDuiRect &rc, int alpha = 0) override;
 
-		virtual BOOL SaveFile(LPCTSTR pstrFileName) override;
+		virtual uiBool SaveFile(LPCTSTR pstrFileName) override;
 	protected:
 		virtual ~UIBitmap_gdi();
 	protected:
@@ -89,7 +89,7 @@ namespace DuiLib {
 		BYTE	*m_pBits;
 		int		m_nWidth;
 		int		m_nHeight;
-		BOOL	m_bAlphaChannel;
+		uiBool	m_bAlphaChannel;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +101,7 @@ namespace DuiLib {
 
 		virtual void DeleteObject() override;
 
-		virtual BOOL CreateImage(HBITMAP hBitmap, bool bAlpha) override;
+		virtual uiBool CreateImage(HBITMAP hBitmap, bool bAlpha) override;
 	protected:
 		virtual ~UIImage_gdi();
 	};
@@ -117,9 +117,9 @@ namespace DuiLib {
 
 		virtual HBRUSH GetHBrush() const override;
 
-		virtual BOOL CreateFromHBrush(HBRUSH hBrush) override;
-		virtual BOOL CreateSolidBrush(CDuiColor clr) override;
-		virtual BOOL CreateBitmapBrush(UIBitmap *bitmap) override;
+		virtual uiBool CreateFromHBrush(HBRUSH hBrush) override;
+		virtual uiBool CreateSolidBrush(CDuiColor clr) override;
+		virtual uiBool CreateBitmapBrush(UIBitmap *bitmap) override;
 
 	protected:
 		virtual ~UIBrush_gdi();
@@ -139,12 +139,12 @@ namespace DuiLib {
 
 		virtual void DeleteObject() override;
 
-		virtual BOOL Beginpath() override;
-		virtual BOOL EndPath() override;
-		virtual BOOL AbortPath() override;
+		virtual uiBool Beginpath() override;
+		virtual uiBool EndPath() override;
+		virtual uiBool AbortPath() override;
 
-		virtual BOOL AddLine(int x1, int y1, int x2, int y2) override;
-		virtual BOOL AddLines(CDuiPoint *points, int count) override;
+		virtual uiBool AddLine(int x1, int y1, int x2, int y2) override;
+		virtual uiBool AddLines(CDuiPoint *points, int count) override;
 
 	protected:
 		virtual ~UIPath_gdi();

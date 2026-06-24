@@ -71,12 +71,12 @@ CUIFrameWndSDL::~CUIFrameWndSDL(void)
 	
 }
 
-LRESULT CUIFrameWndSDL::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CUIFrameWndSDL::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	return CUIFrameWndBase::HandleCustomMessage(uMsg, wParam, lParam, bHandled);
 }
 
-LRESULT CUIFrameWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CUIFrameWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	// 关联UI管理器
 	GetManager()->Init(GetHWND(), GetManagerName(), this);
@@ -119,7 +119,7 @@ LRESULT CUIFrameWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	return 0;
 }
 
-LRESULT CUIFrameWndSDL::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CUIFrameWndSDL::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	CDuiPoint ptEvent(lParam);
 
@@ -151,15 +151,15 @@ LRESULT CUIFrameWndSDL::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 		else if (rcRight.PtInRect(ptEvent))			SetCursor(DUI_SIZEWE);
 		else if (rcBottom.PtInRect(ptEvent))			SetCursor(DUI_SIZENS);
 
-		bHandled = TRUE;
+		bHandled = uiTrue;
 		return 0;
 	}
 
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CUIFrameWndSDL::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CUIFrameWndSDL::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	if (wParam == SC_MINIMIZE)
 	{

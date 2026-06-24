@@ -31,7 +31,7 @@ namespace DuiLib {
 	}
 
 
-	BOOL CMenuWndWin32::Receive(ContextMenuParam param)
+	uiBool CMenuWndWin32::Receive(ContextMenuParam param)
 	{
 		switch (param.wParam)
 		{
@@ -56,7 +56,7 @@ namespace DuiLib {
 			break;
 		}
 
-		return TRUE;
+		return uiTrue;
 	}
 
 	CMenuWndWin32* CMenuWndWin32::CreateMenu(CMenuElementUI* pOwner, STRINGorID xml, CDuiPoint point, CPaintManagerUI* pMainPaintManager, CStdStringPtrMap* pMenuCheckInfo /*= NULL*/, DWORD dwAlignment /*= eMenuAlignment_Left | eMenuAlignment_Top*/)
@@ -135,7 +135,7 @@ namespace DuiLib {
 		while( ::GetParent(hWndParent) != NULL ) hWndParent = ::GetParent(hWndParent);
 
 		::ShowWindow(m_hWnd, SW_SHOW);
-		::SendMessage(hWndParent, WM_NCACTIVATE, TRUE, 0L);
+		::SendMessage(hWndParent, WM_NCACTIVATE, uiTrue, 0L);
 	}
 
 	LPCTSTR CMenuWndWin32::GetWindowClassName() const
@@ -199,7 +199,7 @@ namespace DuiLib {
 		}
 	}
 
-	LRESULT CMenuWndWin32::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CMenuWndWin32::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		bool bShowShadow = false;
 		if( m_pOwner != NULL) {
@@ -403,7 +403,7 @@ namespace DuiLib {
 		}
 
 		::SetWindowPos(m_hWnd, HWND_TOPMOST, ptBase.x, ptBase.y, nWidth, nHeight, SWP_SHOWWINDOW);
-		::MoveWindow(m_hWnd, ptBase.x, ptBase.y, nWidth, nHeight, FALSE);
+		::MoveWindow(m_hWnd, ptBase.x, ptBase.y, nWidth, nHeight, uiFalse);
 	}
 
 	void CMenuWndWin32::ResizeSubMenu()
@@ -503,7 +503,7 @@ namespace DuiLib {
 			rc.right = rc.left + cxFixed;
 		}
 
-		MoveWindow(m_hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top + m_pLayout->GetInset().top + m_pLayout->GetInset().bottom, FALSE);
+		MoveWindow(m_hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top + m_pLayout->GetInset().top + m_pLayout->GetInset().bottom, uiFalse);
 	}
 
 	void CMenuWndWin32::setDPI(int DPI) {
@@ -511,11 +511,11 @@ namespace DuiLib {
 	}
 
 
-	LRESULT CMenuWndWin32::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CMenuWndWin32::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		HWND hFocusWnd = (HWND)wParam;
 
-		BOOL bInMenuWindowList = FALSE;
+		uiBool bInMenuWindowList = uiFalse;
 		ContextMenuParam param;
 		param.hWnd = GetHWND();
 
@@ -524,7 +524,7 @@ namespace DuiLib {
 		while( pReceiver != NULL ) {
 			CMenuWndWin32* pContextMenu = dynamic_cast<CMenuWndWin32*>(pReceiver);
 			if( pContextMenu != NULL && pContextMenu->GetHWND() ==  hFocusWnd ) {
-				bInMenuWindowList = TRUE;
+				bInMenuWindowList = uiTrue;
 				break;
 			}
 			pReceiver = iterator.next();
@@ -537,7 +537,7 @@ namespace DuiLib {
 		}
 		return 0;
 	}
-	LRESULT CMenuWndWin32::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CMenuWndWin32::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		CDuiSize szRoundCorner = m_pm.GetRoundCorner();
 		if( !::IsIconic(*this) ) {
@@ -546,17 +546,17 @@ namespace DuiLib {
 			rcWnd.Offset(-rcWnd.left, -rcWnd.top);
 			rcWnd.right++; rcWnd.bottom++;
 			HRGN hRgn = ::CreateRoundRectRgn(rcWnd.left, rcWnd.top, rcWnd.right, rcWnd.bottom, szRoundCorner.cx, szRoundCorner.cy);
-			::SetWindowRgn(*this, hRgn, TRUE);
+			::SetWindowRgn(*this, hRgn, uiTrue);
 			::DeleteObject(hRgn);
 		}
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 
 	LRESULT CMenuWndWin32::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		LRESULT lRes = 0;
-		BOOL bHandled = TRUE;
+		uiBool bHandled = uiTrue;
 		switch( uMsg )
 		{
 		case WM_CREATE:       
@@ -587,7 +587,7 @@ namespace DuiLib {
 			return 0L;
 			break;
 		default:
-			bHandled = FALSE;
+			bHandled = uiFalse;
 			break;
 		}
 

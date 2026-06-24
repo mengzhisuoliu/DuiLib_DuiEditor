@@ -14,7 +14,7 @@ namespace DuiLib {
 		ResetResourceMap();
 	}
 
-	BOOL CResourceManager::LoadResource(STRINGorID xml, LPCTSTR type)
+	uiBool CResourceManager::LoadResource(STRINGorID xml, LPCTSTR type)
 	{
 		if( HIWORD(xml.m_lpstr) != NULL ) 
 		{
@@ -49,12 +49,12 @@ namespace DuiLib {
 		return LoadResource(m_xml.root());
 	}
 
-	BOOL CResourceManager::LoadResource(CXmlNodeUI root)
+	uiBool CResourceManager::LoadResource(CXmlNodeUI root)
 	{
-		if( !root ) return FALSE;
+		if( !root ) return uiFalse;
 
 		CXmlNodeUI nodeRes = root.child(_T("Res"));
-		if(!nodeRes) return FALSE;
+		if(!nodeRes) return uiFalse;
 
 		//º”‘ÿÕº∆¨◊ ‘¥
 		for( CXmlNodeUI node = nodeRes.first_child() ; node; node = node.next_sibling() ) 
@@ -90,7 +90,7 @@ namespace DuiLib {
 			}
 			else continue;
 		}
-		return TRUE;
+		return uiTrue;
 	}
 
 	LPCTSTR CResourceManager::GetImagePath(LPCTSTR lpstrId)
@@ -137,18 +137,18 @@ namespace DuiLib {
 		}
 	}
 
-	BOOL CResourceManager::LoadLanguage(LPCTSTR pstrXml)
+	uiBool CResourceManager::LoadLanguage(LPCTSTR pstrXml)
 	{
 		CXmlDocumentUI xml;
 		if( *(pstrXml) == _T('<') ) {
-			if( !xml.load_string(pstrXml) ) return FALSE;
+			if( !xml.load_string(pstrXml) ) return uiFalse;
 		}
 		else {
-			if( !xml.load_file(pstrXml) ) return FALSE;
+			if( !xml.load_file(pstrXml) ) return uiFalse;
 		}
 
 		CXmlNodeUI nodeRes = xml.child(_T("Res"));
-		if( !nodeRes ) return FALSE;
+		if( !nodeRes ) return uiFalse;
 
 		LPCTSTR pstrClass = NULL;
 		int nAttributes = 0;
@@ -182,7 +182,7 @@ namespace DuiLib {
 			else continue;
 		}
 
-		return TRUE;
+		return uiTrue;
 	}
 
 	CDuiString CResourceManager::GetText(LPCTSTR lpstrId, LPCTSTR lpstrType)

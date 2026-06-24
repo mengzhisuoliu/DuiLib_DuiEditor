@@ -33,7 +33,7 @@ bool CUIApplicationSDL::InitInstance(int argc, char* argv[])
 		return false;
 
 	TTF_Init();
-	GFX_Init();
+	//GFX_Init();
 
 	// 初始化资源
 	InitResource();
@@ -55,7 +55,7 @@ int CUIApplicationSDL::ExitInstance()
 {
 	if (m_pMainWnd != NULL) { delete m_pMainWnd; m_pMainWnd = NULL; }
 	CPaintManagerUI::Term();
-	GFX_Quit();
+	//GFX_Quit();
 	TTF_Quit();
 	SDL_Quit();
 	return 0;

@@ -8,7 +8,7 @@ namespace DuiLib {
 	//
 	IMPLEMENT_DUICONTROL(CListExUI)
 
-	CListExUI::CListExUI() : m_pEditUI(NULL), m_pComboBoxUI(NULL), m_bAddMessageFilter(FALSE),m_nRow(-1),m_nColum(-1),m_pXCallback(NULL)
+	CListExUI::CListExUI() : m_pEditUI(NULL), m_pComboBoxUI(NULL), m_bAddMessageFilter(uiFalse),m_nRow(-1),m_nColum(-1),m_pXCallback(NULL)
 	{
 	}
 
@@ -27,17 +27,17 @@ namespace DuiLib {
 		if( _tcsicmp(pstrName, _T("ListEx")) == 0 ) return static_cast<IListOwnerUI*>(this);
 		return CListUI::GetInterface(pstrName);
 	}
-	BOOL CListExUI::CheckColumEditable(int nColum)
+	uiBool CListExUI::CheckColumEditable(int nColum)
 	{
 		CListContainerHeaderItemUI* pHItem = static_cast<CListContainerHeaderItemUI*>(m_pHeader->GetItemAt(nColum));
-		return pHItem != NULL? pHItem->GetColumeEditable() : FALSE;
+		return pHItem != NULL? pHItem->GetColumeEditable() : uiFalse;
 	}
 	void CListExUI::InitListCtrl()
 	{
 		if (!m_bAddMessageFilter)
 		{
 			GetManager()->AddNotifier(this);
-			m_bAddMessageFilter = TRUE;
+			m_bAddMessageFilter = uiTrue;
 		}
 	}
 	CEditUI* CListExUI::GetEditUI()
@@ -62,10 +62,10 @@ namespace DuiLib {
 		return m_pEditUI;
 	}
 
-	BOOL CListExUI::CheckColumComboBoxable(int nColum)
+	uiBool CListExUI::CheckColumComboBoxable(int nColum)
 	{
 		CListContainerHeaderItemUI* pHItem = static_cast<CListContainerHeaderItemUI*>(m_pHeader->GetItemAt(nColum));
-		return pHItem != NULL? pHItem->GetColumeComboable() : FALSE;
+		return pHItem != NULL? pHItem->GetColumeComboable() : uiFalse;
 	}
 
 	CComboUI* CListExUI::GetComboBoxUI()
@@ -90,11 +90,11 @@ namespace DuiLib {
 		return m_pComboBoxUI;
 	}
 
-	BOOL CListExUI::CheckColumCheckBoxable(int nColum)
+	uiBool CListExUI::CheckColumCheckBoxable(int nColum)
 	{
 		CControlUI* p = m_pHeader->GetItemAt(nColum);
 		CListContainerHeaderItemUI* pHItem = static_cast<CListContainerHeaderItemUI*>(p->GetInterface(_T("ListContainerHeaderItem")));
-		return pHItem != NULL? pHItem->GetColumeCheckable() : FALSE;
+		return pHItem != NULL? pHItem->GetColumeCheckable() : uiFalse;
 	}
 
 	void CListExUI::Notify(TNotifyUI& msg)
@@ -104,7 +104,7 @@ namespace DuiLib {
 		//复选框
 		if(_tcsicmp(msg.sType, _T("listheaditemchecked")) == 0)
 		{
-			BOOL bCheck = (BOOL)msg.lParam;
+			uiBool bCheck = (uiBool)msg.lParam;
 			//判断是否是本LIST发送的notify
 			CListHeaderUI* pHeader = GetHeader();
 			for (int i = 0; i < pHeader->GetCount(); i++)
@@ -238,7 +238,7 @@ namespace DuiLib {
 				m_pEditUI->SetText(lpstrText);
 
 				//移动位置
-				m_pEditUI->SetVisible(TRUE);
+				m_pEditUI->SetVisible(uiTrue);
 				m_pEditUI->SetPos(*lpRCColum);
 			}
 			else if(CheckColumComboBoxable(nColum) && GetComboBoxUI())
@@ -260,7 +260,7 @@ namespace DuiLib {
 
 				//移动位置
 				m_pComboBoxUI->SetPos(*lpRCColum);
-				m_pComboBoxUI->SetVisible(TRUE);
+				m_pComboBoxUI->SetVisible(uiTrue);
 			}
 			else
 			{
@@ -275,7 +275,7 @@ namespace DuiLib {
 			}
 		}
 	}
-	void CListExUI::OnListItemChecked(int nIndex, int nColum, BOOL bChecked)
+	void CListExUI::OnListItemChecked(int nIndex, int nColum, uiBool bChecked)
 	{
 		CControlUI* p = m_pHeader->GetItemAt(nColum);
 		CListContainerHeaderItemUI* pHItem = static_cast<CListContainerHeaderItemUI*>(p->GetInterface(_T("ListContainerHeaderItem")));
@@ -287,29 +287,29 @@ namespace DuiLib {
 		//如果选中，那么检查是否全部都处于选中状态
 		if (bChecked)
 		{
-			BOOL bCheckAll = TRUE;
+			uiBool bCheckAll = uiTrue;
 			for(int i = 0; i < GetCount(); i++) 
 			{
 				CControlUI* p = GetItemAt(i);
 				CListTextExtElementUI* pLItem = static_cast<CListTextExtElementUI*>(p->GetInterface(_T("ListTextExElement")));
 				if( pLItem != NULL && !pLItem->GetCheck()) 
 				{
-					bCheckAll = FALSE;
+					bCheckAll = uiFalse;
 					break;
 				}
 			}
 			if (bCheckAll)
 			{
-				pHItem->SetCheck(TRUE);
+				pHItem->SetCheck(uiTrue);
 			}
 			else
 			{
-				pHItem->SetCheck(FALSE);
+				pHItem->SetCheck(uiFalse);
 			}
 		}
 		else
 		{
-			pHItem->SetCheck(FALSE);
+			pHItem->SetCheck(uiFalse);
 		}
 	}
 	void CListExUI::DoEvent(TEventUI& event)
@@ -332,16 +332,16 @@ namespace DuiLib {
 		}
 	}
 
-	BOOL CListExUI::GetColumItemColor(int nIndex, int nColum, CDuiColor& iBKColor)
+	uiBool CListExUI::GetColumItemColor(int nIndex, int nColum, CDuiColor& iBKColor)
 	{
 		CControlUI* p = GetItemAt(nIndex);
 		CListTextExtElementUI* pLItem = static_cast<CListTextExtElementUI*>(p->GetInterface(_T("ListTextExElement")));
 		if( pLItem == NULL) 
 		{
-			return FALSE;
+			return uiFalse;
 		}
 		pLItem->GetColumItemColor(nColum, iBKColor);
-		return TRUE;
+		return uiTrue;
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -350,7 +350,7 @@ namespace DuiLib {
 	IMPLEMENT_DUICONTROL(CListContainerHeaderItemUI)
 
 	CListContainerHeaderItemUI::CListContainerHeaderItemUI() : 
-		m_bEditable(FALSE),m_bComboable(FALSE),m_bCheckBoxable(FALSE),m_bChecked(FALSE),m_pOwner(NULL)
+		m_bEditable(uiFalse),m_bComboable(uiFalse),m_bCheckBoxable(uiFalse),m_bChecked(uiFalse),m_pOwner(NULL)
 	{
 		m_bDragable = true;
 		m_iSepWidth = 4;
@@ -701,47 +701,47 @@ Label_ForeImage:
 			m_iFont, DT_SINGLELINE | m_uTextStyle);
 	}
 
-	BOOL CListContainerHeaderItemUI::GetColumeEditable()
+	uiBool CListContainerHeaderItemUI::GetColumeEditable()
 	{
 		return m_bEditable;
 	}
 
-	void CListContainerHeaderItemUI::SetColumeEditable(BOOL bEnable)
+	void CListContainerHeaderItemUI::SetColumeEditable(uiBool bEnable)
 	{
 		m_bEditable = bEnable;
 	}
 
-	BOOL CListContainerHeaderItemUI::GetColumeComboable()
+	uiBool CListContainerHeaderItemUI::GetColumeComboable()
 	{
 		return m_bComboable;
 	}
 
-	void CListContainerHeaderItemUI::SetColumeComboable(BOOL bEnable)
+	void CListContainerHeaderItemUI::SetColumeComboable(uiBool bEnable)
 	{
 		m_bComboable = bEnable;
 	}
 
-	BOOL CListContainerHeaderItemUI::GetColumeCheckable()
+	uiBool CListContainerHeaderItemUI::GetColumeCheckable()
 	{
 		return m_bCheckBoxable;
 	}
-	void CListContainerHeaderItemUI::SetColumeCheckable(BOOL bEnable)
+	void CListContainerHeaderItemUI::SetColumeCheckable(uiBool bEnable)
 	{
 		m_bCheckBoxable = bEnable;
 	}
-	void CListContainerHeaderItemUI::SetCheck(BOOL bCheck)
+	void CListContainerHeaderItemUI::SetCheck(uiBool bCheck)
 	{
 		if( m_bChecked == bCheck ) return;
 		m_bChecked = bCheck;
-		m_uCheckBoxState.SetSelected(m_bChecked == TRUE);
+		m_uCheckBoxState.SetSelected(m_bChecked == uiTrue);
 		Invalidate();
 	}
 
-	BOOL CListContainerHeaderItemUI::GetCheck()
+	uiBool CListContainerHeaderItemUI::GetCheck()
 	{
 		return m_bChecked;
 	}
-	BOOL CListContainerHeaderItemUI::DrawCheckBoxImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify)
+	uiBool CListContainerHeaderItemUI::DrawCheckBoxImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify)
 	{
 		CDuiRect rcCheckBox;
 		GetCheckBoxRect(rcCheckBox);
@@ -859,7 +859,7 @@ Label_ForeImage:
 	IMPLEMENT_DUICONTROL(CListTextExtElementUI)
 
 	CListTextExtElementUI::CListTextExtElementUI() : 
-	m_nLinks(0), m_nHoverLink(-1), m_pOwner(NULL),m_uCheckBoxState(0),m_bChecked(FALSE)
+	m_nLinks(0), m_nHoverLink(-1), m_pOwner(NULL),m_uCheckBoxState(0),m_bChecked(uiFalse)
 	{
 		memset(&m_rcLinks, 0, sizeof(m_rcLinks));
 		m_cxyCheckBox.cx = m_cxyCheckBox.cy = 0;
@@ -1199,7 +1199,7 @@ Label_ForeImage:
 			}
 		}
 	}
-	BOOL CListTextExtElementUI::DrawCheckBoxImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify, CDuiRect& rcCheckBox)
+	uiBool CListTextExtElementUI::DrawCheckBoxImage(UIRender *pRender, LPCTSTR pStrImage, LPCTSTR pStrModify, CDuiRect& rcCheckBox)
 	{
 		return pRender->DrawImageString(rcCheckBox, m_rcPaint, pStrImage, pStrModify);
 	}
@@ -1324,7 +1324,7 @@ Label_ForeImage:
 		m_cxyCheckBox.cy = cy;
 	}
 
-	void CListTextExtElementUI::SetCheck(BOOL bCheck)
+	void CListTextExtElementUI::SetCheck(uiBool bCheck)
 	{
 		if( m_bChecked == bCheck ) return;
 		m_bChecked = bCheck;
@@ -1333,7 +1333,7 @@ Label_ForeImage:
 		Invalidate();
 	}
 
-	BOOL  CListTextExtElementUI::GetCheck() const
+	uiBool  CListTextExtElementUI::GetCheck() const
 	{
 		return m_bChecked;
 	}
@@ -1358,7 +1358,7 @@ Label_ForeImage:
 		return -1;
 	}
 
-	BOOL CListTextExtElementUI::CheckColumEditable(int nColum)
+	uiBool CListTextExtElementUI::CheckColumEditable(int nColum)
 	{
 		return m_pOwner->CheckColumEditable(nColum);
 	}
@@ -1373,18 +1373,18 @@ Label_ForeImage:
 
 	void CListTextExtElementUI::SetColumItemColor(int nColum, CDuiColor iBKColor)
 	{
-		ColumCorlorArray[nColum].bEnable = TRUE;
+		ColumCorlorArray[nColum].bEnable = uiTrue;
 		ColumCorlorArray[nColum].iBKColor = iBKColor;
 		Invalidate();
 	}
-	BOOL CListTextExtElementUI::GetColumItemColor(int nColum, CDuiColor& iBKColor)
+	uiBool CListTextExtElementUI::GetColumItemColor(int nColum, CDuiColor& iBKColor)
 	{
 		if (!ColumCorlorArray[nColum].bEnable)
 		{
-			return FALSE;
+			return uiFalse;
 		}
 		iBKColor = ColumCorlorArray[nColum].iBKColor;
-		return TRUE;
+		return uiTrue;
 	}
 
 } // namespace DuiLib

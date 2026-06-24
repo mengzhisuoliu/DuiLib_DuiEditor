@@ -52,7 +52,7 @@ namespace DuiLib
 		HRESULT FlashCall (_bstr_t request );
 
 		virtual void ReleaseControl();
-		HRESULT RegisterEventHandler(BOOL inAdvise);
+		HRESULT RegisterEventHandler(uiBool inAdvise);
 
 		// ITranslateAccelerator
 		// Duilib消息分发给WebBrowser

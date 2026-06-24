@@ -33,16 +33,16 @@ public:
 
 	void SetDate(int year, int month, int day);
 protected:
-	virtual BOOL OnSdlEvent(const void* pEvent) override;
-	virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+	virtual uiBool OnSdlEvent(const void* pEvent) override;
+	virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
 
 private:
 	void SetFocusSegment(int index);
@@ -53,7 +53,7 @@ private:
 	void MoveRight();
 	void MoveHome();
 	void MoveEnd();
-	BOOL CheckInput(int n);
+	uiBool CheckInput(int n);
 
 	void DrawButton(UIRender* pRender, const CDuiRect& rc, const TButtonState& state, bool bUp);
 	void DrawDropDownButton(UIRender* pRender, const CDuiRect& rc, const TButtonState& state);

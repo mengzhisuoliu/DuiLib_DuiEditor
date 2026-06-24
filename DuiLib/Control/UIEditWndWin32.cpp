@@ -35,11 +35,11 @@ namespace DuiLib
 		Create(m_pOwner->GetManager()->GetPaintWindow(), NULL, uStyle, 0, rcPos.left, rcPos.top, rcPos.GetWidth(), rcPos.GetHeight());
 
 		m_font = MakeRefPtr<UIFont>(m_pOwner->GetManager()->CloneFont(m_pOwner->GetFont()));
-		::SendMessage(m_hWnd, WM_SETFONT, (WPARAM)m_font->GetHFONT(m_pOwner->GetManager()), (LPARAM)TRUE);
+		::SendMessage(m_hWnd, WM_SETFONT, (WPARAM)m_font->GetHFONT(m_pOwner->GetManager()), (LPARAM)uiTrue);
 		Edit_LimitText(m_hWnd, GetMaxChar());
 		if( IsPasswordMode() ) Edit_SetPasswordChar(m_hWnd, GetPasswordChar());
 		Edit_SetText(m_hWnd, m_pOwner->GetText());
-		Edit_SetModify(m_hWnd, FALSE);
+		Edit_SetModify(m_hWnd, uiFalse);
 		::SendMessage(m_hWnd, EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELPARAM(0, 0));
 		Edit_Enable(m_hWnd, m_pOwner->IsEnabled() == true);
 		Edit_SetReadOnly(m_hWnd, m_pOwner->IsReadOnly() == true);
@@ -131,14 +131,14 @@ namespace DuiLib
 	LRESULT CEditWndWin32::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		LRESULT lRes = 0;
-		BOOL bHandled = TRUE;
+		uiBool bHandled = uiTrue;
 		if( uMsg == WM_CREATE ) 
 		{
 			//m_pOwner->GetManager()->AddNativeWindow(m_pOwner, m_hWnd);
 			//if( m_pOwner->GetManager()->IsLayered() ) {
 			//	::SetTimer(m_hWnd, DEFAULT_TIMERID, ::GetCaretBlinkTime(), NULL);
 			//}
-			bHandled = FALSE;
+			bHandled = uiFalse;
 		}
 		else if( uMsg == WM_KILLFOCUS ) lRes = OnKillFocus(uMsg, wParam, lParam, bHandled);
 		else if( uMsg == OCM_COMMAND ) {
@@ -146,7 +146,7 @@ namespace DuiLib
 			else if( GET_WM_COMMAND_CMD(wParam, lParam) == EN_UPDATE ) {
 				CDuiRect rcClient;
 				::GetClientRect(m_hWnd, &rcClient);
-				::InvalidateRect(m_hWnd, &rcClient, FALSE);
+				::InvalidateRect(m_hWnd, &rcClient, uiFalse);
 			}
 		}
 		else if( uMsg == WM_KEYDOWN && TCHAR(wParam) == VK_RETURN )
@@ -194,7 +194,7 @@ namespace DuiLib
 			//if (m_pOwner->GetManager()->IsLayered()) {
 			//	m_pOwner->GetManager()->AddNativeWindow(m_pOwner, m_hWnd);
 			//}
-			bHandled = FALSE;
+			bHandled = uiFalse;
 		}
 		else if( uMsg == WM_PRINT ) {
 			//if (m_pOwner->GetManager()->IsLayered()) {
@@ -209,25 +209,25 @@ namespace DuiLib
 			//	}
 			//	return lRes;
 			//}
-			bHandled = FALSE;
+			bHandled = uiFalse;
 		}
 		else if( uMsg == WM_TIMER ) {
 			if (wParam == CARET_TIMERID) {
 				m_bDrawCaret = !m_bDrawCaret;
 				CDuiRect rcClient;
 				::GetClientRect(m_hWnd, &rcClient);
-				::InvalidateRect(m_hWnd, &rcClient, FALSE);
+				::InvalidateRect(m_hWnd, &rcClient, uiFalse);
 				return 0;
 			}
-			bHandled = FALSE;
+			bHandled = uiFalse;
 		}
-		else bHandled = FALSE;
+		else bHandled = uiFalse;
 
 		if( !bHandled ) return DefaultWndProc(uMsg, wParam, lParam);
 		return lRes;
 	}
 
-	LRESULT CEditWndWin32::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CEditWndWin32::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		LRESULT lRes = ::DefWindowProc(m_hWnd, uMsg, wParam, lParam);
 		//if ((HWND)wParam != m_pOwner->GetManager()->GetPaintWindow()) {
@@ -237,7 +237,7 @@ namespace DuiLib
 		return lRes;
 	}
 
-	LRESULT CEditWndWin32::OnEditChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT CEditWndWin32::OnEditChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, uiBool& /*bHandled*/)
 	{
 		if( m_pOwner == NULL ) return 0;
 		// Copy text back

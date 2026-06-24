@@ -58,7 +58,7 @@ class MenuMenuObserverImplBase
 public:
 	virtual void AddReceiver(MenuMenuReceiverImplBase* receiver) = 0;
 	virtual void RemoveReceiver(MenuMenuReceiverImplBase* receiver) = 0;
-	virtual BOOL RBroadcast(ContextMenuParam param) = 0;
+	virtual uiBool RBroadcast(ContextMenuParam param) = 0;
 };
 /////////////////////////////////////////////////
 class MenuMenuReceiverImplBase
@@ -66,7 +66,7 @@ class MenuMenuReceiverImplBase
 public:
 	virtual void AddObserver(MenuMenuObserverImplBase* observer) = 0;
 	virtual void RemoveObserver() = 0;
-	virtual BOOL Receive(ContextMenuParam param) = 0;
+	virtual uiBool Receive(ContextMenuParam param) = 0;
 };
 /////////////////////////////////////////////////
 
@@ -117,7 +117,7 @@ public:
 		}
 	}
 
-	virtual BOOL RBroadcast(ContextMenuParam param) override
+	virtual uiBool RBroadcast(ContextMenuParam param) override
 	{
 		ReceiversVector::reverse_iterator it = pReceivers_->rbegin();
 		for (; it != pReceivers_->rend(); ++it)
@@ -125,7 +125,7 @@ public:
 			(*it)->Receive(param);
 		}
 
-		return BOOL();
+		return uiBool();
 	}
 
 
@@ -221,9 +221,9 @@ public:
 		}
 	}
 
-	virtual BOOL Receive(ContextMenuParam param) override
+	virtual uiBool Receive(ContextMenuParam param) override
 	{
-		return BOOL();
+		return uiBool();
 	}
 
 protected:
@@ -351,11 +351,11 @@ class CMenuCmdUI
 	friend class CMenuElementUI;
 public:
 	CMenuCmdUI(CMenuElementUI *p);
-	virtual void Enable(BOOL bEnable = TRUE);
-	virtual BOOL IsEnable();
+	virtual void Enable(uiBool bEnable = uiTrue);
+	virtual uiBool IsEnable();
 
-	virtual void SetCheck(BOOL bCheck = TRUE);
-	virtual BOOL IsCheck();
+	virtual void SetCheck(uiBool bCheck = uiTrue);
+	virtual uiBool IsCheck();
 
 	virtual void SetText(LPCTSTR lpszText);
 	virtual CDuiString GetText();

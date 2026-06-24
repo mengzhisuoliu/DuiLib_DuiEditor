@@ -174,7 +174,7 @@ namespace DuiLib {
 	//////////////////////////////////////////////////////////////////////////
 	//
 	//
-	BOOL UIFont::CreateDefaultFont()
+	uiBool UIFont::CreateDefaultFont()
 	{
 		DeleteObject();
 
@@ -185,21 +185,21 @@ namespace DuiLib {
 		sFontName = lf.lfFaceName;
 		iSize = -lf.lfHeight;
 		bBold = (lf.lfWeight >= FW_BOLD);
-		bUnderline = (lf.lfUnderline == TRUE);
-		bItalic = (lf.lfItalic == TRUE);
+		bUnderline = (lf.lfUnderline == uiTrue);
+		bItalic = (lf.lfItalic == uiTrue);
 #else
 		sFontName = _T("微软雅黑");
 		iSize = 14;
-		bBold = FALSE;
-		bUnderline = FALSE;
-		bItalic = FALSE;
+		bBold = uiFalse;
+		bUnderline = uiFalse;
+		bItalic = uiFalse;
 		return _buildFont(NULL);
 #endif
 
 		return _buildFont(NULL);
 	}
 
-	BOOL UIFont::CreateFont(CPaintManagerUI *pManager, int id, LPCTSTR sFontName, int iSize, bool bBold, bool bUnderline, bool bItalic, bool bDefault, bool bShared)
+	uiBool UIFont::CreateFont(CPaintManagerUI *pManager, int id, LPCTSTR sFontName, int iSize, bool bBold, bool bUnderline, bool bItalic, bool bDefault, bool bShared)
 	{
 		DeleteObject();
 
@@ -215,7 +215,7 @@ namespace DuiLib {
 		return _buildFont(pManager);
 	}
 
-	BOOL UIFont::CreateFont(CPaintManagerUI *pManager, CXmlNodeUI node)
+	uiBool UIFont::CreateFont(CPaintManagerUI *pManager, CXmlNodeUI node)
 	{
 		DeleteObject();
 
@@ -231,7 +231,7 @@ namespace DuiLib {
 		return _buildFont(pManager);
 	}
 
-	BOOL UIFont::RebuildFont(CPaintManagerUI *pManager)
+	uiBool UIFont::RebuildFont(CPaintManagerUI *pManager)
 	{
 		DeleteObject();
 		return _buildFont(pManager);
@@ -349,14 +349,14 @@ namespace DuiLib {
 		return pImage;
 	}
 
-	BOOL UIImage::LoadImage(const TDrawInfo *pDrawInfo, CPaintManagerUI* pManager, HINSTANCE instance)
+	uiBool UIImage::LoadImage(const TDrawInfo *pDrawInfo, CPaintManagerUI* pManager, HINSTANCE instance)
 	{
 		//是不是资源ID号
 		if( _ttoi(pDrawInfo->sResType) != 0 ) 
 		{
 			CUIFile f;
 			if(!f.LoadFile(pDrawInfo->sImageName.GetData(), pDrawInfo->sResType, instance)) 
-				return FALSE;
+				return uiFalse;
 
 			return LoadImageFromMemory(f.GetData(), f.GetSize(), pDrawInfo->dwMask, pDrawInfo->width, pDrawInfo->height, pDrawInfo->fillcolor, pManager);
 		}
@@ -369,26 +369,26 @@ namespace DuiLib {
 
 			CUIFile f;
 			if(!f.LoadFile(sStrPath.GetData(), NULL, instance)) 
-				return FALSE;
+				return uiFalse;
 
 			return LoadImageFromMemory(f.GetData(), f.GetSize(), pDrawInfo->dwMask, pDrawInfo->width, pDrawInfo->height, pDrawInfo->fillcolor, pManager);
 		}
 
-		return FALSE;
+		return uiFalse;
 	}
 
-	BOOL UIImage::LoadImage(STRINGorID bitmap, LPCTSTR type, CDuiColor mask, int width, int height, CDuiColor fillcolor, CPaintManagerUI* pManager, HINSTANCE instance)
+	uiBool UIImage::LoadImage(STRINGorID bitmap, LPCTSTR type, CDuiColor mask, int width, int height, CDuiColor fillcolor, CPaintManagerUI* pManager, HINSTANCE instance)
 	{
 		CUIFile f;
 		if(!f.LoadFile(bitmap, type, instance)) 
-			return FALSE;
+			return uiFalse;
 
 		return LoadImageFromMemory(f.GetData(), f.GetSize(), mask, width, height, fillcolor, pManager);
 	}
 
-	BOOL UIImage::LoadImage(LPCTSTR pStrImage, LPCTSTR type, CDuiColor mask, int width, int height, CDuiColor fillcolor, CPaintManagerUI* pManager, HINSTANCE instance)
+	uiBool UIImage::LoadImage(LPCTSTR pStrImage, LPCTSTR type, CDuiColor mask, int width, int height, CDuiColor fillcolor, CPaintManagerUI* pManager, HINSTANCE instance)
 	{
-		if(pStrImage == NULL) return FALSE;
+		if(pStrImage == NULL) return uiFalse;
 
 		CDuiString sStrPath = pStrImage;
 		if( type == NULL )  
@@ -400,7 +400,7 @@ namespace DuiLib {
 		return LoadImage(STRINGorID(sStrPath.GetData()), type, mask, width, height, fillcolor, pManager, instance);
 	}
 
-	BOOL UIImage::LoadImage(UINT nID, LPCTSTR type, CDuiColor mask, int width, int height, CDuiColor fillcolor, CPaintManagerUI* pManager, HINSTANCE instance)
+	uiBool UIImage::LoadImage(UINT nID, LPCTSTR type, CDuiColor mask, int width, int height, CDuiColor fillcolor, CPaintManagerUI* pManager, HINSTANCE instance)
 	{
 		return LoadImage(STRINGorID(nID), type, mask, width, height, fillcolor, pManager, instance);
 	}
@@ -435,7 +435,7 @@ namespace DuiLib {
 	}
 
 
-	BOOL UIImage::LoadImageFromMemory(const LPBYTE pData, DWORD dwSize, CDuiColor mask, int width, int height, CDuiColor fillcolor, CPaintManagerUI* pManager)
+	uiBool UIImage::LoadImageFromMemory(const LPBYTE pData, DWORD dwSize, CDuiColor mask, int width, int height, CDuiColor fillcolor, CPaintManagerUI* pManager)
 	{
 		DeleteObject();
 
@@ -446,7 +446,7 @@ namespace DuiLib {
 		{
 			pImage = svg_load_from_memory(pData, x, y, width, height, fillcolor, pManager);		
 		}
-		if(!pImage) return FALSE;
+		if(!pImage) return uiFalse;
 
 		bitmap->CreateFromData(pImage, x, y, mask);
 
@@ -454,11 +454,11 @@ namespace DuiLib {
 		pSrcBits = NULL;
 		nWidth = x;
 		nHeight = y;
-		bAlpha = bitmap->IsAlpha() == TRUE;
+		bAlpha = bitmap->IsAlpha() == uiTrue;
 		delay = delay;
 
 		stbi_image_free(pImage);
-		return TRUE;
+		return uiTrue;
 	}
 
 	bool UIImage::LoadGifImageFromMemory(const LPBYTE pData, DWORD dwSize, CStdPtrArray &arrImageInfo)
@@ -479,7 +479,7 @@ namespace DuiLib {
 			data->pSrcBits = NULL;
 			data->nWidth = x;
 			data->nHeight = y;
-			data->bAlpha = data->bitmap->IsAlpha() == TRUE;
+			data->bAlpha = data->bitmap->IsAlpha() == uiTrue;
 			data->delay = delays[f];
 
 			if(!arrImageInfo.Add(data)) 

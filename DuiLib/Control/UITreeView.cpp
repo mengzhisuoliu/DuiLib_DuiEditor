@@ -21,8 +21,8 @@ namespace DuiLib
 
 		pTreeView = NULL;
 		m_iTreeLavel = 0;
-		m_bIsVisable = TRUE;
-		m_bIsCheckBox = FALSE;
+		m_bIsVisable = uiTrue;
+		m_bIsCheckBox = uiFalse;
 		pParentTreeNode	= NULL;
 
 		pHoriz = new CHorizontalLayoutUI();
@@ -37,9 +37,9 @@ namespace DuiLib
 		pDottedLine->SetFixedWidth(2);
 		pCheckBox->SetFixedWidth(GetFixedHeight());
 		pItemButton->SetAttribute(_T("align"),_T("left"));
-		pDottedLine->SetVisible(FALSE);
-		pCheckBox->SetVisible(FALSE);
-		pItemButton->SetMouseEnabled(FALSE);
+		pDottedLine->SetVisible(uiFalse);
+		pCheckBox->SetVisible(uiFalse);
+		pItemButton->SetMouseEnabled(uiFalse);
 
 		if(_ParentNode) {
 			if (_tcsicmp(_ParentNode->GetClass(), _T("TreeNodeUI")) != 0) return;
@@ -253,15 +253,15 @@ namespace DuiLib
 	bool CTreeNodeUI::AddAt( CControlUI* pControl, int iIndex )
 	{
 		if(NULL == static_cast<CTreeNodeUI*>(pControl->GetInterface(_T("TreeNode"))))
-			return FALSE;
+			return uiFalse;
 
 		CTreeNodeUI* pIndexNode = static_cast<CTreeNodeUI*>(mTreeNodes.GetAt(iIndex));
 		if(!pIndexNode){
 			if(!mTreeNodes.Add(pControl))
-				return FALSE;
+				return uiFalse;
 		}
 		else if(pIndexNode && !mTreeNodes.InsertAt(iIndex,pControl))
-			return FALSE;
+			return uiFalse;
 
 		if(!pIndexNode && pTreeView && pTreeView->GetItemAt(GetTreeIndex()+1))
 			pIndexNode = static_cast<CTreeNodeUI*>(pTreeView->GetItemAt(GetTreeIndex()+1)->GetInterface(_T("TreeNode")));
@@ -276,7 +276,7 @@ namespace DuiLib
 				return pTreeView->Add((CTreeNodeUI*)pControl);
 		}
 
-		return TRUE;
+		return uiTrue;
 	}
 
 	//************************************
@@ -383,14 +383,14 @@ namespace DuiLib
 	bool CTreeNodeUI::AddChildNode( CTreeNodeUI* _pTreeNodeUI )
 	{
 		if (!_pTreeNodeUI)
-			return FALSE;
+			return uiFalse;
 
 		if (NULL == static_cast<CTreeNodeUI*>(_pTreeNodeUI->GetInterface(_T("TreeNode"))))
-			return FALSE;
+			return uiFalse;
 
 		_pTreeNodeUI = CalLocation(_pTreeNodeUI);
 
-		bool nRet = TRUE;
+		bool nRet = uiTrue;
 
 		if(pTreeView){
 			CTreeNodeUI* pNode = static_cast<CTreeNodeUI*>(mTreeNodes.GetAt(mTreeNodes.GetSize()-1));
@@ -425,9 +425,9 @@ namespace DuiLib
 			if(pTreeView)
 				pTreeView->Remove(_pTreeNodeUI);
 
-			return TRUE;
+			return uiTrue;
 		}
-		return FALSE;
+		return uiFalse;
 	}
 
 	//************************************
@@ -740,9 +740,9 @@ namespace DuiLib
 		// 参数信息: void
 		// 函数说明: 
 		//************************************
-		CTreeViewUI::CTreeViewUI( void ) : m_bVisibleFolderBtn(TRUE),m_bVisibleCheckBtn(FALSE),m_uItemMinWidth(0)
+		CTreeViewUI::CTreeViewUI( void ) : m_bVisibleFolderBtn(uiTrue),m_bVisibleCheckBtn(uiFalse),m_uItemMinWidth(0)
 	{
-		this->GetHeader()->SetVisible(FALSE);
+		this->GetHeader()->SetVisible(uiFalse);
 	}
 
 	//************************************
@@ -933,7 +933,7 @@ namespace DuiLib
 			}
 		}
 		CListUI::Remove(pControl);
-		return TRUE;
+		return uiTrue;
 	}
 
 	//************************************
@@ -947,7 +947,7 @@ namespace DuiLib
 		CTreeNodeUI* pItem = (CTreeNodeUI*)GetItemAt(iIndex);
 		if(pItem->GetCountChild())
 			Remove(pItem);
-		return TRUE;
+		return uiTrue;
 	}
 
 	void CTreeViewUI::RemoveAll()
@@ -980,9 +980,9 @@ namespace DuiLib
 			CCheckBoxUI* pCheckBox = (CCheckBoxUI*)pMsg->pSender;
 			CTreeNodeUI* pItem = (CTreeNodeUI*)pCheckBox->GetParent()->GetParent();
 			SetItemCheckBox(pCheckBox->GetCheck(),pItem);
-			return TRUE;
+			return uiTrue;
 		}
-		return TRUE;
+		return uiTrue;
 	}
 
 	//************************************
@@ -999,9 +999,9 @@ namespace DuiLib
 			CTreeNodeUI* pItem = (CTreeNodeUI*)pFolder->GetParent()->GetParent();
 			pItem->SetVisibleTag(!pFolder->GetCheck());
 			SetItemExpand(!pFolder->GetCheck(),pItem);
-			return TRUE;
+			return uiTrue;
 		}
-		return TRUE;
+		return uiTrue;
 	}
 
 	//************************************
@@ -1019,9 +1019,9 @@ namespace DuiLib
 			pFolder->Selected(!pFolder->IsSelected());
 			pItem->SetVisibleTag(!pFolder->GetCheck());
 			SetItemExpand(!pFolder->GetCheck(),pItem);
-			return TRUE;
+			return uiTrue;
 		}
-		return FALSE;
+		return uiFalse;
 	}
 
 	//************************************
@@ -1043,7 +1043,7 @@ namespace DuiLib
 						SetItemCheckBox(_Selected,pItem);
 				}
 			}
-			return TRUE;
+			return uiTrue;
 		}
 		else {
 			int nIndex = 0;
@@ -1056,9 +1056,9 @@ namespace DuiLib
 
 				nIndex++;
 			}
-			return TRUE;
+			return uiTrue;
 		}
-		return FALSE;
+		return uiFalse;
 	}
 
 	//************************************

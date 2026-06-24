@@ -25,8 +25,8 @@ namespace DuiLib {
 		void Release(void) { delete this; }
 
 	public:
-		BOOL LoadResource(STRINGorID xml, LPCTSTR type = NULL);
-		BOOL LoadResource(CXmlNodeUI root);
+		uiBool LoadResource(STRINGorID xml, LPCTSTR type = NULL);
+		uiBool LoadResource(CXmlNodeUI root);
 		void ResetResourceMap();
 		LPCTSTR GetImagePath(LPCTSTR lpstrId);
 		LPCTSTR GetXmlPath(LPCTSTR lpstrId);
@@ -34,7 +34,7 @@ namespace DuiLib {
 	public:
 		void SetLanguage(LPCTSTR pstrLanguage) { m_sLauguage = pstrLanguage; }
 		LPCTSTR GetLanguage() { return m_sLauguage; }
-		BOOL LoadLanguage(LPCTSTR pstrXml);
+		uiBool LoadLanguage(LPCTSTR pstrXml);
 		
 	public:
 		void SetTextQueryInterface(IQueryControlText* pInterface) { m_pQuerypInterface = pInterface; }

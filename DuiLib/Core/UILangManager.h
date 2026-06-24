@@ -12,17 +12,17 @@ namespace DuiLib {
 	public:
 		void SetSkinFile(LPCTSTR lpstrSkinFile);
 		LPCTSTR GetSkinFile();
-		BOOL LoadResource(STRINGorID xml, LPCTSTR type);
-		BOOL LoadResource(CXmlNodeUI Root);
+		uiBool LoadResource(STRINGorID xml, LPCTSTR type);
+		uiBool LoadResource(CXmlNodeUI Root);
 		void ResetResource();
 
-		BOOL AddText(int resid, LPCTSTR lpstrText);
+		uiBool AddText(int resid, LPCTSTR lpstrText);
 		LPCTSTR GetText(int resid);
 
-		BOOL AddToolTip(int resid, LPCTSTR lpstrText);
+		uiBool AddToolTip(int resid, LPCTSTR lpstrText);
 		LPCTSTR GetToolTip(int resid);
 
-		BOOL AddTipValue(int resid, LPCTSTR lpstrText);
+		uiBool AddTipValue(int resid, LPCTSTR lpstrText);
 		LPCTSTR GetTipValue(int resid);
 	private:
 		CDuiString m_sSkinFile;
@@ -68,9 +68,9 @@ namespace DuiLib {
 	protected:
 		void ResetPackage();
 		CLangPackageUI *_addPackage(LPCTSTR lpstrSkinFile);
-		static BOOL LoadStringTable();
-		static BOOL LoadStringTableResource(STRINGorID xml, LPCTSTR type);
-		static BOOL LoadStringTableResource(CXmlNodeUI root);
+		static uiBool LoadStringTable();
+		static uiBool LoadStringTableResource(STRINGorID xml, LPCTSTR type);
+		static uiBool LoadStringTableResource(CXmlNodeUI root);
 
 		static void InitStringReource();
 	private:
@@ -82,7 +82,7 @@ namespace DuiLib {
 
 		static std::map<CDuiString, CDuiString> m_mStringResource;
 		static CXmlDocumentUI m_xmlStringRecource;
-		static BOOL m_bNeedSaveStringRecource;
+		static uiBool m_bNeedSaveStringRecource;
 	};
 
 } // namespace DuiLib

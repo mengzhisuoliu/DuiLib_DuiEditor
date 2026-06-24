@@ -36,7 +36,7 @@ namespace DuiLib
 		{
 			this->Navigate2(m_sHomePage);
 		}
-		RegisterEventHandler(TRUE);
+		RegisterEventHandler(uiTrue);
 		return true;
 	}
 
@@ -45,7 +45,7 @@ namespace DuiLib
 		m_bCreated=false;
 		CPaintManagerWin32UI *pManager = (CPaintManagerWin32UI *)GetManager();
 		pManager->RemoveTranslateAccelerator(this);
-		RegisterEventHandler(FALSE);
+		RegisterEventHandler(uiFalse);
 	}
 
 	CWebBrowserUI::~CWebBrowserUI()
@@ -335,7 +335,7 @@ namespace DuiLib
 		return S_OK;
 	}
 
-	STDMETHODIMP CWebBrowserUI::EnableModeless( BOOL fEnable )
+	STDMETHODIMP CWebBrowserUI::EnableModeless( uiBool fEnable )
 	{
 		if (m_pWebBrowserEventHandler)
 		{
@@ -344,7 +344,7 @@ namespace DuiLib
 		return E_NOTIMPL;
 	}
 
-	STDMETHODIMP CWebBrowserUI::OnDocWindowActivate( BOOL fActivate )
+	STDMETHODIMP CWebBrowserUI::OnDocWindowActivate( uiBool fActivate )
 	{
 		if (m_pWebBrowserEventHandler)
 		{
@@ -353,7 +353,7 @@ namespace DuiLib
 		return E_NOTIMPL;
 	}
 
-	STDMETHODIMP CWebBrowserUI::OnFrameWindowActivate( BOOL fActivate )
+	STDMETHODIMP CWebBrowserUI::OnFrameWindowActivate( uiBool fActivate )
 	{
 		if (m_pWebBrowserEventHandler)
 		{
@@ -362,7 +362,7 @@ namespace DuiLib
 		return E_NOTIMPL;
 	}
 
-	STDMETHODIMP CWebBrowserUI::ResizeBorder( LPCRECT prcBorder, IOleInPlaceUIWindow* pUIWindow, BOOL fFrameWindow )
+	STDMETHODIMP CWebBrowserUI::ResizeBorder( LPCRECT prcBorder, IOleInPlaceUIWindow* pUIWindow, uiBool fFrameWindow )
 	{
 		if (m_pWebBrowserEventHandler)
 		{
@@ -389,7 +389,7 @@ namespace DuiLib
 			return E_NOTIMPL;
 
 		// 当前Web窗口不是焦点,不处理加速键
-		BOOL bIsChild = FALSE;
+		uiBool bIsChild = uiFalse;
 		HWND hTempWnd = NULL;
 		HWND hWndFocus = ::GetFocus();
 
@@ -398,7 +398,7 @@ namespace DuiLib
 		{
 			if(hTempWnd == m_hwndHost)
 			{
-				bIsChild = TRUE;
+				bIsChild = uiTrue;
 				break;
 			}
 			hTempWnd = ::GetParent(hTempWnd);
@@ -560,7 +560,7 @@ namespace DuiLib
 		return hr;
 	}
 
-	HRESULT CWebBrowserUI::RegisterEventHandler( BOOL inAdvise )
+	HRESULT CWebBrowserUI::RegisterEventHandler( uiBool inAdvise )
 	{
 		CComPtr<IWebBrowser2> pWebBrowser;
 		CComPtr<IConnectionPointContainer>  pCPC;
@@ -700,7 +700,7 @@ namespace DuiLib
 					DISPID                      rgDispIDs[5];
 					VARIANT                     rgvaEventInfo[5];
 					DISPPARAMS                  params;
-					BOOL                        fContinueRunningScripts = true;
+					uiBool                        fContinueRunningScripts = true;
 					int                         i;
 
 					params.cArgs = 0;

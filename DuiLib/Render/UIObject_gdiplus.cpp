@@ -142,33 +142,33 @@ namespace DuiLib {
 		delete m_pPath;
 	}
 
-	BOOL UIPath_gdiplus::Beginpath()
+	uiBool UIPath_gdiplus::Beginpath()
 	{
 		m_pPath->StartFigure();
-		return TRUE;
+		return uiTrue;
 	}
 
-	BOOL UIPath_gdiplus::EndPath()
+	uiBool UIPath_gdiplus::EndPath()
 	{
 		m_pPath->CloseFigure();
-		return TRUE;
+		return uiTrue;
 	}
 
-	BOOL UIPath_gdiplus::AbortPath()
+	uiBool UIPath_gdiplus::AbortPath()
 	{
 		m_pPath->CloseFigure();
-		return TRUE;
+		return uiTrue;
 	}
 
-	BOOL UIPath_gdiplus::AddLine(int x1, int y1, int x2, int y2)
+	uiBool UIPath_gdiplus::AddLine(int x1, int y1, int x2, int y2)
 	{
 		m_pPath->AddLine(x1, y1, x2, y2);
-		return TRUE;
+		return uiTrue;
 	}
 
-	BOOL UIPath_gdiplus::AddLines(CDuiPoint *points, int count)
+	uiBool UIPath_gdiplus::AddLines(CDuiPoint *points, int count)
 	{
-		if(count < 2) return FALSE;
+		if(count < 2) return uiFalse;
 
 		std::vector<Gdiplus::Point> p;
 		for (int i = 0; i < count; i++)

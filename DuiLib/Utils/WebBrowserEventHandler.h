@@ -60,19 +60,19 @@ namespace DuiLib
 		}
 
 		virtual HRESULT STDMETHODCALLTYPE EnableModeless(CControlUI* pWeb, 
-			/* [in] */ BOOL fEnable)
+			/* [in] */ uiBool fEnable)
 		{
 			return S_OK;
 		}
 
 		virtual HRESULT STDMETHODCALLTYPE OnDocWindowActivate(CControlUI* pWeb, 
-			/* [in] */ BOOL fActivate)
+			/* [in] */ uiBool fActivate)
 		{
 			return S_OK;
 		}
 
 		virtual HRESULT STDMETHODCALLTYPE OnFrameWindowActivate(CControlUI* pWeb, 
-			/* [in] */ BOOL fActivate)
+			/* [in] */ uiBool fActivate)
 		{
 			return S_OK;
 		}
@@ -80,7 +80,7 @@ namespace DuiLib
 		virtual HRESULT STDMETHODCALLTYPE ResizeBorder(CControlUI* pWeb, 
 			/* [in] */ LPCRECT prcBorder,
 			/* [in] */ IOleInPlaceUIWindow __RPC_FAR *pUIWindow,
-			/* [in] */ BOOL fRameWindow)
+			/* [in] */ uiBool fRameWindow)
 		{
 			return S_OK;
 		}

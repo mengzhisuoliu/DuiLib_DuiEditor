@@ -24,7 +24,7 @@ UIWND CUIFrameWndWin32::Create(UIWND hwndParent, LPCTSTR pstrName, DWORD dwStyle
 	return hWnd;
 }
 
-LRESULT CUIFrameWndWin32::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CUIFrameWndWin32::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	LRESULT lRet = CUIFrameWndBase::HandleCustomMessage(uMsg, wParam, lParam, bHandled);
 	if(bHandled) return lRet;
@@ -44,29 +44,29 @@ LRESULT CUIFrameWndWin32::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM l
 		return 1;
 	}
 
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CUIFrameWndWin32::OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CUIFrameWndWin32::OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	if( ::IsIconic(*this) ) bHandled = FALSE;
-	return (wParam == 0) ? TRUE : FALSE;
+	if( ::IsIconic(*this) ) bHandled = uiFalse;
+	return (wParam == 0) ? uiTrue : uiFalse;
 }
 
-LRESULT CUIFrameWndWin32::OnNcCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CUIFrameWndWin32::OnNcCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = TRUE;
+	bHandled = uiTrue;
 	return 0;
 }
 
-LRESULT CUIFrameWndWin32::OnNcPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CUIFrameWndWin32::OnNcPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
-	bHandled = TRUE;
+	bHandled = uiTrue;
 	return 0;
 }
 
-LRESULT CUIFrameWndWin32::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CUIFrameWndWin32::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	CDuiPoint pt; pt.x = GET_X_LPARAM(lParam); pt.y = GET_Y_LPARAM(lParam);
 	::ScreenToClient(*this, &pt);
@@ -114,7 +114,7 @@ LRESULT CUIFrameWndWin32::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 	return HTCLIENT;
 }
 
-LRESULT CUIFrameWndWin32::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CUIFrameWndWin32::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	MONITORINFO Monitor = {};
 	Monitor.cbSize = sizeof(Monitor);
@@ -134,11 +134,11 @@ LRESULT CUIFrameWndWin32::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lPara
 	lpMMI->ptMinTrackSize.x = GetManager()->GetMinInfo().cx;
 	lpMMI->ptMinTrackSize.y = GetManager()->GetMinInfo().cy;
 
-	bHandled = TRUE;
+	bHandled = uiTrue;
 	return 0;
 }
 
-LRESULT CUIFrameWndWin32::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CUIFrameWndWin32::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	CDuiSize szRoundCorner = GetManager()->GetRoundCorner();
 #if defined(WIN32) && !defined(UNDER_CE)
@@ -148,7 +148,7 @@ LRESULT CUIFrameWndWin32::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 		rcWnd.Offset(-rcWnd.left, -rcWnd.top);
 		rcWnd.right++; rcWnd.bottom++;
 		HRGN hRgn = ::CreateRoundRectRgn(rcWnd.left, rcWnd.top, rcWnd.right, rcWnd.bottom, szRoundCorner.cx, szRoundCorner.cy);
-		::SetWindowRgn(*this, hRgn, TRUE);
+		::SetWindowRgn(*this, hRgn, uiTrue);
 		::DeleteObject(hRgn);
 	}
 #endif
@@ -170,15 +170,15 @@ LRESULT CUIFrameWndWin32::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 		if (pRestoreBtn) pRestoreBtn->SetVisible(false);
 	}
 
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CUIFrameWndWin32::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CUIFrameWndWin32::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	if (wParam == SC_CLOSE)
 	{
-		bHandled = TRUE;
+		bHandled = uiTrue;
 		::SendMessage(GetHWND(), WM_CLOSE, 0, 0);
 		return 0;
 	}
@@ -209,11 +209,11 @@ LRESULT CUIFrameWndWin32::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 #endif
 	return lRes;
 	*/
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
-LRESULT CUIFrameWndWin32::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CUIFrameWndWin32::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	// 调整窗口样式
 	LONG styleValue = ::GetWindowLong(*this, GWL_STYLE);

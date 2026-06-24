@@ -23,17 +23,17 @@ namespace DuiLib {
 		void ShowWindow(bool bShow = true, bool bTakeFocus = true);
 		UINT ShowModal();
 
-		static BOOL IsWindow(UIWND hWnd);
-		static BOOL IsChildWindow(UIWND hWnd);
+		static uiBool IsWindow(UIWND hWnd);
+		static uiBool IsChildWindow(UIWND hWnd);
 		static UIWND GetParentWindow(UIWND hWnd);
-		static BOOL SetForeground(UIWND hWnd);
+		static uiBool SetForeground(UIWND hWnd);
 		static LRESULT SendMessage(UIWND hWnd, UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0);
-		static BOOL PostMessage(UIWND hWnd, UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0);
+		static uiBool PostMessage(UIWND hWnd, UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0);
 
 		virtual void Invalidate() override;
-		virtual BOOL SetWindowPos(int x, int y, int cx, int cy, UINT uFlags) override;
-		virtual BOOL GetWindowRect(LPRECT lpRect) override;
-		virtual BOOL GetClientRect(LPRECT lpRect) override;
+		virtual uiBool SetWindowPos(int x, int y, int cx, int cy, UINT uFlags) override;
+		virtual uiBool GetWindowRect(LPRECT lpRect) override;
+		virtual uiBool GetClientRect(LPRECT lpRect) override;
 
 		virtual void Close(UINT nRet = IDOK) override;
 		virtual void SetCursor(int nCursor) override;
@@ -51,7 +51,7 @@ namespace DuiLib {
 
 		static LRESULT CALLBACK __WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 		static LRESULT CALLBACK __ControlProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-		static BOOL DoTouchInformation(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+		static uiBool DoTouchInformation(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	protected:
 		WNDPROC m_OldWndProc;

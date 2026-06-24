@@ -70,7 +70,7 @@ public:
 	}
 
 	TNodeData *GetParent() const { return m_pParent; }
-	BOOL NodeHasChildren() const { return m_childs.GetSize() > 0 || m_bHasChildren; }
+	uiBool NodeHasChildren() const { return m_childs.GetSize() > 0 || m_bHasChildren; }
 	TNodeData *GetChild(int n) const { return (TNodeData *)m_childs.GetAt(n); }
 
 	bool m_bSelected;
@@ -101,14 +101,14 @@ public:
 	void SetIndentWidth(int nWidth)					{ m_nIndentWidth = nWidth;				}
 	int  GetIndentWidth()							{ return m_nIndentWidth;				}
 
-	void SetViewLine(BOOL bView)					{ m_bViewLine = bView;					}
-	BOOL IsViewLine() const							{ return m_bViewLine;					}
+	void SetViewLine(uiBool bView)					{ m_bViewLine = bView;					}
+	uiBool IsViewLine() const							{ return m_bViewLine;					}
 
 	void SetNodeHeight(int nHeight)					{ m_nNodeHeight = nHeight;				}
 	int  GetNodeHeight() const						{ return m_nNodeHeight;					}
 
-	void SetMultiSelect(BOOL bMultiSel)				{ m_bMultiSelect = bMultiSel;			}
-	BOOL IsMultiSelect() const						{ return m_bMultiSelect;				}
+	void SetMultiSelect(uiBool bMultiSel)				{ m_bMultiSelect = bMultiSel;			}
+	uiBool IsMultiSelect() const						{ return m_bMultiSelect;				}
 
 	void SetStyleNode(LPCTSTR pstrValue)			{ m_sStyleNode = pstrValue;			}
 	LPCTSTR GetStyleNode()							{ return m_sStyleNode;				}
@@ -153,7 +153,7 @@ public:
 	TNodeData *GetRootNode();
 
 	//判断是否根节点 ( 根节点可能不止一个 )
-	BOOL IsRootNode(TNodeData *pNode);
+	uiBool IsRootNode(TNodeData *pNode);
 
 	//获得pNode的下一项，用于纵深方向遍历树。
 	TNodeData *GetNextNode(TNodeData *pNode, bool bGetVisibleNode=false);
@@ -167,7 +167,7 @@ public:
 	//获得pNode的上一个兄弟
 	TNodeData *GetNextPrevNode(TNodeData *pNode);
 
-	void Expand(TNodeData *pNode, BOOL bExpand);
+	void Expand(TNodeData *pNode, uiBool bExpand);
 	bool IsExpand(TNodeData *pNode) const;
 
 	void ClearSeletedNodes();
@@ -178,16 +178,16 @@ public:
 	TNodeData *GetSelectNode();
 	TNodeData *GetNextSelectNode();
 
-	BOOL MoveNode(TNodeData *pNode, TNodeData *pNewParent, TNodeData *phInsertAfter = TNODE_LAST);
+	uiBool MoveNode(TNodeData *pNode, TNodeData *pNewParent, TNodeData *phInsertAfter = TNODE_LAST);
 protected:
 	TNodeData *AllocNodeData();
 	void FreeNodeData(TNodeData *pTreeData);
 	void _DeleteAllItem(TNodeData *pNodeData);
 protected:
 	int m_nIndentWidth;
-	BOOL m_bViewLine;
+	uiBool m_bViewLine;
 	int  m_nNodeHeight;
-	BOOL m_bMultiSelect;
+	uiBool m_bMultiSelect;
 	CDuiString m_sStyleNode;
 	CDuiString m_sStyleFolder;
 	CDuiString m_sStyleCheckBox;

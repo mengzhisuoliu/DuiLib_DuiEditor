@@ -377,7 +377,7 @@ namespace DuiLib {
 		return new UIPath_gdiplus();
 	}
 
-	BOOL UIRender_gdiplus::DrawPath(const UIPath* path, int nSize, CDuiColor dwColor)
+	uiBool UIRender_gdiplus::DrawPath(const UIPath* path, int nSize, CDuiColor dwColor)
 	{
 		Gdiplus::Graphics graphics(m_hDC);
 		graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
@@ -385,7 +385,7 @@ namespace DuiLib {
 		return graphics.DrawPath(&pen, ((UIPath_gdiplus *)path)->Getpath()) == Gdiplus::Ok;
 	}
 
-	BOOL UIRender_gdiplus::FillPath(const UIPath* path, const CDuiColor dwColor)
+	uiBool UIRender_gdiplus::FillPath(const UIPath* path, const CDuiColor dwColor)
 	{
 		Gdiplus::Graphics graphics(m_hDC);
 		graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);

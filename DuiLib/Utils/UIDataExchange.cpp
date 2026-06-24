@@ -96,12 +96,12 @@ implfun bool CUIDataExchange::_UpdateText(_ddx_data *pData, bool bSaveAndValidat
 				}
 				else
 				{
-					m_bUpdate = ((COleDateTime *)(pData->pValue))->ParseDateTime(pData->pControl->GetText()) == TRUE;
+					m_bUpdate = ((COleDateTime *)(pData->pValue))->ParseDateTime(pData->pControl->GetText()) == uiTrue;
 				}
 			}
 			break;
 		case _value_colecurrency:
-			m_bUpdate = ((COleCurrency *)(pData->pValue))->ParseCurrency(pData->pControl->GetText()) == TRUE;
+			m_bUpdate = ((COleCurrency *)(pData->pValue))->ParseCurrency(pData->pControl->GetText()) == uiTrue;
 			break;
 #endif
 		default: break;
@@ -228,7 +228,7 @@ implfun bool CUIDataExchange::_UpdateCheckBox(_ddx_data *pData, bool bSaveAndVal
 			*((bool *)(pData->pValue)) = pOption->IsSelected();
 			break;
 		case _value_BOOL:
-			*((BOOL *)(pData->pValue)) = pOption->IsSelected();
+			*((uiBool*)(pData->pValue)) = pOption->IsSelected();
 			break;
 		}
 	}
@@ -240,7 +240,7 @@ implfun bool CUIDataExchange::_UpdateCheckBox(_ddx_data *pData, bool bSaveAndVal
 			pOption->Selected(*((bool *)(pData->pValue)));
 			break;
 		case _value_BOOL:
-			pOption->Selected(*((BOOL *)(pData->pValue)) == TRUE);
+			pOption->Selected(*((uiBool*)(pData->pValue)) == uiTrue);
 			break;
 		}
 	}
@@ -488,7 +488,7 @@ implfun bool CUIDataExchange::ddxCheckBox(LPCTSTR pControlName, bool &va)
 	return ddxCheckBox(pControl, va);
 }
 
-implfun bool CUIDataExchange::ddxCheckBox(CControlUI *pControl, BOOL &va)
+implfun bool CUIDataExchange::ddxCheckBox(CControlUI *pControl, uiBool&va)
 {
 	ASSERT(pControl);
 	ASSERT(pControl->GetInterface(DUI_CTR_OPTION));
@@ -505,7 +505,7 @@ implfun bool CUIDataExchange::ddxCheckBox(CControlUI *pControl, BOOL &va)
 	return true;
 }
 
-implfun bool CUIDataExchange::ddxCheckBox(LPCTSTR pControlName, BOOL &va)
+implfun bool CUIDataExchange::ddxCheckBox(LPCTSTR pControlName, uiBool&va)
 {
 	CControlUI *pControl = NULL;
 	if(m_pRoot)

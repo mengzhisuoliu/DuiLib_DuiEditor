@@ -1,0 +1,415 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0C1CC1DE2FE3C193007904E2 /* libSDL3_ttf.0.3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C1CC1DD2FE3C193007904E2 /* libSDL3_ttf.0.3.0.dylib */; };
+		0C1CC1E02FE3C198007904E2 /* libSDL3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C1CC1DF2FE3C198007904E2 /* libSDL3.0.dylib */; };
+		0C1CC1E42FE3C1BB007904E2 /* libSDL3_ttf.0.3.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 0C1CC1DD2FE3C193007904E2 /* libSDL3_ttf.0.3.0.dylib */; };
+		0C1CC1E52FE3C1BC007904E2 /* libSDL3.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 0C1CC1DF2FE3C198007904E2 /* libSDL3.0.dylib */; };
+		0C1CC1F32FE3CD7D007904E2 /* libSDL3_ttf.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C1CC1F22FE3CD7D007904E2 /* libSDL3_ttf.0.dylib */; };
+		0C1CC1F42FE3CD7E007904E2 /* libSDL3_ttf.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 0C1CC1F22FE3CD7D007904E2 /* libSDL3_ttf.0.dylib */; };
+		0C1CC1F62FE3CD81007904E2 /* libSDL3_ttf.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C1CC1F52FE3CD81007904E2 /* libSDL3_ttf.dylib */; };
+		0C1CC1F72FE3CD81007904E2 /* libSDL3_ttf.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 0C1CC1F52FE3CD81007904E2 /* libSDL3_ttf.dylib */; };
+		0C1CC1F92FE3CD88007904E2 /* libSDL3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C1CC1F82FE3CD88007904E2 /* libSDL3.dylib */; };
+		0C1CC1FA2FE3CD88007904E2 /* libSDL3.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 0C1CC1F82FE3CD88007904E2 /* libSDL3.dylib */; };
+		0C5BA9682FEA6A0A0038F9F3 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C5BA9672FEA6A0A0038F9F3 /* libiconv.tbd */; };
+		52E714AB2FDF9A7E003701EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52E714AA2FDF9A7E003701EB /* Assets.xcassets */; };
+		52E714B02FDF9A7E003701EB /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 52E714AF2FDF9A7E003701EB /* main.mm */; };
+		52E714C02FE2826D003701EB /* MainFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52E714BE2FE2826C003701EB /* MainFrame.cpp */; };
+		52E714C12FE2826D003701EB /* App.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52E714BF2FE2826D003701EB /* App.cpp */; };
+		52E714C42FE285A3003701EB /* libDuiLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52E714C32FE285A3003701EB /* libDuiLib.a */; };
+		52E714CE2FE28699003701EB /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 52E714CD2FE28698003701EB /* Config.xcconfig */; };
+		52E714D02FE28828003701EB /* skin in Resources */ = {isa = PBXBuildFile; fileRef = 52E714CF2FE28827003701EB /* skin */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0C1CC1E22FE3C1B7007904E2 /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0C1CC1FA2FE3CD88007904E2 /* libSDL3.dylib in Embed Libraries */,
+				0C1CC1E52FE3C1BC007904E2 /* libSDL3.0.dylib in Embed Libraries */,
+				0C1CC1F72FE3CD81007904E2 /* libSDL3_ttf.dylib in Embed Libraries */,
+				0C1CC1F42FE3CD7E007904E2 /* libSDL3_ttf.0.dylib in Embed Libraries */,
+				0C1CC1E42FE3C1BB007904E2 /* libSDL3_ttf.0.3.0.dylib in Embed Libraries */,
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0C1CC1DD2FE3C193007904E2 /* libSDL3_ttf.0.3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSDL3_ttf.0.3.0.dylib; path = ../../../../../../usr/local/lib/libSDL3_ttf.0.3.0.dylib; sourceTree = "<group>"; };
+		0C1CC1DF2FE3C198007904E2 /* libSDL3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSDL3.0.dylib; path = ../../../../../../usr/local/lib/libSDL3.0.dylib; sourceTree = "<group>"; };
+		0C1CC1F22FE3CD7D007904E2 /* libSDL3_ttf.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSDL3_ttf.0.dylib; path = ../../../../../../usr/local/lib/libSDL3_ttf.0.dylib; sourceTree = "<group>"; };
+		0C1CC1F52FE3CD81007904E2 /* libSDL3_ttf.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSDL3_ttf.dylib; path = ../../../../../../usr/local/lib/libSDL3_ttf.dylib; sourceTree = "<group>"; };
+		0C1CC1F82FE3CD88007904E2 /* libSDL3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSDL3.dylib; path = ../../../../../../usr/local/lib/libSDL3.dylib; sourceTree = "<group>"; };
+		0C5BA9672FEA6A0A0038F9F3 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		52E714A12FDF9A7A003701EB /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		52E714AA2FDF9A7E003701EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		52E714AF2FDF9A7E003701EB /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		52E714B12FDF9A7E003701EB /* TestApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestApp.entitlements; sourceTree = "<group>"; };
+		52E714BC2FE2826C003701EB /* MainFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainFrame.h; sourceTree = "<group>"; };
+		52E714BD2FE2826C003701EB /* App.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
+		52E714BE2FE2826C003701EB /* MainFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainFrame.cpp; sourceTree = "<group>"; };
+		52E714BF2FE2826D003701EB /* App.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = App.cpp; sourceTree = "<group>"; };
+		52E714C32FE285A3003701EB /* libDuiLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDuiLib.a; path = ../../DuiLib/Lib/libDuiLib.a; sourceTree = "<group>"; };
+		52E714CD2FE28698003701EB /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		52E714CF2FE28827003701EB /* skin */ = {isa = PBXFileReference; lastKnownFileType = folder; path = skin; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		52E7149E2FDF9A7A003701EB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0C5BA9682FEA6A0A0038F9F3 /* libiconv.tbd in Frameworks */,
+				52E714C42FE285A3003701EB /* libDuiLib.a in Frameworks */,
+				0C1CC1DE2FE3C193007904E2 /* libSDL3_ttf.0.3.0.dylib in Frameworks */,
+				0C1CC1F32FE3CD7D007904E2 /* libSDL3_ttf.0.dylib in Frameworks */,
+				0C1CC1F62FE3CD81007904E2 /* libSDL3_ttf.dylib in Frameworks */,
+				0C1CC1E02FE3C198007904E2 /* libSDL3.0.dylib in Frameworks */,
+				0C1CC1F92FE3CD88007904E2 /* libSDL3.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		52E714982FDF9A7A003701EB = {
+			isa = PBXGroup;
+			children = (
+				52E714CF2FE28827003701EB /* skin */,
+				52E714CD2FE28698003701EB /* Config.xcconfig */,
+				52E714A32FDF9A7A003701EB /* TestApp */,
+				52E714A22FDF9A7A003701EB /* Products */,
+				52E714C22FE285A3003701EB /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		52E714A22FDF9A7A003701EB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				52E714A12FDF9A7A003701EB /* TestApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		52E714A32FDF9A7A003701EB /* TestApp */ = {
+			isa = PBXGroup;
+			children = (
+				52E714BD2FE2826C003701EB /* App.h */,
+				52E714BF2FE2826D003701EB /* App.cpp */,
+				52E714BC2FE2826C003701EB /* MainFrame.h */,
+				52E714BE2FE2826C003701EB /* MainFrame.cpp */,
+				52E714AA2FDF9A7E003701EB /* Assets.xcassets */,
+				52E714AF2FDF9A7E003701EB /* main.mm */,
+				52E714B12FDF9A7E003701EB /* TestApp.entitlements */,
+			);
+			path = TestApp;
+			sourceTree = "<group>";
+		};
+		52E714C22FE285A3003701EB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0C5BA9672FEA6A0A0038F9F3 /* libiconv.tbd */,
+				0C1CC1F82FE3CD88007904E2 /* libSDL3.dylib */,
+				0C1CC1F52FE3CD81007904E2 /* libSDL3_ttf.dylib */,
+				0C1CC1F22FE3CD7D007904E2 /* libSDL3_ttf.0.dylib */,
+				0C1CC1DF2FE3C198007904E2 /* libSDL3.0.dylib */,
+				0C1CC1DD2FE3C193007904E2 /* libSDL3_ttf.0.3.0.dylib */,
+				52E714C32FE285A3003701EB /* libDuiLib.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		52E714A02FDF9A7A003701EB /* TestApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 52E714B42FDF9A7E003701EB /* Build configuration list for PBXNativeTarget "TestApp" */;
+			buildPhases = (
+				52E7149D2FDF9A7A003701EB /* Sources */,
+				52E7149E2FDF9A7A003701EB /* Frameworks */,
+				52E7149F2FDF9A7A003701EB /* Resources */,
+				0C1CC1E22FE3C1B7007904E2 /* Embed Libraries */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestApp;
+			productName = TestApp;
+			productReference = 52E714A12FDF9A7A003701EB /* TestApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		52E714992FDF9A7A003701EB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1320;
+				TargetAttributes = {
+					52E714A02FDF9A7A003701EB = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
+				};
+			};
+			buildConfigurationList = 52E7149C2FDF9A7A003701EB /* Build configuration list for PBXProject "TestApp" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 52E714982FDF9A7A003701EB;
+			productRefGroup = 52E714A22FDF9A7A003701EB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				52E714A02FDF9A7A003701EB /* TestApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		52E7149F2FDF9A7A003701EB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				52E714CE2FE28699003701EB /* Config.xcconfig in Resources */,
+				52E714AB2FDF9A7E003701EB /* Assets.xcassets in Resources */,
+				52E714D02FE28828003701EB /* skin in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		52E7149D2FDF9A7A003701EB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				52E714C02FE2826D003701EB /* MainFrame.cpp in Sources */,
+				52E714C12FE2826D003701EB /* App.cpp in Sources */,
+				52E714B02FDF9A7E003701EB /* main.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		52E714B22FDF9A7E003701EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		52E714B32FDF9A7E003701EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		52E714B52FDF9A7E003701EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TestApp/TestApp.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../bin";
+				CURRENT_PROJECT_VERSION = 1;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DUILIB_SDL=1",
+					"DEBUG=1",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					../../DuiLib/Lib,
+					/usr/local/lib,
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = DuiLib.TestApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../DuiLib";
+			};
+			name = Debug;
+		};
+		52E714B62FDF9A7E003701EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TestApp/TestApp.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../bin";
+				CURRENT_PROJECT_VERSION = 1;
+				GCC_PREPROCESSOR_DEFINITIONS = "DUILIB_SDL=1";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					../../DuiLib/Lib,
+					/usr/local/lib,
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = DuiLib.TestApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../DuiLib";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		52E7149C2FDF9A7A003701EB /* Build configuration list for PBXProject "TestApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52E714B22FDF9A7E003701EB /* Debug */,
+				52E714B32FDF9A7E003701EB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		52E714B42FDF9A7E003701EB /* Build configuration list for PBXNativeTarget "TestApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52E714B52FDF9A7E003701EB /* Debug */,
+				52E714B62FDF9A7E003701EB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 52E714992FDF9A7A003701EB /* Project object */;
+}

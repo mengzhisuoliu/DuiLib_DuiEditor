@@ -23,7 +23,7 @@ namespace DuiLib {
 		return m_sSkinFile.GetData();
 	}
 
-	BOOL CLangPackageUI::LoadResource(STRINGorID xml, LPCTSTR type)
+	uiBool CLangPackageUI::LoadResource(STRINGorID xml, LPCTSTR type)
 	{
 		CXmlDocumentUI xmlMarkup;
 		if( HIWORD(xml.m_lpstr) != NULL ) 
@@ -59,12 +59,12 @@ namespace DuiLib {
 		return LoadResource(xmlMarkup.root());
 	}
 
-	BOOL CLangPackageUI::LoadResource(CXmlNodeUI root)
+	uiBool CLangPackageUI::LoadResource(CXmlNodeUI root)
 	{	
-		if( !root ) return FALSE;
+		if( !root ) return uiFalse;
 
 		CXmlNodeUI nodeLanguage = root.child(_T("Language"));
-		if(!nodeLanguage) return FALSE;
+		if(!nodeLanguage) return uiFalse;
 
 		//加载资源
 		for( CXmlNodeUI node = nodeLanguage.first_child(); node; node = node.next_sibling() ) 
@@ -87,7 +87,7 @@ namespace DuiLib {
 					AddTipValue(id, attrTipValue.value());
 			}
 		}
-		return TRUE;
+		return uiTrue;
 	}
 
 	void CLangPackageUI::ResetResource()
@@ -112,7 +112,7 @@ namespace DuiLib {
 		m_mTipValue.clear();
 	}
 
-	BOOL CLangPackageUI::AddText(int resid, LPCTSTR lpstrText)
+	uiBool CLangPackageUI::AddText(int resid, LPCTSTR lpstrText)
 	{
 // 		if(resid == 39)
 // 		{
@@ -121,10 +121,10 @@ namespace DuiLib {
 		std::map<int, CDuiString *>::iterator it = m_mText.find(resid);
 		if(it != m_mText.end())
 		{
-			return FALSE;
+			return uiFalse;
 		}
 		m_mText[resid] = new CDuiString(lpstrText);
-		return TRUE;
+		return uiTrue;
 	}
 
 	LPCTSTR CLangPackageUI::GetText(int resid)
@@ -137,15 +137,15 @@ namespace DuiLib {
 		return _T("");
 	}	
 
-	BOOL CLangPackageUI::AddToolTip(int resid, LPCTSTR lpstrText)
+	uiBool CLangPackageUI::AddToolTip(int resid, LPCTSTR lpstrText)
 	{
 		std::map<int, CDuiString *>::iterator it = m_mToolTip.find(resid);
 		if(it != m_mToolTip.end())
 		{
-			return FALSE;
+			return uiFalse;
 		}
 		m_mToolTip[resid] = new CDuiString(lpstrText);
-		return TRUE;
+		return uiTrue;
 	}
 
 	LPCTSTR CLangPackageUI::GetToolTip(int resid)
@@ -158,15 +158,15 @@ namespace DuiLib {
 		return _T("");
 	}
 
-	BOOL CLangPackageUI::AddTipValue(int resid, LPCTSTR lpstrText)
+	uiBool CLangPackageUI::AddTipValue(int resid, LPCTSTR lpstrText)
 	{
 		std::map<int, CDuiString *>::iterator it = m_mTipValue.find(resid);
 		if(it != m_mTipValue.end())
 		{
-			return FALSE;
+			return uiFalse;
 		}
 		m_mTipValue[resid] = new CDuiString(lpstrText);
-		return TRUE;
+		return uiTrue;
 	}
 
 	LPCTSTR CLangPackageUI::GetTipValue(int resid)
@@ -186,7 +186,7 @@ namespace DuiLib {
 
 	std::map<CDuiString, CDuiString> CLangManagerUI::m_mStringResource;
 	CXmlDocumentUI CLangManagerUI::m_xmlStringRecource;
-	BOOL CLangManagerUI::m_bNeedSaveStringRecource = FALSE;
+	uiBool CLangManagerUI::m_bNeedSaveStringRecource = uiFalse;
 
 	CLangManagerUI::CLangManagerUI(void)
 	{
@@ -225,7 +225,7 @@ namespace DuiLib {
 	CLangPackageUI *CLangManagerUI::_addPackage(LPCTSTR lpstrSkinFile)
 	{
 		CLangPackageUI *pkg = static_cast<CLangPackageUI *>(m_mLangPackage.Find(lpstrSkinFile));
-		if(pkg) return FALSE;
+		if(pkg) return uiFalse;
 
 		pkg = new CLangPackageUI;
 		pkg->SetSkinFile(lpstrSkinFile);
@@ -268,7 +268,7 @@ namespace DuiLib {
 	CLangPackageUI *CLangManagerUI::AddPackage(LPCTSTR lpstrSkinFile)
 	{
 		CDuiString *pstr = static_cast<CDuiString *>(m_mSkinFile.Find(lpstrSkinFile));
-		if(pstr) return FALSE;
+		if(pstr) return uiFalse;
 		m_mSkinFile.Insert(lpstrSkinFile, new CDuiString(lpstrSkinFile));
 
 		return _addPackage(lpstrSkinFile);
@@ -297,7 +297,7 @@ namespace DuiLib {
 		return s_sLangName;
 	}
 
-	BOOL CLangManagerUI::LoadStringTable()
+	uiBool CLangManagerUI::LoadStringTable()
 	{
 		ReleaseStringTable();
 		CDuiString sPath = CLangManagerUI::GetLangPath();
@@ -308,7 +308,7 @@ namespace DuiLib {
 		return LoadStringTableResource(xml, NULL);
 	}
 
-	BOOL CLangManagerUI::LoadStringTableResource(STRINGorID xml, LPCTSTR type)
+	uiBool CLangManagerUI::LoadStringTableResource(STRINGorID xml, LPCTSTR type)
 	{
 		CXmlDocumentUI xmlMarkup;
 		if( HIWORD(xml.m_lpstr) != NULL ) 
@@ -344,12 +344,12 @@ namespace DuiLib {
 		return LoadStringTableResource(xmlMarkup.root());
 	}
 
-	BOOL CLangManagerUI::LoadStringTableResource(CXmlNodeUI root)
+	uiBool CLangManagerUI::LoadStringTableResource(CXmlNodeUI root)
 	{
-		if( !root ) return FALSE;
+		if( !root ) return uiFalse;
 
 		CXmlNodeUI nodeLanguage = root.child(_T("Language"));
-		if(!nodeLanguage) return FALSE;
+		if(!nodeLanguage) return uiFalse;
 
 		//加载StringTable
 		for( CXmlNodeUI node = nodeLanguage.first_child() ; node; node = node.next_sibling() ) 
@@ -375,7 +375,7 @@ namespace DuiLib {
 				}
 			}
 		}
-		return TRUE;
+		return uiTrue;
 	}
 
 	void CLangManagerUI::ReleaseStringTable()
@@ -407,7 +407,7 @@ namespace DuiLib {
 
 	void CLangManagerUI::InitStringReource()
 	{
-		m_bNeedSaveStringRecource = FALSE;
+		m_bNeedSaveStringRecource = uiFalse;
 		m_mStringResource.clear();
 
 		CDuiString sPath = CLangManagerUI::GetLangPath();
@@ -443,7 +443,7 @@ namespace DuiLib {
 
 		m_mStringResource[id] = text;
 
-		m_bNeedSaveStringRecource = TRUE;
+		m_bNeedSaveStringRecource = uiTrue;
 		return text;
 	}
 

@@ -51,7 +51,7 @@ namespace DuiLib {
 				break;
 #endif
 			default:
-				ASSERT(FALSE);
+				ASSERT(uiFalse);
 				break;
 			}
 		}

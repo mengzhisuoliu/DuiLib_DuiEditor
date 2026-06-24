@@ -38,27 +38,27 @@ public:
 	virtual UINT ReadInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefault);
 
 	// Sets an integer value to INI file or registry.
-	virtual BOOL WriteInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nValue);
+	virtual uiBool WriteInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nValue);
 
 	// Retrieve a string value from INI file or registry.
 	virtual CDuiString ReadString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR lpszDefault = NULL);
 
 	// Sets a string value to INI file or registry.
-	virtual BOOL WriteString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR lpszValue);
+	virtual uiBool WriteString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR lpszValue);
 
 	// Retrieve an arbitrary binary value from INI file or registry.
-	virtual BOOL ReadBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYTE* ppData, UINT* pBytes);
+	virtual uiBool ReadBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYTE* ppData, UINT* pBytes);
 
 	// Sets an arbitrary binary value to INI file or registry.
-	virtual BOOL WriteBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYTE pData, UINT nBytes);
+	virtual uiBool WriteBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYTE pData, UINT nBytes);
 
 	//...int
-	virtual BOOL GetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, int &nValue, int nDefault = 0);
-	virtual BOOL SetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nValue);
+	virtual uiBool GetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, int &nValue, int nDefault = 0);
+	virtual uiBool SetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nValue);
 
 	//....string
-	virtual BOOL GetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, CDuiString &strValue, LPCTSTR lpszDefault = NULL);
-	virtual BOOL SetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR strValue);
+	virtual uiBool GetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, CDuiString &strValue, LPCTSTR lpszDefault = NULL);
+	virtual uiBool SetValue(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR strValue);
 
 protected:
 	// returns key for HKEY_CURRENT_USER\"Software"\RegistryKey\ProfileName.
@@ -88,23 +88,23 @@ public:
 	void LoadConfig(LPCTSTR szPathName = NULL);
 	void SaveConfig();
 
-	BOOL SaveControl(CXmlNodeUI nodeParent, CEditUI *pControl);
-	BOOL LoadControl(CXmlNodeUI nodeParent, CEditUI *pControl, LPCTSTR szDefault = _T(""));
+	uiBool SaveControl(CXmlNodeUI nodeParent, CEditUI *pControl);
+	uiBool LoadControl(CXmlNodeUI nodeParent, CEditUI *pControl, LPCTSTR szDefault = _T(""));
 
-	BOOL SaveControl(CXmlNodeUI nodeParent, CRichEditUI *pControl);
-	BOOL LoadControl(CXmlNodeUI nodeParent, CRichEditUI *pControl, LPCTSTR szDefault = _T(""));
+	uiBool SaveControl(CXmlNodeUI nodeParent, CRichEditUI *pControl);
+	uiBool LoadControl(CXmlNodeUI nodeParent, CRichEditUI *pControl, LPCTSTR szDefault = _T(""));
 
-	BOOL SaveControl(CXmlNodeUI nodeParent, CComboUI *pControl, BOOL bSaveItems = FALSE);
-	BOOL LoadControl(CXmlNodeUI nodeParent, CComboUI *pControl, LPCTSTR szDefault = _T(""), BOOL bLoadItems = FALSE);
+	uiBool SaveControl(CXmlNodeUI nodeParent, CComboUI *pControl, uiBool bSaveItems = uiFalse);
+	uiBool LoadControl(CXmlNodeUI nodeParent, CComboUI *pControl, LPCTSTR szDefault = _T(""), uiBool bLoadItems = uiFalse);
 
-	BOOL SaveControl(CXmlNodeUI nodeParent, CComboExUI *pControl, BOOL bSaveItems = FALSE);
-	BOOL LoadControl(CXmlNodeUI nodeParent, CComboExUI *pControl, LPCTSTR szDefault = _T(""), BOOL bLoadItems = FALSE);
+	uiBool SaveControl(CXmlNodeUI nodeParent, CComboExUI *pControl, uiBool bSaveItems = uiFalse);
+	uiBool LoadControl(CXmlNodeUI nodeParent, CComboExUI *pControl, LPCTSTR szDefault = _T(""), uiBool bLoadItems = uiFalse);
 
-	BOOL SaveControl(CXmlNodeUI nodeParent, COptionUI *pControl);
-	BOOL LoadControl(CXmlNodeUI nodeParent, COptionUI *pControl, BOOL bDefault = FALSE);
+	uiBool SaveControl(CXmlNodeUI nodeParent, COptionUI *pControl);
+	uiBool LoadControl(CXmlNodeUI nodeParent, COptionUI *pControl, uiBool bDefault = uiFalse);
 
-	BOOL SaveControl(CXmlNodeUI nodeParent, CTabLayoutUI *pControl);
-	BOOL LoadControl(CXmlNodeUI nodeParent, CTabLayoutUI *pControl, int nDefault = 0);
+	uiBool SaveControl(CXmlNodeUI nodeParent, CTabLayoutUI *pControl);
+	uiBool LoadControl(CXmlNodeUI nodeParent, CTabLayoutUI *pControl, int nDefault = 0);
 
 private:
 	CXmlDocumentUI m_xml;
@@ -134,19 +134,19 @@ public:
 	virtual UINT GetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefault);
 
 	// Sets an integer value to INI file or registry.
-	virtual BOOL WriteProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nValue);
+	virtual uiBool WriteProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nValue);
 
 	// Retrieve a string value from INI file or registry.
 	virtual CDuiString GetProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR lpszDefault = NULL);
 
 	// Sets a string value to INI file or registry.
-	virtual BOOL WriteProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR lpszValue);
+	virtual uiBool WriteProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR lpszValue);
 
 	// Retrieve an arbitrary binary value from INI file or registry.
-	virtual BOOL GetProfileBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYTE* ppData, UINT* pBytes);
+	virtual uiBool GetProfileBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYTE* ppData, UINT* pBytes);
 
 	// Sets an arbitrary binary value to INI file or registry.
-	virtual BOOL WriteProfileBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYTE pData, UINT nBytes);
+	virtual uiBool WriteProfileBinary(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPBYTE pData, UINT nBytes);
 protected:
 	virtual int ExitInstance();
 

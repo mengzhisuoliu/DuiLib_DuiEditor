@@ -200,7 +200,7 @@ namespace DuiLib
 	//
 	IMPLEMENT_DUICONTROL(CCheckBoxUI)
 
-	CCheckBoxUI::CCheckBoxUI() : m_bAutoCheck(FALSE)
+	CCheckBoxUI::CCheckBoxUI() : m_bAutoCheck(uiFalse)
 	{
 
 	}
@@ -268,7 +268,7 @@ namespace DuiLib
 					for( int i = 0; i < aOptionGroup->GetSize(); i++ ) {
 						COptionUI* pControl = static_cast<COptionUI*>(aOptionGroup->GetAt(i));
 						if( pControl != this ) {
-							pControl->Selected(FALSE);
+							pControl->Selected(uiFalse);
 						}
 					}
 					if (bTriggerEvent) m_pManager->SendNotify(this, DUI_MSGTYPE_SELECTCHANGED, IsSelected(), 0);

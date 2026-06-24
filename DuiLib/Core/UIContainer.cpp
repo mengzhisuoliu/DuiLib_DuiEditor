@@ -786,7 +786,7 @@ namespace DuiLib
 		}
 		else if( _tcsicmp(pstrName, _T("vscrollbarstyle")) == 0 ) {
 			m_sVerticalScrollBarStyle = pstrValue;
-			EnableScrollBar(TRUE, GetHorizontalScrollBar() != NULL);
+			EnableScrollBar(uiTrue, GetHorizontalScrollBar() != NULL);
 			if( GetVerticalScrollBar() ) {
 				LPCTSTR pStyle = m_pManager->GetStyle(m_sVerticalScrollBarStyle);
 				if( pStyle ) {
@@ -802,7 +802,7 @@ namespace DuiLib
 		}
 		else if( _tcsicmp(pstrName, _T("hscrollbarstyle")) == 0 ) {
 			m_sHorizontalScrollBarStyle = pstrValue;
-			EnableScrollBar(TRUE, GetHorizontalScrollBar() != NULL);
+			EnableScrollBar(uiTrue, GetHorizontalScrollBar() != NULL);
 			if( GetHorizontalScrollBar() ) {
 				LPCTSTR pStyle = m_pManager->GetStyle(m_sHorizontalScrollBarStyle);
 				if( pStyle ) {
@@ -1172,10 +1172,10 @@ namespace DuiLib
 		if (pSubControl!=NULL)
 		{
 			pSubControl->SetText(pstrText);
-			return TRUE;
+			return uiTrue;
 		}
 		else
-			return FALSE;
+			return uiFalse;
 	}
 
 	bool CContainerUI::SetSubControlFixedHeight( LPCTSTR pstrSubControlName,int cy )
@@ -1185,10 +1185,10 @@ namespace DuiLib
 		if (pSubControl!=NULL)
 		{
 			pSubControl->SetFixedHeight(cy);
-			return TRUE;
+			return uiTrue;
 		}
 		else
-			return FALSE;
+			return uiFalse;
 	}
 
 	bool CContainerUI::SetSubControlFixedWdith( LPCTSTR pstrSubControlName,int cx )
@@ -1198,10 +1198,10 @@ namespace DuiLib
 		if (pSubControl!=NULL)
 		{
 			pSubControl->SetFixedWidth(cx);
-			return TRUE;
+			return uiTrue;
 		}
 		else
-			return FALSE;
+			return uiFalse;
 	}
 
 	bool CContainerUI::SetSubControlUserData( LPCTSTR pstrSubControlName,LPCTSTR pstrText )
@@ -1211,10 +1211,10 @@ namespace DuiLib
 		if (pSubControl!=NULL)
 		{
 			pSubControl->SetUserData(pstrText);
-			return TRUE;
+			return uiTrue;
 		}
 		else
-			return FALSE;
+			return uiFalse;
 	}
 
 	DuiLib::CDuiString CContainerUI::GetSubControlText( LPCTSTR pstrSubControlName )

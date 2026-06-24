@@ -183,7 +183,7 @@ void regCDuiString::String_Construct_int(int val, CDuiString *thisPointer)
 	new(thisPointer) CDuiString(val);
 }
 
-void regCDuiString::String_Construct_int64(DuiLib::Int64 val, CDuiString *thisPointer)
+void regCDuiString::String_Construct_int64(uiInt64 val, CDuiString *thisPointer)
 {
 	new(thisPointer) CDuiString(val);
 }
@@ -235,7 +235,7 @@ CDuiString regCDuiString::opAddString(int val, const CDuiString &str)
 }
 
 //////////////////////////////////////////////////////////////////////////
-CDuiString regCDuiString::opAddString(DuiLib::Int64 val, const CDuiString &str)
+CDuiString regCDuiString::opAddString(uiInt64 val, const CDuiString &str)
 {
 	return str + val;
 }
@@ -362,11 +362,11 @@ bool regCDuiString::Register(asIScriptEngine *engine)
 
 	//////////////////////////////////////////////////////////////////////////
 	//赋值函数  operator =
-	r = engine->RegisterObjectMethod("string", "string &opAssign(int64)", asMETHODPR(CDuiString, Assign, (DuiLib::Int64), CDuiString&), asCALL_THISCALL); assert( r >= 0 );
+	r = engine->RegisterObjectMethod("string", "string &opAssign(int64)", asMETHODPR(CDuiString, Assign, (uiInt64), CDuiString&), asCALL_THISCALL); assert( r >= 0 );
 	//字符串连接 operator +=
-	r = engine->RegisterObjectMethod("string", "string &opAddAssign(int64)", asMETHODPR(CDuiString, Append, (DuiLib::Int64), CDuiString&), asCALL_THISCALL); assert( r >= 0 );
+	r = engine->RegisterObjectMethod("string", "string &opAddAssign(int64)", asMETHODPR(CDuiString, Append, (uiInt64), CDuiString&), asCALL_THISCALL); assert( r >= 0 );
 	//字符串连接 operator +
-	r = engine->RegisterObjectMethod("string", "string opAdd(int64) const", asFUNCTIONPR(opAddString, (DuiLib::Int64, const CDuiString &), CDuiString), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	r = engine->RegisterObjectMethod("string", "string opAdd(int64) const", asFUNCTIONPR(opAddString, (uiInt64, const CDuiString &), CDuiString), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 
 	//////////////////////////////////////////////////////////////////////////
 	//赋值函数  operator =
@@ -390,7 +390,7 @@ bool regCDuiString::Register(asIScriptEngine *engine)
 	//////////////////////////////////////////////////////////////////////////
 	REG_METHOD_FUNPR2("string", CDuiString, bool, toBool, (bool def) const); assert( r >= 0 );					
 	REG_METHOD_FUNPR2("string", CDuiString, int, toInt, (int def) const); assert( r >= 0 );	
-	r = engine->RegisterObjectMethod("string", "int64 toInt64(int64 def) const", asMETHODPR(CDuiString, toInt64, (DuiLib::Int64 def) const, DuiLib::Int64), asCALL_THISCALL); assert( r >= 0 );
+	r = engine->RegisterObjectMethod("string", "int64 toInt64(int64 def) const", asMETHODPR(CDuiString, toInt64, (uiInt64 def) const, uiInt64), asCALL_THISCALL); assert( r >= 0 );
 	REG_METHOD_FUNPR2("string", CDuiString, double, toDouble, (double def) const); assert( r >= 0 );
 	REG_METHOD_FUNPR2("string", CDuiString, float, toFloat, (float def) const); assert( r >= 0 );
 

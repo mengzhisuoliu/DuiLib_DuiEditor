@@ -86,9 +86,10 @@ public:
     int SetRatio(int iRatio) {
         i_Ratio = iRatio;
         if (i_Ratio <= 0)	i_Ratio = 1;
+        return i_Ratio;
     }
 
-	virtual BOOL Encode(const char* pszCode) { return FALSE; }
+	virtual uiBool Encode(const char* pszCode) { return uiFalse; }
 
 #ifdef WIN32
     void DrawBarcode(HDC hDC, int iX, int iY0, int iY10, int iY11, const COLORREF clrBar, const COLORREF clrSpace, const int iPenW) {
@@ -159,7 +160,7 @@ public:
 		return str;
     }
 
-    virtual BOOL Encode(const char*pszCodeIn) override {
+    virtual uiBool Encode(const char*pszCodeIn) override {
         int iLen = strlen(pszCodeIn);
 
         char*pszCode = new char[iLen + 3];
@@ -262,7 +263,7 @@ public:
     ~BarcodeI2of5() {
     }
 
-    virtual BOOL Encode(const char*pszCode) override {
+    virtual uiBool Encode(const char*pszCode) override {
         Clear();
         BYTE*pFst = ia_Buf;
         BYTE*pb = pFst;
@@ -429,7 +430,7 @@ public:
     ~Barcode93() {
     }
 
-    virtual BOOL Encode(const char* pszCode) override {
+    virtual uiBool Encode(const char* pszCode) override {
         Clear();
         const int iNum = strlen(pszCode);
 
@@ -439,7 +440,7 @@ public:
         pb = P_GetBarSpace93(pb, 47);
         if (pb == 0)	return 0;
 
-        BOOL b;
+        uiBool b;
         int i, iFirst, iSecond;
         for (i = 0; i < iNum; i++) {
             b = P_AscIItoCode93Sequence((int)pszCode[i], iFirst, iSecond);
@@ -591,7 +592,7 @@ private:
         return pb;
     }
 
-    BOOL P_AscIItoCode93Sequence(int iValue, int&iFirst, int&iSecond) {
+    uiBool P_AscIItoCode93Sequence(int iValue, int&iFirst, int&iSecond) {
         if (iValue < 0)	return 0;
         if (iValue > 127)	return 0;
 
@@ -743,9 +744,9 @@ public:
     ~Barcode128() {
     }
 
-    BOOL Encode128A(const char* pszCode) { return P_Encode128((char*)pszCode, SUB::SETA); }
-    BOOL Encode128B(const char* pszCode) { return P_Encode128((char*)pszCode, SUB::SETB); }
-    BOOL Encode128C(const char* pszCode) { return P_Encode128((char*)pszCode, SUB::SETC); }
+    uiBool Encode128A(const char* pszCode) { return P_Encode128((char*)pszCode, SUB::SETA); }
+    uiBool Encode128B(const char* pszCode) { return P_Encode128((char*)pszCode, SUB::SETB); }
+    uiBool Encode128C(const char* pszCode) { return P_Encode128((char*)pszCode, SUB::SETC); }
 
 	#ifdef WIN32
     void Draw128(HDC hDC, int iX, int iY0, int iY1, const COLORREF clrBar, const COLORREF clrSpace, const int iPenW) {
@@ -762,7 +763,7 @@ private:
         };
     };
 
-    BOOL P_Encode128(char*pszCode, const int iSetIn) {
+    uiBool P_Encode128(char*pszCode, const int iSetIn) {
         Clear();
         BYTE*pFst = ia_Buf;
         BYTE*pb = pFst;
@@ -1081,7 +1082,7 @@ public:
     ~BarcodeEan13() {
     }
 
-    BOOL EncodeEan13(const char*pszCodeIn) {
+    uiBool EncodeEan13(const char*pszCodeIn) {
         Clear();
 
         //only allow 12 characters as input
@@ -1104,7 +1105,7 @@ public:
         *pb += 5;	pb++;
 
         BYTE iaCountryCode[6];
-        BOOL b = P_GetCountryCode(szCode[0], iaCountryCode);
+        uiBool b = P_GetCountryCode(szCode[0], iaCountryCode);
         if (b == 0)	return 0;
 
         pb = P_GetLeftOddParity(pb, szCode[1]);
@@ -1150,7 +1151,7 @@ public:
     #endif
 
 private:
-    BOOL P_GetCountryCode(char ch, BYTE*pbCountryCode) {
+    uiBool P_GetCountryCode(char ch, BYTE*pbCountryCode) {
         const int iV = ch - '0';
         if (iV < 0)	return 0;
         if (iV > 9)	return 0;

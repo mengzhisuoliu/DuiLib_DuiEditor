@@ -461,7 +461,14 @@ CXmlNodeUI child(LPCWSTR name) const;
 会影响应用层继承控件，比如 SetPos(RECT ..) 要改为 SetPos(CDuiRect ..)。
 
 
-
+2026-06-24
+改动非常多，几乎每个文件都会改动，尽量列出来。
+1，添加MacOS/TestApp项目
+2，修改xmake脚本，可以正常编译DuiLib。保证DuiLib/xmake.lua和Linux/gcc/xmake.lua可以编译。其它xmake未修改，可能已不可用。
+3，项目中BOOL全部改为uiBool, 兼容windows原来的定义。mac Objective-C 定义的BOOL不明确，一会是signed char 一会是bool。
+原因是C89/C90及以前是没有bool关键字的，很扯。。。重定义基础类型是大多数跨平台库的行为，以后可能会增加uiInt,uiUint,uiInt64,uiUint64等等....
+4，去除SDL_gfx依赖，去除SDL_image依赖（其实本来也没用到，目前还是用stb_image解析图片，nanosvg解析svg）。
+5，.........
 
 
 

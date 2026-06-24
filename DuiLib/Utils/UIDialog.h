@@ -21,9 +21,9 @@ public:
 	virtual LRESULT ResponseDefaultKeyEvent(WPARAM wParam) override;
 
 	//设置响应回车键和ESC的默认处理方式
-	virtual void SetDefaultKeyEvent(BOOL bEnterCloseOK=TRUE, BOOL bEscCloseCancel=TRUE);
-	virtual BOOL IsEnterCloseOK() const;
-	virtual BOOL IsEscCloseCancel() const;
+	virtual void SetDefaultKeyEvent(uiBool bEnterCloseOK=uiTrue, uiBool bEscCloseCancel=uiTrue);
+	virtual uiBool IsEnterCloseOK() const;
+	virtual uiBool IsEscCloseCancel() const;
 
 	//显示模态对话窗口
 	virtual UINT DoModal(UIWND hWndParent);
@@ -56,8 +56,8 @@ public:
 	virtual void RegScriptNotify(LPCTSTR sNotifyType, LPCTSTR sFunName);
 private:
 	bool _bModal;
-	BOOL m_bEnterCloseOK;
-	BOOL m_bEscCloseCancel;
+	uiBool m_bEnterCloseOK;
+	uiBool m_bEscCloseCancel;
 
 	CDuiString m_sSkinFile, m_sWindowClassName;
 	std::map<CDuiString, CDuiString> m_mScriptNotify;

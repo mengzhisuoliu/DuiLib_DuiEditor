@@ -96,8 +96,8 @@ public:
 
 	bool ddxCheckBox(CControlUI *pControl, bool &va);
 	bool ddxCheckBox(LPCTSTR pControlName, bool &va);
-	bool ddxCheckBox(CControlUI *pControl, BOOL &va);
-	bool ddxCheckBox(LPCTSTR pControlName, BOOL &va);
+	bool ddxCheckBox(CControlUI *pControl, uiBool &va);
+	bool ddxCheckBox(LPCTSTR pControlName, uiBool&va);
 
 	bool ddxCombo(CControlUI *pControl, int &va); //cursel
 	bool ddxCombo(LPCTSTR pControlName, int &va); //cursel

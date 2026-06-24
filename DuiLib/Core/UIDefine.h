@@ -64,7 +64,7 @@ namespace DuiLib
 		CDuiString szName;
 		CDuiString szUserData;
 		CDuiString szText;
-		BOOL bChecked;
+		uiBool bChecked;
 		UINT_PTR tag;
 	};
 

@@ -43,13 +43,13 @@ public:
 	TCellData();
 
 protected:
-	void Select(BOOL bSelected=TRUE);
+	void Select(uiBool bSelected=uiTrue);
 
 public:
-	BOOL IsSelected() const;
+	uiBool IsSelected() const;
 
-	void SetCheckBoxCheck(BOOL bSelected=TRUE);
-	BOOL IsCheckBoxCheck() const;
+	void SetCheckBoxCheck(uiBool bSelected=uiTrue);
+	uiBool IsCheckBoxCheck() const;
 
 	void SetMergedWidthOthers(bool bMerged);
 	bool IsMergedWithOthers() const;
@@ -94,8 +94,8 @@ struct UILIB_API TRowData : public ILinkedList
 	void SetHeight(int n);
 	int  GetHeight() const;
 
-	void Selected(BOOL bSelected=TRUE);
-	BOOL IsSelected() const;
+	void Selected(uiBool bSelected=uiTrue);
+	uiBool IsSelected() const;
 
 	void SetTag(UINT_PTR tag);
 	UINT_PTR GetTag() const;
@@ -106,7 +106,7 @@ struct UILIB_API TRowData : public ILinkedList
 	TCellData *GetCell(int col);
 
 	short m_nHeight;
-	BOOL m_bSelected;
+	uiBool m_bSelected;
 	UINT_PTR m_tag;
 	CDuiString m_sUserData;
 	CStdPtrArray m_cells;
@@ -122,73 +122,73 @@ public:
 
 	virtual void Refresh(bool bNeedUpdate=false)		= 0;
 
-	virtual void SetVirtualGrid(BOOL bVirtual)	= 0;
-	BOOL IsVirtualGrid()						{ return m_bVirtualGrid; }
+	virtual void SetVirtualGrid(uiBool bVirtual)	= 0;
+	uiBool IsVirtualGrid()						{ return m_bVirtualGrid; }
 
-	virtual BOOL SetRowCount(int rows)			= 0;
+	virtual uiBool SetRowCount(int rows)			= 0;
 	virtual int GetRowCount()					= 0;
 
-	virtual BOOL SetColumnCount(int cols)		= 0;
+	virtual uiBool SetColumnCount(int cols)		= 0;
 	virtual int GetColumnCount()				= 0;
 
-	virtual BOOL SetFixedRowCount(int rows)	= 0;
+	virtual uiBool SetFixedRowCount(int rows)	= 0;
 	virtual int GetFixedRowCount()				= 0;
 
 	virtual void SetFixedColumnCount(int cols)	{ m_nFixedColCount = cols; }
 	virtual int GetFixedColumnCount()			{ return m_nFixedColCount; }
 
-	virtual void SetViewListNumber(BOOL bView)		{ m_bViewListNo = bView; }
-	virtual BOOL IsViewListNumber()					{ return m_bViewListNo; }
+	virtual void SetViewListNumber(uiBool bView)		{ m_bViewListNo = bView; }
+	virtual uiBool IsViewListNumber()					{ return m_bViewListNo; }
 
 	void SetDefRowHeight(int height)			{ m_nDefRowHeight = height; }
 	int GetDefRowHeight() const					{ return m_nDefRowHeight; }
 	void SetDefColWidth(int width)				{ m_nDefColWidth = width; }
 	int GetDefColWidth() const					{ return m_nDefColWidth; }
 
-	void EnableDrawRowLine(BOOL bEnable)		{ m_bDrawRowLine = bEnable; }
-	BOOL IsDrawRowLine()						{ return m_bDrawRowLine; }
+	void EnableDrawRowLine(uiBool bEnable)		{ m_bDrawRowLine = bEnable; }
+	uiBool IsDrawRowLine()						{ return m_bDrawRowLine; }
 
-	void EnableDrawColumnLine(BOOL bEnable)		{ m_bDrawColumnLine = bEnable; }
-	BOOL IsDrawColumnLine()						{ return m_bDrawColumnLine; }
+	void EnableDrawColumnLine(uiBool bEnable)		{ m_bDrawColumnLine = bEnable; }
+	uiBool IsDrawColumnLine()						{ return m_bDrawColumnLine; }
 
 	void SetLineColor(CDuiColor clr)				{ m_dwLineColor = clr; }
 	CDuiColor GetLineColor() const					{ return m_dwLineColor; }
 
-	virtual BOOL SetRowHeight(int row, int height)		= 0;
-	virtual int  GetRowHeight(int row, BOOL bScaleByDPI=FALSE)					= 0;
+	virtual uiBool SetRowHeight(int row, int height)		= 0;
+	virtual int  GetRowHeight(int row, uiBool bScaleByDPI=uiFalse)					= 0;
 
-	virtual BOOL SetColumnWidth(int col, int width)	= 0;
-	virtual int  GetColumnWidth(int col, BOOL bScaleByDPI=FALSE)				= 0;
+	virtual uiBool SetColumnWidth(int col, int width)	= 0;
+	virtual int  GetColumnWidth(int col, uiBool bScaleByDPI=uiFalse)				= 0;
 
-	void EnableSizeColumn(BOOL bEnable)			{ m_bEnableSizeColumn = bEnable; }
-	BOOL IsEnableSizeColumn()					{ return m_bEnableSizeColumn; }
+	void EnableSizeColumn(uiBool bEnable)			{ m_bEnableSizeColumn = bEnable; }
+	uiBool IsEnableSizeColumn()					{ return m_bEnableSizeColumn; }
 
-	void EnableSizeRow(BOOL bEnable)			{ m_bEnableSizeRow = bEnable; }
-	BOOL IsEnableSizeRow()						{ return m_bEnableSizeRow; }
+	void EnableSizeRow(uiBool bEnable)			{ m_bEnableSizeRow = bEnable; }
+	uiBool IsEnableSizeRow()						{ return m_bEnableSizeRow; }
 
-	void SetExpandColumnByText(BOOL bExpand)	{ m_bAutoExpandColumnByText = bExpand; }
-	BOOL IsExpandColumnByText()				{ return m_bAutoExpandColumnByText; }
+	void SetExpandColumnByText(uiBool bExpand)	{ m_bAutoExpandColumnByText = bExpand; }
+	uiBool IsExpandColumnByText()				{ return m_bAutoExpandColumnByText; }
 
-	void SetExpandLastColumn(BOOL bExpand)		{ m_bAutoExpandLastColumn = bExpand; }
-	BOOL IsExpandLastColumn()					{ return m_bAutoExpandLastColumn; }
+	void SetExpandLastColumn(uiBool bExpand)		{ m_bAutoExpandLastColumn = bExpand; }
+	uiBool IsExpandLastColumn()					{ return m_bAutoExpandLastColumn; }
 
-	void SetFitColumns(BOOL bFit)		{ m_bAutoFitColumns = bFit; }
-	BOOL IsFitColumns()					{ return m_bAutoFitColumns; }
+	void SetFitColumns(uiBool bFit)		{ m_bAutoFitColumns = bFit; }
+	uiBool IsFitColumns()					{ return m_bAutoFitColumns; }
 
-	void SetFitRows(BOOL bFit)			{ m_bAutoFitRows = bFit; }
-	BOOL IsFitRows()						{ return m_bAutoFitRows; }
+	void SetFitRows(uiBool bFit)			{ m_bAutoFitRows = bFit; }
+	uiBool IsFitRows()						{ return m_bAutoFitRows; }
 
-	void SetListMode(BOOL bList)				{ m_bListMode = bList; }
-	BOOL IsListMode()							{ return m_bListMode; }
+	void SetListMode(uiBool bList)				{ m_bListMode = bList; }
+	uiBool IsListMode()							{ return m_bListMode; }
 
-	void SetSingleRowSelection(BOOL bSingle)	{ m_bSingleRowSelection = bSingle; }
-	BOOL IsSingleRowSelection()					{ return m_bSingleRowSelection; }
+	void SetSingleRowSelection(uiBool bSingle)	{ m_bSingleRowSelection = bSingle; }
+	uiBool IsSingleRowSelection()					{ return m_bSingleRowSelection; }
 
-	void SetCheckBoxSelection(BOOL bSingle)		{ m_bCheckBoxSelection = bSingle; }
-	BOOL IsCheckBoxSelection()					{ return m_bCheckBoxSelection; }
+	void SetCheckBoxSelection(uiBool bSingle)		{ m_bCheckBoxSelection = bSingle; }
+	uiBool IsCheckBoxSelection()					{ return m_bCheckBoxSelection; }
 
-	void SetHeaderSort(BOOL bSort)				{ m_bHeaderSort = bSort; }
-	BOOL IsHeaderSort()	const					{ return m_bHeaderSort; }
+	void SetHeaderSort(uiBool bSort)				{ m_bHeaderSort = bSort; }
+	uiBool IsHeaderSort()	const					{ return m_bHeaderSort; }
 
 	void SetSortAscendingImage(LPCTSTR lpszImage)	{ m_sSortAscendingImage = lpszImage; }		
 	LPCTSTR GetSortAscendingImage()					{ return m_sSortAscendingImage; }
@@ -199,8 +199,8 @@ public:
 	void SetSortIconSize(CDuiSize sz)				{ m_szSortIconSize = sz; }
 	CDuiSize GetSortIconSize()						{ return m_szSortIconSize; }
 
-	void SetEditable(BOOL bEditable)			{ m_bEditable = bEditable; }
-	BOOL GetEditable() const					{ return m_bEditable; }
+	void SetEditable(uiBool bEditable)			{ m_bEditable = bEditable; }
+	uiBool GetEditable() const					{ return m_bEditable; }
 
 	//////////////////////////////////////////////////////////////////////////
 	void SetStyleFixedRow(LPCTSTR pstrValue)			{ m_sStyleFixedRow = pstrValue; }
@@ -229,36 +229,36 @@ public:
 	LPCTSTR GetStylePicture()						{ return m_sStylePicture; }
 
 protected:
-	BOOL  m_bVirtualGrid;				//virtual grid
+	uiBool  m_bVirtualGrid;				//virtual grid
 
 	int   m_nDefRowHeight;				//default row's height
 	int   m_nDefColWidth;				//default column's width
-	BOOL  m_bViewListNo;				//view list index on leftmost fixed column
+	uiBool  m_bViewListNo;				//view list index on leftmost fixed column
 	int	  m_nFixedColCount;				//count of the fixed columns on the left side by grid
 
-	BOOL  m_bDrawRowLine;				//enable drawing row's line
-	BOOL  m_bDrawColumnLine;			//enable drawing column's line
+	uiBool  m_bDrawRowLine;				//enable drawing row's line
+	uiBool  m_bDrawColumnLine;			//enable drawing column's line
 	CDuiColor m_dwLineColor;				//grid line color
 
-	BOOL  m_bEnableSizeColumn;			//enable drag column size in grid header
-	BOOL  m_bEnableSizeRow;				//enable drag row height in grid header
+	uiBool  m_bEnableSizeColumn;			//enable drag column size in grid header
+	uiBool  m_bEnableSizeRow;				//enable drag row height in grid header
 
-	BOOL  m_bAutoExpandColumnByText;	//enable auto expand the column's with by text
-	BOOL  m_bAutoExpandLastColumn;		//enable auto expand the last of column's with  to fit list
-	BOOL  m_bAutoFitColumns;			//enable auto expand width of columns  to fit list
-	BOOL  m_bAutoFitRows;				//enable auto expand height of rows  to fit list
+	uiBool  m_bAutoExpandColumnByText;	//enable auto expand the column's with by text
+	uiBool  m_bAutoExpandLastColumn;		//enable auto expand the last of column's with  to fit list
+	uiBool  m_bAutoFitColumns;			//enable auto expand width of columns  to fit list
+	uiBool  m_bAutoFitRows;				//enable auto expand height of rows  to fit list
 		
-	BOOL  m_bListMode;					//click to select a full row
-	BOOL  m_bSingleRowSelection;		//only single row can be selected, not multi rows selected.
-	BOOL  m_bCheckBoxSelection;			//列表模式下选中行时，联动最左边的非固定列checkbox单元格。
+	uiBool  m_bListMode;					//click to select a full row
+	uiBool  m_bSingleRowSelection;		//only single row can be selected, not multi rows selected.
+	uiBool  m_bCheckBoxSelection;			//列表模式下选中行时，联动最左边的非固定列checkbox单元格。
 
 
-	BOOL  m_bHeaderSort;				//enable click fixed row to sort column
+	uiBool  m_bHeaderSort;				//enable click fixed row to sort column
 	CDuiString m_sSortAscendingImage;	//ascending icon
 	CDuiString m_sSortDescendingImage;	//descending icon
 	CDuiSize m_szSortIconSize;
 
-	BOOL m_bEditable;
+	uiBool m_bEditable;
 
 	CDuiString m_sStyleFixedRow;
 	CDuiString m_sStyleFixedCell;
@@ -287,12 +287,12 @@ public:
 	TCellData &Cell(const TCellID &cell);
 
 	virtual void ClearSelectedRows();
-	virtual void SelectRow(int row, BOOL bSelected=TRUE, BOOL bTriggerEvent= FALSE);
-	BOOL IsSelectedRow(int row);
+	virtual void SelectRow(int row, uiBool bSelected=uiTrue, uiBool bTriggerEvent= uiFalse);
+	uiBool IsSelectedRow(int row);
 
 	void ClearSelectedCells();
-	void SelectCell(int row, int col, BOOL bSelected=TRUE, BOOL bTriggerEvent = FALSE);
-	BOOL IsSelectedCell(int row, int col);
+	void SelectCell(int row, int col, uiBool bSelected=uiTrue, uiBool bTriggerEvent = uiFalse);
+	uiBool IsSelectedCell(int row, int col);
 
 	int GetSelectRowCount();
 	int GetSelectRow();

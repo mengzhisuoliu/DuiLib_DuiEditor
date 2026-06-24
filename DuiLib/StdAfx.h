@@ -123,35 +123,35 @@ private:
 
 #ifdef DUILIB_SDL
 #include <SDL3/SDL.h>
-#include <SDL3_image/SDL_image.h>
+//#include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
-#include <SDL3_gfxPrimitives.h>
+//#include <SDL3_gfxPrimitives.h>
 #	ifdef WIN32
 #		ifdef _M_ARM64EC
 #		elif defined(_M_ARM64)
 #		elif defined(_WIN64)
 #			ifdef _DEBUG
 #				pragma comment(lib, "../3rd/SDL/VisualC/x64/Debug/SDL3x64_d.lib")
-#				pragma comment(lib, "../3rd/SDL_image/VisualC/x64/Debug/SDL3_image64_d.lib")
+//#				pragma comment(lib, "../3rd/SDL_image/VisualC/x64/Debug/SDL3_image64_d.lib")
 #				pragma comment(lib, "../3rd/SDL_ttf/VisualC/x64/Debug/SDL3_ttf64_d.lib")
-#				pragma comment(lib, "../3rd/SDL_gfx/Win32/Debug/SDL3_gfx64_d.lib")
+//#				pragma comment(lib, "../3rd/SDL_gfx/Win32/Debug/SDL3_gfx64_d.lib")
 #			else
 #				pragma comment(lib, "../3rd/SDL/VisualC/Win32/Debug/SDL3x64.lib")
-#				pragma comment(lib, "../3rd/SDL_image/VisualC/Win32/Debug/SDL3_image64.lib")
+//#				pragma comment(lib, "../3rd/SDL_image/VisualC/Win32/Debug/SDL3_image64.lib")
 #				pragma comment(lib, "../3rd/SDL_ttf/VisualC/Win32/Debug/SDL3_ttf64.lib")
-#				pragma comment(lib, "../3rd/SDL_gfx/Win32/Debug/SDL3_gfx64.lib")
+//#				pragma comment(lib, "../3rd/SDL_gfx/Win32/Debug/SDL3_gfx64.lib")
 #			endif
 #		else
 #			ifdef _DEBUG
 #				pragma comment(lib, "../3rd/SDL/VisualC/Win32/Debug/SDL3_d.lib")
-#				pragma comment(lib, "../3rd/SDL_image/VisualC/Win32/Debug/SDL3_image_d.lib")
+//#				pragma comment(lib, "../3rd/SDL_image/VisualC/Win32/Debug/SDL3_image_d.lib")
 #				pragma comment(lib, "../3rd/SDL_ttf/VisualC/Win32/Debug/SDL3_ttf_d.lib")
-#				pragma comment(lib, "../3rd/SDL_gfx/Win32/Debug/SDL3_gfx_d.lib")
+//#				pragma comment(lib, "../3rd/SDL_gfx/Win32/Debug/SDL3_gfx_d.lib")
 #			else
 #				pragma comment(lib, "../3rd/SDL/VisualC/Win32/Debug/SDL3.lib")
-#				pragma comment(lib, "../3rd/SDL_image/VisualC/Win32/Debug/SDL3_image.lib")
+//#				pragma comment(lib, "../3rd/SDL_image/VisualC/Win32/Debug/SDL3_image.lib")
 #				pragma comment(lib, "../3rd/SDL_ttf/VisualC/Win32/Debug/SDL3_ttf.lib")
-#				pragma comment(lib, "../3rd/SDL_gfx/Win32/Debug/SDL3_gfx.lib")
+//#				pragma comment(lib, "../3rd/SDL_gfx/Win32/Debug/SDL3_gfx.lib")
 #			endif
 #		endif
 #	endif

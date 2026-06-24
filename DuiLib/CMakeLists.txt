@@ -59,15 +59,15 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/Render
     ${CMAKE_CURRENT_SOURCE_DIR}/../3rd/SDL/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../3rd/SDL_image/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/../3rd/SDL_ttf/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/../3rd/SDL_gfx
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../3rd/SDL_ttf/include
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../3rd/SDL_gfx
 )
 
 # 查找系统库（优先静态库，路径可调整）
 find_library(SDL3_LIB NAMES SDL3 libSDL3 PATHS /usr/local/lib /usr/lib)
-find_library(SDL3_image_LIB NAMES SDL3_image SDL_image PATHS /usr/local/lib /usr/lib)
+#find_library(SDL3_image_LIB NAMES SDL3_image SDL_image PATHS /usr/local/lib /usr/lib)
 find_library(SDL3_ttf_LIB NAMES SDL3_ttf SDL_ttf PATHS /usr/local/lib /usr/lib)
-find_library(SDL3_gfx_LIB NAMES SDL3_gfx SDL_gfx PATHS /usr/local/lib /usr/lib)
+#find_library(SDL3_gfx_LIB NAMES SDL3_gfx SDL_gfx PATHS /usr/local/lib /usr/lib)
 
 # 可选：处理 macOS 下的 framework 或额外库（如 CoreFoundation）
 if(APPLE)
@@ -84,9 +84,9 @@ add_library(DuiLib ${ALL_SOURCES})
 # 链接 SDL 相关库
 target_link_libraries(DuiLib
     ${SDL3_LIB}
-    ${SDL3_image_LIB}
+#    ${SDL3_image_LIB}
     ${SDL3_ttf_LIB}
-    ${SDL3_gfx_LIB}
+#    ${SDL3_gfx_LIB}
     ${EXTRA_LIBS}
 )
 
@@ -100,6 +100,8 @@ elseif(APPLE)
         "-framework IOKit"
         "-framework CoreVideo"
         "-framework CoreFoundation"
+        "-framework CoreText"
+        "-framework CoreGraphics"
     )
 endif()
 

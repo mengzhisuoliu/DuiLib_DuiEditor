@@ -78,7 +78,7 @@ void CIPAddressWndSDL::OnFinalMessage(UIWND hWnd)
 	delete this;
 }
 
-BOOL CIPAddressWndSDL::OnSdlEvent(const void* pEvent)
+uiBool CIPAddressWndSDL::OnSdlEvent(const void* pEvent)
 {
 	SDL_Event* ev = (SDL_Event*)pEvent;
 
@@ -102,7 +102,7 @@ BOOL CIPAddressWndSDL::OnSdlEvent(const void* pEvent)
 			else if (n > 99) //3位数，进入下一段
 			{
 				m_vSegments[m_nIndex].sValue = n;
-				SetFocusSegment(m_nIndex + 1, FALSE);
+				SetFocusSegment(m_nIndex + 1, uiFalse);
 			}
 			else
 			{
@@ -110,26 +110,26 @@ BOOL CIPAddressWndSDL::OnSdlEvent(const void* pEvent)
 				m_vSegments[m_nIndex].curPos++;
 				if (!m_bShowCaret) //全选时，输入一个字符，显示光标，去除全选状态
 				{
-					m_bShowCaret = TRUE;
+					m_bShowCaret = uiTrue;
 				}
 			}
 			Invalidate();
 		}
 		else if (ev->text.text[0] == '.')
 		{
-			SetFocusSegment(m_nIndex + 1, FALSE);
+			SetFocusSegment(m_nIndex + 1, uiFalse);
 		}
-		return TRUE;
+		return uiTrue;
 	}
 	else if (ev->type == SDL_EVENT_WINDOW_MOUSE_ENTER)
 	{
 		GetManager()->SetCursor(DUI_IBEAM);
-		return TRUE;
+		return uiTrue;
 	}
 	else if (ev->type == SDL_EVENT_WINDOW_MOUSE_LEAVE)
 	{
 		GetManager()->SetCursor(DUI_ARROW);
-		return TRUE;
+		return uiTrue;
 	}
 	else if (ev->type == SDL_EVENT_WINDOW_EXPOSED)
 	{
@@ -165,12 +165,12 @@ BOOL CIPAddressWndSDL::OnSdlEvent(const void* pEvent)
 				m_rcPoints[i].bottom = rcClient.bottom;
 			}
 		}
-		return FALSE;
+		return uiFalse;
 	}
-	return FALSE;
+	return uiFalse;
 }
 
-LRESULT CIPAddressWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CIPAddressWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	m_pm.SetForceUseSharedRes(true);
 	m_pm.Init(m_hWnd, NULL, this);
@@ -178,7 +178,7 @@ LRESULT CIPAddressWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 	return 0;
 }
 
-LRESULT CIPAddressWndSDL::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CIPAddressWndSDL::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	CDuiRect rcClient;
 	GetClientRect(&rcClient);
@@ -286,7 +286,7 @@ LRESULT CIPAddressWndSDL::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	return 0;
 }
 
-LRESULT CIPAddressWndSDL::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CIPAddressWndSDL::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	switch (wParam)
 	{
@@ -351,7 +351,7 @@ LRESULT CIPAddressWndSDL::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	return 0;
 }
 
-LRESULT CIPAddressWndSDL::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CIPAddressWndSDL::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	CDuiPoint pt(lParam);
 
@@ -361,11 +361,11 @@ LRESULT CIPAddressWndSDL::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam,
 		{
 			if (i == m_nIndex)
 			{
-				SetFocusSegment(i, TRUE);
+				SetFocusSegment(i, uiTrue);
 			}
 			else
 			{
-				SetFocusSegment(i, TRUE);
+				SetFocusSegment(i, uiTrue);
 				//return 0;
 			}
 			break;
@@ -382,7 +382,7 @@ LRESULT CIPAddressWndSDL::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam,
 	return 0;
 }
 
-LRESULT CIPAddressWndSDL::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CIPAddressWndSDL::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	if (m_bDragging)
 	{
@@ -399,7 +399,7 @@ LRESULT CIPAddressWndSDL::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 	return 0;
 }
 
-LRESULT CIPAddressWndSDL::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CIPAddressWndSDL::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	if (!m_bDragging) return 0;
 
@@ -415,14 +415,14 @@ LRESULT CIPAddressWndSDL::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 	return 0;
 }
 
-LRESULT CIPAddressWndSDL::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CIPAddressWndSDL::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	SDL_StartTextInput(m_hWnd);
 	GetManager()->SetCursor(DUI_IBEAM);
 	return 0;
 }
 
-LRESULT CIPAddressWndSDL::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CIPAddressWndSDL::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	GetManager()->KillTimer(m_pOwner, m_caretTimerID);
 	SDL_StopTextInput(m_hWnd);
@@ -432,14 +432,14 @@ LRESULT CIPAddressWndSDL::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 	return 0;
 }
 
-LRESULT CIPAddressWndSDL::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CIPAddressWndSDL::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	m_bDrawCaret = !m_bDrawCaret;
 	Invalidate();
 	return 0;
 }
 
-void CIPAddressWndSDL::SetFocusSegment(int index, BOOL bDrawCaret)
+void CIPAddressWndSDL::SetFocusSegment(int index, uiBool bDrawCaret)
 {
 	if (index >= 4)
 		m_nIndex = 0;
@@ -463,7 +463,7 @@ void CIPAddressWndSDL::DeleteBackward()
 			//当前是0, 退格键回退到上一个字段
 			if (m_nIndex != 0)
 			{
-				SetFocusSegment(m_nIndex - 1, FALSE);
+				SetFocusSegment(m_nIndex - 1, uiFalse);
 				Invalidate();
 			}
 		}
@@ -475,7 +475,7 @@ void CIPAddressWndSDL::DeleteBackward()
 	{
 		if (m_nIndex > 0)
 		{
-			SetFocusSegment(m_nIndex - 1, FALSE);
+			SetFocusSegment(m_nIndex - 1, uiFalse);
 			Invalidate();
 		}
 		return;
@@ -559,7 +559,7 @@ void CIPAddressWndSDL::MoveLeft()
 	if (!m_bShowCaret) //全选时
 	{
 		if (m_nIndex > 0)
-			SetFocusSegment(m_nIndex - 1, FALSE);
+			SetFocusSegment(m_nIndex - 1, uiFalse);
 		return;
 	}
 
@@ -567,7 +567,7 @@ void CIPAddressWndSDL::MoveLeft()
 	if (m_vSegments[m_nIndex].curPos <= 0)
 	{
 		if (m_nIndex > 0)
-			SetFocusSegment(m_nIndex - 1, FALSE);
+			SetFocusSegment(m_nIndex - 1, uiFalse);
 		return;
 	}
 
@@ -579,7 +579,7 @@ void CIPAddressWndSDL::MoveRight()
 	if (!m_bShowCaret) //全选时
 	{
 		if (m_nIndex < 3)
-			SetFocusSegment(m_nIndex + 1, FALSE);
+			SetFocusSegment(m_nIndex + 1, uiFalse);
 		return;
 	}
 
@@ -587,7 +587,7 @@ void CIPAddressWndSDL::MoveRight()
 	if (m_vSegments[m_nIndex].curPos >= m_vSegments[m_nIndex].sValue.GetLength())
 	{
 		if (m_nIndex < 3)
-			SetFocusSegment(m_nIndex + 1, FALSE);
+			SetFocusSegment(m_nIndex + 1, uiFalse);
 		return;
 	}
 
@@ -596,12 +596,12 @@ void CIPAddressWndSDL::MoveRight()
 
 void CIPAddressWndSDL::MoveHome()
 {
-	SetFocusSegment(0, FALSE);
+	SetFocusSegment(0, uiFalse);
 }
 
 void CIPAddressWndSDL::MoveEnd()
 {
-	SetFocusSegment(3, FALSE);
+	SetFocusSegment(3, uiFalse);
 }
 
 int CIPAddressWndSDL::GetCharPosFromPoint(const CDuiPoint& pt)

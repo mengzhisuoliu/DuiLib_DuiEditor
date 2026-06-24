@@ -10,14 +10,14 @@ namespace DuiLib {
 	public:
 		virtual ~IUIAnimation() { }
 
-		virtual BOOL StartAnimation(int nElapse, int nTotalFrame, int nAnimationID = 0, BOOL bLoop = FALSE) = 0;
+		virtual uiBool StartAnimation(int nElapse, int nTotalFrame, int nAnimationID = 0, uiBool bLoop = uiFalse) = 0;
 		virtual void StopAnimation(int nAnimationID = 0) = 0;
-		virtual BOOL IsAnimationRunning(int nAnimationID) = 0;
+		virtual uiBool IsAnimationRunning(int nAnimationID) = 0;
 		virtual int GetCurrentFrame(int nAnimationID = 0) = 0;
-		virtual BOOL SetCurrentFrame(int nFrame, int nAnimationID = 0) = 0;
+		virtual uiBool SetCurrentFrame(int nFrame, int nAnimationID = 0) = 0;
 
 		virtual void OnAnimationStep(int nTotalFrame, int nCurFrame, int nAnimationID) = 0;
-		virtual void OnAnimationStart(int nAnimationID, BOOL bFirstLoop) = 0;
+		virtual void OnAnimationStart(int nAnimationID, uiBool bFirstLoop) = 0;
 		virtual void OnAnimationStop(int nAnimationID) = 0;
 
 		virtual void OnAnimationElapse(int nAnimationID) = 0;
@@ -26,9 +26,9 @@ namespace DuiLib {
 	class UILIB_API CAnimationData
 	{
 	public:
-		CAnimationData(int nElipse, int nFrame, int nID, BOOL bLoop)
+		CAnimationData(int nElipse, int nFrame, int nID, uiBool bLoop)
 		{
-			m_bFirstLoop = TRUE;
+			m_bFirstLoop = uiTrue;
 			m_nCurFrame = 0;
 			m_nElapse = nElipse;
 			m_nTotalFrame = nFrame;
@@ -46,8 +46,8 @@ namespace DuiLib {
 		int m_nTotalFrame;
 		int m_nCurFrame;
 
-		BOOL m_bLoop;
-		BOOL m_bFirstLoop;
+		uiBool m_bLoop;
+		uiBool m_bFirstLoop;
 	};
 
 	class UILIB_API CUIAnimation: public IUIAnimation
@@ -59,13 +59,13 @@ namespace DuiLib {
 
 		void AttachAnimationControl(CControlUI* pOwner);
 
-		virtual BOOL StartAnimation(int nElapse, int nTotalFrame, int nAnimationID = 0, BOOL bLoop = FALSE) override;
+		virtual uiBool StartAnimation(int nElapse, int nTotalFrame, int nAnimationID = 0, uiBool bLoop = uiFalse) override;
 		virtual void StopAnimation(int nAnimationID = 0) override;
-		virtual BOOL IsAnimationRunning(int nAnimationID) override;
+		virtual uiBool IsAnimationRunning(int nAnimationID) override;
 		virtual int GetCurrentFrame(int nAnimationID = 0) override;
-		virtual BOOL SetCurrentFrame(int nFrame, int nAnimationID = 0) override;
+		virtual uiBool SetCurrentFrame(int nFrame, int nAnimationID = 0) override;
 
-		virtual void OnAnimationStart(int nAnimationID, BOOL bFirstLoop) override {};
+		virtual void OnAnimationStart(int nAnimationID, uiBool bFirstLoop) override {};
 		virtual void OnAnimationStep(int nTotalFrame, int nCurFrame, int nAnimationID) override {};
 		virtual void OnAnimationStop(int nAnimationID) override {};
 

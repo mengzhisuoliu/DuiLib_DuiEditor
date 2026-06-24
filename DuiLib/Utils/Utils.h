@@ -411,7 +411,7 @@ namespace DuiLib
 		}
 
 		//交集，两个区域的交叉部分
-		BOOL Intersect(const RECT& rect1, const RECT& rect2)
+		uiBool Intersect(const RECT& rect1, const RECT& rect2)
 		{
 			#ifdef DUILIB_WIN32
 			return ::IntersectRect(this, (LPRECT)&rect1, (LPRECT)&rect2);
@@ -434,13 +434,13 @@ namespace DuiLib
 		void AlignRect(const RECT &rc, UINT uAlign = DT_CENTER|DT_VCENTER);
 
 		//区域是否相等
-		BOOL EqualRect(const CDuiRect& rc) const
+		uiBool EqualRect(const CDuiRect& rc) const
 		{
 			return left == rc.left && right == rc.right && top == rc.top && bottom == rc.bottom;
 		}
 
 		//pt是否在区域中
-		BOOL PtInRect(POINT pt) const
+		uiBool PtInRect(POINT pt) const
 		{
 			#ifdef DUILIB_WIN32
 			return ::PtInRect(this, pt);
@@ -562,6 +562,11 @@ namespace DuiLib
 		SDL_Color ToSDL_Color() const;
 		operator SDL_Color() const;
 		CDuiColor& operator=(const SDL_Color& color);
+
+		CDuiColor(const SDL_FColor& color); // 从 SDL_Color 构造
+		SDL_FColor ToSDL_FColor() const;
+		operator SDL_FColor() const;
+		CDuiColor& operator=(const SDL_FColor& color);
 	#endif
 
 		// 静态预定义颜色
@@ -873,16 +878,16 @@ namespace DuiLib
 			p = NULL;
 			return pt;
 		}
-		BOOL CopyTo(T** ppT) throw()
+		uiBool CopyTo(T** ppT) throw()
 		{
 			if (ppT == NULL)
-				return FALSE;
+				return uiFalse;
 			*ppT = p;
 			if (p)
 			{
 				p->AddRef();
 			}
-			return TRUE;
+			return uiTrue;
 		}
 
 	protected:

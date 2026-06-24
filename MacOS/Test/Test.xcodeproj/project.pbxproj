@@ -7,18 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C1A03D22A8B4B8700026EBB /* libDuiLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C1A03D12A8B4B8700026EBB /* libDuiLib.a */; };
-		0C86644A2A4BCE1100076737 /* libcairo.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C8664492A4BCE1100076737 /* libcairo.dylib */; };
-		0C86644C2A4BCE2500076737 /* libgtk-3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C86644B2A4BCE2500076737 /* libgtk-3.0.dylib */; };
-		0C86644E2A4BCE3800076737 /* libgobject-2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C86644D2A4BCE3800076737 /* libgobject-2.0.dylib */; };
-		0C8664502A4BCE6D00076737 /* libgdk-3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C86644F2A4BCE6D00076737 /* libgdk-3.dylib */; };
-		0C8664522A4BCE8200076737 /* libgdk_pixbuf-2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C8664512A4BCE8200076737 /* libgdk_pixbuf-2.0.dylib */; };
-		0C8664542A4BCEAF00076737 /* libpango-1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C8664532A4BCEAF00076737 /* libpango-1.0.dylib */; };
-		0C8664562A4BCEB600076737 /* libpangocairo-1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C8664552A4BCEB600076737 /* libpangocairo-1.0.0.dylib */; };
-		0C8664582A4BCEDC00076737 /* libglib-2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C8664572A4BCEDC00076737 /* libglib-2.0.dylib */; };
 		10F0E6ED2A4979CB0013A3B1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 10F0E6EC2A4979CB0013A3B1 /* main.cpp */; };
 		10F0E6F72A497A8D0013A3B1 /* App.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 10F0E6F32A497A8B0013A3B1 /* App.cpp */; };
 		10F0E6F82A497A8D0013A3B1 /* MainFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 10F0E6F52A497A8C0013A3B1 /* MainFrame.cpp */; };
+		52E714D22FE9023A003701EB /* libDuiLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52E714D12FE9023A003701EB /* libDuiLib.a */; };
+		52E714D42FE90304003701EB /* libSDL3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52E714D32FE90303003701EB /* libSDL3.a */; };
+		52E714D62FE9030B003701EB /* libSDL3_ttf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52E714D52FE9030B003701EB /* libSDL3_ttf.a */; };
+		52E714D82FE90311003701EB /* libSDL3_gfx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52E714D72FE90311003701EB /* libSDL3_gfx.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,7 +31,6 @@
 /* Begin PBXFileReference section */
 		0C1A03D02A8B4AD700026EBB /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		0C1A03D12A8B4B8700026EBB /* libDuiLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDuiLib.a; path = ../../bin/libDuiLib.a; sourceTree = "<group>"; };
-		0C1A03D32A8DB64700026EBB /* FileList.xcfilelist */ = {isa = PBXFileReference; lastKnownFileType = text.xcfilelist; path = FileList.xcfilelist; sourceTree = "<group>"; };
 		0C8664422A4BCB0A00076737 /* libDuiLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDuiLib.a; path = ../../DuiLib/Lib/Release/libDuiLib.a; sourceTree = "<group>"; };
 		0C8664442A4BCCED00076737 /* libcairo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcairo.a; path = ../../../../../../opt/homebrew/Cellar/cairo/1.16.0_5/lib/libcairo.a; sourceTree = "<group>"; };
 		0C8664462A4BCD6A00076737 /* libcairo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcairo.a; path = ../../../../../../opt/homebrew/lib/libcairo.a; sourceTree = "<group>"; };
@@ -55,6 +49,10 @@
 		10F0E6F52A497A8C0013A3B1 /* MainFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainFrame.cpp; sourceTree = "<group>"; };
 		10F0E6F62A497A8D0013A3B1 /* App.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
 		10F0E6FA2A4985FA0013A3B1 /* libDuiLib.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libDuiLib.dylib; path = ../DuiLib/Build/Products/Debug/libDuiLib.dylib; sourceTree = "<group>"; };
+		52E714D12FE9023A003701EB /* libDuiLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDuiLib.a; path = ../../DuiLib/Lib/libDuiLib.a; sourceTree = "<group>"; };
+		52E714D32FE90303003701EB /* libSDL3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL3.a; path = ../../../../../../usr/local/lib/libSDL3.a; sourceTree = "<group>"; };
+		52E714D52FE9030B003701EB /* libSDL3_ttf.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL3_ttf.a; path = ../../../../../../usr/local/lib/libSDL3_ttf.a; sourceTree = "<group>"; };
+		52E714D72FE90311003701EB /* libSDL3_gfx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL3_gfx.a; path = ../../../../../../usr/local/lib/libSDL3_gfx.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,15 +60,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C1A03D22A8B4B8700026EBB /* libDuiLib.a in Frameworks */,
-				0C86644A2A4BCE1100076737 /* libcairo.dylib in Frameworks */,
-				0C86644C2A4BCE2500076737 /* libgtk-3.0.dylib in Frameworks */,
-				0C86644E2A4BCE3800076737 /* libgobject-2.0.dylib in Frameworks */,
-				0C8664502A4BCE6D00076737 /* libgdk-3.dylib in Frameworks */,
-				0C8664522A4BCE8200076737 /* libgdk_pixbuf-2.0.dylib in Frameworks */,
-				0C8664542A4BCEAF00076737 /* libpango-1.0.dylib in Frameworks */,
-				0C8664562A4BCEB600076737 /* libpangocairo-1.0.0.dylib in Frameworks */,
-				0C8664582A4BCEDC00076737 /* libglib-2.0.dylib in Frameworks */,
+				52E714D22FE9023A003701EB /* libDuiLib.a in Frameworks */,
+				52E714D42FE90304003701EB /* libSDL3.a in Frameworks */,
+				52E714D62FE9030B003701EB /* libSDL3_ttf.a in Frameworks */,
+				52E714D82FE90311003701EB /* libSDL3_gfx.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,7 +74,6 @@
 			isa = PBXGroup;
 			children = (
 				0C1A03D02A8B4AD700026EBB /* Config.xcconfig */,
-				0C1A03D32A8DB64700026EBB /* FileList.xcfilelist */,
 				10F0E6EB2A4979CB0013A3B1 /* Test */,
 				10F0E6EA2A4979CB0013A3B1 /* Products */,
 				10F0E6F92A4985EA0013A3B1 /* Frameworks */,
@@ -111,7 +103,11 @@
 		10F0E6F92A4985EA0013A3B1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				52E714D72FE90311003701EB /* libSDL3_gfx.a */,
+				52E714D52FE9030B003701EB /* libSDL3_ttf.a */,
+				52E714D32FE90303003701EB /* libSDL3.a */,
 				0C1A03D12A8B4B8700026EBB /* libDuiLib.a */,
+				52E714D12FE9023A003701EB /* libDuiLib.a */,
 				0C8664572A4BCEDC00076737 /* libglib-2.0.dylib */,
 				0C8664552A4BCEB600076737 /* libpangocairo-1.0.0.dylib */,
 				0C8664532A4BCEAF00076737 /* libpango-1.0.dylib */,
@@ -311,15 +307,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
-					"DUILIB_GTK=1",
+					"DUILIB_SDL=1",
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS = ../../DuiLib/;
 				LD_RUNPATH_SEARCH_PATHS = ./;
 				LIBRARY_SEARCH_PATHS = (
-					../../DuiLib/Lib/Debug/,
-					/opt/homebrew/Cellar/cairo/1.16.0_5/lib,
-					/opt/homebrew/lib,
+					../../DuiLib/Lib/,
+					/usr/local/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -329,12 +324,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				GCC_PREPROCESSOR_DEFINITIONS = "DUILIB_SDL=1";
 				HEADER_SEARCH_PATHS = ../../DuiLib/;
 				LD_RUNPATH_SEARCH_PATHS = ./;
 				LIBRARY_SEARCH_PATHS = (
-					../../DuiLib/Lib/Debug/,
-					/opt/homebrew/Cellar/cairo/1.16.0_5/lib,
-					/opt/homebrew/lib,
+					../../DuiLib/Lib/,
+					/usr/local/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

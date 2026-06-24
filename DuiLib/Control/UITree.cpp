@@ -263,7 +263,7 @@ void CTreeUI::BuildRows(CDuiRect rc, bool bNeedInvalidate)
 	//显示的第一行是哪个？
 	int cyNeeded = 0;
 	int nNodeCount = 0;  //总共可能需要绘制几行
-	BOOL bFindBeginRow = FALSE;
+	uiBool bFindBeginRow = uiFalse;
 	TNodeData *pNode = GetRootNode();
 	TNodeData *pBeginNode = pNode; //从哪一行开始绘制
 	while (pNode)
@@ -273,7 +273,7 @@ void CTreeUI::BuildRows(CDuiRect rc, bool bNeedInvalidate)
 			if(iPosY + GetNodeHeight() + GetChildPadding() > rc.top)
 			{
 				pBeginNode = pNode;
-				bFindBeginRow = TRUE;
+				bFindBeginRow = uiTrue;
 			}
 			else
 			{

@@ -77,7 +77,7 @@ namespace DuiLib {
 		HWND hWndParent = m_hWnd;
 		while( ::GetParent(hWndParent) != NULL ) hWndParent = ::GetParent(hWndParent);
 		::ShowWindow(m_hWnd, SW_SHOW);
-		::SendMessage(hWndParent, WM_NCACTIVATE, TRUE, 0L);
+		::SendMessage(hWndParent, WM_NCACTIVATE, uiTrue, 0L);
 	}
 
 	LPCTSTR CComboWndWin32::GetWindowClassName() const

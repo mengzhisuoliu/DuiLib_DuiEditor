@@ -24,7 +24,7 @@ public:
 
 	virtual void OnUpdateView() {} //弃用，为了兼容保留
 
-	BOOL IsForm(LPCTSTR formName) { return GetFormName() == formName; }
+	uiBool IsForm(LPCTSTR formName) { return GetFormName() == formName; }
 
 	virtual void OnActiveForm() {}	//页面由隐藏切换到显示时
 	virtual void OnHideForm() {}	//页面由显示切换到隐藏时

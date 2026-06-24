@@ -149,13 +149,13 @@ private:
 	DWORD			m_dwDelayStartTick;
 
 	/** Is delayed */
-	BOOL			m_bIsDelayed;
+	uiBool			m_bIsDelayed;
 
 	/** Is animating */
-	BOOL			m_bIsAnimating;
+	uiBool			m_bIsAnimating;
 
 	/** Play toggle */
-	BOOL			m_bPlay;
+	uiBool			m_bPlay;
 };
 
 

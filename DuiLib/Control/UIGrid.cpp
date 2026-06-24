@@ -14,7 +14,7 @@ namespace DuiLib
 			m_mapColumnWidth[i] = 0;
 			m_mapColWidthFixed[i] = 0;
 			m_mapColumnCellType[i] = celltypeText;
-			m_mapColumnSort[i] = TRUE;
+			m_mapColumnSort[i] = uiTrue;
 		}
 
 		m_nColCount = 0;
@@ -27,7 +27,7 @@ namespace DuiLib
 		m_pBody->SetOwner(this);
 
 		m_nSortCol = -1;
-		m_bSortAscending = TRUE;
+		m_bSortAscending = uiTrue;
 		m_pfnCompare = CGridUI::pfnCellTextCompare;
 
 		m_pCellLButtonDown = NULL;
@@ -207,11 +207,11 @@ namespace DuiLib
 			m_pHeader->RemoveAt(nIndex);
 		}
 
-		SelectRow(nIndex, FALSE);
+		SelectRow(nIndex, uiFalse);
 
 		for (int i=0; i<GetColumnCount(); i++)
 		{
-			SelectCell(nIndex, i, FALSE);
+			SelectCell(nIndex, i, uiFalse);
 			if(GetFocusCell().row == nIndex && GetFocusCell().col == i)
 				SetFocusCell(-1,-1);
 		}
@@ -305,7 +305,7 @@ namespace DuiLib
 			TRowData *pRowData = (TRowData *)m_RowData.GetAt(i);
 			TCellData *pCellData = (TCellData *)pRowData->m_cells.GetAt(nIndex);
 
-			SelectCell(i,nIndex,FALSE);
+			SelectCell(i,nIndex,uiFalse);
 			if(GetFocusCell().row == i && GetFocusCell().col == nIndex)
 				SetFocusCell(-1, -1);
 
@@ -359,9 +359,9 @@ namespace DuiLib
 		*/
 	}
 
-	BOOL CGridUI::SetRowCount(int rows)
+	uiBool CGridUI::SetRowCount(int rows)
 	{
-		BOOL bResult = TRUE;
+		uiBool bResult = uiTrue;
 		ASSERT(rows >= 0);
 
 
@@ -398,10 +398,10 @@ namespace DuiLib
 	}
 
 
-	BOOL CGridUI::SetColumnCount(int cols)
+	uiBool CGridUI::SetColumnCount(int cols)
 	{
-		BOOL bResult = TRUE;
-		if(cols <= 0) return FALSE;
+		uiBool bResult = uiTrue;
+		if(cols <= 0) return uiFalse;
 		if (cols == GetColumnCount())
 			return bResult;
 
@@ -429,9 +429,9 @@ namespace DuiLib
 		return m_nColCount;
 	}
 
-	BOOL CGridUI::SetFixedRowCount(int rows)
+	uiBool CGridUI::SetFixedRowCount(int rows)
 	{
-		BOOL bResult = TRUE;
+		uiBool bResult = uiTrue;
 		ASSERT(rows >= 0);
 		if (rows == m_pHeader->GetCount())
 			return bResult;
@@ -468,7 +468,7 @@ namespace DuiLib
 
 				for (int i=0; i<GetColumnCount(); i++)
 				{
-					SelectCell(nDeleteRow, i, FALSE);
+					SelectCell(nDeleteRow, i, uiFalse);
 					if(GetFocusCell().row == nDeleteRow && GetFocusCell().col == i)
 						SetFocusCell(-1,-1);
 				}
@@ -489,16 +489,16 @@ namespace DuiLib
 		return m_pHeader->GetCount();
 	}
 
-	BOOL CGridUI::SetRowHeight(int row, int height)
+	uiBool CGridUI::SetRowHeight(int row, int height)
 	{
 		TRowData *pRowData = GetRowData(row);
-		if(!pRowData) return FALSE;
+		if(!pRowData) return uiFalse;
 
 		pRowData->SetHeight(height);
-		return TRUE;
+		return uiTrue;
 	}
 
-	int CGridUI::GetRowHeight(int row, BOOL bScaleByDPI)
+	int CGridUI::GetRowHeight(int row, uiBool bScaleByDPI)
 	{
 		TRowData *pRowData = GetRowData(row);
 
@@ -522,14 +522,14 @@ namespace DuiLib
 		return height;
 	}
 
-	BOOL CGridUI::SetColumnWidth(int col, int width)
+	uiBool CGridUI::SetColumnWidth(int col, int width)
 	{
-		if(col<0 || col >= MAX_GRID_COLUMN_COUNT) return FALSE;
+		if(col<0 || col >= MAX_GRID_COLUMN_COUNT) return uiFalse;
 		m_mapColWidthFixed[col] = width;
-		return TRUE;
+		return uiTrue;
 	}
 
-	int CGridUI::GetColumnWidth(int col, BOOL bScaleByDPI)
+	int CGridUI::GetColumnWidth(int col, uiBool bScaleByDPI)
 	{
 		if(col<0 || col >= MAX_GRID_COLUMN_COUNT) return 0;
 
@@ -614,7 +614,7 @@ namespace DuiLib
 
 						if(GetCellType(row,col) == celltypeCheckBox)
 						{
-							Cell(row,col).SetCheckBoxCheck(FALSE);
+							Cell(row,col).SetCheckBoxCheck(uiFalse);
 						}
 						break;
 					}
@@ -625,7 +625,7 @@ namespace DuiLib
 		IGridUI::ClearSelectedRows();
 	}
 
-	void CGridUI::SelectRow(int row, BOOL bSelected, BOOL bTriggerEvent)
+	void CGridUI::SelectRow(int row, uiBool bSelected, uiBool bTriggerEvent)
 	{
 		IGridUI::SelectRow(row, bSelected, bTriggerEvent);
 
@@ -645,7 +645,7 @@ namespace DuiLib
 		}
 	}
 
-	void CGridUI::SetVirtualGrid(BOOL bVirtual)
+	void CGridUI::SetVirtualGrid(uiBool bVirtual)
 	{
 		if(m_bVirtualGrid == bVirtual) return;
 		ResetGridBody();
@@ -689,7 +689,7 @@ namespace DuiLib
 		return -1;
 	}
 
-	BOOL CGridUI::IsMergedCell(int row, int col)
+	uiBool CGridUI::IsMergedCell(int row, int col)
 	{
 		if(row == 0 && col == 0)
 		{
@@ -698,9 +698,9 @@ namespace DuiLib
 		INT64 key = (((INT64)row) << 32) + col;
 		std::map<INT64, TGridMergeRange>::iterator it = m_mapCellMergeRange.find(key);
 		if(it != m_mapCellMergeRange.end())
-			return TRUE;
+			return uiTrue;
 
-		return FALSE;
+		return uiFalse;
 	}
 
 	TGridMergeRange CGridUI::GetCellMergeRange(int row, int col)
@@ -997,18 +997,18 @@ OUT_FOR:
 		return NULL;
 	}
 
-	BOOL CGridUI::IsFixedRow(int row)
+	uiBool CGridUI::IsFixedRow(int row)
 	{
 		if(row >= 0 && row < GetFixedRowCount())
-			return TRUE;
-		return FALSE;
+			return uiTrue;
+		return uiFalse;
 	}
 
-	BOOL CGridUI::IsFixedCol(int col)
+	uiBool CGridUI::IsFixedCol(int col)
 	{
 		if(col >= 0 && col < GetFixedColumnCount())
-			return TRUE;
-		return FALSE;
+			return uiTrue;
+		return uiFalse;
 	}
 
 	void CGridUI::SetFocusCell(int row, int col) 
@@ -1039,7 +1039,7 @@ OUT_FOR:
 
 	const TCellID &CGridUI::GetFocusCell() const { return m_FocusCell; }
 
-	void CGridUI::SetColumnSort(int col, BOOL bSort)
+	void CGridUI::SetColumnSort(int col, uiBool bSort)
 	{
 		if(col >= 0 && col <= MAX_GRID_COLUMN_COUNT)
 		{
@@ -1047,13 +1047,13 @@ OUT_FOR:
 		}
 	}
 
-	BOOL CGridUI::IsColumnSort(int col) const
+	uiBool CGridUI::IsColumnSort(int col) const
 	{
 		if(col >= 0 && col <= MAX_GRID_COLUMN_COUNT)
 		{
 			return m_mapColumnSort[col];
 		}
-		return FALSE;
+		return uiFalse;
 	}
 
 	void CGridUI::SetSortCallbackFun(PFNLVCOMPARE pfnCompare) { m_pfnCompare = pfnCompare; }
@@ -1066,12 +1066,12 @@ OUT_FOR:
 		ClearSelectedRows();
 		ClearSelectedCells();
 
-		BOOL bAscending = !m_bSortAscending;
+		uiBool bAscending = !m_bSortAscending;
 		if(!IsVirtualGrid())
 		{
 			//int lo = GetFixedRowCount();
 			//int hi = -1;
-			if(m_nSortCol != col) bAscending = TRUE;
+			if(m_nSortCol != col) bAscending = uiTrue;
 			SortItems(m_pfnCompare, col, bAscending, 0, GetFixedRowCount(), -1);
 		}
 		m_nSortCol = col;
@@ -1081,14 +1081,14 @@ OUT_FOR:
 		Refresh(true);
 	}
 
-	void CGridUI::SortItems(int col, BOOL bSortAscending)
+	void CGridUI::SortItems(int col, uiBool bSortAscending)
 	{
 		if (!IsHeaderSort() || !IsColumnSort(col)) return;
 
 		ClearSelectedRows();
 		ClearSelectedCells();
 
-		BOOL bAscending = bSortAscending;
+		uiBool bAscending = bSortAscending;
 		if (!IsVirtualGrid())
 		{
 			//int lo = GetFixedRowCount();
@@ -1102,15 +1102,15 @@ OUT_FOR:
 		Refresh(true);
 	}
 
-	void CGridUI::OnSortItem(int col, BOOL bAscending)
+	void CGridUI::OnSortItem(int col, uiBool bAscending)
 	{
 		SendGridNotify(DUI_MSGTYPE_SORTITEM, (WPARAM)col, (LPARAM)bAscending);
 	}
 
-	BOOL CGridUI::SortItems(PFNLVCOMPARE pfnCompare, int col, BOOL bAscending, LPARAM data, int low, int high)
+	uiBool CGridUI::SortItems(PFNLVCOMPARE pfnCompare, int col, uiBool bAscending, LPARAM data, int low, int high)
 	{
 		if (col >= GetColumnCount())
-			return FALSE;
+			return uiFalse;
 
 		if (high == -1)
 			high = GetRowCount() - 1;
@@ -1119,7 +1119,7 @@ OUT_FOR:
 		int hi = high;
 
 		if (hi <= lo)
-			return FALSE;
+			return uiFalse;
 
 		//LPARAM midItem = GetItemData((lo + hi)/2, col);
 		LPARAM pMidCell = (LPARAM) GetCellData((lo + hi)/2, col);
@@ -1171,7 +1171,7 @@ OUT_FOR:
 		if (lo < high)
 			SortItems(pfnCompare, col, bAscending, data, lo, high);
 
-		return TRUE;
+		return uiTrue;
 	}
 
 	int CALLBACK CGridUI::pfnCellTextCompare(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
@@ -1209,7 +1209,7 @@ OUT_FOR:
 			int ypos = 0;
 			for (int i=0; i<=row-1; i++)
 			{
-				ypos += GetRowHeight(i, TRUE);
+				ypos += GetRowHeight(i, uiTrue);
 			}
 
 			CDuiRect rcBody = m_pBody->GetPos();
@@ -1354,7 +1354,7 @@ LABEL_END:
 							//当多行选中时，若是按住Ctrl键，点击已选中行时，取消选择
 							if(IsSelectedRow(row))
 							{
-								SelectRow(row, FALSE);
+								SelectRow(row, uiFalse);
 								SetFocusCell(-1,-1);
 							}
 							else
@@ -1398,7 +1398,7 @@ LABEL_END:
 						{
 							//当多行选中时，若是按住Ctrl键，点击已选中单元格时，取消选择之
 							if(IsSelectedCell(row, col))
-								SelectCell(row, col, FALSE);
+								SelectCell(row, col, uiFalse);
 							else
 								SelectCell(row, col);
 
@@ -1713,7 +1713,7 @@ LABEL_END:
 			int colCount = GetColumnCount();
 			for (int i=0; i<colCount-1; i++)
 			{
-				cxFixed += GetColumnWidth(i, TRUE);
+				cxFixed += GetColumnWidth(i, uiTrue);
 			}
 
 			//最后一列大于默认列宽才能扩展
@@ -1758,7 +1758,7 @@ LABEL_END:
 		int nGridWidth = 0;
 		for (int i=0; i<GetColumnCount(); i++)
 		{
-			nGridWidth += GetColumnWidth(i, TRUE);
+			nGridWidth += GetColumnWidth(i, uiTrue);
 		}
 
 		CDuiSize szHeader = m_pHeader->EstimateSize(szAvailable);
@@ -1792,16 +1792,16 @@ LABEL_END:
 		int cyNeeded = 0;
 		int nBeginRow = GetFixedRowCount();
 		int nRows = GetRowCount();
-		BOOL bFindBeginRow = FALSE;
+		uiBool bFindBeginRow = uiFalse;
 		for (int i=nBeginRow; i<nRows; i++)
 		{
-			int nHeight = GetRowHeight(i, TRUE);
+			int nHeight = GetRowHeight(i, uiTrue);
 			if(!bFindBeginRow)
 			{
 				if(iPosY + nHeight > rc.top)
 				{
 					nBeginRow = i;
-					bFindBeginRow = TRUE;
+					bFindBeginRow = uiTrue;
 				}
 				else
 				{
@@ -1818,7 +1818,7 @@ LABEL_END:
 		int iTempPosY = iPosY;
 		while (iTempPosY < rcItem.bottom && nTempRow < GetRowCount())
 		{
-			iTempPosY += GetRowHeight(nTempRow, TRUE);
+			iTempPosY += GetRowHeight(nTempRow, uiTrue);
 			nNeedRows++;
 			nTempRow++;
 		}
@@ -1857,7 +1857,7 @@ LABEL_END:
 		for (int i=0; i<m_pBody->GetCount(); i++)
 		{
 			CGridRowUI *pRowUI = (CGridRowUI *)m_pBody->GetItemAt(i);
-			CDuiRect rcRow(rcItem.left, iPosY, rcItem.right, iPosY + GetRowHeight(nCurrentRow, TRUE) );
+			CDuiRect rcRow(rcItem.left, iPosY, rcItem.right, iPosY + GetRowHeight(nCurrentRow, uiTrue) );
 			pRowUI->SetPos(rcRow, bNeedInvalidate);
 
 			if(pRowUI->GetRow() != nCurrentRow)
@@ -1892,7 +1892,7 @@ LABEL_END:
 				SendGridNotify(DUI_MSGTYPE_INITROWDATA, nCurrentRow, 0);
 			}
 
-			iPosY += GetRowHeight(nCurrentRow, TRUE);
+			iPosY += GetRowHeight(nCurrentRow, uiTrue);
 			nCurrentRow++;
 		}
 

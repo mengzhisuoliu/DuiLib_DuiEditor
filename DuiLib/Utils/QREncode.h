@@ -83,7 +83,7 @@ public:
 public:
 	int m_nLevel;		// 誤り訂正レベル
 	int m_nVersion;		// バージョン(型番)
-	BOOL m_bAutoExtent;	// バージョン(型番)自動拡張指定フラグ
+	uiBool m_bAutoExtent;	// バージョン(型番)自動拡張指定フラグ
 	int m_nMaskingNo;	// マスキングパターン番号
 
 public:
@@ -109,19 +109,19 @@ private:
 
 // データエンコード関連ファンクション
 public:
-	BOOL EncodeData(int nLevel, int nVersion, BOOL bAutoExtent, int nMaskingNo, LPBYTE lpsSource, int ncSource = 0);
+	uiBool EncodeData(int nLevel, int nVersion, uiBool bAutoExtent, int nMaskingNo, LPBYTE lpsSource, int ncSource = 0);
 
 private:
 	int GetEncodeVersion(int nVersion, LPBYTE lpsSource, int ncLength);
-	BOOL EncodeSourceData(LPBYTE lpsSource, int ncLength, int nVerGroup);
+	uiBool EncodeSourceData(LPBYTE lpsSource, int ncLength, int nVerGroup);
 
 	int GetBitLength(BYTE nMode, int ncData, int nVerGroup);
 
 	int SetBitStream(int nIndex, WORD wData, int ncData);
 
-	BOOL IsNumeralData(unsigned char c);
-	BOOL IsAlphabetData(unsigned char c);
-	BOOL IsKanjiData(unsigned char c1, unsigned char c2);
+	uiBool IsNumeralData(unsigned char c);
+	uiBool IsAlphabetData(unsigned char c);
+	uiBool IsKanjiData(unsigned char c1, unsigned char c2);
 
 	BYTE AlphabetToBinaly(unsigned char c);
 	WORD KanjiToBinaly(WORD wc);

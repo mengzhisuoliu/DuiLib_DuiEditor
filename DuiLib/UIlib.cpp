@@ -51,7 +51,7 @@
 #include "UIlib.h"
 
 #ifdef WIN32
-BOOL APIENTRY DllMain(HANDLE hModule, DWORD  dwReason, LPVOID /*lpReserved*/)
+uiBool APIENTRY DllMain(HANDLE hModule, DWORD  dwReason, LPVOID /*lpReserved*/)
 {
 	switch( dwReason ) {
 	case DLL_PROCESS_DETACH:
@@ -61,6 +61,6 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD  dwReason, LPVOID /*lpReserved*/)
        ::DisableThreadLibraryCalls((HMODULE)hModule);
        break;
     }
-    return TRUE;
+    return uiTrue;
 }
 #endif

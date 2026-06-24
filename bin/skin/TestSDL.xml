@@ -25,7 +25,7 @@
 				<ListLabelElement text="111111" />
 				<ListLabelElement text="222222" />
 			</ComboEx>
-			<Control pos="629,33,740,118" width="111" height="85" float="true" bordercolor="0xFF000080" bordersize="2" />
+			<Control pos="629,33,740,118" width="111" height="85" float="true" bkcolor="0xFF808000" bkcolor2="0xFFA6CAF0" bkcolor3="0xFF008080" bordercolor="0xFF000080" bordersize="3" />
 			<Tracker width="121" height="94" pos="354,33,475,127" float="true" />
 			<IPAddress width="144" height="36" align="center" pos="29,253,173,289" float="true" bordercolor="0xFFC0C0C0" bordersize="1" />
 			<DateTime width="110" height="30" pos="29,297,139,327" float="true" bordercolor="0xFF333333" bordersize="1" />
@@ -35,8 +35,8 @@
 		<VerticalLayout height="100" sepheight="-8" sepimm="true" inset="0,8,0,0" bkcolor="0xFFFFFFFF">
 			<MsgWnd name="msgwnd_frame" bordercolor="0xFFC0C0C0" bordersize="1" />
 		</VerticalLayout>
-		<Control pos="507,62,607,139" width="100" height="77" float="true" bordercolor="0xFF000080" leftbordersize="2" borderround="10,10" />
+		<Control pos="507,62,607,139" width="100" height="77" float="true" bordercolor="0xFF000080" leftbordersize="3" topbordersize="3" />
 		<Label text="qdqqwd" width="163" height="46" pos="416,157,579,203" float="true" />
-		<Control pos="637,162,713,217" width="76" height="55" float="true" bordercolor="0xFF000080" bordersize="2" borderround="10,10" />
+		<Control pos="637,162,713,217" width="76" height="55" float="true" bkcolor="0xFFC0DCC0" bordercolor="0xFF000080" bordersize="2" borderround="10,10" />
 	</VerticalLayout>
 </Window>

@@ -30,7 +30,7 @@ namespace DuiLib {
 			delete phost;
 		}
 
-		return TRUE;
+		return uiTrue;
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -204,8 +204,8 @@ namespace DuiLib {
 			lf.lfCharSet = DEFAULT_CHARSET;
 			lf.lfHeight = -nSize;
 			if( bBold ) lf.lfWeight += FW_BOLD;
-			if( bUnderline ) lf.lfUnderline = TRUE;
-			if( bItalic ) lf.lfItalic = TRUE;
+			if( bUnderline ) lf.lfUnderline = uiTrue;
+			if( bItalic ) lf.lfItalic = uiTrue;
 			HFONT hFont = ::CreateFontIndirect(&lf);
 			if( hFont == NULL ) return;
 			m_pTwh->SetFont(hFont);
@@ -291,7 +291,7 @@ namespace DuiLib {
 		m_sText.Replace(_T("{\\n}"), _T("\n"));
 		if( !m_pTwh ) return;
 		SetSel(0, -1);
-		ReplaceSel(pstrText, FALSE);
+		ReplaceSel(pstrText, uiFalse);
 	}
 
 	bool CRichEditUI::IsModify() const
@@ -299,7 +299,7 @@ namespace DuiLib {
 		if( !m_pTwh ) return false;
 		LRESULT lResult;
 		TxSendMessage(EM_GETMODIFY, 0, 0, &lResult);
-		return (BOOL)lResult == TRUE;
+		return (uiBool)lResult == uiTrue;
 	}
 
 	void CRichEditUI::SetModify(bool bModified) const
@@ -388,7 +388,7 @@ namespace DuiLib {
 	{
 		LRESULT lResult;
 		TxSendMessage(EM_GETZOOM, (WPARAM)&nNum, (LPARAM)&nDen, &lResult);
-		return (BOOL)lResult == TRUE;
+		return (uiBool)lResult == uiTrue;
 	}
 
 	bool CRichEditUI::SetZoom(int nNum, int nDen)
@@ -397,14 +397,14 @@ namespace DuiLib {
 		if (nDen < 0 || nDen > 64) return false;
 		LRESULT lResult;
 		TxSendMessage(EM_SETZOOM, nNum, nDen, &lResult);
-		return (BOOL)lResult == TRUE;
+		return (uiBool)lResult == uiTrue;
 	}
 
 	bool CRichEditUI::SetZoomOff()
 	{
 		LRESULT lResult;
 		TxSendMessage(EM_SETZOOM, 0, 0, &lResult);
-		return (BOOL)lResult == TRUE;
+		return (uiBool)lResult == uiTrue;
 	}
 
 	WORD CRichEditUI::GetSelectionType() const
@@ -418,14 +418,14 @@ namespace DuiLib {
 	{
 		LRESULT lResult;
 		TxSendMessage(EM_GETAUTOURLDETECT, 0, 0, &lResult);
-		return (BOOL)lResult == TRUE;
+		return (uiBool)lResult == uiTrue;
 	}
 
 	bool CRichEditUI::SetAutoURLDetect(bool bAutoDetect)
 	{
 		LRESULT lResult;
 		TxSendMessage(EM_AUTOURLDETECT, bAutoDetect, 0, &lResult);
-		return (BOOL)lResult == FALSE;
+		return (uiBool)lResult == uiFalse;
 	}
 
 	DWORD CRichEditUI::GetEventMask() const
@@ -498,7 +498,7 @@ namespace DuiLib {
 		cf.cbSize = sizeof(CHARFORMAT2);
 		LRESULT lResult;
 		TxSendMessage(EM_SETCHARFORMAT, 0, (LPARAM)&cf, &lResult);
-		if( (BOOL)lResult == TRUE ) {
+		if( (uiBool)lResult == uiTrue ) {
 			CHARFORMAT2W cfw;
 			cfw.cbSize = sizeof(CHARFORMAT2W);
 			TxSendMessage(EM_GETCHARFORMAT, 1, (LPARAM)&cfw, 0);
@@ -522,7 +522,7 @@ namespace DuiLib {
 		cf.cbSize = sizeof(CHARFORMAT2);
 		LRESULT lResult;
 		TxSendMessage(EM_SETCHARFORMAT, SCF_SELECTION, (LPARAM)&cf, &lResult);
-		return (BOOL)lResult == TRUE;
+		return (uiBool)lResult == uiTrue;
 	}
 
 	bool CRichEditUI::SetWordCharFormat(CHARFORMAT2 &cf)
@@ -531,7 +531,7 @@ namespace DuiLib {
 		cf.cbSize = sizeof(CHARFORMAT2);
 		LRESULT lResult;
 		TxSendMessage(EM_SETCHARFORMAT, SCF_SELECTION|SCF_WORD, (LPARAM)&cf, &lResult); 
-		return (BOOL)lResult == TRUE;
+		return (uiBool)lResult == uiTrue;
 	}
 
 	DWORD CRichEditUI::GetParaFormat(PARAFORMAT2 &pf) const
@@ -548,7 +548,7 @@ namespace DuiLib {
 		pf.cbSize = sizeof(PARAFORMAT2);
 		LRESULT lResult;
 		TxSendMessage(EM_SETPARAFORMAT, 0, (LPARAM)&pf, &lResult);
-		if( (BOOL)lResult == TRUE ) {
+		if( (uiBool)lResult == uiTrue ) {
 			m_pTwh->SetParaFormat(pf);
 			return true;
 		}
@@ -560,7 +560,7 @@ namespace DuiLib {
 		if( !m_pTwh ) return false;
 		LRESULT lResult;
 		TxSendMessage(EM_CANUNDO, 0, 0, &lResult);
-		return (BOOL)lResult == TRUE; 
+		return (uiBool)lResult == uiTrue; 
 	}
 
 	bool CRichEditUI::CanRedo()
@@ -568,7 +568,7 @@ namespace DuiLib {
 		if( !m_pTwh ) return false;
 		LRESULT lResult;
 		TxSendMessage(EM_CANREDO, 0, 0, &lResult);
-		return (BOOL)lResult == TRUE; 
+		return (uiBool)lResult == uiTrue; 
 	}
 
 	bool CRichEditUI::CanPaste()
@@ -576,14 +576,14 @@ namespace DuiLib {
 		if( !m_pTwh ) return false;
 		LRESULT lResult;
 		TxSendMessage(EM_CANPASTE, 0, 0, &lResult);
-		return (BOOL)lResult == TRUE; 
+		return (uiBool)lResult == uiTrue; 
 	}
 	bool CRichEditUI::Redo()
 	{ 
 		if( !m_pTwh ) return false;
 		LRESULT lResult;
 		TxSendMessage(EM_REDO, 0, 0, &lResult);
-		return (BOOL)lResult == TRUE; 
+		return (uiBool)lResult == uiTrue; 
 	}
 
 	bool CRichEditUI::Undo()
@@ -591,7 +591,7 @@ namespace DuiLib {
 		if( !m_pTwh ) return false;
 		LRESULT lResult;
 		TxSendMessage(EM_UNDO, 0, 0, &lResult);
-		return (BOOL)lResult == TRUE; 
+		return (uiBool)lResult == uiTrue; 
 	}
 
 	void CRichEditUI::Clear()
@@ -655,7 +655,7 @@ namespace DuiLib {
 	{
 		LRESULT lResult;
 		TxSendMessage(EM_LINESCROLL, nChars, nLines, &lResult);
-		return (BOOL)lResult == TRUE;
+		return (uiBool)lResult == uiTrue;
 	}
 
 	CDuiPoint CRichEditUI::GetCharPos(long lChar) const
@@ -742,7 +742,7 @@ namespace DuiLib {
 		cs.lpszName = m_sText.GetData();
 		CreateHost(this, &cs, &m_pTwh);
 		if( m_pTwh ) {
-			if( m_bTransparent ) m_pTwh->SetTransparent(TRUE);
+			if( m_bTransparent ) m_pTwh->SetTransparent(uiTrue);
 			LRESULT lResult;
 			m_pTwh->GetTextServices()->TxSendMessage(EM_SETLANGOPTIONS, 0, 0, &lResult);
 			m_pTwh->GetTextServices()->TxSendMessage(EM_SETEVENTMASK, 0, ENM_DROPFILES|ENM_LINK|ENM_CHANGE, &lResult);
@@ -788,7 +788,7 @@ namespace DuiLib {
 		LRESULT lResult;
 		TxSendMessage(EM_SETEVENTMASK, 0,ENM_DROPFILES|ENM_LINK, // ENM_CHANGE| ENM_CORRECTTEXT | ENM_DRAGDROPDONE | ENM_DROPFILES | ENM_IMECHANGE | ENM_LINK | ENM_OBJECTPOSITIONS | ENM_PROTECTED | ENM_REQUESTRESIZE | ENM_SCROLL | ENM_SELCHANGE | ENM_UPDATE,
 			&lResult);
-		return (BOOL)lResult == FALSE;
+		return (uiBool)lResult == uiFalse;
 	}
 
 	void CRichEditUI::OnTxNotify(DWORD iNotify, void *pv)
@@ -1654,7 +1654,7 @@ namespace DuiLib {
 			DestroyMenu(hPopMenu);
 		}
 		else if( uMsg == WM_COMMAND ) {
-			bHandled = FALSE;
+			bHandled = uiFalse;
 			if( !IsFocused() ) return 0;
 			UINT uCmd = (UINT)wParam;
 			switch(uCmd) {

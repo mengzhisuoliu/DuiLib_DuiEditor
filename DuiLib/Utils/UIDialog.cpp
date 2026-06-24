@@ -7,8 +7,8 @@ CUIDialog::CUIDialog(void)
 {
 	m_nMode = 0;
 	_bModal = false;
-	m_bEnterCloseOK=TRUE;
-	m_bEscCloseCancel=TRUE;
+	m_bEnterCloseOK=uiTrue;
+	m_bEscCloseCancel=uiTrue;
 	__refCount = 1;
 }
 
@@ -16,8 +16,8 @@ CUIDialog::CUIDialog(LPCTSTR sSkinFile)
 {
 	m_nMode = 0;
 	_bModal = false;
-	m_bEnterCloseOK=TRUE;
-	m_bEscCloseCancel=TRUE;
+	m_bEnterCloseOK=uiTrue;
+	m_bEscCloseCancel=uiTrue;
 
 	m_sSkinFile = sSkinFile;
 	m_sWindowClassName = m_sSkinFile;
@@ -95,15 +95,15 @@ LRESULT CUIDialog::ResponseDefaultKeyEvent(WPARAM wParam)
 	return S_FALSE;
 }
 
-void CUIDialog::SetDefaultKeyEvent(BOOL bEnterCloseOK, BOOL bEscCloseCancel)
+void CUIDialog::SetDefaultKeyEvent(uiBool bEnterCloseOK, uiBool bEscCloseCancel)
 {
 	m_bEnterCloseOK = bEnterCloseOK;
 	m_bEscCloseCancel = bEscCloseCancel;
 }
 
-BOOL CUIDialog::IsEnterCloseOK() const { return m_bEnterCloseOK; }
+uiBool CUIDialog::IsEnterCloseOK() const { return m_bEnterCloseOK; }
 
-BOOL CUIDialog::IsEscCloseCancel() const { return m_bEscCloseCancel; }
+uiBool CUIDialog::IsEscCloseCancel() const { return m_bEscCloseCancel; }
 
 UINT CUIDialog::DoModal(UIWND hWndParent)
 {

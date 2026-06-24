@@ -33,7 +33,7 @@ namespace DuiLib
 
 			Create(m_pOwner->GetManager()->GetPaintWindow(), NULL, uStyle, 0, rcPos.left, rcPos.top, rcPos.GetWidth(), rcPos.GetHeight());
 			m_font = MakeRefPtr<UIFont>(m_pOwner->GetManager()->CloneFont(m_pOwner->GetFont()));
-			::SendMessage(m_hWnd, WM_SETFONT, (WPARAM)m_font->GetHFONT(m_pOwner->GetManager()), (LPARAM)TRUE);
+			::SendMessage(m_hWnd, WM_SETFONT, (WPARAM)m_font->GetHFONT(m_pOwner->GetManager()), (LPARAM)uiTrue);
 		}
 
 		memcpy(&m_oldSysTime, &m_pOwner->m_sysTime, sizeof(SYSTEMTIME));
@@ -88,10 +88,10 @@ namespace DuiLib
 	LRESULT CDateTimeWndWin32::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		LRESULT lRes = 0;
-		BOOL bHandled = TRUE;
+		uiBool bHandled = uiTrue;
 		if( uMsg == WM_CREATE ) {
 			//m_pOwner->GetManager()->AddNativeWindow(m_pOwner, m_hWnd);
-			bHandled = FALSE;
+			bHandled = uiFalse;
 		}
 		else if (uMsg == WM_KEYDOWN && wParam == VK_ESCAPE)
 		{
@@ -162,27 +162,27 @@ namespace DuiLib
 					m_bDropOpen = false;
 				}
 			}
-			bHandled = FALSE;
+			bHandled = uiFalse;
 		}
 		else if(uMsg == WM_KILLFOCUS)
 		{
 			if(!m_bDropOpen) {
 				::PostMessage(m_hWnd, WM_CLOSE, 0, 0);
 			}
-			bHandled = FALSE;
+			bHandled = uiFalse;
 		}
 		else if( uMsg == WM_PAINT) {
 			if (m_pOwner->GetManager()->IsLayered()) {
 				//m_pOwner->GetManager()->AddNativeWindow(m_pOwner, m_hWnd);
 			}
-			bHandled = FALSE;
+			bHandled = uiFalse;
 		}
 		else if( uMsg == WM_SETCURSOR) 
 		{
 			//::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_IBEAM)));
 			SetCursor(DUI_IBEAM);
 		}
-		else bHandled = FALSE;
+		else bHandled = uiFalse;
 		if( !bHandled ) return DefaultWndProc(uMsg, wParam, lParam);
 		return lRes;
 	}

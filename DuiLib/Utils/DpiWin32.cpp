@@ -91,9 +91,9 @@ namespace DuiLib
 		return m_Awareness;
 	}
 
-	BOOL CDpiWin32::SetDPIAwareness(PROCESS_DPI_AWARENESS Awareness)
+	uiBool CDpiWin32::SetDPIAwareness(PROCESS_DPI_AWARENESS Awareness)
 	{
-		BOOL bRet = FALSE;
+		uiBool bRet = uiFalse;
 		//if (IsWindows8Point1OrGreater()) //由于这个函数不支持win8.1 or greater，假设win8就是8.1 or greater。
 		if (IsWindows8OrGreater()) {
 			HMODULE hModule =::LoadLibrary(_T("Shcore.dll"));
@@ -101,7 +101,7 @@ namespace DuiLib
 				LPSetProcessDpiAwareness SetProcessDpiAwareness = (LPSetProcessDpiAwareness)GetProcAddress(hModule, "SetProcessDpiAwareness");
 				if (SetProcessDpiAwareness != NULL && SetProcessDpiAwareness(Awareness) == S_OK) {
 					m_Awareness = Awareness;
-					bRet = TRUE;
+					bRet = uiTrue;
 				}
 			}
 		}

@@ -192,7 +192,7 @@ void CQRCodeUI::MakeQrImage()
 	uinner::CQR_Encode qr;
 	int nLevel = MAX(MIN(m_qrLevel,3),0);
 	int nVersion = MAX(MIN(m_qrVersion,40),0);
-	BOOL bAutoExtent = nVersion == 0;
+	uiBool bAutoExtent = nVersion == 0;
 	int nMaskingNo = MAX(MIN(m_qrMarkNo,7),-1);
 	if(qr.EncodeData(nLevel, nVersion, bAutoExtent, nMaskingNo, m_qrText.GetBuffer(), m_qrText.GetLength()))
 	{
@@ -216,7 +216,7 @@ void CQRCodeUI::MakeQrImage()
 		{
 			//非整数倍放大时,小数取整,可能会导致失真无法扫描，所以不要实际铺满控件
 			int qrsize = 1;
-			while(TRUE)
+			while(uiTrue)
 			{
 				if(rcControl.GetWidth() < (qrsize+1) * size)
 					break;

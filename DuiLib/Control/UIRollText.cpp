@@ -10,7 +10,7 @@ namespace DuiLib
 		m_nScrollPos = 0;
 		m_nText_W_H = 0;
 		m_nStep = 5;
-		m_bUseRoll = FALSE;
+		m_bUseRoll = uiFalse;
 		m_nRollDirection = ROLLTEXT_LEFT;
 	}
 
@@ -46,7 +46,7 @@ namespace DuiLib
 		m_pManager->KillTimer(this, ROLLTEXT_ROLL_END);
 		m_pManager->SetTimer(this, ROLLTEXT_ROLL_END, lMaxTimeLimited*1000);
 
-		m_bUseRoll = TRUE;
+		m_bUseRoll = uiTrue;
 	}
 
 	void CRollTextUI::EndRoll()
@@ -56,7 +56,7 @@ namespace DuiLib
 		m_pManager->KillTimer(this, ROLLTEXT_ROLL_END);
 		m_pManager->KillTimer(this, ROLLTEXT_TIMERID);
 		
-		m_bUseRoll = FALSE;
+		m_bUseRoll = uiFalse;
 	}
 
 	void CRollTextUI::SetPos(CDuiRect rc, bool bNeedInvalidate)

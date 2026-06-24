@@ -23,7 +23,7 @@ namespace DuiLib{
 				break;
 			}
 			m_font = MakeRefPtr<UIFont>(m_pOwner->GetManager()->CloneFont(m_pOwner->GetFont()));
-			::SendMessage(m_hWnd, WM_SETFONT, (WPARAM)m_font->GetHFONT(m_pOwner->GetManager()), (LPARAM)TRUE);
+			::SendMessage(m_hWnd, WM_SETFONT, (WPARAM)m_font->GetHFONT(m_pOwner->GetManager()), (LPARAM)uiTrue);
 			SetHotKey(m_pOwner->m_wVirtualKeyCode, m_pOwner->m_wModifiers);
 			m_pOwner->m_sText = GetHotKeyName();
 			::EnableWindow(m_hWnd, m_pOwner->IsEnabled() == true);
@@ -68,14 +68,14 @@ namespace DuiLib{
 	LRESULT CHotKeyWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		LRESULT lRes = 0;
-		BOOL bHandled = TRUE;
+		uiBool bHandled = uiTrue;
 		if( uMsg == WM_KILLFOCUS ) lRes = OnKillFocus(uMsg, wParam, lParam, bHandled);
 		else if( uMsg == OCM_COMMAND ) {
 			if( GET_WM_COMMAND_CMD(wParam, lParam) == EN_CHANGE ) lRes = OnEditChanged(uMsg, wParam, lParam, bHandled);
 			else if( GET_WM_COMMAND_CMD(wParam, lParam) == EN_UPDATE ) {
 				CDuiRect rcClient;
 				::GetClientRect(m_hWnd, &rcClient);
-				::InvalidateRect(m_hWnd, &rcClient, FALSE);
+				::InvalidateRect(m_hWnd, &rcClient, uiFalse);
 			}
 		}
 		else if( uMsg == WM_KEYDOWN && TCHAR(wParam) == VK_RETURN ) {
@@ -106,9 +106,9 @@ namespace DuiLib{
 			::SelectObject(hDC, hOldFont);
 			::SetCaretPos(size.cx, 0);
 			::EndPaint(m_hWnd, &ps);
-			bHandled = TRUE;
+			bHandled = uiTrue;
 		}
-		else bHandled = FALSE;
+		else bHandled = uiFalse;
 		if( !bHandled ) return DefaultWndProc(uMsg, wParam, lParam);
 		return lRes;
 	}
@@ -120,7 +120,7 @@ namespace DuiLib{
 	}
 
 
-	LRESULT CHotKeyWnd::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CHotKeyWnd::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		LRESULT lRes = ::DefWindowProc(m_hWnd, uMsg, wParam, lParam);
 		::SendMessage(m_hWnd, WM_CLOSE, 0, 0);
@@ -128,7 +128,7 @@ namespace DuiLib{
 	}
 
 
-	LRESULT CHotKeyWnd::OnEditChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CHotKeyWnd::OnEditChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		if( !m_bInit ) return 0;
 		if( m_pOwner == NULL ) return 0;
@@ -175,7 +175,7 @@ namespace DuiLib{
 	}
 
 
-	CDuiString CHotKeyWnd::GetKeyName(UINT vk, BOOL fExtended)
+	CDuiString CHotKeyWnd::GetKeyName(UINT vk, uiBool fExtended)
 	{
 		UINT nScanCode = ::MapVirtualKeyEx( vk, 0, ::GetKeyboardLayout( 0 ) );
 		switch( vk )
@@ -217,21 +217,21 @@ namespace DuiLib{
 		{
 			if (wModifiers & HOTKEYF_CONTROL)
 			{
-				strKeyName += GetKeyName(VK_CONTROL, FALSE);
+				strKeyName += GetKeyName(VK_CONTROL, uiFalse);
 				strKeyName += szPlus;
 			}
 
 
 			if (wModifiers & HOTKEYF_SHIFT)
 			{
-				strKeyName += GetKeyName(VK_SHIFT, FALSE);
+				strKeyName += GetKeyName(VK_SHIFT, uiFalse);
 				strKeyName += szPlus;
 			}
 
 
 			if (wModifiers & HOTKEYF_ALT)
 			{
-				strKeyName += GetKeyName(VK_MENU, FALSE);
+				strKeyName += GetKeyName(VK_MENU, uiFalse);
 				strKeyName += szPlus;
 			}
 

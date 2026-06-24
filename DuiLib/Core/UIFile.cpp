@@ -40,7 +40,7 @@ namespace DuiLib {
 		m_dwSize = 0U;
 	}
 
-	BOOL CUIFile::LoadFile(const STRINGorID &bitmap, LPCTSTR type, HINSTANCE instance)
+	uiBool CUIFile::LoadFile(const STRINGorID &bitmap, LPCTSTR type, HINSTANCE instance)
 	{
 		Empty();
 
@@ -48,15 +48,15 @@ namespace DuiLib {
 		if (type == NULL)
 		{
 			if (__LoadFromZip(bitmap, type, instance))
-				return TRUE;
+				return uiTrue;
 			if (__LoadFromSkinPath(bitmap, type, instance))
-				return TRUE;
+				return uiTrue;
 		}
 		else
 		{
 #ifdef DUILIB_WIN32
 			if (__LoadFromResource(bitmap, type, instance))
-				return TRUE;
+				return uiTrue;
 #endif
 		}
 
@@ -64,19 +64,19 @@ namespace DuiLib {
 	}
 
 
-	BOOL CUIFile::LoadFile(LPCTSTR pStrImage, LPCTSTR type, HINSTANCE instance)
+	uiBool CUIFile::LoadFile(LPCTSTR pStrImage, LPCTSTR type, HINSTANCE instance)
 	{
 		return LoadFile(STRINGorID(pStrImage), type, instance);
 	}
 
 #ifdef WIN32
-	BOOL CUIFile::LoadFile(UINT nID, LPCTSTR type, HINSTANCE instance)
+	uiBool CUIFile::LoadFile(UINT nID, LPCTSTR type, HINSTANCE instance)
 	{
 		return LoadFile(STRINGorID(nID), type, instance);
 	}
 #endif
 
-	BOOL CUIFile::__LoadFromSkinPath(const STRINGorID& bitmap, LPCTSTR type, HINSTANCE instance)
+	uiBool CUIFile::__LoadFromSkinPath(const STRINGorID& bitmap, LPCTSTR type, HINSTANCE instance)
 	{
 		CDuiString sFile = CPaintManagerUI::GetResourcePath();	
 		sFile += bitmap.m_lpstr;
@@ -86,10 +86,10 @@ namespace DuiLib {
 		return __LoadFromDiskPath(sFile);
 	}
 
-	BOOL CUIFile::__LoadFromZip(const STRINGorID& bitmap, LPCTSTR type, HINSTANCE instance)
+	uiBool CUIFile::__LoadFromZip(const STRINGorID& bitmap, LPCTSTR type, HINSTANCE instance)
 	{
 		if (CPaintManagerUI::GetResourceZip().IsEmpty())
-			return FALSE;
+			return uiFalse;
 
 #ifdef WIN32
 		HZIP hz = NULL;
@@ -132,7 +132,7 @@ namespace DuiLib {
 	}
 
 #ifdef WIN32
-	BOOL CUIFile::__LoadFromResource(const STRINGorID& bitmap, LPCTSTR type, HINSTANCE instance)
+	uiBool CUIFile::__LoadFromResource(const STRINGorID& bitmap, LPCTSTR type, HINSTANCE instance)
 	{
 		HINSTANCE dllinstance = NULL;
 		if (instance)
@@ -145,19 +145,19 @@ namespace DuiLib {
 		}
 
 		HRSRC hResource = ::FindResource(dllinstance, bitmap.m_lpstr, type);
-		if (hResource == NULL) return FALSE;
+		if (hResource == NULL) return uiFalse;
 		HGLOBAL hGlobal = ::LoadResource(dllinstance, hResource);
 		if (hGlobal == NULL)
 		{
 			FreeResource(hResource);
-			return FALSE;
+			return uiFalse;
 		}
 
 		m_dwSize = ::SizeofResource(dllinstance, hResource);
 		if (m_dwSize == 0)
 		{
 			FreeResource(hResource);
-			return FALSE;
+			return uiFalse;
 		}
 		m_pData = new BYTE[m_dwSize + 1];
 		m_pData[m_dwSize] = '\0';
@@ -168,12 +168,12 @@ namespace DuiLib {
 	}
 #endif
 
-	BOOL CUIFile::__LoadFromDiskPath(LPCTSTR sFilePath)
+	uiBool CUIFile::__LoadFromDiskPath(LPCTSTR sFilePath)
 	{
 		//直接去读取bitmap.m_lpstr指向的路径
 		FILE *file = _tfopen(sFilePath, _T("rb"));
-		if(file==NULL) return FALSE;
-		if(feof(file)) return FALSE;
+		if(file==NULL) return uiFalse;
+		if(feof(file)) return uiFalse;
 
 		int pos = ftell(file);
 		fseek(file, 0, SEEK_END);
@@ -183,7 +183,7 @@ namespace DuiLib {
 		if (m_dwSize == 0)
 		{
 			fclose(file);
-			return FALSE;
+			return uiFalse;
 		}
 
 		m_pData = new BYTE[m_dwSize + 1];
@@ -216,7 +216,7 @@ namespace DuiLib {
 	}
 	*/
 
-	BOOL CUIFile::Open(LPCTSTR lpszFileName, LPCTSTR mode)
+	uiBool CUIFile::Open(LPCTSTR lpszFileName, LPCTSTR mode)
 	{
 		m_fp = _tfopen(lpszFileName, mode);
 		return m_fp != NULL;
@@ -364,7 +364,7 @@ namespace DuiLib {
 		return fseek(m_fp, lOff, nFrom);
 	}
 
-	BOOL CUIFile::IsEOF()
+	uiBool CUIFile::IsEOF()
 	{
 		return feof(m_fp) == 1;
 	}
@@ -375,7 +375,7 @@ namespace DuiLib {
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	BOOL CUIFile::CopyFile(LPCTSTR sSourceFilePathName, LPCTSTR sDestFilePathName, BOOL bFailIfExists)
+	uiBool CUIFile::CopyFile(LPCTSTR sSourceFilePathName, LPCTSTR sDestFilePathName, uiBool bFailIfExists)
 	{
 #ifdef WIN32
 		return ::CopyFile(sSourceFilePathName, sDestFilePathName, bFailIfExists);
@@ -388,10 +388,10 @@ namespace DuiLib {
         s.Format(_T("cp \"%s\" \"%s\""), sSourceFilePathName, sDestFilePathName);
         system(s.GetData());
 #endif
-		return FALSE;
+		return uiFalse;
 	}
 
-	BOOL CUIFile::DeleteFile(LPCTSTR sFilePathName)
+	uiBool CUIFile::DeleteFile(LPCTSTR sFilePathName)
 	{
 #ifdef WIN32
 		return ::DeleteFile(sFilePathName);
@@ -406,14 +406,14 @@ namespace DuiLib {
 		//system(s.GetData());
 		return remove(sFilePathName) == 0;
 #endif
-		return FALSE;
+		return uiFalse;
 	}
 
-	BOOL CUIFile::IsFileExist(LPCTSTR sFilePathName)
+	uiBool CUIFile::IsFileExist(LPCTSTR sFilePathName)
 	{
 #ifdef WIN32
 		DWORD dwAttrib = GetFileAttributes(sFilePathName);
-		if( dwAttrib == INVALID_FILE_ATTRIBUTES) return FALSE;
+		if( dwAttrib == INVALID_FILE_ATTRIBUTES) return uiFalse;
 		return (dwAttrib & FILE_ATTRIBUTE_DIRECTORY) != FILE_ATTRIBUTE_DIRECTORY;
 #elif defined __linux__
 		//return access(sPathName, F_OK) == 0;
@@ -423,13 +423,13 @@ namespace DuiLib {
         struct stat buff;
         return stat(sFilePathName, &buff) == 0 && S_ISREG(buff.st_mode);
 #endif
-		return FALSE;
+		return uiFalse;
 	}
 
-	BOOL CUIFile::CreateDirectory(LPCTSTR sPathName, BOOL bCreateMultiLevelDirectory)
+	uiBool CUIFile::CreateDirectory(LPCTSTR sPathName, uiBool bCreateMultiLevelDirectory)
 	{
 		if (IsDirectoryExist(sPathName))
-			return TRUE;
+			return uiTrue;
 
 		if(bCreateMultiLevelDirectory)
 		{
@@ -444,8 +444,8 @@ namespace DuiLib {
 				{
 					if (!temp.IsEmpty() && !IsDirectoryExist(temp))
 					{
-						if (!CreateDirectory(temp.GetData(), FALSE))
-							return FALSE;
+						if (!CreateDirectory(temp.GetData(), uiFalse))
+							return uiFalse;
 					}
 				}
 			}
@@ -466,15 +466,15 @@ namespace DuiLib {
             return ::mkdir(sPathName, S_IRWXU | S_IRWXG | S_IRWXO) == 0;
 #endif
 		}
-		return TRUE;
+		return uiTrue;
 	}
 
-	BOOL CUIFile::RemoveDirectory(LPCTSTR sPathName, BOOL bDeleteNoEmptyDirectory)
+	uiBool CUIFile::RemoveDirectory(LPCTSTR sPathName, uiBool bDeleteNoEmptyDirectory)
 	{
 		if (bDeleteNoEmptyDirectory)
 		{
 			if (!IsDirectoryExist(sPathName))
-				return FALSE;
+				return uiFalse;
 
 			CUIFileFind finder;
 			CDuiString sFindPath = sPathName;
@@ -484,7 +484,7 @@ namespace DuiLib {
 #ifdef WIN32
 			sFindPath += _T("*.*");
 #endif
-			BOOL bFind = finder.FindFile(sFindPath);
+			uiBool bFind = finder.FindFile(sFindPath);
 			while (bFind)
 			{
 				bFind = finder.FindNextFile();
@@ -494,16 +494,16 @@ namespace DuiLib {
 				CDuiString sFilePath = finder.GetFilePath();
 				if (finder.IsDirectory())
 				{
-					RemoveDirectory(sFilePath, TRUE);
+					RemoveDirectory(sFilePath, uiTrue);
 					continue;
 				}
 
 				if (!DeleteFile(sFilePath))
 				{
-					return FALSE;
+					return uiFalse;
 				}
 			}
-			return RemoveDirectory(sPathName, FALSE);
+			return RemoveDirectory(sPathName, uiFalse);
 		}
 		else
 		{
@@ -515,23 +515,23 @@ namespace DuiLib {
 			return ::rmdir(sPathName) == 0;
 #endif
 		}
-		return FALSE;
+		return uiFalse;
 	}
 
-	BOOL CUIFile::IsDirectoryExist(LPCTSTR sPathName)
+	uiBool CUIFile::IsDirectoryExist(LPCTSTR sPathName)
 	{
 #ifdef WIN32
 		DWORD dwAttrib = GetFileAttributes(sPathName);
-		if( dwAttrib == INVALID_FILE_ATTRIBUTES) return FALSE;
+		if( dwAttrib == INVALID_FILE_ATTRIBUTES) return uiFalse;
 		return (dwAttrib & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY;
 #elif defined __linux__
 		//return access(sPathName, F_OK) == 0;
 		struct stat buff;
 #ifdef _DEBUG
 		int n = stat(sPathName, &buff);
-		BOOL b = S_ISDIR(buff.st_mode);
+		uiBool b = S_ISDIR(buff.st_mode);
 		int error = errno;
-		return n == 0 && b == TRUE;
+		return n == 0 && b == uiTrue;
 #else
 		return stat(sPathName, &buff) == 0 && S_ISDIR(buff.st_mode);
 #endif
@@ -539,7 +539,7 @@ namespace DuiLib {
         struct stat buff;
         return stat(sPathName, &buff) == 0 && S_ISDIR(buff.st_mode);
 #endif
-		return FALSE;
+		return uiFalse;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -571,16 +571,16 @@ namespace DuiLib {
 		FindClose();
 	}
 
-	BOOL CUIFileFind::FindFile(LPCTSTR lpFileName)
+	uiBool CUIFileFind::FindFile(LPCTSTR lpFileName)
 	{
 		FindClose();
 
 		if (lpFileName == NULL) 
-			return FALSE;
+			return uiFalse;
 
 #ifdef DUILIB_WIN32
 		//是否相对路径
-		BOOL bRelativePath = PathIsRelative(lpFileName);
+		uiBool bRelativePath = PathIsRelative(lpFileName);
 		if (bRelativePath)
 		{		
 			//在程序目录下搜索
@@ -589,7 +589,7 @@ namespace DuiLib {
 
 			m_hFind = ::FindFirstFile(CPaintManagerUI::GetInstancePath() + lpFileName, (LPWIN32_FIND_DATA)m_pNextInfo);
 			if (m_hFind != INVALID_HANDLE_VALUE)
-				return TRUE;
+				return uiTrue;
 			delete m_pNextInfo;
 			m_pNextInfo = NULL;
 		}
@@ -607,7 +607,7 @@ namespace DuiLib {
 				m_pNextInfo = new WIN32_FIND_DATA;
 				m_hFind = ::FindFirstFile(lpFileName, (LPWIN32_FIND_DATA)m_pNextInfo);
 				if (m_hFind != INVALID_HANDLE_VALUE)
-					return TRUE;
+					return uiTrue;
 				delete m_pNextInfo;
 				m_pNextInfo = NULL;
 			}
@@ -615,7 +615,7 @@ namespace DuiLib {
 #elif defined __linux__
 		m_strRoot = lpFileName;
 		if (!CUIFile::IsDirectoryExist(lpFileName))
-			return FALSE;
+			return uiFalse;
 		
 // 		m_dir = opendir(lpFileName);
 // 		if (NULL == m_dir)
@@ -627,31 +627,31 @@ namespace DuiLib {
 // 		return m_dirFoundInfo != NULL;
 
 		m_scandirCount = scandir(lpFileName, &m_scandirList, 0, alphasort);
-		if (m_scandirCount <= 0) return FALSE;
+		if (m_scandirCount <= 0) return uiFalse;
 		m_dirFoundInfo = m_scandirList[0];
 		m_dirNextInfo = m_dirFoundInfo;
 		m_scandirIterator = 0;
-		return TRUE;
+		return uiTrue;
 #elif defined __APPLE__
         m_strRoot = lpFileName;
         if (!CUIFile::IsDirectoryExist(lpFileName))
-            return FALSE;
+            return uiFalse;
         
         m_scandirCount = scandir(lpFileName, &m_scandirList, 0, alphasort);
-        if (m_scandirCount <= 0) return FALSE;
+        if (m_scandirCount <= 0) return uiFalse;
         m_dirFoundInfo = m_scandirList[0];
         m_dirNextInfo = m_dirFoundInfo;
         m_scandirIterator = 0;
-        return TRUE;
+        return uiTrue;
 #endif
-		return FALSE;
+		return uiFalse;
 	}
 
-	BOOL CUIFileFind::FindNextFile()
+	uiBool CUIFileFind::FindNextFile()
 	{
 #ifdef WIN32
 		if (m_hFind == INVALID_HANDLE_VALUE)
-			return FALSE;
+			return uiFalse;
 
 		if (m_pFoundInfo == NULL)
 			m_pFoundInfo = new WIN32_FIND_DATA;
@@ -667,16 +667,16 @@ namespace DuiLib {
 		m_dirFoundInfo = m_dirNextInfo;
 		m_scandirIterator++;
 		if (m_scandirIterator >= m_scandirCount)
-			return FALSE;
+			return uiFalse;
 		m_dirNextInfo = m_scandirList[m_scandirIterator];
-		return TRUE;
+		return uiTrue;
 #elif defined __APPLE__
         m_dirFoundInfo = m_dirNextInfo;
         m_scandirIterator++;
         if (m_scandirIterator >= m_scandirCount)
-            return FALSE;
+            return uiFalse;
         m_dirNextInfo = m_scandirList[m_scandirIterator];
-        return TRUE;
+        return uiTrue;
 #endif
 	}
 
@@ -809,9 +809,9 @@ namespace DuiLib {
 // 		return sFile;
 // 	}
 
-	BOOL CUIFileFind::IsDots()
+	uiBool CUIFileFind::IsDots()
 	{
-		BOOL bResult = FALSE;
+		uiBool bResult = uiFalse;
 
 #ifdef WIN32
 		if (m_pFoundInfo != NULL && IsDirectory())
@@ -822,7 +822,7 @@ namespace DuiLib {
 				if (pFindData->cFileName[1] == '\0' ||
 					(pFindData->cFileName[1] == '.' && pFindData->cFileName[2] == '\0'))
 				{
-					bResult = TRUE;
+					bResult = uiTrue;
 				}
 			}
 		}
@@ -834,7 +834,7 @@ namespace DuiLib {
 				if (m_dirFoundInfo->d_name[1] == '\0' ||
 					(m_dirFoundInfo->d_name[1] == '.' && m_dirFoundInfo->d_name[2] == '\0'))
 				{
-					bResult = TRUE;
+					bResult = uiTrue;
 				}
 			}
 		}
@@ -846,7 +846,7 @@ namespace DuiLib {
                 if (m_dirFoundInfo->d_name[1] == '\0' ||
                     (m_dirFoundInfo->d_name[1] == '.' && m_dirFoundInfo->d_name[2] == '\0'))
                 {
-                    bResult = TRUE;
+                    bResult = uiTrue;
                 }
             }
         }
@@ -855,9 +855,9 @@ namespace DuiLib {
 		return bResult;
 	}
 
-	BOOL CUIFileFind::IsDirectory()
+	uiBool CUIFileFind::IsDirectory()
 	{
-		BOOL bResult = FALSE;
+		uiBool bResult = uiFalse;
 
 #ifdef WIN32
 		if (m_pFoundInfo != NULL)

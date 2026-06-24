@@ -23,8 +23,8 @@ public:
 
 	virtual void OnFinalMessage( UIWND hWnd ) override;
 
-	virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-	virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+	virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+	virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
 
 	virtual UINT DoModal(UIWND hWndParent);
 	virtual UINT DoModal(CUIFrmBase *pParentWnd = NULL);
@@ -37,7 +37,7 @@ public:
 	virtual void InitWindow() override;
 
 private:
-	BOOL IsLeapYear(int year);					// 是否闰年
+	uiBool IsLeapYear(int year);					// 是否闰年
 	void UpdateCalendar();						// 刷新日历网格
 	int GetDaysInMonth(int year, int month);	// 获取某月的天数
 	int GetFirstDayOfWeek(int year, int month); // 返回0=周一 ... 6=周日
@@ -51,7 +51,7 @@ private:
 	CBtnCalendarDayUI* m_btnDays[42];	// 每天的按钮
 	int m_firstDayOfWeek; //// 获取本月第一天是星期几（周一为0）
 
-	BOOL m_bOK;	//是否更新到父窗口
+	uiBool m_bOK;	//是否更新到父窗口
 };
 
 } //namespace DuiLib {

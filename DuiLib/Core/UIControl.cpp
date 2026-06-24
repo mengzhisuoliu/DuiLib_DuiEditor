@@ -2101,7 +2101,7 @@ namespace DuiLib {
 	void CControlUI::SetFrameDelay(int nDelay) { m_nFrameDelay = nDelay; }
 	int CControlUI::GetFrameDelay() const { return m_nFrameDelay; }
 
-	void CControlUI::OnAnimationStart(int nAnimationID, BOOL bFirstLoop)
+	void CControlUI::OnAnimationStart(int nAnimationID, uiBool bFirstLoop)
 	{
 		if(nAnimationID == ANIMATION_ID_SHOW)
 		{

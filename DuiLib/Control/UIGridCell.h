@@ -50,8 +50,8 @@ public:
 	int GetRow() const { return m_row; }
 	int GetCol() const { return m_col; }
 
-	BOOL IsFixedRow() const;
-	BOOL IsFixedCol() const;
+	uiBool IsFixedRow() const;
+	uiBool IsFixedCol() const;
 
 	virtual void SetFixedWidth(int cx) override;
 	virtual bool IsSelected() const override;

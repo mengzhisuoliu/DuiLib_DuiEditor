@@ -93,17 +93,17 @@ namespace DuiLib {
 #endif
 
 		//构造默认字体
-		virtual BOOL CreateDefaultFont() = 0;
+		virtual uiBool CreateDefaultFont() = 0;
 
 		//从参数构造字体
-		BOOL CreateFont(CPaintManagerUI *pManager, int id, LPCTSTR sFontName, int iSize, 
+		uiBool CreateFont(CPaintManagerUI *pManager, int id, LPCTSTR sFontName, int iSize, 
 			bool bBold, bool bUnderline, bool bItalic, bool bDefault, bool bShared);
 
 		//从Xml节点构造字体, 如：<Font id="0" name=....... />
-		BOOL CreateFont(CPaintManagerUI *pManager, CXmlNodeUI node);
+		uiBool CreateFont(CPaintManagerUI *pManager, CXmlNodeUI node);
 
 		//重新构造字体, 当dpi改动时
-		BOOL RebuildFont(CPaintManagerUI *pManager);
+		uiBool RebuildFont(CPaintManagerUI *pManager);
 
 		//克隆字体
 		virtual UIFont* Clone(CPaintManagerUI *pManager) = 0;
@@ -121,7 +121,7 @@ namespace DuiLib {
 		virtual bool IsShared()				{ return bShared;		}
 
 	protected:
-		virtual BOOL _buildFont(CPaintManagerUI *pManager=NULL) = 0;
+		virtual uiBool _buildFont(CPaintManagerUI *pManager=NULL) = 0;
 	protected:
 		int id;
 		CDuiString sFontName;
@@ -145,7 +145,7 @@ namespace DuiLib {
 		virtual HPEN GetHPEN() const = 0;
 #endif
 
-		virtual BOOL CreatePen(int nStyle, int nWidth, CDuiColor dwColor) = 0;
+		virtual uiBool CreatePen(int nStyle, int nWidth, CDuiColor dwColor) = 0;
 
 		bool operator == (UIPen &obj) const;
 
@@ -168,14 +168,14 @@ namespace DuiLib {
 
 		//hBitmap由内部释放
 #ifdef DUILIB_WIN32
-		virtual BOOL CreateFromHBitmap(HBITMAP hBitmap) = 0;
+		virtual uiBool CreateFromHBitmap(HBITMAP hBitmap) = 0;
 
-		virtual BOOL CreateARGB32Bitmap(HDC hDC, int width, int height, BOOL bFlip) = 0;
+		virtual uiBool CreateARGB32Bitmap(HDC hDC, int width, int height, uiBool bFlip) = 0;
 
-		virtual BOOL CreateCompatibleBitmap(HDC hDC, int width, int height) = 0;
+		virtual uiBool CreateCompatibleBitmap(HDC hDC, int width, int height) = 0;
 #endif
 
-		virtual BOOL CreateFromData(LPBYTE pImage, int width, int height, CDuiColor mask) = 0;
+		virtual uiBool CreateFromData(LPBYTE pImage, int width, int height, CDuiColor mask) = 0;
 
 		virtual UINT_PTR  GetHandle() = 0;
 #ifdef DUILIB_WIN32
@@ -184,7 +184,7 @@ namespace DuiLib {
 		virtual BYTE* GetBits()			= 0;
 		virtual int	GetWidth()			= 0;
 		virtual int GetHeight()			= 0;
-		virtual BOOL IsAlpha()			= 0;
+		virtual uiBool IsAlpha()			= 0;
 
 		virtual UIBitmap *Clone()		= 0;
 
@@ -192,7 +192,7 @@ namespace DuiLib {
 
 		virtual void ClearAlpha(const CDuiRect &rc, int alpha = 0) = 0;
 
-		virtual BOOL SaveFile(LPCTSTR pstrFileName) = 0;
+		virtual uiBool SaveFile(LPCTSTR pstrFileName) = 0;
 	};
 
 	class UILIB_API UIImage  : public TObjRefImpl<UIObject>
@@ -204,20 +204,20 @@ namespace DuiLib {
 		const emUIOBJTYPE ObjectType() const override {  return OT_IMAGE;  }
 
 #ifdef DUILIB_WIN32
-		virtual BOOL CreateImage(HBITMAP hBitmap, bool bAlpha) = 0;
+		virtual uiBool CreateImage(HBITMAP hBitmap, bool bAlpha) = 0;
 #endif
 
 		//载入图像
-		BOOL LoadImage(const TDrawInfo *pDrawInfo, CPaintManagerUI* pManager=NULL, HINSTANCE instance = NULL);
-		BOOL LoadImage(STRINGorID bitmap, LPCTSTR type = NULL, CDuiColor mask = CDuiColor(), int width=0, int height=0, CDuiColor fillcolor=CDuiColor(), CPaintManagerUI* pManager=NULL, HINSTANCE instance = NULL);
-		BOOL LoadImage(LPCTSTR pStrImage, LPCTSTR type = NULL, CDuiColor mask = CDuiColor(), int width=0, int height=0, CDuiColor fillcolor=CDuiColor(), CPaintManagerUI* pManager=NULL, HINSTANCE instance = NULL);
-		BOOL LoadImage(UINT nID, LPCTSTR type = NULL, CDuiColor mask = CDuiColor(), int width=0, int height=0, CDuiColor fillcolor=CDuiColor(), CPaintManagerUI* pManager=NULL, HINSTANCE instance = NULL);
+		uiBool LoadImage(const TDrawInfo *pDrawInfo, CPaintManagerUI* pManager=NULL, HINSTANCE instance = NULL);
+		uiBool LoadImage(STRINGorID bitmap, LPCTSTR type = NULL, CDuiColor mask = CDuiColor(), int width=0, int height=0, CDuiColor fillcolor=CDuiColor(), CPaintManagerUI* pManager=NULL, HINSTANCE instance = NULL);
+		uiBool LoadImage(LPCTSTR pStrImage, LPCTSTR type = NULL, CDuiColor mask = CDuiColor(), int width=0, int height=0, CDuiColor fillcolor=CDuiColor(), CPaintManagerUI* pManager=NULL, HINSTANCE instance = NULL);
+		uiBool LoadImage(UINT nID, LPCTSTR type = NULL, CDuiColor mask = CDuiColor(), int width=0, int height=0, CDuiColor fillcolor=CDuiColor(), CPaintManagerUI* pManager=NULL, HINSTANCE instance = NULL);
 
 		//图像HSL转换
 		void AdjustHslImage(bool bUseHSL, short H, short S, short L);
 
 		//从内存中载入图像，支持图像格式：bmp, jpg, png, svg
-		virtual BOOL LoadImageFromMemory(const LPBYTE pData, DWORD dwSize, CDuiColor mask=CDuiColor(), int width=0, int height=0, CDuiColor fillcolor=CDuiColor(), CPaintManagerUI* pManager=NULL);
+		virtual uiBool LoadImageFromMemory(const LPBYTE pData, DWORD dwSize, CDuiColor mask=CDuiColor(), int width=0, int height=0, CDuiColor fillcolor=CDuiColor(), CPaintManagerUI* pManager=NULL);
 
 		//从内存中载入gif图像, arrImageInfo返回每帧图像， 使用完记得释放arrImageInfo
 		virtual bool LoadGifImageFromMemory(const LPBYTE pData, DWORD dwSize, CStdPtrArray &arrImageInfo);
@@ -250,14 +250,14 @@ namespace DuiLib {
 
 		//hBrush由内部释放
 #ifdef DUILIB_WIN32
-		virtual BOOL CreateFromHBrush(HBRUSH hBrush) = 0;
+		virtual uiBool CreateFromHBrush(HBRUSH hBrush) = 0;
 #endif
 
 		//用指定的实线初始化画刷
-		virtual BOOL CreateSolidBrush(CDuiColor clr) = 0;
+		virtual uiBool CreateSolidBrush(CDuiColor clr) = 0;
 
 		//从位图构造画刷
-		virtual BOOL CreateBitmapBrush(UIBitmap *bitmap) = 0;
+		virtual uiBool CreateBitmapBrush(UIBitmap *bitmap) = 0;
 	};
 
 	class UILIB_API UIPath  : public TObjRefImpl<UIObject>
@@ -269,19 +269,19 @@ namespace DuiLib {
 		const emUIOBJTYPE ObjectType() const override {  return OT_PATH;  }
 
 		//开始定义新的路径 
-		virtual BOOL Beginpath()	= 0;
+		virtual uiBool Beginpath()	= 0;
 
 		//结束定义路径
-		virtual BOOL EndPath()		= 0;
+		virtual uiBool EndPath()		= 0;
 
 		//结束定义路径 并且 清理
-		virtual BOOL AbortPath()	= 0;
+		virtual uiBool AbortPath()	= 0;
 
 		//由多个线段组成的多边形
-		virtual BOOL AddLine(int x1, int y1, int x2, int y2) = 0;
+		virtual uiBool AddLine(int x1, int y1, int x2, int y2) = 0;
 
 		//由多个点组成的多边形
-		virtual BOOL AddLines(CDuiPoint *points, int count) = 0;
+		virtual uiBool AddLines(CDuiPoint *points, int count) = 0;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -329,13 +329,13 @@ namespace DuiLib {
 		virtual CDuiColor SetPixel(int x, int y, CDuiColor dwColor) = 0;
 
 		//BitBlt (bit block transfer)
-		virtual BOOL BitBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, DWORD dwRop = SRCCOPY ) = 0;
+		virtual uiBool BitBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, DWORD dwRop = SRCCOPY ) = 0;
 		
 		//stretch BitBlt
-		virtual BOOL StretchBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, DWORD dwRop = SRCCOPY) = 0;
+		virtual uiBool StretchBlt(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, DWORD dwRop = SRCCOPY) = 0;
 
 		//显示具有透明或半透明像素的位图
-		virtual BOOL AlphaBlend(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, int alpha ) = 0;
+		virtual uiBool AlphaBlend(int x, int y, int nWidth, int nHeight, UIRender *pSrcRender, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, int alpha ) = 0;
 
 		//绘制位图
 		virtual void DrawBitmapAlpha(int x, int y, int nWidth, int nHeight, UIBitmap *pUiBitmap, int xSrc, int ySrc, int nWidthSrc, int nHeightSrc, int alpha) = 0;
@@ -368,10 +368,10 @@ namespace DuiLib {
 		virtual UIPath* CreatePath() = 0;	
 
 		//绘制路径
-		virtual BOOL DrawPath(const UIPath* path, int nSize, CDuiColor dwColor) = 0;
+		virtual uiBool DrawPath(const UIPath* path, int nSize, CDuiColor dwColor) = 0;
 
 		//填充路径
-		virtual BOOL FillPath(const UIPath* path, const CDuiColor dwColor) = 0;
+		virtual uiBool FillPath(const UIPath* path, const CDuiColor dwColor) = 0;
 
 		//绘制文字的占用的空间大小
 		virtual CDuiSize GetTextSize(LPCTSTR pstrText, int iFont, UINT uStyle) = 0;

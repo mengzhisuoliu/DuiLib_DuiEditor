@@ -44,7 +44,7 @@ namespace DuiLib {
 		delete this;
 	}
 
-	LRESULT CComboWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CComboWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		m_pm.SetForceUseSharedRes(true);
 		m_pm.Init(m_hWnd, NULL, this);
@@ -77,7 +77,7 @@ namespace DuiLib {
 		return 0;
 	}
 
-	LRESULT CComboWndSDL::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CComboWndSDL::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		m_pOwner->SetManager(m_pOwner->GetManager(), m_pOwner->GetParent(), false);
 		CDuiRect rcNull;
@@ -86,19 +86,19 @@ namespace DuiLib {
 			static_cast<CControlUI*>(m_pOwner->GetItemAt(i))->SetPos(rcNull);
 		}
 		m_pOwner->SetFocus();
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 
-	LRESULT CComboWndSDL::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CComboWndSDL::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		CDuiPoint pt(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		m_bHitItem = IsHitItem(pt);
-		bHandled = FALSE;
+		bHandled = uiFalse;
 		return 0;
 	}
 
-	LRESULT CComboWndSDL::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CComboWndSDL::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		CDuiPoint pt(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		if (m_bHitItem && IsHitItem(pt))
@@ -110,7 +110,7 @@ namespace DuiLib {
 		return 0;
 	}
 
-	LRESULT CComboWndSDL::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CComboWndSDL::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 	{
 		Close();
 		//SetHandleMessage(FALSE);

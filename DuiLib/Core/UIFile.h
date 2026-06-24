@@ -30,14 +30,14 @@ namespace DuiLib {
 		DWORD  GetSize() const;
 		void Empty();
 
-		BOOL LoadFile(const STRINGorID &bitmap, LPCTSTR type=NULL, HINSTANCE instance=NULL);
-		BOOL LoadFile(LPCTSTR pStrImage, LPCTSTR type=NULL, HINSTANCE instance=NULL);
+		uiBool LoadFile(const STRINGorID &bitmap, LPCTSTR type=NULL, HINSTANCE instance=NULL);
+		uiBool LoadFile(LPCTSTR pStrImage, LPCTSTR type=NULL, HINSTANCE instance=NULL);
 #ifdef WIN32
-		BOOL LoadFile(UINT nID, LPCTSTR type=NULL, HINSTANCE instance=NULL);
+		uiBool LoadFile(UINT nID, LPCTSTR type=NULL, HINSTANCE instance=NULL);
 #endif
 
 		//BOOL Open(LPCTSTR lpszFileName, UINT nOpenFlags);
-		BOOL Open(LPCTSTR lpszFileName, LPCTSTR mode);
+		uiBool Open(LPCTSTR lpszFileName, LPCTSTR mode);
 		void Close();
 		UINT Read(void* lpBuf, UINT nCount);
 		UINT Write(const void* lpBuf, UINT nCount);
@@ -49,15 +49,15 @@ namespace DuiLib {
 		int SeekToEnd();
 		void SeekToBegin();
 		int Seek(UINT lOff, UINT nFrom);
-		BOOL IsEOF();
+		uiBool IsEOF();
 		void SetCharSet(CUIFile::CharSet charset);
 	protected:
-		BOOL __LoadFromSkinPath(const STRINGorID& bitmap, LPCTSTR type, HINSTANCE instance);
-		BOOL __LoadFromZip(const STRINGorID& bitmap, LPCTSTR type, HINSTANCE instance);
+		uiBool __LoadFromSkinPath(const STRINGorID& bitmap, LPCTSTR type, HINSTANCE instance);
+		uiBool __LoadFromZip(const STRINGorID& bitmap, LPCTSTR type, HINSTANCE instance);
 #ifdef WIN32
-		BOOL __LoadFromResource(const STRINGorID& bitmap, LPCTSTR type, HINSTANCE instance);
+		uiBool __LoadFromResource(const STRINGorID& bitmap, LPCTSTR type, HINSTANCE instance);
 #endif
-		BOOL __LoadFromDiskPath(LPCTSTR sFilePath);
+		uiBool __LoadFromDiskPath(LPCTSTR sFilePath);
 	private:
 		LPBYTE m_pData; 
 		DWORD m_dwSize;
@@ -67,13 +67,13 @@ namespace DuiLib {
 
 	// --- static functions --
 	public:
-		static BOOL CopyFile(LPCTSTR sSourceFilePathName, LPCTSTR sDestFilePathName, BOOL bFailIfExists); //拷贝文件
-		static BOOL DeleteFile(LPCTSTR sFilePathName); //删除文件
-		static BOOL IsFileExist(LPCTSTR sFilePathName);	//文件是否存在
+		static uiBool CopyFile(LPCTSTR sSourceFilePathName, LPCTSTR sDestFilePathName, uiBool bFailIfExists); //拷贝文件
+		static uiBool DeleteFile(LPCTSTR sFilePathName); //删除文件
+		static uiBool IsFileExist(LPCTSTR sFilePathName);	//文件是否存在
 		
-		static BOOL CreateDirectory(LPCTSTR sPathName, BOOL bCreateMultiLevelDirectory = FALSE); //创建目录
-		static BOOL RemoveDirectory(LPCTSTR sPathName, BOOL bDeleteNonEmptyDirectory = FALSE); //删除目录
-		static BOOL IsDirectoryExist(LPCTSTR sPathName); //目录是否存在
+		static uiBool CreateDirectory(LPCTSTR sPathName, uiBool bCreateMultiLevelDirectory = uiFalse); //创建目录
+		static uiBool RemoveDirectory(LPCTSTR sPathName, uiBool bDeleteNonEmptyDirectory = uiFalse); //删除目录
+		static uiBool IsDirectoryExist(LPCTSTR sPathName); //目录是否存在
 	};
 	
 	class UILIB_API CUIFileFind
@@ -82,8 +82,8 @@ namespace DuiLib {
 		CUIFileFind();
 		~CUIFileFind();
 
-		BOOL FindFile(LPCTSTR lpFileName);
-		BOOL FindNextFile();
+		uiBool FindFile(LPCTSTR lpFileName);
+		uiBool FindNextFile();
 		void FindClose();
 
 		//获取找到的文件的名称（包括扩展名）
@@ -99,16 +99,16 @@ namespace DuiLib {
 // 		CDuiString GetFileExtName();
 
 		//确定找到的文件的名称是否具有名称 "." 或 "..."，以指示实际上是一个目录。
-		BOOL IsDots();
+		uiBool IsDots();
 
 		//确定找到的文件是否为目录
-		BOOL IsDirectory();
+		uiBool IsDirectory();
 
 	protected:
 		void MakeFullPath(CDuiString& sPath);
 	private:
 		CDuiString m_strRoot;
-		BOOL m_bFindInZip;
+		uiBool m_bFindInZip;
 
 #ifdef WIN32
 		HANDLE m_hFind;

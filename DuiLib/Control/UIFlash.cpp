@@ -175,7 +175,7 @@ namespace DuiLib
 	void CFlashUI::ReleaseControl()
 	{
 		//GetManager()->RemoveTranslateAccelerator(this);
-		RegisterEventHandler(FALSE);
+		RegisterEventHandler(uiFalse);
 		if (m_pFlash)
 		{
 			m_pFlash->Release();
@@ -189,7 +189,7 @@ namespace DuiLib
 			return false;
 		//GetManager()->AddTranslateAccelerator(this);
 		GetControl(__uuidof(IShockwaveFlash),(LPVOID*)&m_pFlash);
-		RegisterEventHandler(TRUE);
+		RegisterEventHandler(uiTrue);
 		return true;
 	}
 
@@ -217,7 +217,7 @@ namespace DuiLib
 			return E_NOTIMPL;
 
 		// 当前Web窗口不是焦点,不处理加速键
-		BOOL bIsChild = FALSE;
+		uiBool bIsChild = uiFalse;
 		HWND hTempWnd = NULL;
 		HWND hWndFocus = ::GetFocus();
 
@@ -226,7 +226,7 @@ namespace DuiLib
 		{
 			if(hTempWnd == m_hwndHost)
 			{
-				bIsChild = TRUE;
+				bIsChild = uiTrue;
 				break;
 			}
 			hTempWnd = ::GetParent(hTempWnd);
@@ -242,7 +242,7 @@ namespace DuiLib
 		return hResult;
 	}
 
-	HRESULT CFlashUI::RegisterEventHandler( BOOL inAdvise )
+	HRESULT CFlashUI::RegisterEventHandler( uiBool inAdvise )
 	{
 		if (m_pFlash==NULL)
 			return S_FALSE;

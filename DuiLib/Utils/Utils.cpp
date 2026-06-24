@@ -393,6 +393,42 @@ namespace DuiLib
 		m_dwColor = ((DWORD)color.a << 24) | ((DWORD)color.r << 16) | ((DWORD)color.g << 8) | color.b;
 		return *this;
 	}
+	//////////////////////////////////////////////////////////////////////////
+
+	CDuiColor::CDuiColor(const SDL_FColor& color)
+	{
+		m_dwColor = (((DWORD)color.a) << 24) | (((DWORD)color.r) << 16) | (((DWORD)color.g) << 8) | (DWORD)color.b;
+	}
+
+	SDL_FColor CDuiColor::ToSDL_FColor() const
+	{
+		SDL_FColor c1;
+		c1.r = GetR() / 255.0f;
+		c1.g = GetG() / 255.0f;
+		c1.b = GetB() / 255.0f;
+		c1.a = GetA() / 255.0f;
+		return c1;
+	}
+
+	CDuiColor::operator SDL_FColor() const
+	{
+		SDL_FColor c1;
+		c1.r = GetR() / 255.0f;
+		c1.g = GetG() / 255.0f;
+		c1.b = GetB() / 255.0f;
+		c1.a = GetA() / 255.0f;
+		return c1;
+	}
+
+	CDuiColor& CDuiColor::operator=(const SDL_FColor& color)
+	{
+		BYTE r = color.r * 255.0f;
+		BYTE g = color.g * 255.0f;
+		BYTE b = color.b * 255.0f;
+		BYTE a = color.a * 255.0f;
+		m_dwColor = ((DWORD)a << 24) | ((DWORD)r << 16) | ((DWORD)g << 8) | b;
+		return *this;
+	}
 	#endif
 
 	// 静态常量初始化

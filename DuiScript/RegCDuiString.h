@@ -11,7 +11,7 @@ protected:
 	static void String_Construct_LPCTSTR(LPCTSTR str, CDuiString *thisPointer);
 	static void String_Construct_bool(bool val, CDuiString *thisPointer);
 	static void String_Construct_int(int val, CDuiString *thisPointer);
-	static void String_Construct_int64(DuiLib::Int64 val, CDuiString *thisPointer);
+	static void String_Construct_int64(uiInt64 val, CDuiString *thisPointer);
 	static void String_Construct_double(double val, int base, CDuiString *thisPointer);
 	static void String_Construct_float(float val, int base, CDuiString *thisPointer);
 	static void String_Destruct(CDuiString *thisPointer);
@@ -20,7 +20,7 @@ protected:
 	static CDuiString opAddString(const CDuiString &str, const CDuiString &dest);
 	static CDuiString opAddString(bool val, const CDuiString &str);
 	static CDuiString opAddString(int val, const CDuiString &str);
-	static CDuiString opAddString(DuiLib::Int64 val, const CDuiString &str);
+	static CDuiString opAddString(uiInt64 val, const CDuiString &str);
 	static CDuiString &opAssign(double val, CDuiString &dest);
 	static CDuiString &opAddAssign(double val, CDuiString &dest);
 	static CDuiString opAddString(double val, const CDuiString &str);

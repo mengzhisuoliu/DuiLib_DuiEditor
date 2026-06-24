@@ -134,7 +134,7 @@ void CDateTimeWndSDL::SetDate(int year, int month, int day)
 	}
 }
 
-BOOL CDateTimeWndSDL::OnSdlEvent(const void* pEvent)
+uiBool CDateTimeWndSDL::OnSdlEvent(const void* pEvent)
 {
 	SDL_Event* ev = (SDL_Event*)pEvent;
 
@@ -162,17 +162,17 @@ BOOL CDateTimeWndSDL::OnSdlEvent(const void* pEvent)
 		{
 			SetFocusSegment(m_nIndex + 1);
 		}
-		return TRUE;
+		return uiTrue;
 	}
 	else if (ev->type == SDL_EVENT_WINDOW_MOUSE_ENTER)
 	{
 		GetManager()->SetCursor(DUI_IBEAM);
-		return TRUE;
+		return uiTrue;
 	}
 	else if (ev->type == SDL_EVENT_WINDOW_MOUSE_LEAVE)
 	{
 		GetManager()->SetCursor(DUI_ARROW);
-		return TRUE;
+		return uiTrue;
 	}
 	else if (ev->type == SDL_EVENT_WINDOW_EXPOSED)
 	{
@@ -233,12 +233,12 @@ BOOL CDateTimeWndSDL::OnSdlEvent(const void* pEvent)
 				m_rcPoints[i].bottom = rcClient.bottom;
 			}
 		}
-		return FALSE;
+		return uiFalse;
 	}
-	return FALSE;
+	return uiFalse;
 }
 
-LRESULT CDateTimeWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CDateTimeWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	m_pm.SetForceUseSharedRes(true);
 	m_pm.Init(m_hWnd, NULL, this);
@@ -246,7 +246,7 @@ LRESULT CDateTimeWndSDL::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	return 0;
 }
 
-LRESULT CDateTimeWndSDL::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CDateTimeWndSDL::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	CDuiRect rcClient;
 	GetClientRect(&rcClient);
@@ -307,7 +307,7 @@ LRESULT CDateTimeWndSDL::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	return 0;
 }
 
-LRESULT CDateTimeWndSDL::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CDateTimeWndSDL::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	switch (wParam)
 	{
@@ -347,7 +347,7 @@ LRESULT CDateTimeWndSDL::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 	return 0;
 }
 
-LRESULT CDateTimeWndSDL::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CDateTimeWndSDL::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	CDuiPoint pt(lParam);
 
@@ -415,7 +415,7 @@ LRESULT CDateTimeWndSDL::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 	return 0;
 }
 
-LRESULT CDateTimeWndSDL::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CDateTimeWndSDL::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	CDuiPoint pt(lParam);
 
@@ -467,7 +467,7 @@ LRESULT CDateTimeWndSDL::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	return 0;
 }
 
-LRESULT CDateTimeWndSDL::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CDateTimeWndSDL::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	CDuiPoint pt(lParam);
 	bool bHotChanged = false;
@@ -525,7 +525,7 @@ LRESULT CDateTimeWndSDL::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	return 0;
 }
 
-LRESULT CDateTimeWndSDL::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CDateTimeWndSDL::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	DUITRACE(_T("CDateTimeWndSDL::OnSetFocus wParam=%p"), wParam);
 	SDL_StartTextInput(m_hWnd);
@@ -533,7 +533,7 @@ LRESULT CDateTimeWndSDL::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	return 0;
 }
 
-LRESULT CDateTimeWndSDL::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CDateTimeWndSDL::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	SDL_StopTextInput(m_hWnd);
 	GetManager()->SetCursor(DUI_ARROW);
@@ -553,7 +553,7 @@ LRESULT CDateTimeWndSDL::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	return 0;
 }
 
-LRESULT CDateTimeWndSDL::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT CDateTimeWndSDL::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled)
 {
 	if (wParam == m_TimerUpButton.uWinTimer)
 	{
@@ -566,7 +566,7 @@ LRESULT CDateTimeWndSDL::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 		return 0;
 	}
 
-	bHandled = FALSE;
+	bHandled = uiFalse;
 	return 0;
 }
 
@@ -617,7 +617,7 @@ void CDateTimeWndSDL::MoveEnd()
 	SetFocusSegment(2);
 }
 
-BOOL CDateTimeWndSDL::CheckInput(int n)
+uiBool CDateTimeWndSDL::CheckInput(int n)
 {
 	if (m_uFormatStyle == DTS_TIMEFORMAT) // 时间选取框
 	{
@@ -670,18 +670,18 @@ BOOL CDateTimeWndSDL::CheckInput(int n)
 				case 2:  // 2 月（需判断润年）
 					{
 						// 润年规则：能被4整除且不能被100整除，或者能被400整除
-						BOOL bLeap = ((nYear % 4 == 0) && (nYear % 100 != 0)) || (nYear % 400 == 0);
+						uiBool bLeap = ((nYear % 4 == 0) && (nYear % 100 != 0)) || (nYear % 400 == 0);
 						maxDay = bLeap ? 29 : 28;
 						break;
 					}
 				default:
-					return FALSE; // 未知月份
+					return uiFalse; // 未知月份
 			}
 			return (n >= 1) && (n <= maxDay);
 		}
 	}
 
-	return FALSE;
+	return uiFalse;
 }
 
 // 绘制上下微调按钮（箭头）

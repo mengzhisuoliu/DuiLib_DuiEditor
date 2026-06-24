@@ -18,15 +18,15 @@ namespace DuiLib{
 		void OnFinalMessage(HWND hWnd);
 		LPCTSTR GetSuperClassName() const;
 		LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-		LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-		LRESULT OnEditChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+		LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled);
+		LRESULT OnEditChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled);
 	public:
 		void SetHotKey(WORD wVirtualKeyCode, WORD wModifiers);
 		void GetHotKey(WORD &wVirtualKeyCode, WORD &wModifiers) const;
 		DWORD GetHotKey(void) const;
 		CDuiString GetHotKeyName();
 		void SetRules(WORD wInvalidComb, WORD wModifiers);
-		CDuiString GetKeyName(UINT vk, BOOL fExtended);
+		CDuiString GetKeyName(UINT vk, uiBool fExtended);
 	protected:
 		CHotKeyUI * m_pOwner;
 		HBRUSH m_hBkBrush;

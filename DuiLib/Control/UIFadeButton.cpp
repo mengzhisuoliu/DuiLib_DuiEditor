@@ -4,7 +4,7 @@
 namespace DuiLib {
 	IMPLEMENT_DUICONTROL(CFadeButtonUI)
 
-	CFadeButtonUI::CFadeButtonUI() : m_bMouseHove( FALSE ), m_bMouseLeave( FALSE )
+	CFadeButtonUI::CFadeButtonUI() : m_bMouseHove( uiFalse ), m_bMouseLeave( uiFalse )
 	{
 	}
 
@@ -36,8 +36,8 @@ namespace DuiLib {
 		if( event.Type == UIEVENT_MOUSEENTER && !IsAnimationRunning( FADE_IN_ID ) )
 		{
 			m_bFadeAlpha = 0;
-			m_bMouseLeave = FALSE;
-			m_bMouseHove = TRUE;
+			m_bMouseLeave = uiFalse;
+			m_bMouseHove = uiTrue;
 			StopAnimation( FADE_OUT_ID );
 			StartAnimation( FADE_ELLAPSE, FADE_FRAME_COUNT, FADE_IN_ID );
 			Invalidate();
@@ -46,8 +46,8 @@ namespace DuiLib {
 		else if( event.Type == UIEVENT_MOUSELEAVE && !IsAnimationRunning( FADE_OUT_ID ) )
 		{
 			m_bFadeAlpha = 0;
-			m_bMouseHove = FALSE;
-			m_bMouseLeave = TRUE;
+			m_bMouseHove = uiFalse;
+			m_bMouseLeave = uiTrue;
 			StopAnimation(FADE_IN_ID);
 			StartAnimation(FADE_ELLAPSE, FADE_FRAME_COUNT, FADE_OUT_ID);
 			Invalidate();
@@ -103,14 +103,14 @@ namespace DuiLib {
 			}
 			else {
 				if( m_bMouseHove ) {
-					m_bMouseHove = FALSE;
+					m_bMouseHove = uiFalse;
 					m_sLastImage = m_sHotImage;
 					if( !DrawImage(pRender, (LPCTSTR)m_sHotImage) ) {}
 					return;
 				}
 
 				if( m_bMouseLeave ) {
-					m_bMouseLeave = FALSE;
+					m_bMouseLeave = uiFalse;
 					m_sLastImage = m_sNormalImage;
 					if( !DrawImage(pRender, (LPCTSTR)m_sNormalImage) ) {}
 					return;

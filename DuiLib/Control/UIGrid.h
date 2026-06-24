@@ -46,19 +46,19 @@ public:
 
 	void EnsureVisible(int row, int col); //滚动使单元格可见。
 
-	virtual BOOL SetRowCount(int rows) override;
+	virtual uiBool SetRowCount(int rows) override;
 	virtual int GetRowCount() override;
-	virtual BOOL SetColumnCount(int cols) override;
+	virtual uiBool SetColumnCount(int cols) override;
 	virtual int GetColumnCount() override;
 
-	virtual BOOL SetFixedRowCount(int rows) override;
+	virtual uiBool SetFixedRowCount(int rows) override;
 	virtual int GetFixedRowCount() override;
 
-	virtual BOOL SetRowHeight(int row, int height) override;
-	virtual int  GetRowHeight(int row, BOOL bScaleByDPI=FALSE) override;
+	virtual uiBool SetRowHeight(int row, int height) override;
+	virtual int  GetRowHeight(int row, uiBool bScaleByDPI=uiFalse) override;
 
-	virtual BOOL SetColumnWidth(int col, int width) override;
-	virtual int  GetColumnWidth(int col, BOOL bScaleByDPI=FALSE) override;
+	virtual uiBool SetColumnWidth(int col, int width) override;
+	virtual int  GetColumnWidth(int col, uiBool bScaleByDPI=uiFalse) override;
 
 	//设置整列单元格类型
 	void SetCellType(int col, GridCellType cellType);
@@ -73,16 +73,16 @@ public:
 	GridCellType GetCellType(int row, int col);
 
 	virtual void ClearSelectedRows() override;
-	virtual void SelectRow(int row, BOOL bSelected=TRUE, BOOL bTriggerEvent= FALSE) override;
+	virtual void SelectRow(int row, uiBool bSelected=uiTrue, uiBool bTriggerEvent= uiFalse) override;
 
-	virtual void SetVirtualGrid(BOOL bVirtual) override;
+	virtual void SetVirtualGrid(uiBool bVirtual) override;
 	virtual void SetVirtualRowCount(int nRows);
 
 	void SetRowTag(int row, UINT_PTR tag);
 	UINT_PTR GetRowTag(int row);
 	int FindRowFromRowTag(UINT_PTR tag);
 
-	BOOL IsMergedCell(int row, int col);
+	uiBool IsMergedCell(int row, int col);
 	TGridMergeRange GetCellMergeRange(int row, int col);
 	TGridMergeRange GetCellMergeRangeEx(int row, int col);
 	void SetMergeCellsNeedPaint(int row0, int col0, bool bPaint);
@@ -98,18 +98,18 @@ public:
 	CGridCellUI *GetHotCell() { return m_pHotCell; }
 	CGridRowUI *GetHotRow() { return m_pHotRow; }
 
-	BOOL IsFixedRow(int row);
-	BOOL IsFixedCol(int col);
+	uiBool IsFixedRow(int row);
+	uiBool IsFixedCol(int col);
 
 	virtual void SetFocusCell(int row, int col) override;
 	virtual void SetFocusCell(const TCellID &cellID) override;
 	virtual const TCellID &GetFocusCell() const override;
 
 	//设置col列是否允许点击表头排序
-	void SetColumnSort(int col, BOOL bSort);
+	void SetColumnSort(int col, uiBool bSort);
 
 	//获取col列是否允许点击表头排序
-	BOOL IsColumnSort(int col) const;
+	uiBool IsColumnSort(int col) const;
 
 	//设置自定义排序算法回调函数，默认按单元格字符串比较，_tcscmp()
 	void SetSortCallbackFun(PFNLVCOMPARE pfnCompare);
@@ -118,16 +118,16 @@ public:
 
 	//执行按col列进行排序
 	void SortItems(int col);
-	void SortItems(int col, BOOL bSortAscending); //指定升序还是降序， TRUE=升序，FALSE=降序
-	virtual void OnSortItem(int col, BOOL bAscending);
+	void SortItems(int col, uiBool bSortAscending); //指定升序还是降序， TRUE=升序，FALSE=降序
+	virtual void OnSortItem(int col, uiBool bAscending);
 
 	//获取当前排序的列
 	int GetSortColumn() const		{ return m_nSortCol; }
 
 	//TRUE=升序排列，FALSE=降序排列
-	BOOL GetSortAscending() const	{ return m_bSortAscending; }
+	uiBool GetSortAscending() const	{ return m_bSortAscending; }
 protected:
-	BOOL SortItems(PFNLVCOMPARE pfnCompare, int col, BOOL bAscending, LPARAM data, int low, int high);
+	uiBool SortItems(PFNLVCOMPARE pfnCompare, int col, uiBool bAscending, LPARAM data, int low, int high);
 	static int CALLBACK pfnCellTextCompare(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 	bool OnGridNotify(void *param);
 public:
@@ -153,12 +153,12 @@ protected:
 	int m_mapColumnWidth[MAX_GRID_COLUMN_COUNT];
 	int m_mapColWidthFixed[MAX_GRID_COLUMN_COUNT];
 	GridCellType m_mapColumnCellType[MAX_GRID_COLUMN_COUNT];
-	BOOL m_mapColumnSort[MAX_GRID_COLUMN_COUNT];
+	uiBool m_mapColumnSort[MAX_GRID_COLUMN_COUNT];
 
 	CDuiRect m_rcTracker; //拖动鼠标进行选择的框框
 
 	int m_nSortCol;
-	BOOL m_bSortAscending;
+	uiBool m_bSortAscending;
 	PFNLVCOMPARE m_pfnCompare;
 
 private:

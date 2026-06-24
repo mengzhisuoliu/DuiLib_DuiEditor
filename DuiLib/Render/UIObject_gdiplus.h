@@ -101,12 +101,12 @@ namespace DuiLib {
 
 		virtual void DeleteObject() override;
 
-		virtual BOOL Beginpath() override;
-		virtual BOOL EndPath() override;
-		virtual BOOL AbortPath() override;
+		virtual uiBool Beginpath() override;
+		virtual uiBool EndPath() override;
+		virtual uiBool AbortPath() override;
 
-		virtual BOOL AddLine(int x1, int y1, int x2, int y2) override;
-		virtual BOOL AddLines(CDuiPoint *points, int count) override;
+		virtual uiBool AddLine(int x1, int y1, int x2, int y2) override;
+		virtual uiBool AddLines(CDuiPoint *points, int count) override;
 
 		Gdiplus::GraphicsPath* Getpath();
 

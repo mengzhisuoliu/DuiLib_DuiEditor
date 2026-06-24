@@ -17,19 +17,19 @@ namespace DuiLib
 		virtual void SetEditText(LPCTSTR sText) override;
 
 		virtual void OnFinalMessage(UIWND hWnd) override;
-		BOOL OnSdlEvent(const void* pEvent) override;
+		uiBool OnSdlEvent(const void* pEvent) override;
 
 	protected:
-		virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-		virtual LRESULT OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-		virtual LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-		virtual LRESULT OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-		virtual LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-		virtual LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-		virtual LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-		virtual LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-		virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
-		virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
+		virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+		virtual LRESULT OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+		virtual LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+		virtual LRESULT OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+		virtual LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+		virtual LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+		virtual LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+		virtual LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+		virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
+		virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, uiBool& bHandled) override;
 
 		// ±à¼­²Ù×÷
 		void InsertText(const CDuiString& text);

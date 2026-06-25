@@ -37,9 +37,14 @@ https://blog.csdn.net/mmcanyu/article/details/111148886
 
 正式发布DuiLib脚本系统 结合angelscript 
 https://blog.csdn.net/mmcanyu/article/details/112685524
-```
-### 3. 项目编译说明：
 
+DuiLib跨平台教程
+https://blog.csdn.net/mmcanyu/article/details/162272826
+
+```
+
+### 3. 项目编译说明：
+```
 DuiEditor2010.sln	VS2010解决方案  
 DuiEditor2019.sln	VS2019解决方案  
 
@@ -57,8 +62,33 @@ xsUnicodeRelease	静态库 - Unicode - 发行
 
 重要提醒：设计器非Unicode版本会出错！！！ Duilib库和相关插件无此限制。
 
-​    
+```
+### 4. 跨平台
+```
+1, 编译安装SDL3
+​cd 3rd
+bash makeSDL.sh 或者 sh makeSDL.sh
+SDL3会安装到 /usr/local/include 和 /usr/local/lib  
 
-   ### 4. 重要说明
+2，编译DuiLib
+cd DuiLib
 
+sh makeCMake.sh
+sudo cmake --install build
+
+或者使用xmake编译
+xmake
+xmake install --root
+
+MacOS可以使用xcode编译，项目路径：MacOS/DuiLib/DuiLib.xcodeproj
+
+3，跨平台范例
+Linux/gcc
+MacOS/Test
+MacOS/TestApp
+
+```
+### 5. 重要说明
+```
 设计器创建控件和修改属性依据`bin\DuiLib.xml`，理论上只要遵循这个约定的duilib版本都可以使用这款设计器。
+```

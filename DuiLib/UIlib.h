@@ -5,6 +5,14 @@
 #define DUILIB_WIN32 //д╛хо╣д
 #endif
 
+#if defined(__ANDROID__)
+#define DUILIB_ANDROID
+#elif defined(__linux__)
+#define DUILIB_LINUX
+#elif defined(__APPLE__)
+#define DUILIB_MACOS
+#endif
+
 #include "compat.h"
 
 #ifdef DUILIB_WIN32

@@ -8,7 +8,7 @@ namespace DuiLib {
 /////////////////////////////////////////////////////////////////////////////////////
 //
 //
-#ifdef __linux__
+#ifdef DUILIB_LINUX
 #include <X11/Xlib.h>
 void CompleteStartupNotification(SDL_Window* window)
 {
@@ -131,7 +131,7 @@ UIWND CWindowSDL::Create(UIWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWOR
 
 	HandleMessage(WM_CREATE, 0, 0);
 
-	#ifdef __linux__
+	#ifdef DUILIB_LINUX
 	CompleteStartupNotification(m_hWnd);
 	#endif
 	return m_hWnd;

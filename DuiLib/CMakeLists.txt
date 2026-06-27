@@ -63,11 +63,58 @@ include_directories(
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../3rd/SDL_gfx
 )
 
-# 查找系统库（优先静态库，路径可调整）
-find_library(SDL3_LIB NAMES SDL3 libSDL3 PATHS /usr/local/lib /usr/lib)
-#find_library(SDL3_image_LIB NAMES SDL3_image SDL_image PATHS /usr/local/lib /usr/lib)
-find_library(SDL3_ttf_LIB NAMES SDL3_ttf SDL_ttf PATHS /usr/local/lib /usr/lib)
-#find_library(SDL3_gfx_LIB NAMES SDL3_gfx SDL_gfx PATHS /usr/local/lib /usr/lib)
+
+# 查找系统库
+
+# 1. 尝试使用 Config 模式（从 SDL3Config.cmake 获取信息）
+find_package(SDL3 CONFIG QUIET)
+find_package(SDL3_ttf CONFIG QUIET)
+
+# 2. 如果 Config 模式失败，回退到传统 find_library + find_path
+if(NOT SDL3_FOUND)
+    # 允许用户通过 -DSDL3_ROOT 指定 SDL3 根目录（如 /usr/local 或构建目录）
+    if(NOT SDL3_ROOT)
+        set(SDL3_ROOT "/usr/local" CACHE PATH "SDL3 installation root")
+    endif()
+    # 尝试在指定路径查找库（优先静态库）
+    find_library(SDL3_LIB NAMES SDL3 libSDL3
+        PATHS ${SDL3_ROOT}/lib ${SDL3_ROOT}/build_android_arm64
+        NO_DEFAULT_PATH
+    )
+    find_path(SDL3_INCLUDE_DIR NAMES SDL3/SDL.h
+        PATHS ${SDL3_ROOT}/include ${SDL3_ROOT}/include/SDL3
+        NO_DEFAULT_PATH
+    )
+    # 如果上述没找到，再试系统默认路径（非交叉编译时）
+    if(NOT SDL3_LIB OR NOT SDL3_INCLUDE_DIR)
+        find_library(SDL3_LIB NAMES SDL3 libSDL3)
+        find_path(SDL3_INCLUDE_DIR NAMES SDL3/SDL.h)
+    endif()
+    if(NOT SDL3_LIB OR NOT SDL3_INCLUDE_DIR)
+        message(FATAL_ERROR "SDL3 not found. Please set SDL3_DIR (Config) or SDL3_ROOT (fallback).")
+    endif()
+endif()
+
+if(NOT SDL3_ttf_FOUND)
+    if(NOT SDL3_TTF_ROOT)
+        set(SDL3_TTF_ROOT "/usr/local" CACHE PATH "SDL3_ttf installation root")
+    endif()
+    find_library(SDL3_ttf_LIB NAMES SDL3_ttf libSDL3_ttf
+        PATHS ${SDL3_TTF_ROOT}/lib ${SDL3_TTF_ROOT}/build_android_arm64
+        NO_DEFAULT_PATH
+    )
+    find_path(SDL3_ttf_INCLUDE_DIR NAMES SDL3_ttf/SDL_ttf.h
+        PATHS ${SDL3_TTF_ROOT}/include ${SDL3_TTF_ROOT}/include/SDL3_ttf
+        NO_DEFAULT_PATH
+    )
+    if(NOT SDL3_ttf_LIB OR NOT SDL3_ttf_INCLUDE_DIR)
+        find_library(SDL3_ttf_LIB NAMES SDL3_ttf libSDL3_ttf)
+        find_path(SDL3_ttf_INCLUDE_DIR NAMES SDL3_ttf/SDL_ttf.h)
+    endif()
+    if(NOT SDL3_ttf_LIB OR NOT SDL3_ttf_INCLUDE_DIR)
+        message(FATAL_ERROR "SDL3_ttf not found. Please set SDL3_ttf_DIR (Config) or SDL3_TTF_ROOT (fallback).")
+    endif()
+endif()
 
 # 可选：处理 macOS 下的 framework 或额外库（如 CoreFoundation）
 if(APPLE)
@@ -82,13 +129,26 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Lib)
 add_library(DuiLib ${ALL_SOURCES})
 
 # 链接 SDL 相关库
-target_link_libraries(DuiLib
-    ${SDL3_LIB}
-#    ${SDL3_image_LIB}
-    ${SDL3_ttf_LIB}
-#    ${SDL3_gfx_LIB}
-    ${EXTRA_LIBS}
-)
+if(SDL3_FOUND AND SDL3_ttf_FOUND)
+    # 使用导入目标（自动处理 include 路径和依赖）
+    target_link_libraries(DuiLib
+        SDL3::SDL3
+        SDL3_ttf::SDL3_ttf
+        ${EXTRA_LIBS}
+    )
+else()
+    # 回退：直接使用找到的库和头文件路径
+    target_link_libraries(DuiLib
+        ${SDL3_LIB}
+        ${SDL3_ttf_LIB}
+        ${EXTRA_LIBS}
+    )
+    # 手动添加头文件路径（仅在回退模式下需要）
+    target_include_directories(DuiLib PRIVATE
+        ${SDL3_INCLUDE_DIR}
+        ${SDL3_ttf_INCLUDE_DIR}
+    )
+endif()
 
 # 平台特定链接库（静态链接时也需要）
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")

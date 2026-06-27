@@ -1,21 +1,17 @@
 # DuiEditor
 
-### 1. 开源说明
+### 一. 开源说明
 
 
 ```
-本项目是针对DuiLib开发的可视化界面设计工具，可实际工作中使用
-如有想参与本工具的开发欢迎加入：
-							duilib设计器交流群：819272442
+本项目是针对DuiLib开发的可视化界面设计工具，可实际工作中使用。
+同时本项目维护了一个DuiLib库。
+欢迎加入duilib设计器交流群：819272442，一起探讨和开发。
 ```
 
-### 2.  项目帮助	
+### 二.  项目帮助	
 
 ```
-本项目基于以下：
-	https://gitee.com/Liqs99/DuiLib_DuiEditor
-	https://github.com/xfcanyue/DuiLib_DuiEditor
--------------------------------------------------------------------------
 相关教程与说明：	
 duilib设计器 DuiEditor简易教程 (DuiDesigner) （一）
 https://blog.csdn.net/mmcanyu/article/details/106758857
@@ -43,7 +39,7 @@ https://blog.csdn.net/mmcanyu/article/details/162272826
 
 ```
 
-### 3. 项目编译说明：
+### 三. 项目编译说明：
 ```
 DuiEditor2010.sln	VS2010解决方案  
 DuiEditor2019.sln	VS2019解决方案  
@@ -63,7 +59,9 @@ xsUnicodeRelease	静态库 - Unicode - 发行
 重要提醒：设计器非Unicode版本会出错！！！ Duilib库和相关插件无此限制。
 
 ```
-### 4. 跨平台
+### 四. 跨平台
+
+Linux and macos
 ```
 1, 编译安装SDL3
 ​cd 3rd
@@ -73,7 +71,7 @@ SDL3会安装到 /usr/local/include 和 /usr/local/lib
 2，编译DuiLib
 cd DuiLib
 
-sh makeCMake.sh
+sh makeDuiLib.sh
 sudo cmake --install build
 
 或者使用xmake编译
@@ -87,8 +85,29 @@ Linux/gcc
 MacOS/Test
 MacOS/TestApp
 
+4, 教程
+https://blog.csdn.net/mmcanyu/article/details/162272826
+
 ```
-### 5. 重要说明
+
+Android
+```
+Windows平台交叉编译
+
+1, 编译SDL3, SDL3_ttf
+makeSDL_android.bat
+makeSDL_ttf_android.bat
+
+2, 编译DuiLib
+makeDuiLib_android.bat
+
+3, Android范例
+Android\TestAndroidApp
+
+4, 教程
+
+```
+### 五. 重要说明
 ```
 设计器创建控件和修改属性依据`bin\DuiLib.xml`，理论上只要遵循这个约定的duilib版本都可以使用这款设计器。
 ```

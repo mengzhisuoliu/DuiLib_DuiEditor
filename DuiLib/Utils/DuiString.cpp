@@ -1484,6 +1484,8 @@ namespace DuiLib
 
 		#ifdef WIN32
 			m_cp = CP_ACP;
+		#elif defined DUILIB_ANDROID
+			m_from = "UTF-8";
 		#else
 			setlocale(LC_ALL, "");
 			m_from = nl_langinfo(CODESET);
@@ -1698,56 +1700,36 @@ namespace DuiLib
 	bool StringConverterUI::iconv_convert(const char* tocode, const char* fromcode,
 		const void* input, int input_len, size_t& out_len)
 	{
-		if (!input || input_len <= 0) {
+		if (!input || input_len == 0) {
 			out_len = 0;
 			return true;
 		}
+		// 若长度为负，按 C 字符串计算
+		if (input_len < 0) {
+			input_len = (int)strlen((const char*)input);
+			if (input_len == 0) {
+				out_len = 0;
+				return true;
+			}
+		}
 
-		iconv_t cd = iconv_open(tocode, fromcode);
-		if (cd == (iconv_t)-1) {
+		// 调用 SDL_iconv_string，返回以 '\0' 结尾的转换后字符串
+		char* output = SDL_iconv_string(tocode, fromcode, (const char*)input, input_len);
+		if (!output) {
 			return false;
 		}
 
-		// 估算输出缓冲区大小（通常足够）
-		size_t in_left = input_len;
-		size_t out_left = in_left * 6 + 64;   // UTF-8 最多 6 字节/字符，加额外安全空间
-		std::vector<char> out_buf(out_left);
-		char* out_ptr = out_buf.data();
-		const char* in_ptr = (const char*)input;
-
-		size_t result = iconv(cd, (char**)&in_ptr, &in_left, &out_ptr, &out_left);
-		if (result == (size_t)-1) {
-			// 如果是因为缓冲区太小，尝试用更大的缓冲区重试（最多一次）
-			if (errno == E2BIG) {
-				out_left = input_len * 12 + 128;
-				out_buf.resize(out_left);
-				out_ptr = out_buf.data();
-				in_ptr = (const char*)input;
-				in_left = input_len;
-				// 重新打开转换描述符（可能已经损坏）
-				iconv_close(cd);
-				cd = iconv_open(tocode, fromcode);
-				if (cd == (iconv_t)-1) return false;
-				result = iconv(cd, (char**)&in_ptr, &in_left, &out_ptr, &out_left);
-				if (result == (size_t)-1) {
-					iconv_close(cd);
-					return false;
-				}
-			}
-			else {
-				iconv_close(cd);
-				return false;
-			}
-		}
-		iconv_close(cd);
-
-		out_len = out_buf.size() - out_left;   // 实际写入字节数
-		// 分配目标内存（含 null 终止符）
+		out_len = strlen(output);  // 实际转换后的字节数（不含终止符）
+		// 分配 DuiLib 内存块（duistringdata）存储转换结果
 		duistringdata* data = DuiStringMgr::GetInstance()->Alloc((int)(out_len + 1));
-		if (!data) return false;
+		if (!data) {
+			SDL_free(output);
+			return false;
+		}
 		_block = (BYTE*)data->data();
-		memcpy(_block, out_buf.data(), out_len);
+		memcpy(_block, output, out_len);
 		_block[out_len] = '\0';
+		SDL_free(output);
 		return true;
 	}
 #endif // !WIN32

@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "math.h"
 
 #ifdef DUILIB_SDL
@@ -20,3 +20,4 @@ bool CShadowSDLUI::Initialize(HINSTANCE hInstance)
 
 } //namespace DuiLib
 #endif //#ifdef DUILIB_SDL
+

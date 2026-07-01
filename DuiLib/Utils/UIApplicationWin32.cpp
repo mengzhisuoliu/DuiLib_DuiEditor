@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 
 #ifdef DUILIB_WIN32
 namespace DuiLib{
@@ -29,14 +29,14 @@ bool CUIApplicationWin32::InitInstance(HINSTANCE hInstance)
 	HRESULT hRes = ::OleInitialize(NULL);
 	if( FAILED(hRes) ) return false;
 
-	// ³õÊ¼»¯UI¹ÜÀíÆ÷
+	// åˆå§‹åŒ–UIç®¡ç†å™¨
 	CPaintManagerUI::SetInstance(hInstance);
 	m_strAppPath = CPaintManagerUI::GetInstancePath();
 
-	// ³õÊ¼»¯×ÊÔ´
+	// åˆå§‹åŒ–èµ„æº
 	InitResource();
 
-	// ÊÇ·ñµ¥ÀıÔËĞĞ³ÌĞò
+	// æ˜¯å¦å•ä¾‹è¿è¡Œç¨‹åº
 	if(m_bSingleApplication && (!m_GuidAppName.IsEmpty()) )
 	{
 		m_UIAPP_SINGLEAPPLICATION_MSG = ::RegisterWindowMessage(m_GuidAppName);
@@ -59,7 +59,7 @@ void CUIApplicationWin32::Run()
 		m_pMainWnd->m_pApplication = this;
 	}
 
-	// ÏûÏ¢Ñ­»·
+	// æ¶ˆæ¯å¾ªç¯
 	CPaintManagerWin32UI::MessageLoop();
 }
 
@@ -72,7 +72,7 @@ int CUIApplicationWin32::ExitInstance()
 		CloseHandle(m_hMutexApplication); m_hMutexApplication = NULL;
 	}
 
-	// ÇåÀí×ÊÔ´
+	// æ¸…ç†èµ„æº
 	CPaintManagerUI::Term();
 	// OLE
 	OleUninitialize();
@@ -85,7 +85,7 @@ int CUIApplicationWin32::ExitInstance()
 
 
 
-bool CUIApplicationWin32::SetSingleApplication(bool bSingle, LPCTSTR szGuidName) //Ö»ÔÊĞíÔËĞĞµ¥Ò»ÊµÀı
+bool CUIApplicationWin32::SetSingleApplication(bool bSingle, LPCTSTR szGuidName) //åªå…è®¸è¿è¡Œå•ä¸€å®ä¾‹
 {
 	if(szGuidName == NULL)	return false;
 	if(szGuidName[0] == '\0')	return false;

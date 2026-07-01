@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIBarCode.h"
 
 #include "../Utils/barcode.h"

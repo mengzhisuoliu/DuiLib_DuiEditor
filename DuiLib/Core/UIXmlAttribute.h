@@ -1,4 +1,4 @@
-#ifndef __UIXMLATTRIBUTE_H__
+﻿#ifndef __UIXMLATTRIBUTE_H__
 #define __UIXMLATTRIBUTE_H__
 
 #pragma once
@@ -67,3 +67,4 @@ namespace DuiLib {
 } // namespace DuiLib
 
 #endif // __UIXMLATTRIBUTE_H__
+

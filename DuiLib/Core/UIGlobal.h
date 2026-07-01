@@ -1,4 +1,4 @@
-#ifndef __UIGLOBAL_H__
+ï»¿#ifndef __UIGLOBAL_H__
 #define __UIGLOBAL_H__
 
 #pragma once
@@ -22,16 +22,16 @@ namespace DuiLib {
 		static UIImage *CreateImage();
 
 		//////////////////////////////////////////////////////////////////////////
-		//HSLÑÕÉ«×ª»»
+		//HSLé¢œè‰²è½¬æ¢
 		static void RGBtoHSL(DWORD ARGB, float* H, float* S, float* L);
 
-		//HSLÑÕÉ«×ª»»
+		//HSLé¢œè‰²è½¬æ¢
 		static void HSLtoRGB(DWORD* ARGB, float H, float S, float L);
 
-		//HSLÑÕÉ«×ª»»
+		//HSLé¢œè‰²è½¬æ¢
 		static CDuiColor AdjustHslColor(CDuiColor dwColor, short H, short S, short L);
 
-		//HSLÑÕÉ«×ª»»
+		//HSLé¢œè‰²è½¬æ¢
 		static void  AdjustHslImage(bool bUseHSL, UIImage *imageInfo, short H, short S, short L);
 
 		//alpha utilities
@@ -49,3 +49,4 @@ namespace DuiLib {
 } // namespace DuiLib
 
 #endif // __UIRENDER_H__
+

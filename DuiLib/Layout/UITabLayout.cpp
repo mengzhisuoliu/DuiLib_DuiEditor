@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+Ôªø#include "StdAfx.h"
 #include "UITabLayout.h"
 
 namespace DuiLib
@@ -217,7 +217,7 @@ namespace DuiLib
 
 		if(IsAnimationRunning(ANIMATION_ID_TAB))
 		{
-			//CMsgWndUI::InsertMsgV(_T("◊‹÷° ˝: %d, µ±«∞÷°: %d"), GetFrameCount(), GetCurrentFrame(ANIMATION_ID_TAB));
+			//CMsgWndUI::InsertMsgV(_T("ÊÄªÂ∏ßÊï∞: %d, ÂΩìÂâçÂ∏ß: %d"), GetFrameCount(), GetCurrentFrame(ANIMATION_ID_TAB));
 
 			for( int it = 0; it < m_items.GetSize(); it++ ) 
 			{
@@ -259,25 +259,25 @@ namespace DuiLib
 					CDuiRect rcItem = rcCtrl;
 					if(m_animation == DuiAnim_horizontal)
 					{
-						if(m_nMoveDirection == 1) //¥””“œÚ◊Û±ﬂπˆ∂Ø
+						if(m_nMoveDirection == 1) //‰ªéÂè≥ÂêëÂ∑¶ËæπÊªöÂä®
 						{
 							rcItem.left = rcCtrl.right - nHoriPer;
 							rcItem.right = rcItem.left + (rcCtrl.right - rcCtrl.left);
 						}
-						else //¥”◊ÛœÚ”“πˆ∂Ø
+						else //‰ªéÂ∑¶ÂêëÂè≥ÊªöÂä®
 						{
 							rcItem.right = rcCtrl.left + nHoriPer;
 							rcItem.left = rcItem.right - (rcCtrl.right - rcCtrl.left);
 						}
 					}
-					else if(m_animation == DuiAnim_vertical) //¥”œ¬Õ˘…œπˆ∂Ø
+					else if(m_animation == DuiAnim_vertical) //‰ªé‰∏ãÂæÄ‰∏äÊªöÂä®
 					{
 						if(m_nMoveDirection == 1)
 						{
 							rcItem.top = rcCtrl.bottom - nVertPer;
 							rcItem.bottom = rcItem.top + (rcCtrl.bottom - rcCtrl.top);
 						}
-						else //¥”…œÕ˘œ¬πˆ∂Ø
+						else //‰ªé‰∏äÂæÄ‰∏ãÊªöÂä®
 						{
 							rcItem.bottom = rcCtrl.top + nVertPer;
 							rcItem.top = rcItem.top - (rcCtrl.bottom - rcCtrl.top);
@@ -416,3 +416,4 @@ namespace DuiLib
 		}
 	}
 }
+

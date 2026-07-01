@@ -1,4 +1,4 @@
-#ifndef __UIRENDER_GDIPLUS_H__
+﻿#ifndef __UIRENDER_GDIPLUS_H__
 #define __UIRENDER_GDIPLUS_H__
 
 #pragma once
@@ -39,3 +39,4 @@ namespace DuiLib {
 } // namespace DuiLib
 #endif // #ifdef DUILIB_WIN32
 #endif // __UIRENDER_H__
+

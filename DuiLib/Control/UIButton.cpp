@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIButton.h"
 
 namespace DuiLib
@@ -260,3 +260,4 @@ namespace DuiLib
 // 		return CLabelUI::PaintText(pRender);
 // 	}
 }
+

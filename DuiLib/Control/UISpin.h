@@ -1,4 +1,4 @@
-#ifndef __UISPIN_H__
+﻿#ifndef __UISPIN_H__
 #define __UISPIN_H__
 
 #pragma once

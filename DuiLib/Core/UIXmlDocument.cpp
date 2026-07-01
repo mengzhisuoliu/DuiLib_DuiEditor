@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 
 namespace DuiLib {
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -146,3 +146,4 @@ bool CXmlDocumentUI::_Failed(LPCTSTR pstrError)
 }
 
 } // namespace DuiLib
+

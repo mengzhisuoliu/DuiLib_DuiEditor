@@ -1,4 +1,4 @@
-#ifndef __UIIPADDRESS_H__
+﻿#ifndef __UIIPADDRESS_H__
 #define __UIIPADDRESS_H__
 
 #pragma once
@@ -7,7 +7,7 @@ namespace DuiLib
 {
 	class CIPAddressWnd;
 
-	/// IP�ؼ�
+	/// IP控件
 	class UILIB_API CIPAddressUI : public CLabelUI
 	{
 		DECLARE_DUICONTROL(CIPAddressUI)
@@ -46,3 +46,4 @@ namespace DuiLib
 	};
 }
 #endif // __UIIPADDRESS_H__
+

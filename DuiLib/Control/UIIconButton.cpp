@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIIconButton.h"
 
 
@@ -201,3 +201,4 @@ void CIconButtonUI::SetIconDisabledImage(LPCTSTR pStrImage)
 }
 
 }
+

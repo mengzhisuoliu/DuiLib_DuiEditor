@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIAnimationTabLayout.h"
 
 namespace DuiLib {
@@ -194,3 +194,4 @@ namespace DuiLib {
 		CTabLayoutUI::SetAttribute(pstrName, pstrValue);
 	}
 } // namespace DuiLib
+

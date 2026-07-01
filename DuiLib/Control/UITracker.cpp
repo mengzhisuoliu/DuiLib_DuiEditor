@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 
 namespace DuiLib
 {
@@ -165,13 +165,13 @@ void CTrackerUI::PaintBorder(UIRender *pRender)
 	CContainerUI::PaintBorder(pRender);
 }
 
-//×§¿éÒÆ¶¯Î»ÖÃ
+//æ‹½å—ç§»åŠ¨ä½ç½®
 void CTrackerUI::MoveRect(int cx, int cy)
 {
 	CDuiRect rcParent = m_pParent->GetPos();
 	CDuiRect rcCurPos = m_rcNewPos;
 
-	//Ö»ÄÜÔÚÇøÓòÒÆ¶¯
+	//åªèƒ½åœ¨åŒºåŸŸç§»åŠ¨
 	if (cx >= 0) {
 		if (rcCurPos.right + cx > rcParent.right) {
 			cx = rcParent.right - rcCurPos.right;
@@ -199,14 +199,14 @@ void CTrackerUI::MoveRect(int cx, int cy)
 	rcCurPos.left += cx;
 	rcCurPos.right += cx;
 
-	//Î»ÖÃ±ä»¯²Å·¢ËÍÏûÏ¢
+	//ä½ç½®å˜åŒ–æ‰å‘é€æ¶ˆæ¯
 	if (cy || cx) {
 		if (m_pManager != NULL) m_pManager->SendNotify(this, DUI_MSGTYPE_SIZECHANGED);
 	}
 	m_rcNewPos = rcCurPos;
 }
 
-//ÍÏ×§ĞŞ¸Ä´óĞ¡
+//æ‹–æ‹½ä¿®æ”¹å¤§å°
 void CTrackerUI::SizeRect(int movex, int movey)
 {
 	CDuiRect rcParent = m_pParent->GetPos();
@@ -298,7 +298,7 @@ void CTrackerUI::SizeRect(int movex, int movey)
 	rcCurPos.top = (firsty < othery) ? firsty : othery;
 	rcCurPos.bottom = (firsty > othery) ? firsty : othery;
 
-	//Î»ÖÃ±ä»¯²Å·¢ËÍÏûÏ¢
+	//ä½ç½®å˜åŒ–æ‰å‘é€æ¶ˆæ¯
 	if ((m_rcNewPos.left!= rcCurPos.left) || (m_rcNewPos.top != rcCurPos.top) || (m_rcNewPos.bottom != rcCurPos.bottom) || (m_rcNewPos.right != rcCurPos.right) ){
 		m_rcNewPos = rcCurPos;
 		if (m_pManager != NULL) m_pManager->SendNotify(this, DUI_MSGTYPE_SIZECHANGED);
@@ -367,7 +367,7 @@ void CTrackerUI::DoEvent(TEventUI& event)
 		}
 
 		m_ptLastMouse = event.ptMouse;
-		//½«µ±Ç°ÍÏ×§¿éµÄÎ»ÖÃ ºÍ µ±Ç°ÍÏ×§¿éµÄÇ°Ò»Ê±¿ÌµÄÎ»ÖÃ£¬Ë¢ĞÂ  
+		//å°†å½“å‰æ‹–æ‹½å—çš„ä½ç½® å’Œ å½“å‰æ‹–æ‹½å—çš„å‰ä¸€æ—¶åˆ»çš„ä½ç½®ï¼Œåˆ·æ–°  
 		CDuiRect rcInvalidate = m_rcNewPos;
 
 		if (m_iCursor == 4)

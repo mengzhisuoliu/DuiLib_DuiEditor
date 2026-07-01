@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UITreeItem.h"
 
 namespace DuiLib
@@ -430,3 +430,4 @@ namespace DuiLib
 		CHorizontalLayoutUI::DoEvent(event);
 	}
 }
+

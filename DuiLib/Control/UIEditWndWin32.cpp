@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIEditWndWin32.h"
 
 #ifdef DUILIB_WIN32
@@ -253,5 +253,6 @@ namespace DuiLib
 	}
 }
 #endif // #ifdef DUILIB_WIN32
+
 
 

@@ -1,4 +1,4 @@
-/******************************************************************************
+﻿/******************************************************************************
 *  Copyright (C) 2000 by Robert Hubley.                                      *
 *  All rights reserved.                                                      *
 *                                                                            *
@@ -352,3 +352,4 @@ CDuiString CDuiMd5::MakeMd5(LPCTSTR strSource)
 }
 
 } //namespace DuiLib
+

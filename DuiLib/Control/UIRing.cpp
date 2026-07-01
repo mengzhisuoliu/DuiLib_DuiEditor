@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "UIRing.h"
 
 #ifdef DUILIB_WIN32
@@ -57,7 +57,7 @@ namespace DuiLib
 			Gdiplus::Graphics graphics(pRender->GetDC());
 			graphics.TranslateTransform(centerPos.X,centerPos.Y);
 			graphics.RotateTransform(m_fCurAngle);
-			graphics.TranslateTransform(-centerPos.X, -centerPos.Y);//»¹Ô­Ô´µã
+			graphics.TranslateTransform(-centerPos.X, -centerPos.Y);//è¿˜åŸæºç‚¹
 			graphics.DrawImage(m_pBkimage,rcItem.left,rcItem.top,iWidth,iHeight);
 		}
 	}
@@ -116,5 +116,6 @@ namespace DuiLib
 	}
 }
 #endif //#ifdef DUILIB_WIN32
+
 
 

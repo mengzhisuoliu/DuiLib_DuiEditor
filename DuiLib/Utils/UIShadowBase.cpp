@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIShadowBase.h"
 #include "math.h"
 
@@ -15,3 +15,4 @@ CShadowBaseUI::~CShadowBaseUI(void)
 }
 
 } //namespace DuiLib
+

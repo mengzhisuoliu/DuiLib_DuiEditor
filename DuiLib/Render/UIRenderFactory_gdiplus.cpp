@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIRenderFactory_gdiplus.h"
 
 #include "UIRender_gdiplus.h"
@@ -53,3 +53,4 @@ namespace DuiLib {
 
 } // namespace DuiLib
 #endif // #ifdef DUILIB_WIN32
+

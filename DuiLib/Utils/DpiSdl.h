@@ -1,4 +1,4 @@
-#ifndef __DPI_SDL_H__
+﻿#ifndef __DPI_SDL_H__
 #define __DPI_SDL_H__
 #pragma once
 

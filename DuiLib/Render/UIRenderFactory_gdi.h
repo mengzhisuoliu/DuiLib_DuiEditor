@@ -1,4 +1,4 @@
-#ifndef __UIRENDER_FACTORY_GDI_H__
+﻿#ifndef __UIRENDER_FACTORY_GDI_H__
 #define __UIRENDER_FACTORY_GDI_H__
 
 #pragma once
@@ -22,3 +22,4 @@ namespace DuiLib {
 } // namespace DuiLib
 #endif // #ifdef DUILIB_WIN32
 #endif // __UIRENDER_H__
+

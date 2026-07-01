@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "TrayIcon.h"
 
 #ifdef DUILIB_WIN32
@@ -120,4 +120,5 @@ namespace DuiLib
 	}
 }
 #endif //#ifdef DUILIB_WIN32
+
 

@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 
 namespace DuiLib{
 
@@ -75,29 +75,29 @@ void CUIApplicationBase::SetResType_ZipResource(LPCTSTR pstrPath, LPCTSTR passwo
 void CUIApplicationBase::InitResource()
 {
 	CPaintManagerUI::SetResourceType(m_resType);
-	// ¼ÓÔØ×ÊÔ´
+	// åŠ è½½èµ„æº
 	switch(CPaintManagerUI::GetResourceType())
 	{
 	case UILIB_FILE:
 		{
 			CPaintManagerUI::SetResourcePath(m_strAppPath + m_strSkinPath);
-			// ¼ÓÔØ×ÊÔ´¹ÜÀíÆ÷
+			// åŠ è½½èµ„æºç®¡ç†å™¨
 			CResourceManager::GetInstance()->LoadResource(_T("res.xml"), NULL);
 			break;
 		}
 	case UILIB_RESOURCE:
 		{
 			CPaintManagerUI::SetResourcePath(m_strAppPath + m_strSkinPath);
-			// ¼ÓÔØ×ÊÔ´¹ÜÀíÆ÷
+			// åŠ è½½èµ„æºç®¡ç†å™¨
 			CResourceManager::GetInstance()->LoadResource(m_idrID.GetData(), m_idrType);
 			break;
 		}
 	case UILIB_ZIP:
 		{
 			CPaintManagerUI::SetResourcePath(m_strAppPath + m_strSkinPath);
-			// ¼ÓÃÜ
+			// åŠ å¯†
 			CPaintManagerUI::SetResourceZip(m_strAppPath + m_strZipFile, true, NULL);
-			// ¼ÓÔØ×ÊÔ´¹ÜÀíÆ÷
+			// åŠ è½½èµ„æºç®¡ç†å™¨
 			CResourceManager::GetInstance()->LoadResource(_T("res.xml"), NULL);
 			break;
 		}
@@ -113,7 +113,7 @@ void CUIApplicationBase::InitResource()
 					dwSize = ::SizeofResource(CPaintManagerUI::GetResourceDll(), hResource);
 					if( dwSize > 0 ) {
 						CPaintManagerUI::SetResourceZip((LPBYTE)::LockResource(hGlobal), dwSize, m_zipPassword);
-						// ¼ÓÔØ×ÊÔ´¹ÜÀíÆ÷
+						// åŠ è½½èµ„æºç®¡ç†å™¨
 						CResourceManager::GetInstance()->LoadResource(_T("res.xml"), NULL);
 					}
 				}
@@ -125,3 +125,4 @@ void CUIApplicationBase::InitResource()
 	}
 }
 }//namespace DuiLib{
+

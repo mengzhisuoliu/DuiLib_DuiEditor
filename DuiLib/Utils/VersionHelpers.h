@@ -1,4 +1,4 @@
-#ifndef _VERSIONHELPERS_H_INCLUDED_
+﻿#ifndef _VERSIONHELPERS_H_INCLUDED_
 #define _VERSIONHELPERS_H_INCLUDED_
 
 #ifdef DUILIB_WIN32
@@ -106,3 +106,4 @@ namespace DuiLib
 }
 #endif //#ifdef DUILIB_WIN32
 #endif // _VERSIONHELPERS_H_INCLUDED_
+

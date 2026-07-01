@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "IGridUI.h"
 
 namespace DuiLib
@@ -229,7 +229,7 @@ void IGridUI::ClearSelectedRows()
 
 void IGridUI::SelectRow(int row, uiBool bSelected, uiBool bTriggerEvent)
 {
-	if(IsSingleRowSelection()) //Ö»ÔÊĞíµ¥ĞĞÑ¡ÖĞÊ±
+	if(IsSingleRowSelection()) //åªå…è®¸å•è¡Œé€‰ä¸­æ—¶
 	{
 		if(IsSelectedRow(row) == bSelected)
 			return;
@@ -384,3 +384,4 @@ TCellID IGridUI::GetNextSelectCell()
 }
 
 }
+

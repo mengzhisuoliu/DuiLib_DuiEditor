@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "math.h"
 
 #ifdef DUILIB_WIN32
@@ -717,3 +717,4 @@ bool CShadowWin32UI::CopyShadow(CShadowBaseUI* pShadow)
 
 } //namespace DuiLib
 #endif //#ifdef DUILIB_WIN32
+

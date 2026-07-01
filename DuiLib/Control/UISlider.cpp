@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UISlider.h"
 
 namespace DuiLib
@@ -295,4 +295,5 @@ namespace DuiLib
 		}
 	}
 }
+
 

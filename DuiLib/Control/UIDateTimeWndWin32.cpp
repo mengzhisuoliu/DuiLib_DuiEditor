@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIDateTimeWndWin32.h"
 
 //#include <atlbase.h> 
@@ -188,5 +188,6 @@ namespace DuiLib
 	}
 }
 #endif // #ifdef DUILIB_WIN32
+
 
 

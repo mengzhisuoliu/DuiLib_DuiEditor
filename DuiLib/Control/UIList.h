@@ -1,4 +1,4 @@
-#ifndef __UILIST_H__
+ï»¿#ifndef __UILIST_H__
 #define __UILIST_H__
 
 namespace DuiLib {
@@ -193,7 +193,7 @@ namespace DuiLib {
 		virtual int GetCurSel() const override;
 		int GetCurSelActivate() const;
 		virtual bool SelectItem(int iIndex, bool bTakeFocus = false, bool bTriggerEvent=true) override;
-		bool SelectItemActivate(int iIndex);    // Ë«»÷Ñ¡ÖĞ
+		bool SelectItemActivate(int iIndex);    // åŒå‡»é€‰ä¸­
 
 		virtual bool SelectMultiItem(int iIndex, bool bTakeFocus = false) override;
 		virtual void SetMultiSelect(bool bMultiSel) override;
@@ -276,7 +276,7 @@ namespace DuiLib {
 		int m_iCurSel;
 		bool m_bMultiSel;
 		CStdPtrArray m_aSelItems;
-		int m_iCurSelActivate;  // Ë«»÷µÄÁĞ
+		int m_iCurSelActivate;  // åŒå‡»çš„åˆ—
 		int m_iExpandedItem;
 		IListCallbackUI* m_pCallback;
 		CListBodyUI* m_pList;
@@ -400,7 +400,7 @@ namespace DuiLib {
 		virtual bool IsExpanded() const override;
 		virtual bool Expand(bool bExpand = true) override;
 
-		virtual void Invalidate() override; // Ö±½ÓCControl::Invalidate»áµ¼ÖÂ¹ö¶¯ÌõË¢ĞÂ£¬ÖØĞ´¼õÉÙË¢ĞÂÇøÓò
+		virtual void Invalidate() override; // ç›´æ¥CControl::Invalidateä¼šå¯¼è‡´æ»šåŠ¨æ¡åˆ·æ–°ï¼Œé‡å†™å‡å°‘åˆ·æ–°åŒºåŸŸ
 		virtual bool Activate() override;
 
 		virtual void DoEvent(TEventUI& event) override;
@@ -498,7 +498,7 @@ namespace DuiLib {
 		virtual bool IsExpanded() const override;
 		virtual bool Expand(bool bExpand = true) override;
 
-		virtual void Invalidate() override; // Ö±½ÓCControl::Invalidate»áµ¼ÖÂ¹ö¶¯ÌõË¢ĞÂ£¬ÖØĞ´¼õÉÙË¢ĞÂÇøÓò
+		virtual void Invalidate() override; // ç›´æ¥CControl::Invalidateä¼šå¯¼è‡´æ»šåŠ¨æ¡åˆ·æ–°ï¼Œé‡å†™å‡å°‘åˆ·æ–°åŒºåŸŸ
 		virtual bool Activate() override;
 
 		virtual void DoEvent(TEventUI& event) override;
@@ -519,3 +519,4 @@ namespace DuiLib {
 } // namespace DuiLib
 
 #endif // __UILIST_H__
+

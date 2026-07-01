@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "UIResourceManager.h"
 
 namespace DuiLib {
@@ -56,13 +56,13 @@ namespace DuiLib {
 		CXmlNodeUI nodeRes = root.child(_T("Res"));
 		if(!nodeRes) return uiFalse;
 
-		//¼ÓÔØÍ¼Æ¬×ÊÔ´
+		//åŠ è½½å›¾ç‰‡èµ„æº
 		for( CXmlNodeUI node = nodeRes.first_child() ; node; node = node.next_sibling() ) 
 		{
 			LPCTSTR pstrClass = node.name();
 			if ((_tcsicmp(pstrClass,_T("Image")) == 0))
 			{
-				//¼ÓÔØÍ¼Æ¬×ÊÔ´
+				//åŠ è½½å›¾ç‰‡èµ„æº
 				CXmlAttributeUI attrId = node.attribute(_T("id"));
 				CXmlAttributeUI attrPath = node.attribute(_T("path"));
 
@@ -76,7 +76,7 @@ namespace DuiLib {
 			}
 			else if( _tcsicmp(pstrClass,_T("Xml")) == 0) 
 			{
-				//¼ÓÔØXMLÅäÖÃÎÄ¼ş
+				//åŠ è½½XMLé…ç½®æ–‡ä»¶
 				CXmlAttributeUI attrId = node.attribute(_T("id"));
 				CXmlAttributeUI attrPath = node.attribute(_T("path"));
 
@@ -156,7 +156,7 @@ namespace DuiLib {
 		LPCTSTR pstrValue = NULL;
 		LPTSTR pstr = NULL;
 
-		//¼ÓÔØÍ¼Æ¬×ÊÔ´
+		//åŠ è½½å›¾ç‰‡èµ„æº
 		LPCTSTR pstrId = NULL;
 		LPCTSTR pstrText = NULL;
 		for( CXmlNodeUI node = nodeRes.first_child(); node; node = node.next_sibling() ) 
@@ -214,7 +214,7 @@ namespace DuiLib {
 	void CResourceManager::ReloadText()
 	{
 		if(m_pQuerypInterface == NULL) return;
-		//ÖØÔØÎÄ×ÖÃèÊö
+		//é‡è½½æ–‡å­—æè¿°
 		LPCTSTR lpstrId = NULL;
 		LPCTSTR lpstrText;
 		for( int i = 0; i < m_mTextResourceHashMap.GetSize(); i++ )
@@ -243,3 +243,4 @@ namespace DuiLib {
 
 	
 } // namespace DuiLib
+

@@ -1,4 +1,4 @@
-#ifndef __UITEXTSCROLLEXH__
+﻿#ifndef __UITEXTSCROLLEXH__
 #define __UITEXTSCROLLEXH__
 
 #pragma once

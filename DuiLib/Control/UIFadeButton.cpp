@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIFadeButton.h"
 
 namespace DuiLib {
@@ -131,3 +131,4 @@ namespace DuiLib {
 	}
 
 } // namespace DuiLib
+

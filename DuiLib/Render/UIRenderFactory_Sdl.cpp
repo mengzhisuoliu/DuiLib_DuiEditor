@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 
 #include "../Render/UIRenderFactory_Sdl.h"
 #include "../Render/UIRender_Sdl.h"
@@ -55,3 +55,4 @@ namespace DuiLib {
 
 } // namespace DuiLib
 #endif //#ifdef DUILIB_SDL
+

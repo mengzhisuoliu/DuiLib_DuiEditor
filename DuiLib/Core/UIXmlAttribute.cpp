@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 
 namespace DuiLib {
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -230,4 +230,5 @@ PVOID CXmlAttributeUI::internal_object() const
 }
 
 } // namespace DuiLib
+
 

@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIDynamicLayout.h"
 
 namespace DuiLib
@@ -349,4 +349,5 @@ namespace DuiLib
 		return CDuiRect(0,0,0,0);
 	}
 }
+
 

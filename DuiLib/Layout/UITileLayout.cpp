@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UITileLayout.h"
 
 namespace DuiLib
@@ -346,3 +346,4 @@ namespace DuiLib
 	//	ProcessScrollBar(rc, 0, cyNeeded);
 	}
 }
+

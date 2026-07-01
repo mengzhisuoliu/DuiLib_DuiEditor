@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UITabCtrl.h"
 
 namespace DuiLib
@@ -132,3 +132,4 @@ namespace DuiLib
 			COptionUI::SetAttribute(pstrName, pstrValue);
 	}
 }
+

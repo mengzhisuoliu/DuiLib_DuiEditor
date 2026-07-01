@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIOption.h"
 
 namespace DuiLib
@@ -282,3 +282,4 @@ namespace DuiLib
 		Invalidate();
 	}
 }
+

@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+Ôªø#include "StdAfx.h"
 #include "UILangManager.h"
 
 namespace DuiLib {
@@ -66,7 +66,7 @@ namespace DuiLib {
 		CXmlNodeUI nodeLanguage = root.child(_T("Language"));
 		if(!nodeLanguage) return uiFalse;
 
-		//º”‘ÿ◊ ‘¥
+		//Âä†ËΩΩËµÑÊ∫ê
 		for( CXmlNodeUI node = nodeLanguage.first_child(); node; node = node.next_sibling() ) 
 		{
 			LPCTSTR pstrClass = node.name();
@@ -279,7 +279,7 @@ namespace DuiLib {
 		return static_cast<CLangPackageUI *>(m_mLangPackage.Find(lpstrSkinFile));
 	}
 	
-	void CLangManagerUI::SetLanguage(LPCTSTR lpstrPath, LPCTSTR lpstrname) //…Ë÷√”Ô—‘∞¸Œƒº˛º–
+	void CLangManagerUI::SetLanguage(LPCTSTR lpstrPath, LPCTSTR lpstrname) //ËÆæÁΩÆËØ≠Ë®ÄÂåÖÊñá‰ª∂Â§π
 	{
 		s_sLangPath = lpstrPath;
 		s_sLangName = lpstrname;
@@ -351,7 +351,7 @@ namespace DuiLib {
 		CXmlNodeUI nodeLanguage = root.child(_T("Language"));
 		if(!nodeLanguage) return uiFalse;
 
-		//º”‘ÿStringTable
+		//Âä†ËΩΩStringTable
 		for( CXmlNodeUI node = nodeLanguage.first_child() ; node; node = node.next_sibling() ) 
 		{
 			LPCTSTR pstrClass = node.name();
@@ -453,3 +453,4 @@ namespace DuiLib {
 			m_xmlStringRecource.save_file(filePathName);
 	}
 } // namespace DuiLib
+

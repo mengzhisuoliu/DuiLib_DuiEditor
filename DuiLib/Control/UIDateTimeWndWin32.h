@@ -1,4 +1,4 @@
-#ifndef __UIDATETIME_WND_WIN32_H__
+﻿#ifndef __UIDATETIME_WND_WIN32_H__
 #define __UIDATETIME_WND_WIN32_H__
 
 #pragma once
@@ -31,3 +31,4 @@ namespace DuiLib
 }
 #endif // #ifdef DUILIB_WIN32
 #endif // __UIDATETIME_H__
+

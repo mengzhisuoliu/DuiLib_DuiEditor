@@ -1,4 +1,4 @@
-#ifndef __UIHOTKEY_H__
+﻿#ifndef __UIHOTKEY_H__
 #define __UIHOTKEY_H__
 #pragma once
 
@@ -73,3 +73,4 @@ namespace DuiLib{
 
 #endif //#ifdef DUILIB_WIN32
 #endif //#ifndef __UIHOTKEY_H__
+

@@ -90,7 +90,7 @@ if errorlevel 1 (
 cd "%BUILD_DIR%"
 
 echo Configuring CMake for ABI %ABI% ...
-cmake .. -G "Ninja" -DCMAKE_TOOLCHAIN_FILE="%ANDROID_NDK%/build/cmake/android.toolchain.cmake" -DANDROID_ABI=%ABI% -DANDROID_PLATFORM=android-21 -DBUILD_SHARED_LIBS=OFF -DSDL_STATIC=ON -DSDL3_DIR="../%SDL3_BUILD_DIR%"
+cmake .. -G "Ninja" -DCMAKE_TOOLCHAIN_FILE="%ANDROID_NDK%/build/cmake/android.toolchain.cmake" -DANDROID_ABI=%ABI% -DANDROID_PLATFORM=android-21 -DBUILD_SHARED_LIBS=ON -DSDL3_DIR="../%SDL3_BUILD_DIR%"
 
 if errorlevel 1 (
     echo ERROR: CMake configuration failed.

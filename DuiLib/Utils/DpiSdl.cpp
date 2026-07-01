@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 
 #ifdef DUILIB_SDL
 namespace DuiLib
@@ -15,3 +15,4 @@ CDpiSDL::CDpiSDL()
 
 }
 #endif //#ifdef DUILIB_SDL
+

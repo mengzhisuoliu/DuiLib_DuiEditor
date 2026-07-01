@@ -1,11 +1,11 @@
-#ifndef UITreeNodeEx_h__
+ï»¿#ifndef UITreeNodeEx_h__
 #define UITreeNodeEx_h__
 
 #pragma once
 
 namespace DuiLib
 {
-	//TreeÄÚ²¿µÄµÄOption¿Ø¼þ
+	//Treeå†…éƒ¨çš„çš„OptionæŽ§ä»¶
 	class UILIB_API CTreeInnerCheckBoxUI : public CCheckBoxUI
 	{
 	public:
@@ -71,12 +71,13 @@ namespace DuiLib
 		ITreeUI *m_pOwner;
 		TNodeData *m_pNodeData;
 	
-		CTreeInnerCheckBoxUI			*m_pFolderButton;	//Õ¹¿ªÊÕËõ°´Å¥
-		CTreeInnerCheckBoxUI			*m_pCheckBox;		//Ñ¡ÖÐ°´Å¥
-		CTreeInnerCheckBoxUI			*m_pIcon;			//Í¼±ê
-		CTreeInnerCheckBoxUI			*m_pText;			//ÎÄ±¾¿ò
+		CTreeInnerCheckBoxUI			*m_pFolderButton;	//å±•å¼€æ”¶ç¼©æŒ‰é’®
+		CTreeInnerCheckBoxUI			*m_pCheckBox;		//é€‰ä¸­æŒ‰é’®
+		CTreeInnerCheckBoxUI			*m_pIcon;			//å›¾æ ‡
+		CTreeInnerCheckBoxUI			*m_pText;			//æ–‡æœ¬æ¡†
 	};
 }
 
 
 #endif // UITreeNodeEx_h__
+

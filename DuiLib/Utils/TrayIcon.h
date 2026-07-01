@@ -1,4 +1,4 @@
-#ifndef __UITRAICON_H__
+﻿#ifndef __UITRAICON_H__
 #define __UITRAICON_H__
 
 #pragma once
@@ -41,4 +41,5 @@ namespace DuiLib
 }
 #endif //#ifdef DUILIB_WIN32
 #endif // __UITRAICON_H__
+
 

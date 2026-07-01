@@ -1,4 +1,4 @@
-#ifndef __UICOMBO_WND_WIN32_H__
+﻿#ifndef __UICOMBO_WND_WIN32_H__
 #define __UICOMBO_WND_WIN32_H__
 
 #pragma once
@@ -35,4 +35,5 @@ namespace DuiLib {
 } // namespace DuiLib
 #endif // #ifdef DUILIB_WIN32
 #endif // __UICOMBO_H__
+
 

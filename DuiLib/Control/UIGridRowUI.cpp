@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIGridRowUI.h"
 
 namespace DuiLib
@@ -149,3 +149,4 @@ void CGridRowUI::PaintBkColor(UIRender *pRender)
 }
 
 }
+

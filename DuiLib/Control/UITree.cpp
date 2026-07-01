@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "UITree.h"
 
 namespace DuiLib
@@ -260,12 +260,12 @@ void CTreeUI::BuildRows(CDuiRect rc, bool bNeedInvalidate)
 		iPosY -= GetVerticalScrollBar()->GetScrollPos();
 	}
 
-	//ÏÔÊ¾µÄµÚÒ»ĞĞÊÇÄÄ¸ö£¿
+	//æ˜¾ç¤ºçš„ç¬¬ä¸€è¡Œæ˜¯å“ªä¸ªï¼Ÿ
 	int cyNeeded = 0;
-	int nNodeCount = 0;  //×Ü¹²¿ÉÄÜĞèÒª»æÖÆ¼¸ĞĞ
+	int nNodeCount = 0;  //æ€»å…±å¯èƒ½éœ€è¦ç»˜åˆ¶å‡ è¡Œ
 	uiBool bFindBeginRow = uiFalse;
 	TNodeData *pNode = GetRootNode();
-	TNodeData *pBeginNode = pNode; //´ÓÄÄÒ»ĞĞ¿ªÊ¼»æÖÆ
+	TNodeData *pBeginNode = pNode; //ä»å“ªä¸€è¡Œå¼€å§‹ç»˜åˆ¶
 	while (pNode)
 	{
 		if(!bFindBeginRow)
@@ -286,7 +286,7 @@ void CTreeUI::BuildRows(CDuiRect rc, bool bNeedInvalidate)
 	}
 	cyNeeded -= GetChildPadding();
 
-	//¿ÉÒÔÏÔÊ¾¼¸ĞĞ£¿
+	//å¯ä»¥æ˜¾ç¤ºå‡ è¡Œï¼Ÿ
 	int nNeedRows = 0;
 	int iTempPosY = iPosY;
 	pNode = pBeginNode;
@@ -298,7 +298,7 @@ void CTreeUI::BuildRows(CDuiRect rc, bool bNeedInvalidate)
 		pNode = GetNextNode(pNode,true);
 	}
 
-	//´´½¨Êµ¼ÊµÄTreeNodeUI
+	//åˆ›å»ºå®é™…çš„TreeNodeUI
 	int addedRows = nNeedRows - m_pBody->GetCount();
 	if(addedRows > 0)
 	{
@@ -318,7 +318,7 @@ void CTreeUI::BuildRows(CDuiRect rc, bool bNeedInvalidate)
 		}
 	}
 
-	//×ÓÏîSetPos²¢Ìî³äÊı¾İ
+	//å­é¡¹SetPoså¹¶å¡«å……æ•°æ®
 	int cxNeeded = 0;
 	pNode = pBeginNode;
 	for (int i=0; i<m_pBody->GetCount(); i++)
@@ -369,7 +369,7 @@ void CTreeUI::SetScrollPos(CDuiSize szPos, bool bMsg)
 		rcPos = pControl->GetPos();
 		rcPos.left -= cx;
 		rcPos.right -= cx;
-		//rcPos.top -= cy;	//ÊúÏò¹ö¶¯Ê±£¬²»¸Ä±äÊúÏòÎ»ÖÃ
+		//rcPos.top -= cy;	//ç«–å‘æ»šåŠ¨æ—¶ï¼Œä¸æ”¹å˜ç«–å‘ä½ç½®
 		//rcPos.bottom -= cy;
 		pControl->SetPos(rcPos);
 	}
@@ -378,7 +378,7 @@ void CTreeUI::SetScrollPos(CDuiSize szPos, bool bMsg)
 
 	if(m_pVerticalScrollBar)
 	{
-		// ·¢ËÍ¹ö¶¯ÏûÏ¢
+		// å‘é€æ»šåŠ¨æ¶ˆæ¯
 		if( m_pManager != NULL && bMsg ) {
 			int nPage = (m_pVerticalScrollBar->GetScrollPos() + m_pVerticalScrollBar->GetLineSize()) / m_pVerticalScrollBar->GetLineSize();
 			m_pManager->SendNotify(this, DUI_MSGTYPE_SCROLL, (WPARAM)nPage);
@@ -517,3 +517,4 @@ void CTreeUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 
 
 }
+

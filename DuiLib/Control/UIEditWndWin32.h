@@ -1,4 +1,4 @@
-#ifndef __UIEDIT_WND_WIN32_H__
+﻿#ifndef __UIEDIT_WND_WIN32_H__
 #define __UIEDIT_WND_WIN32_H__
 
 #pragma once

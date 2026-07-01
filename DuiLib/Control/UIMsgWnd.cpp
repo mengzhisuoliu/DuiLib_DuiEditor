@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIMsgWnd.h"
 #include "TxtWinHost.h"
 
@@ -206,3 +206,4 @@ void CMsgWndUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 
 }
 #endif //#ifdef DUILIB_WIN32
+

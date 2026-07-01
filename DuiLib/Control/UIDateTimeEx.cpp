@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIDateTimeEx.h"
 //#include "atlconv.h"
 
@@ -24,4 +24,5 @@ namespace DuiLib
 		return CDateTimeUI::GetInterface(pstrName);
 	}
 }
+
 

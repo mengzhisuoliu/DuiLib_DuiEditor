@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIChildLayout.h"
 
 namespace DuiLib
@@ -56,4 +56,5 @@ namespace DuiLib
 		return _T("ChildLayoutUI");
 	}
 } // namespace DuiLib
+
 

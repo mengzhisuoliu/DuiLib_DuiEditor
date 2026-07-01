@@ -1,4 +1,4 @@
-#ifndef __UIACTIVEX_H__
+﻿#ifndef __UIACTIVEX_H__
 #define __UIACTIVEX_H__
 
 #pragma once
@@ -81,4 +81,5 @@ namespace DuiLib {
 
 #endif //#ifdef DUILIB_WIN32
 #endif // __UIACTIVEX_H__
+
 

@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIScript.h"
 
 
@@ -33,3 +33,4 @@ namespace DuiLib {
 	}
 
 } // namespace DuiLib
+

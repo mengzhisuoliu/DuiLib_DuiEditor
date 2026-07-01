@@ -1,4 +1,4 @@
-#ifndef __UIHORIZONTALLAYOUT_H__
+﻿#ifndef __UIHORIZONTALLAYOUT_H__
 #define __UIHORIZONTALLAYOUT_H__
 
 #pragma once
@@ -37,3 +37,4 @@ namespace DuiLib
 	};
 }
 #endif // __UIHORIZONTALLAYOUT_H__
+

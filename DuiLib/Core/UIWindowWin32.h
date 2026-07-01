@@ -1,4 +1,4 @@
-#ifndef __UIWINDOW_WIN32_H__
+ï»¿#ifndef __UIWINDOW_WIN32_H__
 #define __UIWINDOW_WIN32_H__
 
 
@@ -38,7 +38,7 @@ namespace DuiLib {
 		virtual void Close(UINT nRet = IDOK) override;
 		virtual void SetCursor(int nCursor) override;
 		
-		void CenterWindow();	// ¾ÓÖĞ£¬Ö§³ÖÀ©Õ¹ÆÁÄ»
+		void CenterWindow();	// å±…ä¸­ï¼Œæ”¯æŒæ‰©å±•å±å¹•
 		void SetIcon(UINT nRes);
 
 		void ResizeClient(int cx = -1, int cy = -1);
@@ -61,4 +61,5 @@ namespace DuiLib {
 } // namespace DuiLib
 #endif //#ifdef DUILIB_WIN32
 #endif // __UIWINDOW_WIN32_H__
+
 

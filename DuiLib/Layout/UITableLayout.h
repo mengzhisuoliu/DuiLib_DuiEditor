@@ -1,4 +1,4 @@
-#ifndef __UITABLELAYOUT_H__
+ï»¿#ifndef __UITABLELAYOUT_H__
 #define __UITABLELAYOUT_H__
 
 #pragma once
@@ -8,7 +8,7 @@ namespace DuiLib
 	#define MAX_TABLE_COLUMN_COUNT	16
 
 	//////////////////////////////////////////////////////////////////////////
-	//Table²¼¾Ö
+	//Tableå¸ƒå±€
 	class UILIB_API CTableLayoutUI : public CVerticalLayoutUI
 	{
 		DECLARE_DUICONTROL(CTableLayoutUI)
@@ -56,7 +56,7 @@ namespace DuiLib
 	};
 
 	//////////////////////////////////////////////////////////////////////////
-	//TableĞĞ±ê¼Ç
+	//Tableè¡Œæ ‡è®°
 	class UILIB_API CTRUI : public COptionLayoutUI
 	{
 		DECLARE_DUICONTROL(CTRUI)
@@ -78,7 +78,7 @@ namespace DuiLib
 	};
 
 	//////////////////////////////////////////////////////////////////////////
-	//TableÁĞ±ê¼Ç
+	//Tableåˆ—æ ‡è®°
 	class UILIB_API CTDUI : public COptionLayoutUI
 	{
 		DECLARE_DUICONTROL(CTDUI)
@@ -108,7 +108,7 @@ namespace DuiLib
 		virtual CDuiRect GetTextPadding() const override;
 		virtual void SetTextPadding(CDuiRect rc) override;
 
-		virtual void SetTextStyle(UINT uStyle) override; //ĞèÒªÔÚ´úÂëÖĞÉè¶¨£¬xmlÖĞÅäÖÃ²»ÉúĞ§¡£
+		virtual void SetTextStyle(UINT uStyle) override; //éœ€è¦åœ¨ä»£ç ä¸­è®¾å®šï¼Œxmlä¸­é…ç½®ä¸ç”Ÿæ•ˆã€‚
 
 		virtual void DoInit() override;
 		virtual CDuiSize EstimateSize(CDuiSize szAvailable) override;
@@ -116,3 +116,4 @@ namespace DuiLib
 	};
 }
 #endif // __UIVERTICALLAYOUT_H__
+

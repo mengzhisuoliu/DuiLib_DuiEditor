@@ -1,4 +1,4 @@
-#ifndef __UITABCTRL_H__
+ï»¿#ifndef __UITABCTRL_H__
 #define __UITABCTRL_H__
 
 #pragma once
@@ -22,7 +22,7 @@ namespace DuiLib
 		virtual bool IsSelectedState() const override;
 		virtual void BindTriggerTabSel(int _SetSelectIndex = -1) override;	
 
-		void SetActiveMouseOn(bool bActive); //Êó±êĞüÍ£Ê±ÇĞ»»Ò³Ãæ
+		void SetActiveMouseOn(bool bActive); //é¼ æ ‡æ‚¬åœæ—¶åˆ‡æ¢é¡µé¢
 		bool IsActiveMouseOn();
 
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;

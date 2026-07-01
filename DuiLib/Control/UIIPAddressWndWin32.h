@@ -1,4 +1,4 @@
-#ifndef __UIIPADDRESS_WND_WIN32_H__
+﻿#ifndef __UIIPADDRESS_WND_WIN32_H__
 #define __UIIPADDRESS_WND_WIN32_H__
 
 #pragma once

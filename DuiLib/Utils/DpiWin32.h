@@ -1,4 +1,4 @@
-#ifndef __DPI_Win32_H__
+﻿#ifndef __DPI_Win32_H__
 #define __DPI_Win32_H__
 #pragma once
 

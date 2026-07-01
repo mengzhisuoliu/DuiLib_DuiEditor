@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "UIHotKey.h"
 
 #ifdef DUILIB_WIN32
@@ -135,7 +135,7 @@ namespace DuiLib{
 		GetHotKey(m_pOwner->m_wVirtualKeyCode, m_pOwner->m_wModifiers);
 		if (m_pOwner->m_wVirtualKeyCode == 0)
 		{
-			m_pOwner->m_sText = _T("ÎÞ");
+			m_pOwner->m_sText = _T("æ— ");
 			m_pOwner->m_wModifiers = 0;
 		}
 		else
@@ -423,3 +423,4 @@ namespace DuiLib{
 
 }// Duilib
 #endif //#ifdef DUILIB_WIN32
+

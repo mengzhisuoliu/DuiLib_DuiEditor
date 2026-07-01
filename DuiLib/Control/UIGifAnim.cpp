@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIGifAnim.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -249,3 +249,4 @@ namespace DuiLib
 	}
 }
 #endif //#ifdef DUILIB_WIN32
+

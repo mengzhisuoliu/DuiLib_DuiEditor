@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 
 namespace DuiLib
 {
@@ -31,10 +31,11 @@ protected:
 	CDuiRect m_rcCode;
 	CStdRefPtr<UIRender> m_qrRender;
 
-	CDuiString m_sBarCodeType; //Ãı¬Î¿‡–Õ, code39, code93, code128
+	CDuiString m_sBarCodeType; //Êù°Á†ÅÁ±ªÂûã, code39, code93, code128
 	int m_nBarCodeSize;
 protected:
 	Imp *m_pImpl;
 };
 
 }
+

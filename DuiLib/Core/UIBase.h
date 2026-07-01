@@ -1,4 +1,4 @@
-#ifndef __UIBASE_H__
+﻿#ifndef __UIBASE_H__
 #define __UIBASE_H__
 
 
@@ -53,7 +53,7 @@ namespace DuiLib {
 		bool RemoveVirtualWnd(CDuiString strName);
 		void NotifyPump(TNotifyUI& msg);
 		bool LoopDispatch(TNotifyUI& msg);
-		DUI_DECLARE_MESSAGE_MAP()
+		DUI_DECLARE_MESSAGE_MAP_ROOT()
 	private:
 		CStdStringPtrMap m_VirtualWndMap;
 	};
@@ -124,3 +124,4 @@ namespace DuiLib {
 } // namespace DuiLib
 
 #endif // __UIBASE_H__
+

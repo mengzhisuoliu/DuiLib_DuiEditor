@@ -1,4 +1,4 @@
-#ifndef __UIVERTICALLAYOUT_H__
+﻿#ifndef __UIVERTICALLAYOUT_H__
 #define __UIVERTICALLAYOUT_H__
 
 #pragma once
@@ -36,3 +36,4 @@ namespace DuiLib
 	};
 }
 #endif // __UIVERTICALLAYOUT_H__
+

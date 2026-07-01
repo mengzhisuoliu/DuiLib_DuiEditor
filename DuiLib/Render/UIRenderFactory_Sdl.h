@@ -1,4 +1,4 @@
-#ifndef __UIRENDER_FACTORY_SDL_H__
+﻿#ifndef __UIRENDER_FACTORY_SDL_H__
 #define __UIRENDER_FACTORY_SDL_H__
 
 #pragma once
@@ -24,3 +24,4 @@ namespace DuiLib {
 #endif //#ifdef DUILIB_SDL
 
 #endif // __UIRENDER_H__
+

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <list>
 
 #ifdef DUILIB_SDL
@@ -20,3 +20,4 @@ protected:
 
 } //namespace DuiLib {
 #endif //#ifdef DUILIB_SDL
+

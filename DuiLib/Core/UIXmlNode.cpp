@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 
 namespace DuiLib {
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -455,3 +455,4 @@ CDuiString CXmlNodeUI::ToString()
 }
 
 } // namespace DuiLib
+

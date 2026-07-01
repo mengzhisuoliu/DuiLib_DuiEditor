@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIText.h"
 
 namespace DuiLib
@@ -42,4 +42,5 @@ namespace DuiLib
 		CLabelUI::DoEvent(event);
 	}
 }
+
 

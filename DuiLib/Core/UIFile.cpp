@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+Ôªø#include "StdAfx.h"
 #include "UIFile.h"
 
 #include <stdarg.h>
@@ -44,7 +44,7 @@ namespace DuiLib {
 	{
 		Empty();
 
-		//∂¡»°À≥–Ú  zipŒƒº˛ ==> skinŒƒº˛º– ==> ◊ ‘¥ ==> Œƒº˛æ¯∂‘¬∑æ∂
+		//ËØªÂèñÈ°∫Â∫è  zipÊñá‰ª∂ ==> skinÊñá‰ª∂Â§π ==> ËµÑÊ∫ê ==> Êñá‰ª∂ÁªùÂØπË∑ØÂæÑ
 		if (type == NULL)
 		{
 			if (__LoadFromZip(bitmap, type, instance))
@@ -97,11 +97,11 @@ namespace DuiLib {
 		{
 			CDuiString sFile = CPaintManagerUI::GetResourcePath();
 			sFile += CPaintManagerUI::GetResourceZip();
-			if (CPaintManagerUI::IsCachedResourceZip())  //zip◊ ‘¥
+			if (CPaintManagerUI::IsCachedResourceZip())  //zipËµÑÊ∫ê
 			{
 				hz = (HZIP)CPaintManagerUI::GetResourceZipHandle();
 			}
-			else //zipŒƒº˛
+			else //zipÊñá‰ª∂
 			{
 				CDuiString sFilePwd = CPaintManagerUI::GetResourceZipPwd();
 				UISTRING_CONVERSION;
@@ -170,7 +170,30 @@ namespace DuiLib {
 
 	uiBool CUIFile::__LoadFromDiskPath(LPCTSTR sFilePath)
 	{
-		//÷±Ω”»•∂¡»°bitmap.m_lpstr÷∏œÚµƒ¬∑æ∂
+	#ifdef DUILIB_SDL
+		CDuiStringUtf8 utf8Path(sFilePath);
+		SDL_IOStream* io = SDL_IOFromFile(utf8Path.GetData(), "rb");
+		if (!io) return uiFalse;
+
+		Sint64 size = SDL_GetIOSize(io);
+		if (size <= 0) {
+			SDL_CloseIO(io);
+			return uiFalse;
+		}
+
+		m_pData = new BYTE[(size_t)size + 1];
+		m_pData[(size_t)size] = '\0';
+		size_t readSize = SDL_ReadIO(io, m_pData, (size_t)size);
+		SDL_CloseIO(io);
+
+		if (readSize != (size_t)size) {
+			Empty();
+			return uiFalse;
+		}
+		m_dwSize = (DWORD)size;
+		return uiTrue;
+	#else
+		//Áõ¥Êé•ÂéªËØªÂèñbitmap.m_lpstrÊåáÂêëÁöÑË∑ØÂæÑ
 		FILE *file = _tfopen(sFilePath, _T("rb"));
 		if(file==NULL) return uiFalse;
 		if(feof(file)) return uiFalse;
@@ -191,50 +214,51 @@ namespace DuiLib {
 		int nRead = fread(m_pData, 1, m_dwSize, file);
 		fclose(file);
 		return m_dwSize > 0;
+	#endif
 	}
-	/*
-	BOOL CUIFile::Open(LPCTSTR lpszFileName, UINT nOpenFlags)
-	{
-		Close();
-
-		CDuiString mode;
-		if((nOpenFlags & modeRead) ==  modeRead)
-		{
-			mode = _T("r");
-		}
-		else if((nOpenFlags & modeWrite) ==  modeWrite)
-		{
-			mode = _T("w");
-		}
-		else if((nOpenFlags & modeReadWrite) ==  modeReadWrite)
-		{
-			mode = _T("r");
-		}
-
-		m_fp = _tfopen(lpszFileName, mode);
-		return m_fp != NULL;
-	}
-	*/
 
 	uiBool CUIFile::Open(LPCTSTR lpszFileName, LPCTSTR mode)
 	{
+	#ifdef DUILIB_SDL
+		CDuiStringUtf8 utf8Path(lpszFileName);
+		CDuiStringUtf8 utf8Mode(mode);
+		m_fp = SDL_IOFromFile(utf8Path.GetData(), utf8Mode.GetData());
+		return m_fp != NULL;
+	#else
 		m_fp = _tfopen(lpszFileName, mode);
 		return m_fp != NULL;
+	#endif
 	}
 
 	void CUIFile::Close()
 	{
-		if(m_fp) { fclose(m_fp); m_fp = NULL; }
+		if (m_fp) 
+		{
+		#ifdef DUILIB_SDL
+			SDL_CloseIO(m_fp);
+		#else
+			fclose(m_fp);
+		#endif
+			m_fp = NULL;
+		}
 	}
 
 	UINT CUIFile::Read(void* lpBuf, UINT nCount)
 	{
+	#ifdef DUILIB_SDL
+		return (UINT)SDL_ReadIO(m_fp, lpBuf, nCount);
+	#else
 		return fread(lpBuf, 1, nCount, m_fp);
+	#endif
 	}
 
 	UINT CUIFile::Write(const void* lpBuf, UINT nCount)
 	{
+		#ifdef DUILIB_SDL
+		return (UINT)SDL_WriteIO(m_fp, lpBuf, nCount);
+		#else
 		return fwrite(lpBuf, 1, nCount, m_fp);
+		#endif
 	}
 
 	UINT CUIFile::WriteV(const char* lpszFormat, ...)
@@ -341,32 +365,70 @@ namespace DuiLib {
 
 	UINT CUIFile::GetFileLength() const
 	{
+	#ifdef DUILIB_SDL
+		if (!m_fp) return 0;
+		return (UINT)SDL_GetIOSize(m_fp);
+	#else
 		DWORD fsize;
 		int pos = ftell(m_fp);
 		fseek(m_fp, 0, SEEK_END);
 		fsize = ftell(m_fp);
 		fseek(m_fp, pos, SEEK_SET);
 		return fsize;
+	#endif
 	}
 
 	int CUIFile::SeekToEnd()
 	{
+	#ifdef DUILIB_SDL
+		return (SDL_SeekIO(m_fp, 0, SDL_IO_SEEK_END) < 0) ? -1 : 0;
+	#else
 		return fseek(m_fp, 0, SEEK_END);
+	#endif
 	}
 
 	void CUIFile::SeekToBegin()
 	{
+	#ifdef DUILIB_SDL
+		SDL_SeekIO(m_fp, 0, SDL_IO_SEEK_SET);
+	#else
 		fseek(m_fp, 0, SEEK_SET);
+	#endif
 	}
 
-	int CUIFile::Seek(UINT lOff, UINT nFrom)
+	int CUIFile::Seek(UINT lOff, int nFrom)
 	{
-		return fseek(m_fp, lOff, nFrom);
+	#ifdef DUILIB_SDL
+		if (!m_fp) return -1;
+
+		SDL_IOWhence origin;
+		switch (nFrom) {
+			case SEEK_SET: origin = SDL_IO_SEEK_SET; break;
+			case SEEK_CUR: origin = SDL_IO_SEEK_CUR; break;
+			case SEEK_END: origin = SDL_IO_SEEK_END; break;
+			default: return -1;
+		}
+
+		// SDL_SeekIO ËøîÂõûÊñ∞ÂÅèÁßªÔºåÂ§±Ë¥•ËøîÂõû -1
+		if (SDL_SeekIO(m_fp, lOff, origin) < 0) {
+			SDL_Log("SDL_SeekIO failed: %s", SDL_GetError());
+			return -1;
+		}
+		return 0;
+	#else
+		if (!m_fp) return -1;
+		return (fseek(m_fp, lOff, nFrom) == 0) ? 0 : -1;
+	#endif
 	}
 
 	uiBool CUIFile::IsEOF()
 	{
+	#ifdef DUILIB_SDL
+		if (!m_fp) return uiTrue;
+		return (SDL_GetIOStatus(m_fp) == SDL_IO_STATUS_EOF);
+	#else
 		return feof(m_fp) == 1;
+	#endif
 	}
 
 	void CUIFile::SetCharSet(CUIFile::CharSet charset)
@@ -579,11 +641,11 @@ namespace DuiLib {
 			return uiFalse;
 
 #ifdef DUILIB_WIN32
-		// «∑Òœ‡∂‘¬∑æ∂
+		//ÊòØÂê¶Áõ∏ÂØπË∑ØÂæÑ
 		uiBool bRelativePath = PathIsRelative(lpFileName);
 		if (bRelativePath)
 		{		
-			//‘⁄≥Ã–Úƒø¬ºœ¬À—À˜
+			//Âú®Á®ãÂ∫èÁõÆÂΩï‰∏ãÊêúÁ¥¢
 			m_pNextInfo = new WIN32_FIND_DATA; 
 			m_strRoot = CPaintManagerUI::GetInstancePath() + lpFileName;
 
@@ -879,7 +941,7 @@ namespace DuiLib {
 
 	void CUIFileFind::MakeFullPath(CDuiString &sPath)
 	{
-		//”– "*" æÕ»•µÙ°£
+		//Êúâ "*" Â∞±ÂéªÊéâ„ÄÇ
 		int n = sPath.ReverseFind(_T('\\'));
 		CDuiString sTemp = sPath.Right(sPath.GetLength()-n-1);
 		if (sTemp.Find(_T('*') >= 0))
@@ -890,4 +952,5 @@ namespace DuiLib {
 	}
 	
 } // namespace DuiLib
+
 

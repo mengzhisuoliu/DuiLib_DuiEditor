@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIComboEx.h"
 
 namespace DuiLib
@@ -25,3 +25,4 @@ LPVOID CComboExUI::GetInterface(LPCTSTR pstrName)
 }
 
 }
+

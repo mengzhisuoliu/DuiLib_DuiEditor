@@ -102,9 +102,10 @@ makeSDL_ttf_android.bat
 makeDuiLib_android.bat
 
 3, Android范例
-Android\TestAndroidApp
+Android\duidemo
 
 4, 教程
+https://blog.csdn.net/mmcanyu/article/details/162452831
 
 ```
 ### 五. 重要说明

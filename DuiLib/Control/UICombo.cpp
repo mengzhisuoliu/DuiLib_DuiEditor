@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 
 #include "UIComboWndWin32.h"
 #include "UIComboWndSdl.h"
@@ -100,7 +100,7 @@ namespace DuiLib {
 		if( iIndex >= m_items.GetSize() ) iIndex = m_items.GetSize() - 1;
 		CControlUI* pControl = static_cast<CControlUI*>(m_items[iIndex]);
 		//if( !pControl || !pControl->IsEnabled() ) return false;
-		if( !pControl ) return false; //½ûÓÃ×´Ì¬±ØĞëÊÇ¿ÉÒÔÑ¡ÔñµÄ
+		if( !pControl ) return false; //ç¦ç”¨çŠ¶æ€å¿…é¡»æ˜¯å¯ä»¥é€‰æ‹©çš„
 		IListItemUI* pListItem = static_cast<IListItemUI*>(pControl->GetInterface(_T("ListItem")));
 		if( pListItem == NULL ) return false;
 		m_iCurSel = iIndex;
@@ -419,12 +419,12 @@ namespace DuiLib {
 
 		if(!rcPos.EqualRect(m_rcItem)) 
 		{
-			// Òş²ØÏÂÀ­´°¿Ú
+			// éšè—ä¸‹æ‹‰çª—å£
 			if(m_pWindow && DuiLibWindowWnd::IsWindow(m_pWindow->GetHWND())) m_pWindow->Close();
-			// ËùÓĞÔªËØ´óĞ¡ÖÃÎª0
+			// æ‰€æœ‰å…ƒç´ å¤§å°ç½®ä¸º0
 			CDuiRect rcNull;
 			for( int i = 0; i < m_items.GetSize(); i++ ) static_cast<CControlUI*>(m_items[i])->SetPos(rcNull);
-			// µ÷ÕûÎ»ÖÃ
+			// è°ƒæ•´ä½ç½®
 			CControlUI::SetPos(rc, bNeedInvalidate);
 		}
 
@@ -848,4 +848,5 @@ namespace DuiLib {
 		return rcButton;
 	}
 } // namespace DuiLib
+
 

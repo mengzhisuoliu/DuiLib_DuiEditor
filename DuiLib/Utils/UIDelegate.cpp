@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 
 namespace DuiLib {
 
@@ -100,3 +100,4 @@ void CEventSource::Clear()
 	m_aDelegates.Empty();
 }
 } // namespace DuiLib
+

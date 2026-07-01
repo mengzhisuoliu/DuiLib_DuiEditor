@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "ControlFactory.h"
 
 namespace DuiLib 
@@ -116,3 +116,4 @@ namespace DuiLib
 		delete this;
 	}
 }
+

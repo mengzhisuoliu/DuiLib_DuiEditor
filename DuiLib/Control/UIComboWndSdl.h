@@ -1,4 +1,4 @@
-#ifndef __UICOMBO_SDL_H__
+﻿#ifndef __UICOMBO_SDL_H__
 #define __UICOMBO_SDL_H__
 
 #pragma once
@@ -31,3 +31,4 @@ namespace DuiLib {
 #endif //#ifdef DUILIB_SDL
 
 #endif // __UICOMBO_SDL_H__
+

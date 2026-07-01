@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UITableLayout.h"
 
 namespace DuiLib
@@ -197,7 +197,7 @@ namespace DuiLib
 			iPosY -= m_pVerticalScrollBar->GetScrollPos();
 		}
 		else {
-			// �ӿؼ���ֱ���䷽ʽ
+			// 子控件垂直对其方式
 			if(nAdjustables <= 0) {
 				UINT iChildAlign = GetChildVAlign(); 
 				if (iChildAlign == DT_VCENTER) {
@@ -657,3 +657,4 @@ namespace DuiLib
 		else COptionLayoutUI::SetAttribute(pstrName, pstrValue);
 	}
 }
+

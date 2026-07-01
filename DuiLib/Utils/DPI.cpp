@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "DPI.h"
 
 namespace DuiLib
@@ -122,3 +122,4 @@ namespace DuiLib
 		pSize->cy = ScaleIntBack(pSize->cy);
 	}
 }
+

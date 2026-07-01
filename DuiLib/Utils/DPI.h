@@ -1,4 +1,4 @@
-#ifndef __DPI_Base_H__
+﻿#ifndef __DPI_Base_H__
 #define __DPI_Base_H__
 #pragma once
 

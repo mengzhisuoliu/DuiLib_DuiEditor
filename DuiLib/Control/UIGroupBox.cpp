@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "UIGroupBox.h"
 
 namespace DuiLib
@@ -43,7 +43,7 @@ namespace DuiLib
 		CDuiSize szAvailable = rcText;
 		CDuiSize sz = CalcrectSize(szAvailable);
 
-		//¼ÆËãÎÄ×ÖÇøÓò
+		//è®¡ç®—æ–‡å­—åŒºåŸŸ
 		rcText.left = rcText.left + 20;
 		//rcText.top = rcText.top;
 		rcText.right = rcText.left + sz.cx + 10;
@@ -109,4 +109,5 @@ namespace DuiLib
 		CVerticalLayoutUI::SetAttribute(pstrName, pstrValue);
 	}
 }
+
 

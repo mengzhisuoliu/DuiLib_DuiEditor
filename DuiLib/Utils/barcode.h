@@ -1,4 +1,4 @@
-#ifndef PPX_BASE_BARCODE_H_
+﻿#ifndef PPX_BASE_BARCODE_H_
 #define PPX_BASE_BARCODE_H_
 #pragma once
 
@@ -1272,4 +1272,5 @@ private:
 };
 
 #endif
+
 

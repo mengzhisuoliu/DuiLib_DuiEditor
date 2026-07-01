@@ -1,4 +1,4 @@
-#ifndef __UICLIP_WIN32_H__
+﻿#ifndef __UICLIP_WIN32_H__
 #define __UICLIP_WIN32_H__
 
 #pragma once
@@ -29,3 +29,4 @@ namespace DuiLib {
 #endif //#ifdef DUILIB_WIN32
 
 #endif // __UIRENDER_H__
+

@@ -1,4 +1,4 @@
-#ifndef __UIXMLDOCUMENT_H__
+ï»¿#ifndef __UIXMLDOCUMENT_H__
 #define __UIXMLDOCUMENT_H__
 
 #pragma once
@@ -16,7 +16,7 @@ namespace DuiLib {
 		bool load_file(LPCTSTR pstrFilename);
 
 		bool save_file(LPCTSTR path);
-		bool save_to_default_file(); //±£´æÎªÔØÈëÊ±µÄÎÄ¼şÃû
+		bool save_to_default_file(); //ä¿å­˜ä¸ºè½½å…¥æ—¶çš„æ–‡ä»¶å
 
 		CDuiString GetError();
 	protected:
@@ -31,3 +31,4 @@ namespace DuiLib {
 } // namespace DuiLib
 
 #endif // __XMLDOCUMENT_H__
+

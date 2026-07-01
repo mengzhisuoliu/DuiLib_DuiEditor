@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 
 namespace DuiLib {
 
@@ -198,7 +198,7 @@ LDispatch:
 
 void CNotifyPump::NotifyPump(TNotifyUI& msg)
 {
-	///±éÀúĞéÄâ´°¿Ú
+	///éå†è™šæ‹Ÿçª—å£
 	if( !msg.sVirtualWnd.IsEmpty() ){
 		for( int i = 0; i< m_VirtualWndMap.GetSize(); i++ ) {
 			if( LPCTSTR key = m_VirtualWndMap.GetAt(i) ) {
@@ -212,7 +212,7 @@ void CNotifyPump::NotifyPump(TNotifyUI& msg)
 	}
 
 	///
-	//±éÀúÖ÷´°¿Ú
+	//éå†ä¸»çª—å£
 	LoopDispatch( msg );
 }
 
@@ -290,7 +290,7 @@ LRESULT CWindowWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	lRes = HandleCustomMessage(uMsg, wParam, lParam, bHandled);
 	if (bHandled) return lRes;
 
-	//²Ëµ¥ÃüÁî
+	//èœå•å‘½ä»¤
 	lRes = HandleMenuCommandMessage(uMsg, wParam, lParam, bHandled);
 	if (bHandled) return lRes;
 
@@ -631,4 +631,5 @@ void CWindowWnd::_init_wm_defined()
 }
 
 } // namespace DuiLib
+
 

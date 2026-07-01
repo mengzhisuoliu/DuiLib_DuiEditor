@@ -1,4 +1,4 @@
-#ifndef __UIFONT_GDI_H__
+﻿#ifndef __UIFONT_GDI_H__
 #define __UIFONT_GDI_H__
 
 #pragma once
@@ -158,3 +158,4 @@ namespace DuiLib {
 
 #endif //#ifdef DUILIB_WIN32
 #endif // __UIRENDER_H__
+

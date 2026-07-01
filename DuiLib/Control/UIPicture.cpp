@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "UIPicture.h"
 
 namespace DuiLib
@@ -22,9 +22,9 @@ CPictureUI::CPictureUI(void)
 	m_bIsAutoPlay = true;
 	m_bIsAutoSize = false;
 
-	m_idEventTimer = 0;		//¶¯»­¶¨Ê±Æ÷
-	m_nDelay = 0;			//Ñ­»·ºÁÃëÊı
-	m_nFramePosition = 0;	//µ±Ç°·Åµ½µÚ¼¸Ö¡
+	m_idEventTimer = 0;		//åŠ¨ç”»å®šæ—¶å™¨
+	m_nDelay = 0;			//å¾ªç¯æ¯«ç§’æ•°
+	m_nFramePosition = 0;	//å½“å‰æ”¾åˆ°ç¬¬å‡ å¸§
 
 	m_bTrackRect = false;
 	m_dwTrackColor = 0xFF000000;
@@ -178,7 +178,7 @@ void CPictureUI::PaintBkImage(UIRender *pRender)
 	rcRect.Normalize();
 	pRender->DrawRect(rcRect, 1, GetAdjustColor(GetTrackColor()), PS_SOLID);
 
-	//»æÖÆÃÉ°æ
+	//ç»˜åˆ¶è’™ç‰ˆ
 	CDuiRect rcTop(m_rcPaint.left, m_rcPaint.top, m_rcPaint.right, rcRect.top);
 	pRender->DrawColor(rcTop, CDuiSize(0,0), GetAdjustColor(0x77FFFFFF));
 
@@ -384,7 +384,7 @@ bool CPictureUI::__SetHBitmap(HBITMAP hBitmap)
 
 bool CPictureUI::__LoadImageFromMemory(LPBYTE pData, DWORD dwSize)
 {
-	//³¢ÊÔ½âÎöGIF
+	//å°è¯•è§£æGIF
 	CStdRefPtr<UIImage> gifLoader = UIGlobal::CreateImage();
 	CStdPtrArray arrImageInfo;
 	if(gifLoader->LoadGifImageFromMemory(pData, dwSize, arrImageInfo))
@@ -424,11 +424,11 @@ bool CPictureUI::__LoadFile(LPCTSTR pstrImage)
 
 	do 
 	{
-		//ÎÄ¼şÔØÈëÄÚ´æ
+		//æ–‡ä»¶è½½å…¥å†…å­˜
 		if(!file.LoadFile(pDrawInfo->sImageName.GetData()))
 			break;
 
-		//³¢ÊÔ½âÎöGIF
+		//å°è¯•è§£æGIF
 		CStdRefPtr<UIImage> gifLoader = MakeRefPtr<UIImage>(UIGlobal::CreateImage());
 		CStdPtrArray arrImageInfo;
 		if(gifLoader->LoadGifImageFromMemory(file.GetData(), file.GetSize(), arrImageInfo))
@@ -445,7 +445,7 @@ bool CPictureUI::__LoadFile(LPCTSTR pstrImage)
 			break;
 		}
 
-		//³¢ÊÔÆäËû¸ñÊ½µÄÍ¼Ïñ
+		//å°è¯•å…¶ä»–æ ¼å¼çš„å›¾åƒ
 		if(!pImageInfo->LoadImageFromMemory(file.GetData(), file.GetSize(), pDrawInfo->dwMask, pDrawInfo->width, pDrawInfo->height, pDrawInfo->fillcolor, GetManager()))
 		{
 			break;

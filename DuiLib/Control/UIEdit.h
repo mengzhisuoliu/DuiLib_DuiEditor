@@ -1,4 +1,4 @@
-#ifndef __UIEDIT_H__
+﻿#ifndef __UIEDIT_H__
 #define __UIEDIT_H__
 
 #pragma once
@@ -116,3 +116,4 @@ namespace DuiLib
 
 }
 #endif // __UIEDIT_H__
+

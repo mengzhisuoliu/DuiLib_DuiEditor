@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 
 #include "UIIPAddressWndWin32.h"
 #include "UIIPAddressWndSdl.h"
@@ -204,5 +204,6 @@ void CIPAddressUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 }
 
 } //namespace DuiLib
+
 
 

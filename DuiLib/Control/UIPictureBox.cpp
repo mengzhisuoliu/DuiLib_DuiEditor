@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIPicture.h"
 
 #ifdef DUILIB_WIN32
@@ -97,3 +97,4 @@ bool CPictureBoxUI::LoadFile(LPCTSTR pstrImage)
 
 }
 #endif //#ifdef DUILIB_WIN32
+

@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 #include "IGridUI.h"
 
 namespace DuiLib
 {
 
-//µ¥Ôª¸ñÄÚ²¿µÄCheckBox
+//å•å…ƒæ ¼å†…éƒ¨çš„CheckBox
 class UILIB_API CGridCellInnerCheckBoxUI : public CCheckBoxUI
 {
 public:

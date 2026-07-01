@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "UIGridHeader.h"
 
 namespace DuiLib
@@ -70,3 +70,4 @@ CDuiSize CGridHeaderUI::EstimateSize(CDuiSize szAvailable)
 }
 
 }
+

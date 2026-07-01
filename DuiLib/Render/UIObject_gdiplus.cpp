@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "UIObject_gdiplus.h"
 #include "UIRender_gdiplus.h"
 
@@ -32,7 +32,7 @@ namespace DuiLib {
 // 		UIRender_gdiplus *pRenderPlus = dynamic_cast<UIRender_gdiplus *>(pManager->Render());
 // 		if(!pRenderPlus) return NULL;
 // 
-// 		//´´½¨gdi×ÖÌå
+// 		//åˆ›å»ºgdiå­—ä½“
 // 		Gdiplus::Graphics graphics(pRenderPlus->GetDC());
 // 		LOGFONT lf;
 // #ifdef _UNICODE
@@ -72,7 +72,7 @@ namespace DuiLib {
 // 		Gdiplus::Graphics graphics(pRenderPlus->GetDC());
 // 		graphics.MeasureString(_T("A"), -1, m_pFont, rectF, &stringFormat, &bounds);
 // 
-// 		// MeasureString´æÔÚ¼ÆËãÎó²î£¬ÕâÀï¼ÓÒ»ÏñËØ
+// 		// MeasureStringå­˜åœ¨è®¡ç®—è¯¯å·®ï¼Œè¿™é‡ŒåŠ ä¸€åƒç´ 
 // 		return (long)bounds.Height + 1;
 // 	}
 // 
@@ -210,4 +210,5 @@ namespace DuiLib {
 	}
 } // namespace DuiLib
 #endif // #ifdef DUILIB_WIN32
+
 

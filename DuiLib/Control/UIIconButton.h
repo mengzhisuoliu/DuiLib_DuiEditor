@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 namespace DuiLib
 {
@@ -36,4 +36,5 @@ public:
 };
 
 }
+
 

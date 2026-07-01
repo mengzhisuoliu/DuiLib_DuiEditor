@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #ifdef DUILIB_WIN32
 #include "atlimage.h"

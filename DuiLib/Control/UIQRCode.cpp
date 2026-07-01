@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "UIQRCode.h"
 //#include "atlimage.h"
 
@@ -188,7 +188,7 @@ void CQRCodeUI::MakeQrImage()
 
 	CDuiRect rcControl = GetPos();
 
-	//²úÉú¶şÎ¬ÂëÍ¼Æ¬
+	//äº§ç”ŸäºŒç»´ç å›¾ç‰‡
 	uinner::CQR_Encode qr;
 	int nLevel = MAX(MIN(m_qrLevel,3),0);
 	int nVersion = MAX(MIN(m_qrVersion,40),0);
@@ -214,7 +214,7 @@ void CQRCodeUI::MakeQrImage()
 		m_rcCode = CDuiRect();
 		if(m_qrSize <= 0)
 		{
-			//·ÇÕûÊı±¶·Å´óÊ±,Ğ¡ÊıÈ¡Õû,¿ÉÄÜ»áµ¼ÖÂÊ§ÕæÎŞ·¨É¨Ãè£¬ËùÒÔ²»ÒªÊµ¼ÊÆÌÂú¿Ø¼ş
+			//éæ•´æ•°å€æ”¾å¤§æ—¶,å°æ•°å–æ•´,å¯èƒ½ä¼šå¯¼è‡´å¤±çœŸæ— æ³•æ‰«æï¼Œæ‰€ä»¥ä¸è¦å®é™…é“ºæ»¡æ§ä»¶
 			int qrsize = 1;
 			while(uiTrue)
 			{
@@ -236,9 +236,10 @@ void CQRCodeUI::MakeQrImage()
 		m_rcCode.right = MIN(m_rcCode.right, rcControl.GetWidth());
 		m_rcCode.bottom = MIN(m_rcCode.bottom, rcControl.GetHeight());
 
-		//¾ÓÖĞÏÔÊ¾
+		//å±…ä¸­æ˜¾ç¤º
 		m_rcCode.AlignRect(rcControl, DT_CENTER|DT_VCENTER);
 	}
 }
 
 } //namespace DuiLib
+

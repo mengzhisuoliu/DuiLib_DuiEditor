@@ -473,7 +473,9 @@ CXmlNodeUI child(LPCWSTR name) const;
 
 
 
-
+2026-07-01
+1，DuiLib库的源码全部改为带BOM的UTF-8。
+2，增加安卓Demo。
 
 
 
